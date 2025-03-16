@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深度学习原理简明指南</title>
+    <link href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.staticfile.org/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --primary-light: #818CF8;
+            --primary-dark: #3730A3;
+            --secondary-color: #10B981;
+            --secondary-light: #34D399;
+            --secondary-dark: #059669;
+            --text-color: #1F2937;
+            --text-light: #6B7280;
+            --background-color: #F9FAFB;
+            --card-background: #FFFFFF;
+            --border-color: #E5E7EB;
+            --accent-color: #F59E0B;
+            --highlight-bg: #EFF6FF;
+        }
+
+        .dark {
+            --primary-color: #818CF8;
+            --primary-light: #A5B4FC;
+            --primary-dark: #4F46E5;
+            --secondary-color: #34D399;
+            --secondary-light: #6EE7B7;
+            --secondary-dark: #10B981;
+            --text-color: #F9FAFB;
+            --text-light: #D1D5DB;
+            --background-color: #111827;
+            --card-background: #1F2937;
+            --border-color: #374151;
+            --accent-color: #FBBF24;
+            --highlight-bg: #1E3A8A;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', Tahoma, Arial, Roboto, "Droid Sans", "Helvetica Neue", "Droid Sans Fallback", "Heiti SC", "Hiragino Sans GB", Simsun, sans-serif;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            transition: all 0.3s ease;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 600;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            line-height: 1.4;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            line-height: 1.3;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            height: 4px;
+            width: 50%;
+            bottom: -8px;
+            left: 0;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .section-title:hover::after {
+            width: 100%;
+        }
+
+        .card {
+            background-color: var(--card-background);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.1);
+        }
+
+        .highlight {
+            background-color: var(--highlight-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .brain-icon {
+            position: absolute;
+            color: var(--primary-light);
+            opacity: 0.1;
+            font-size: 20rem;
+            right: -100px;
+            top: -50px;
+            z-index: 0;
+        }
+
+        .drop-cap:first-letter {
+            float: left;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 3.5em;
+            line-height: 0.8;
+            padding-right: 0.1em;
+            color: var(--primary-color);
+        }
+
+        .themed-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .themed-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            text-align: left;
+            padding: 1rem;
+        }
+
+        .themed-table td {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .themed-table tr:nth-child(even) {
+            background-color: var(--highlight-bg);
+        }
+
+        .toggle-theme {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--text-light);
+            cursor: help;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--card-background);
+            color: var(--text-color);
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: var(--highlight-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0;
+            transition: width 1.5s ease-out;
+            border-radius: 4px;
+        }
+
+        .conceptual-graph {
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 2rem 0;
+            background-color: var(--card-background);
+            border: 1px solid var(--border-color);
+        }
+
+        .neuron-animation {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 2rem 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .neuron {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .neuron::after {
+            content: "";
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: var(--card-background);
+            opacity: 0.4;
+        }
+
+        .synapse {
+            height: 4px;
+            flex-grow: 1;
+            background: linear-gradient(90deg, var(--primary-light), var(--primary-dark));
+            margin: 0 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .synapse-pulse {
+            position: absolute;
+            width: 20px;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.7);
+            left: -20px;
+            animation: pulse 3s infinite linear;
+        }
+
+        @keyframes pulse {
+            0% {
+                left: -20px;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scrollDown 2s infinite;
+            color: var(--primary-color);
+        }
+
+        @keyframes scrollDown {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -15px);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, 15px);
+            }
+        }
+
+        .book-card {
+            border-left: 4px solid var(--primary-color);
+        }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 768px) {
+            .brain-icon {
+                font-size: 10rem;
+                right: -50px;
+                top: -25px;
+            }
+        }
+
+        /* For dark mode diagrams */
+        .dark .mermaid {
+            --mermaid-bg: var(--card-background);
+            --mermaid-edge-color: var(--text-light);
+            --mermaid-node-bg: var(--primary-dark);
+            --mermaid-node-border: var(--primary-light);
+            --mermaid-text-color: var(--text-color);
+        }
+    </style>
+</head>
+<body class="relative">
+    <!-- Theme Toggle Button -->
+    <button id="theme-toggle" class="toggle-theme p-3 bg-gray-200 dark:bg-gray-700 rounded-full shadow-lg focus:outline-none" aria-label="切换深色/浅色模式">
+        <i class="fas fa-moon dark:hidden" aria-hidden="true"></i>
+        <i class="fas fa-sun hidden dark:inline-block" aria-hidden="true"></i>
+    </button>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden py-20 md:py-32 bg-gradient-to-br from-indigo-50 to-blue-100 dark:from-indigo-900 dark:to-blue-900">
+        <div class="brain-icon">
+            <i class="fas fa-brain" aria-hidden="true"></i>
+        </div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl">
+                <h1 class="hero-title font-bold text-indigo-800 dark:text-indigo-300 mb-6">深度学习原理<br>简明指南</h1>
+                <p class="hero-subtitle font-medium text-gray-700 dark:text-gray-300 mb-8">从人脑灵感到数字智能：<br>理解现代AI背后的核心原理和工作机制</p>
+                <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-10">
+                    <i class="fas fa-quote-left mr-2 text-indigo-500 opacity-50" aria-hidden="true"></i>
+                    深度学习并非魔法，而是模仿人类大脑学习方式的精妙计算过程
+                    <i class="fas fa-quote-right ml-2 text-indigo-500 opacity-50" aria-hidden="true"></i>
+                </p>
+                <div class="flex flex-wrap items-center gap-4">
+                    <a href="#core-idea" class="inline-flex items-center justify-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition duration-300 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-book-open mr-2" aria-hidden="true"></i>
+                        开始学习
+                    </a>
+                    <a href="#visual-guide" class="inline-flex items-center justify-center px-6 py-3 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-indigo-600 dark:text-indigo-400 font-medium rounded-lg transition duration-300 shadow-lg hover:shadow-xl border border-gray-200 dark:border-gray-700">
+                        <i class="fas fa-chart-network mr-2" aria-hidden="true"></i>
+                        可视化指南
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down text-2xl" aria-hidden="true"></i>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-16">
+        <!-- Core Idea Section -->
+        <section id="core-idea" class="mb-20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="section-title text-indigo-700 dark:text-indigo-400 mb-12">一、核心思想：模仿人脑的"学习"机制</h2>
+                <div class="card p-8 mb-10">
+                    <p class="drop-cap text-lg mb-6">
+                        深度学习的本质是<span class="highlight">通过多层神经网络模拟人脑神经元的工作方式</span>。就像人类通过经验学习识别物体（比如区分猫和狗），深度学习让计算机通过大量数据"训练"自己，最终具备判断能力。
+                    </p>
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="w-full md:w-1/2">
+                            <h3 class="text-xl font-semibold text-indigo-600 dark:text-indigo-400 mb-4">
+                                <i class="fas fa-lightbulb mr-2" aria-hidden="true"></i>类比理解
+                            </h3>
+                            <p class="mb-4">想象教孩子认字的过程：</p>
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <div class="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center mr-3 mt-1">
+                                        <i class="fas fa-database text-indigo-600 dark:text-indigo-400 text-sm" aria-hidden="true"></i>
+                                    </div>
+                                    <div>
+                                        <strong>输入数据</strong>：给孩子看大量不同字体的"猫"和"狗"的图片
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center mr-3 mt-1">
+                                        <i class="fas fa-filter text-indigo-600 dark:text-indigo-400 text-sm" aria-hidden="true"></i>
+                                    </div>
+                                    <div>
+                                        <strong>特征提取</strong>：孩子先注意笔画（底层特征），再组合成整体结构（高层特征）
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center mr-3 mt-1">
+                                        <i class="fas fa-check-circle text-indigo-600 dark:text-indigo-400 text-sm" aria-hidden="true"></i>
+                                    </div>
+                                    <div>
+                                        <strong>判断输出</strong>：最终看到新图片时，能说出是"猫"还是"狗"
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="w-full md:w-1/2 relative">
+                            <img src="https://img-blog.csdnimg.cn/29b2d2d424cb4cd8a0283749d63a8095.png" alt="神经网络与人脑类比" class="rounded-lg shadow-lg w-full h-auto object-cover" loading="lazy">
+                            <div class="absolute inset-0 bg-gradient-to-t from-indigo-900 opacity-30 rounded-lg"></div>
+                            <div class="absolute bottom-4 left-4 right-4 text-white text-center p-2 rounded bg-indigo-800 bg-opacity-70">
+                                <p class="text-sm font-medium">人脑神经与深度学习的灵感来源</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Network Structure Section -->
+        <section id="network-structure" class="mb-20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="section-title text-indigo-700 dark:text-indigo-400 mb-12">二、核心组件：神经网络的三层结构</h2>
+                
+                <div class="card p-8 mb-10">
+                    <div class="neuron-animation mb-12">
+                        <div class="neuron floating-element">
+                            <i class="fas fa-angle-right text-white text-xs" aria-hidden="true"></i>
+                        </div>
+                        <div class="synapse">
+                            <div class="synapse-pulse"></div>
+                        </div>
+                        <div class="neuron floating-element" style="animation-delay: 1s;">
+                            <i class="fas fa-angle-right text-white text-xs" aria-hidden="true"></i>
+                        </div>
+                        <div class="synapse">
+                            <div class="synapse-pulse" style="animation-delay: 1s;"></div>
+                        </div>
+                        <div class="neuron floating-element" style="animation-delay: 2s;">
+                            <i class="fas fa-angle-right text-white text-xs" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                        <div class="card hover:border-indigo-500 transition-all duration-300 transform hover:-rotate-1">
+                            <div class="p-6">
+                                <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-sign-in-alt text-indigo-600 dark:text-indigo-400" aria-hidden="true"></i>
+                                </div>
+                                <h3 class="font-bold text-lg mb-2 text-indigo-700 dark:text-indigo-400">输入层</h3>
+                                <p class="text-gray-700 dark:text-gray-300">接收原始数据（如图像像素、文字编码）</p>
+                                <div class="mt-4 text-sm text-gray-600 dark:text-gray-400">
+                                    <em>示例</em>：一张28×28像素的手写数字图片→784个输入节点
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card hover:border-indigo-500 transition-all duration-300 transform hover:-rotate-1">
+                            <div class="p-6">
+                                <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-layer-group text-indigo-600 dark:text-indigo-400" aria-hidden="true"></i>
+                                </div>
+                                <h3 class="font-bold text-lg mb-2 text-indigo-700 dark:text-indigo-400">隐藏层</h3>
+                                <p class="text-gray-700 dark:text-gray-300">多层神经元对数据进行特征加工</p>
+                                <div class="mt-4 text-sm text-gray-600 dark:text-gray-400">
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>第一层可能识别边缘</li>
+                                        <li>第二层组合成形状</li>
+                                        <li>更高层识别复杂模式</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card hover:border-indigo-500 transition-all duration-300 transform hover:-rotate-1">
+                            <div class="p-6">
+                                <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-sign-out-alt text-indigo-600 dark:text-indigo-400" aria-hidden="true"></i>
+                                </div>
+                                <h3 class="font-bold text-lg mb-2 text-indigo-700 dark:text-indigo-400">输出层</h3>
+                                <p class="text-gray-700 dark:text-gray-300">给出最终判断结果（如分类标签、预测数值）</p>
+                                <div class="mt-4 text-sm text-gray-600 dark:text-gray-400">
+                                    <em>示例</em>：输出0-9的概率值判断手写数字
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="conceptual-graph p-4">
+                        <div class="text-center text-gray-700 dark:text-gray-300 mb-3 font-bold">
+                            <i class="fas fa-project-diagram mr-2" aria-hidden="true"></i>神经网络基本结构
+                        </div>
+                        <div class="mermaid">
+graph LR
+    subgraph 输入层
+        I1((x₁))
+        I2((x₂))
+        I3((...))
+    end
+    
+    subgraph 隐藏层
+        H1((h₁))
+        H2((h₂))
+        H3((...))
+    end
+    
+    subgraph 输出层
+        O1((y₁))
+        O2((y₂))
+    end
+    
+    I1 -->|w₁₁| H1
+    I1 -->|w₁₂| H2
+    I2 -->|w₂₁| H1
+    I2 -->|w₂₂| H2
+    I3 -->|...| H3
+    
+    H1 -->|w'₁₁| O1
+    H1 -->|w'₁₂| O2
+    H2 -->|w'₂₁| O1
+    H2 -->|w'₂₂| O2
+    H3 -->|...| O1
+    
+    classDef input fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef hidden fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef output fill:#bfb,stroke:#333,stroke-width:2px;
+    
+    class I1,I2,I3 input;
+    class H1,H2,H3 hidden;
+    class O1,O2 output;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Process Section -->
+        <section id="key-process" class="mb-20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="section-title text-indigo-700 dark:text-indigo-400 mb-12">三、关键流程：三步学会"思考"</h2>
+                
+                <div class="card p-8 mb-10">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="space-y-6">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <span class="font-bold text-indigo-600 dark:text-indigo-400">1</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400">前向传播（预测）</h3>
+                            </div>
+                            <div class="pl-14">
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-chevron-right text-indigo-500 mt-1 mr-2" aria-hidden="true"></i>
+                                        <div>数据从输入层逐层传递，每层对数据做<span class="highlight">加权计算+激活函数处理</span></div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-chevron-right text-indigo-500 mt-1 mr-2" aria-hidden="true"></i>
+                                        <div><em>激活函数作用</em>：引入非线性，让网络能学习复杂关系（类似人脑的"是否触发信号"）</div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-chevron-right text-indigo-500 mt-1 mr-2" aria-hidden="true"></i>
+                                        <div>最终输出层给出预测结果（如判断图片是猫的概率为80%）</div>
+                                    </li>
+                                </ul>
+                                <div class="mt-4 p-3 bg-indigo-50 dark:bg-indigo-900 dark:bg-opacity-30 rounded-lg">
+                                    <p class="text-sm text-indigo-700 dark:text-indigo-300">
+                                        <i class="fas fa-info-circle mr-2" aria-hidden="true"></i>
+                                        每个神经元接收上一层所有神经元的输出，进行加权求和，再通过激活函数计算自己的输出
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <span class="font-bold text-indigo-600 dark:text-indigo-400">2</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400">误差计算（反思）</h3>
+                            </div>
+                            <div class="pl-14">
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-chevron-right text-indigo-500 mt-1 mr-2" aria-hidden="true"></i>
+                                        <div>用<span class="highlight">损失函数</span>比较预测值与真实值的差距（如交叉熵损失）</div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-chevron-right text-indigo-500 mt-1 mr-2" aria-hidden="true"></i>
+                                        <div><em>示例</em>：预测猫的概率是80%，实际是狗 → 损失值较高</div>
+                                    </li>
+                                </ul>
+                                <div class="mt-4 p-3 bg-indigo-50 dark:bg-indigo-900 dark:bg-opacity-30 rounded-lg">
+                                    <p class="text-sm text-indigo-700 dark:text-indigo-300">
+                                        <i class="fas fa-info-circle mr-2" aria-hidden="true"></i>
+                                        损失函数是网络"自我评价"的标准，值越低表示预测越准确
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <span class="font-bold text-indigo-600 dark:text-indigo-400">3</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400">反向传播（改进）</h3>
+                            </div>
+                            <div class="pl-14">
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-chevron-right text-indigo-500 mt-1 mr-2" aria-hidden="true"></i>
+                                        <div>将误差反向传递，通过<span class="highlight">梯度下降算法</span>调整每层神经元的权重</div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-chevron-right text-indigo-500 mt-1 mr-2" aria-hidden="true"></i>
+                                        <div><em>类比</em>：老师批改作业后，学生修正错误思路</div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-chevron-right text-indigo-500 mt-1 mr-2" aria-hidden="true"></i>
+                                        <div>反复迭代直到模型预测准确率达标</div>
+                                    </li>
+                                </ul>
+                                <div class="mt-4 p-3 bg-indigo-50 dark:bg-indigo-900 dark:bg-opacity-30 rounded-lg">
+                                    <p class="text-sm text-indigo-700 dark:text-indigo-300">
+                                        <i class="fas fa-info-circle mr-2" aria-hidden="true"></i>
+                                        梯度下降就像下山寻找最低点，每次向坡度最陡的方向走一小步
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12 conceptual-graph p-4">
+                        <div class="text-center text-gray-700 dark:text-gray-300 mb-3 font-bold">
+                            <i class="fas fa-sync-alt mr-2" aria-hidden="true"></i>深度学习训练循环
+                        </div>
+                        <div class="mermaid">
+graph LR
+    A[输入数据] --> B[前向传播]
+    B --> C[计算损失]
+    C --> D[反向传播]
+    D --> E[更新权重]
+    E --> |下一批数据|B
+    
+    style A fill:#f9f9ff,stroke:#6366f1,stroke-width:2px
+    style B fill:#e0e7ff,stroke:#6366f1,stroke-width:2px
+    style C fill:#e0e7ff,stroke:#6366f1,stroke-width:2px
+    style D fill:#e0e7ff,stroke:#6366f1,stroke-width:2px
+    style E fill:#e0e7ff,stroke:#6366f1,stroke-width:2px
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Advantages Section -->
+        <section id="key-advantages" class="mb-20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="section-title text-indigo-700 dark:text-indigo-400 mb-12">四、关键优势：自动特征学习</h2>
+                
+                <div class="card p-8 mb-10">
+                    <p class="text-lg mb-8">
+                        与传统机器学习相比，深度学习的核心突破在于：
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900 dark:from-opacity-30 dark:to-purple-900 dark:to-opacity-30 p-6 rounded-xl shadow-sm">
+                            <div class="flex items-start mb-4">
+                                <div class="w-12 h-12 rounded-lg bg-indigo-600 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i class="fas fa-robot text-white text-xl" aria-hidden="true"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-indigo-700 dark:text-indigo-300">免人工特征工程</h3>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                自动从数据中提取关键特征（如人脸识别中自动学习眼睛、鼻子的特征组合）
+                            </p>
+                            <div class="mt-6">
+                                <div class="text-sm font-semibold text-indigo-700 dark:text-indigo-300 mb-2">传统机器学习 vs 深度学习</div>
+                                <div class="space-y-3">
+                                    <div>
+                                        <div class="text-xs text-gray-600 dark:text-gray-400 mb-1">传统方法（需专家定义特征）</div>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill bg-gray-500" style="width: 40%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-gray-600 dark:text-gray-400 mb-1">深度学习（自动学习特征）</div>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 90%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900 dark:from-opacity-30 dark:to-indigo-900 dark:to-opacity-30 p-6 rounded-xl shadow-sm">
+                            <div class="flex items-start mb-4">
+                                <div class="w-12 h-12 rounded-lg bg-blue-600 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i class="fas fa-chart-network text-white text-xl" aria-hidden="true"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-blue-700 dark:text-blue-300">处理复杂数据</h3>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                在图像、语音、自然语言等非结构化数据上表现突出
+                            </p>
+                            <div class="mt-6 grid grid-cols-2 gap-3">
+                                <div class="p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm text-center">
+                                    <i class="fas fa-image text-2xl text-blue-500 mb-2" aria-hidden="true"></i>
+                                    <div class="text-sm font-medium text-gray-700 dark:text-gray-300">图像识别</div>
+                                </div>
+                                <div class="p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm text-center">
+                                    <i class="fas fa-microphone text-2xl text-blue-500 mb-2" aria-hidden="true"></i>
+                                    <div class="text-sm font-medium text-gray-700 dark:text-gray-300">语音处理</div>
+                                </div>
+                                <div class="p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm text-center">
+                                    <i class="fas fa-language text-2xl text-blue-500 mb-2" aria-hidden="true"></i>
+                                    <div class="text-sm font-medium text-gray-700 dark:text-gray-300">自然语言</div>
+                                </div>
+                                <div class="p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm text-center">
+                                    <i class="fas fa-dna text-2xl text-blue-500 mb-2" aria-hidden="true"></i>
+                                    <div class="text-sm font-medium text-gray-700 dark:text-gray-300">基因组学</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Applications Section -->
+        <section id="applications" class="mb-20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="section-title text-indigo-700 dark:text-indigo-400 mb-12">五、典型应用场景</h2>
+                
+                <div class="overflow-x-auto">
+                    <table class="themed-table">
+                        <thead>
+                            <tr>
+                                <th>领域</th>
+                                <th>应用案例</th>
+                                <th>原理对应</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-medium">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-camera text-indigo-500 mr-2" aria-hidden="true"></i>
+                                        图像识别
+                                    </div>
+                                </td>
+                                <td>人脸解锁、医学影像诊断</td>
+                                <td>多层卷积提取图像特征</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-comments text-indigo-500 mr-2" aria-hidden="true"></i>
+                                        自然语言处理
+                                    </div>
+                                </td>
+                                <td>智能客服、机器翻译</td>
+                                <td>循环神经网络处理序列数据</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-microphone text-indigo-500 mr-2" aria-hidden="true"></i>
+                                        语音识别
+                                    </div>
+                                </td>
+                                <td>智能音箱、实时字幕生成</td>
+                                <td>声学特征分层提取</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="card overflow-hidden group">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://source.unsplash.com/random/600x400/?face,recognition" alt="人脸识别" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-indigo-900 to-transparent opacity-70"></div>
+                            <div class="absolute bottom-4 left-4 right-4">
+                                <h3 class="text-lg font-bold text-white">人脸识别</h3>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                卷积神经网络自动提取面部特征，从低级（边缘、纹理）到高级（眼睛、鼻子形状）特征，最终形成身份特征向量进行匹配。
+                            </p>
+                            <div class="mt-4 flex items-center text-indigo-600 dark:text-indigo-400 text-sm font-medium">
+                                <i class="fas fa-chart-line mr-2" aria-hidden="true"></i>
+                                准确率高达99.97%
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card overflow-hidden group">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://source.unsplash.com/random/600x400/?translation,language" alt="机器翻译" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-indigo-900 to-transparent opacity-70"></div>
+                            <div class="absolute bottom-4 left-4 right-4">
+                                <h3 class="text-lg font-bold text-white">机器翻译</h3>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                序列到序列模型读取源语言句子，生成目标语言翻译，注意力机制帮助模型关注相关单词，捕捉语义与语法关系。
+                            </p>
+                            <div class="mt-4 flex items-center text-indigo-600 dark:text-indigo-400 text-sm font-medium">
+                                <i class="fas fa-globe mr-2" aria-hidden="true"></i>
+                                支持100+语言对
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card overflow-hidden group">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://source.unsplash.com/random/600x400/?medical,scan" alt="医学诊断" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-indigo-900 to-transparent opacity-70"></div>
+                            <div class="absolute bottom-4 left-4 right-4">
+                                <h3 class="text-lg font-bold text-white">医学诊断</h3>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                深度学习模型分析X光、CT、MRI等医学影像，自动检测异常区域，辅助医生诊断疾病，提高早期发现率。
+                            </p>
+                            <div class="mt-4 flex items-center text-indigo-600 dark:text-indigo-400 text-sm font-medium">
+                                <i class="fas fa-heartbeat mr-2" aria-hidden="true"></i>
+                                诊断准确率媲美专家
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Extended Understanding Section -->
+        <section id="extended-understanding" class="mb-20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="section-title text-indigo-700 dark:text-indigo-400 mb-12">六、延伸理解</h2>
+                
+                <div class="space-y-8">
+                    <div class="card p-8">
+                        <div class="flex flex-col md:flex-row md:items-center">
+                            <div class="mb-6 md:mb-0 md:mr-8 md:w-1/4 flex justify-center">
+                                <div class="w-24 h-24 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
+                                    <i class="fas fa-cubes text-4xl text-indigo-600 dark:text-indigo-400" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <div class="md:w-3/4">
+                                <h3 class="text-xl font-bold text-indigo-700 dark:text-indigo-400 mb-4">为什么需要多层？</h3>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    单层网络只能学习线性关系，多层叠加可表达复杂非线性关系。这就像简单积木可以搭建复杂建筑——每层学习的简单规则组合起来，就能表达极其复杂的模式和关系。
+                                </p>
+                                <div class="mt-4 conceptual-graph p-2">
+                                    <div class="mermaid">
+graph TD
+    A[单层网络] -->|只能学习| B[线性关系]
+    C[多层网络] -->|可以学习| D[任意复杂关系]
+    
+    style A fill:#f0f0ff,stroke:#6366f1,stroke-width:2px
+    style B fill:#f0f0ff,stroke:#6366f1,stroke-width:2px
+    style C fill:#f0f0ff,stroke:#6366f1,stroke-width:2px
+    style D fill:#f0f0ff,stroke:#6366f1,stroke-width:2px
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-8">
+                        <div class="flex flex-col md:flex-row md:items-center">
+                            <div class="mb-6 md:mb-0 md:mr-8 md:w-1/4 flex justify-center">
+                                <div class="w-24 h-24 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
+                                    <i class="fas fa-exclamation-triangle text-4xl text-amber-500" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <div class="md:w-3/4">
+                                <h3 class="text-xl font-bold text-amber-500 mb-4">过拟合问题</h3>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    模型过度记忆训练数据细节，导致对新数据预测效果差。这类似于学生死记硬背考点而非理解概念，遇到新题型就无法应对。解决方法包括：
+                                </p>
+                                <ul class="mt-4 space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2" aria-hidden="true"></i>
+                                        <div><span class="font-medium">Dropout</span> - 随机关闭部分神经元，避免过度依赖</div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2" aria-hidden="true"></i>
+                                        <div><span class="font-medium">数据增强</span> - 对原始数据进行变换，增加训练样本多样性</div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2" aria-hidden="true"></i>
+                                        <div><span class="font-medium">正则化</span> - 对模型参数增加约束，降低复杂度</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-8">
+                        <div class="flex flex-col md:flex-row md:items-center">
+                            <div class="mb-6 md:mb-0 md:mr-8 md:w-1/4 flex justify-center">
+                                <div class="w-24 h-24 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
+                                    <i class="fas fa-microchip text-4xl text-indigo-600 dark:text-indigo-400" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <div class="md:w-3/4">
+                                <h3 class="text-xl font-bold text-indigo-700 dark:text-indigo-400 mb-4">硬件依赖</h3>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    深度学习需要GPU加速训练，因为涉及数百万次矩阵运算。单个深度学习模型训练可能需要：
+                                </p>
+                                <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
+                                    <div class="p-3 bg-indigo-50 dark:bg-indigo-900 dark:bg-opacity-30 rounded-lg text-center">
+                                        <i class="fas fa-bolt text-amber-500 text-xl mb-2" aria-hidden="true"></i>
+                                        <div class="text-sm font-medium text-gray-700 dark:text-gray-300">数千瓦时电力</div>
+                                    </div>
+                                    <div class="p-3 bg-indigo-50 dark:bg-indigo-900 dark:bg-opacity-30 rounded-lg text-center">
+                                        <i class="fas fa-memory text-amber-500 text-xl mb-2" aria-hidden="true"></i>
+                                        <div class="text-sm font-medium text-gray-700 dark:text-gray-300">数十GB显存</div>
+                                    </div>
+                                    <div class="p-3 bg-indigo-50 dark:bg-indigo-900 dark:bg-opacity-30 rounded-lg text-center">
+                                        <i class="fas fa-clock text-amber-500 text-xl mb-2" aria-hidden="true"></i>
+                                        <div class="text-sm font-medium text-gray-700 dark:text-gray-300">数天至数周训练</div>
+                                    </div>
+                                </div>
+                                <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">
+                                    <i class="fas fa-info-circle mr-1" aria-hidden="true"></i>
+                                    最先进的大型语言模型训练可能消耗数千张GPU数月时间，成本达数百万美元。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Visual Guide Section -->
+        <section id="visual-guide" class="mb-20 bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900 dark:from-opacity-50 dark:to-blue-900 dark:to-opacity-30 py-16 px-4 rounded-3xl">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="section-title text-indigo-700 dark:text-indigo-300 mb-12">深度学习工作原理可视化</h2>
+                
+                <div class="conceptual-graph bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                    <div class="text-center text-gray-700 dark:text-gray-300 mb-6 font-bold text-lg">
+                        <i class="fas fa-project-diagram mr-2" aria-hidden="true"></i>深度学习工作流程全景图
+                    </div>
+                    <div class="mermaid">
+flowchart TD
+    subgraph "准备阶段"
+        A[数据收集] --> B[数据清洗]
+        B --> C[数据标注]
+        C --> D[数据增强]
+        D --> E[数据集划分]
+    end
+    
+    subgraph "模型设计阶段"
+        F[问题定义] --> G[模型架构选择]
+        G --> H[超参数设定]
+        H --> I[损失函数选择]
+        I --> J[优化器选择]
+    end
+    
+    subgraph "训练阶段"
+        K[模型初始化] --> L[前向传播]
+        L --> M[计算损失]
+        M --> N[反向传播]
+        N --> O[参数更新]
+        O --> P{收敛?}
+        P -->|否| L
+        P -->|是| Q[保存模型]
+    end
+    
+    subgraph "评估阶段"
+        R[验证集评估] --> S[测试集评估]
+        S --> T[性能指标分析]
+        T --> U[错误分析]
+    end
+    
+    subgraph "优化阶段"
+        V[模型调优] --> W[特征工程优化]
+        W --> X[超参数优化]
+        X --> Y[模型集成]
+    end
+    
+    subgraph "部署阶段"
+        Z[模型压缩] --> AA[模型转换]
+        AA --> AB[API开发]
+        AB --> AC[系统集成]
+        AC --> AD[监控与维护]
+    end
+    
+    E --> F
+    J --> K
+    Q --> R
+    U --> V
+    Y --> Z
+    
+    style 准备阶段 fill:#d4f1f9,stroke:#05a,stroke-width:2px
+    style 模型设计阶段 fill:#ffe6cc,stroke:#d79b00,stroke-width:2px
+    style 训练阶段 fill:#d5e8d4,stroke:#82b366,stroke-width:2px
+    style 评估阶段 fill:#fff2cc,stroke:#d6b656,stroke-width:2px
+    style 优化阶段 fill:#e1d5e7,stroke:#9673a6,stroke-width:2px
+    style 部署阶段 fill:#f8cecc,stroke:#b85450,stroke-width:2px
+                    </div>
+                </div>
+                
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="card p-6">
+                        <h3 class="text-lg font-bold text-indigo-700 dark:text-indigo-400 mb-4 flex items-center">
+                            <i class="fas fa-brain mr-2" aria-hidden="true"></i>
+                            神经元工作原理
+                        </h3>
+                        <div class="mermaid">
+flowchart LR
+    x1((x1)) --> |w1| sum((+))
+    x2((x2)) --> |w2| sum
+    x3((x3)) --> |w3| sum
+    b[偏置b] --> sum
+    sum --> |z=wx+b| f[激活函数]
+    f --> |a=f（z）| output[输出]
+    
+    style x1 fill:#bbdefb,stroke:#2196f3
+    style x2 fill:#bbdefb,stroke:#2196f3
+    style x3 fill:#bbdefb,stroke:#2196f3
+    style sum fill:#ffcc80,stroke:#ff9800
+    style f fill:#c8e6c9,stroke:#4caf50
+    style output fill:#f8bbd0,stroke:#e91e63
+                        </div>
+                        <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">
+                            每个神经元接收多个输入，进行加权求和后通过激活函数处理，产生最终输出。激活函数引入非线性变换，使网络能学习复杂关系。
+                        </p>
+                    </div>
+                    
+                    <div class="card p-6">
+                        <h3 class="text-lg font-bold text-indigo-700 dark:text-indigo-400 mb-4 flex items-center">
+                            <i class="fas fa-chart-line mr-2" aria-hidden="true"></i>
+                            梯度下降优化
+                        </h3>
+                        <div class="mermaid">
+flowchart TD
+    A[计算当前损失] --> B[计算梯度]
+    B --> C[按梯度方向更新参数]
+    C --> D{损失是否收敛?}
+    D -->|否| A
+    D -->|是| E[完成训练]
+    
+    style A fill:#e1bee7,stroke:#9c27b0
+    style B fill:#e1bee7,stroke:#9c27b0
+    style C fill:#e1bee7,stroke:#9c27b0
+    style D fill:#ffecb3,stroke:#ffc107
+    style E fill:#dcedc8,stroke:#8bc34a
+                        </div>
+                        <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">
+                            梯度下降是网络学习的核心算法。计算损失函数相对于参数的梯度（导数），沿梯度方向调整参数，使损失不断减小，最终找到最优解。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="mt-12">
+                    <div class="card p-6">
+                        <h3 class="text-lg font-bold text-indigo-700 dark:text-indigo-400 mb-4 flex items-center">
+                            <i class="fas fa-layer-group mr-2" aria-hidden="true"></i>
+                            卷积神经网络工作原理
+                        </h3>
+                        <div class="mermaid">
+flowchart LR
+    A[输入图像] --> B[卷积层]
+    B --> C[激活函数]
+    C --> D[池化层]
+    D --> E[卷积层2]
+    E --> F[激活函数2]
+    F --> G[池化层2]
+    G --> H[全连接层]
+    H --> I[输出]
+    
+    subgraph 滤波器作用
+        J[低级特征<br>边缘/纹理] --> K[中级特征<br>形状/部件] --> L[高级特征<br>物体/语义]
+    end
+    
+    B -.-> J
+    E -.-> K
+    H -.-> L
+    
+    style A fill:#bbdefb,stroke:#2196f3
+    style B fill:#ffcc80,stroke:#ff9800
+    style C fill:#ffcc80,stroke:#ff9800
+    style D fill:#ffcc80,stroke:#ff9800
+    style E fill:#ffcc80,stroke:#ff9800
+    style F fill:#ffcc80,stroke:#ff9800
+    style G fill:#ffcc80,stroke:#ff9800
+    style H fill:#c8e6c9,stroke:#4caf50
+    style I fill:#f8bbd0,stroke:#e91e63
+    style 滤波器作用 fill:#e8f5e9,stroke:#66bb6a
+                        </div>
+                        <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">
+                            卷积神经网络(CNN)是处理图像最常用的深度学习架构。卷积层通过滑动滤波器提取特征，池化层减少数据尺寸，全连接层综合特征做出最终判断。每个连续层次提取更高级的特征，从简单边缘到复杂形状，再到完整物体识别。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Further Reading Section -->
+        <section id="further-reading" class="mb-20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="section-title text-indigo-700 dark:text-indigo-400 mb-12">延伸阅读：最佳学习资源</h2>
+                
+                <div class="space-y-6">
+                    <div class="book-card card p-6 flex flex-col md:flex-row">
+                        <div class="flex-shrink-0 w-full md:w-1/4 mb-4 md:mb-0 md:mr-6">
+                            <div class="bg-indigo-100 dark:bg-indigo-900 h-40 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-book text-5xl text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-xl font-bold text-indigo-700 dark:text-indigo-400 mb-2">Deep Learning</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-2">Ian Goodfellow, Yoshua Bengio, Aaron Courville</p>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                深度学习领域最权威的教科书，由三位人工智能领域的顶尖专家撰写。书中从理论基础到实际应用，全面介绍深度学习的各个方面。适合有一定数学和编程基础的读者。
+                            </p>
+                            <a href="https://www.deeplearningbook.org/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition duration-200">
+                                <i class="fas fa-external-link-alt mr-2" aria-hidden="true"></i>
+                                官方网站
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="book-card card p-6 flex flex-col md:flex-row">
+                        <div class="flex-shrink-0 w-full md:w-1/4 mb-4 md:mb-0 md:mr-6">
+                            <div class="bg-indigo-100 dark:bg-indigo-900 h-40 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-laptop-code text-5xl text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-xl font-bold text-indigo-700 dark:text-indigo-400 mb-2">动手学深度学习</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-2">李沐 等</p>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                结合理论与实践的开源教程，使用直观的语言和大量代码示例讲解深度学习核心概念。书中提供基于PyTorch、TensorFlow等多个版本的实现，帮助读者快速上手。
+                            </p>
+                            <a href="https://zh.d2l.ai/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition duration-200">
+                                <i class="fas fa-external-link-alt mr-2" aria-hidden="true"></i>
+                                在线阅读
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="book-card card p-6 flex flex-col md:flex-row">
+                        <div class="flex-shrink-0 w-full md:w-1/4 mb-4 md:mb-0 md:mr-6">
+                            <div class="bg-indigo-100 dark:bg-indigo-900 h-40 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-chalkboard-teacher text-5xl text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-xl font-bold text-indigo-700 dark:text-indigo-400 mb-2">CS231n: 卷积神经网络视觉识别</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-2">斯坦福大学课程</p>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                斯坦福大学的经典课程，专注于计算机视觉领域的深度学习应用。课程包含详细的讲义、视频和编程作业，深入浅出地解释卷积神经网络原理。
+                            </p>
+                            <a href="http://cs231n.stanford.edu/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition duration-200">
+                                <i class="fas fa-external-link-alt mr-2" aria-hidden="true"></i>
+                                课程网站
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="book-card card p-6 flex flex-col md:flex-row">
+                        <div class="flex-shrink-0 w-full md:w-1/4 mb-4 md:mb-0 md:mr-6">
+                            <div class="bg-indigo-100 dark:bg-indigo-900 h-40 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-robot text-5xl text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-xl font-bold text-indigo-700 dark:text-indigo-400 mb-2">Neural Networks and Deep Learning</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-2">Michael Nielsen</p>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                一本免费的在线书籍，以极其清晰的方式解释神经网络背后的数学原理。书中包含交互式示例，帮助读者直观理解反向传播等复杂概念。
+                            </p>
+                            <a href="http://neuralnetworksanddeeplearning.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition duration-200">
+                                <i class="fas fa-external-link-alt mr-2" aria-hidden="true"></i>
+                                在线阅读
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="book-card card p-6 flex flex-col md:flex-row">
+                        <div class="flex-shrink-0 w-full md:w-1/4 mb-4 md:mb-0 md:mr-6">
+                            <div class="bg-indigo-100 dark:bg-indigo-900 h-40 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-chart-network text-5xl text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-xl font-bold text-indigo-700 dark:text-indigo-400 mb-2">深度学习入门：基于Python的理论与实现</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-2">斋藤康毅</p>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                从零开始实现神经网络的实用指南，不依赖深度学习框架，帮助读者理解底层原理。书中通过Python代码逐步构建各类神经网络，包括前馈网络、CNN等。
+                            </p>
+                            <a href="https://www.ituring.com.cn/book/1921" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition duration-200">
+                                <i class="fas fa-external-link-alt mr-2" aria-hidden="true"></i>
+                                图书信息
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-indigo-900 text-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-12">
+                    <div class="mb-8 md:mb-0">
+                        <h2 class="text-2xl font-bold mb-2">深度学习原理简明指南</h2>
+                        <p class="text-indigo-200">从基础概念到核心机制的综合解析</p>
+                    </div>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-indigo-800 hover:bg-indigo-700 flex items-center justify-center transition duration-300">
+                            <i class="fab fa-twitter" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-indigo-800 hover:bg-indigo-700 flex items-center justify-center transition duration-300">
+                            <i class="fab fa-github" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-indigo-800 hover:bg-indigo-700 flex items-center justify-center transition duration-300">
+                            <i class="fab fa-linkedin-in" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">快速导航</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#core-idea" class="text-indigo-200 hover:text-white transition duration-200">核心思想</a></li>
+                            <li><a href="#network-structure" class="text-indigo-200 hover:text-white transition duration-200">网络结构</a></li>
+                            <li><a href="#key-process" class="text-indigo-200 hover:text-white transition duration-200">关键流程</a></li>
+                            <li><a href="#key-advantages" class="text-indigo-200 hover:text-white transition duration-200">核心优势</a></li>
+                            <li><a href="#applications" class="text-indigo-200 hover:text-white transition duration-200">应用场景</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">相关资源</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#further-reading" class="text-indigo-200 hover:text-white transition duration-200">推荐书籍</a></li>
+                            <li><a href="#visual-guide" class="text-indigo-200 hover:text-white transition duration-200">可视化指南</a></li>
+                            <li><a href="#extended-understanding" class="text-indigo-200 hover:text-white transition duration-200">延伸理解</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">关于</h3>
+                        <p class="text-indigo-200 mb-4">
+                            本指南旨在通过简明易懂的方式解释深度学习的核心原理，帮助初学者快速入门这一前沿技术领域。
+                        </p>
+                        <p class="text-indigo-200">
+                            <i class="fas fa-envelope mr-2" aria-hidden="true"></i>
+                            contact@deeplearningguide.com
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="border-t border-indigo-800 pt-8 text-center text-indigo-300 text-sm">
+                    <p>© 2023 深度学习原理简明指南. 保留所有权利.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to top button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 p-3 bg-indigo-600 text-white rounded-full shadow-lg opacity-0 invisible transition-all duration-300 focus:outline-none hover:bg-indigo-700" aria-label="回到顶部">
+        <i class="fas fa-chevron-up" aria-hidden="true"></i>
+    </button>
+
+    <script>
+        // Theme toggle functionality
+        const htmlElement = document.documentElement;
+        const themeToggle = document.getElementById('theme-toggle');
+        
+        // Function to set theme
+        function setTheme(isDark) {
+            if (isDark) {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // Initialize theme based on localStorage or system preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            setTheme(true);
+        } else if (savedTheme === 'light') {
+            setTheme(false);
+        } else {
+            // Use system preference
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            setTheme(prefersDark);
+        }
+        
+        // Theme toggle event listener
+        themeToggle.addEventListener('click', function() {
+            const isDark = htmlElement.classList.contains('dark');
+            setTheme(!isDark);
+        });
+        
+        // Mermaid initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: htmlElement.classList.contains('dark') ? 'dark' : 'default',
+                securityLevel: 'loose'
+            });
+            
+            // Initialize progress bars animation
+            const progressBars = document.querySelectorAll('.progress-fill');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = entry.target;
+                        const width = target.getAttribute('style') || 'width: 90%';
+                        target.style.width = '0';
+                        setTimeout(() => {
+                            target.style.width = width;
+                        }, 100);
+                        observer.unobserve(target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            progressBars.forEach(bar => {
+                observer.observe(bar);
+            });
+        });
+        
+        // Back to top button functionality
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const offset = 80; // Adjust offset as needed
+                    
+                    window.scrollTo({
+                        top: targetPosition - offset,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Update mermaid theme when system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (!localStorage.getItem('theme')) {
+                setTheme(e.matches);
+                
+                // Redraw all mermaid diagrams
+                document.querySelectorAll('.mermaid').forEach(diagram => {
+                    const content = diagram.getAttribute('data-content') || diagram.textContent;
+                    diagram.innerHTML = content;
+                });
+                
+                mermaid.init(undefined, '.mermaid');
+            }
+        });
+    </script>
+</body>
+</html>

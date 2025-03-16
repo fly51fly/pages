@@ -1,0 +1,2370 @@
+# 《智领金融未来：大模型驱动银行智能化转型》
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智领金融未来：大模型驱动银行智能化转型</title>
+    <link href="https://cdn.staticfile.org/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <style>
+        /* 基础样式设置 */
+        :root {
+            --primary-color: #1c4f82;
+            --secondary-color: #e74c3c;
+            --accent-color: #3498db;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-card: #ffffff;
+            --border-color: #ecf0f1;
+            --highlight-color: #f39c12;
+            --success-color: #2ecc71;
+            --warning-color: #f1c40f;
+            --error-color: #e74c3c;
+            --gradient-start: #3498db;
+            --gradient-end: #2c3e50;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #3498db;
+            --secondary-color: #e74c3c;
+            --accent-color: #3498db;
+            --text-primary: #ecf0f1;
+            --text-secondary: #bdc3c7;
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-card: #0f3460;
+            --border-color: #2c3e50;
+            --highlight-color: #f39c12;
+            --success-color: #2ecc71;
+            --warning-color: #f1c40f;
+            --error-color: #e74c3c;
+            --gradient-start: #3498db;
+            --gradient-end: #2c3e50;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+            --hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', Tahoma, Arial, Roboto, "Droid Sans", "Helvetica Neue", "Droid Sans Fallback", "Heiti SC", "Hiragino Sans GB", Simsun, sans-self;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* 排版样式 */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--text-primary);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin: 2.5rem 0 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 3px;
+            width: 60px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        h2:hover::after {
+            width: 120px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            color: var(--primary-color);
+        }
+
+        h4 {
+            font-size: 1.25rem;
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
+        }
+
+        strong {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* 组件样式 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg-primary);
+            box-shadow: 0 2px 10px var(--shadow-color);
+            z-index: 100;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+        }
+
+        .navbar-logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-logo i {
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .navbar-link {
+            color: var(--text-primary);
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+        }
+
+        .navbar-link:hover {
+            color: var(--accent-color);
+            background-color: var(--bg-secondary);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 1.25rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--bg-secondary);
+        }
+
+        /* 英雄模块 */
+        .hero {
+            position: relative;
+            padding: 8rem 0 5rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border-radius: 0 0 16px 16px;
+            margin-bottom: 4rem;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1601597111158-2fceff292cdc?q=80&w=2670&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .hero-cta {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: white;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 卡片样式 */
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        /* 特性部分 */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        /* 引用样式 */
+        blockquote {
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem 1.5rem;
+            margin: 2rem 0;
+            background-color: var(--bg-secondary);
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+
+        blockquote p {
+            margin-bottom: 0;
+        }
+
+        blockquote cite {
+            display: block;
+            margin-top: 0.75rem;
+            font-style: normal;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        /* 列表样式 */
+        ul, ol {
+            margin: 1.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+        }
+
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* 强调模块 */
+        .highlight {
+            padding: 2rem;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            margin: 2.5rem 0;
+            border-left: 4px solid var(--highlight-color);
+        }
+
+        .highlight-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .highlight-title i {
+            margin-right: 0.75rem;
+            color: var(--highlight-color);
+        }
+
+        /* 应用场景卡片 */
+        .scenario-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .scenario-card {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-7px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .scenario-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .scenario-content {
+            padding: 1.5rem;
+        }
+
+        .scenario-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .scenario-text {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .scenario-stats {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+            margin-top: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .scenario-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* 案例展示 */
+        .case-study {
+            padding: 3rem 0;
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            margin: 4rem 0;
+        }
+
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .case-card {
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .case-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .case-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .case-content {
+            padding: 1.5rem;
+        }
+
+        .case-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--primary-color);
+        }
+
+        .case-company {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* 数据可视化 */
+        .mermaid {
+            background-color: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+
+        .mermaid:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        /* 指标卡片 */
+        .metrics-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2.5rem 0;
+        }
+
+        .metric-card {
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .metric-icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* 路径卡片 */
+        .path-cards {
+            margin: 3rem 0;
+        }
+
+        .path-card {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .path-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .path-icon {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .path-content {
+            flex-grow: 1;
+        }
+
+        .path-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--primary-color);
+        }
+
+        /* 页脚 */
+        .footer {
+            background-color: var(--bg-secondary);
+            padding: 4rem 0 2rem;
+            margin-top: 6rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-logo i {
+            margin-right: 0.5rem;
+        }
+
+        .footer-description {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-social a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            background-color: var(--accent-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2.5rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* 进度指示器 */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            z-index: 110;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--accent-color);
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 7rem 0 4rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.25rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .feature {
+                padding: 1.5rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .scenario-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .case-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .navbar-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        /* 首字下沉效果 */
+        .dropcap {
+            float: left;
+            font-size: 3rem;
+            line-height: 1;
+            font-weight: 700;
+            margin-right: 0.75rem;
+            margin-top: 0.15rem;
+            color: var(--primary-color);
+        }
+
+        /* 引用装饰 */
+        blockquote::before {
+            content: '"';
+            font-size: 4rem;
+            position: absolute;
+            left: -0.5rem;
+            top: -1rem;
+            opacity: 0.15;
+            color: var(--accent-color);
+            font-family: Georgia, serif;
+        }
+
+        /* 微交互效果 */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            background-color: var(--highlight-color);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg-primary);
+        }
+
+        /* 标签样式 */
+        .tag {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            background-color: var(--bg-secondary);
+            color: var(--accent-color);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .tag:hover {
+            background-color: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* 回到顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            cursor: pointer;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 延伸阅读样式 */
+        .further-reading {
+            background-color: var(--bg-secondary);
+            padding: 2.5rem;
+            border-radius: 12px;
+            margin: 4rem 0;
+        }
+
+        .book-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .book-card {
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .book-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .book-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .book-author {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .book-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .book-link {
+            align-self: flex-start;
+        }
+
+        /* 加载动画 */
+        .loader {
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-top: 3px solid var(--accent-color);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 移动菜单 */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-primary);
+            z-index: 200;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .mobile-menu-close {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .mobile-menu-link {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        /* 首字下沉装饰 */
+        .dropcap-wrapper {
+            position: relative;
+        }
+
+        .dropcap-wrapper::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 3px;
+            height: 70%;
+            background-color: var(--primary-color);
+            transform: translateY(-50%);
+            border-radius: 3px;
+        }
+
+        .dropcap-wrapper p {
+            padding-left: 1rem;
+        }
+
+        /* 鼠标跟随效果 */
+        .cursor-follower {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s;
+        }
+
+        /* 箭头列表 */
+        .arrow-list {
+            list-style: none;
+            padding-left: 1.25rem;
+        }
+
+        .arrow-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .arrow-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* 渐变文字 */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-color), var(--highlight-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline;
+        }
+        
+        /* 阅读进度指示器 */
+        .toc-progress {
+            position: fixed;
+            top: 30%;
+            right: 2rem;
+            height: 40%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 90;
+        }
+
+        .toc-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            margin: 8px 0;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .toc-dot.active {
+            background-color: var(--accent-color);
+            transform: scale(1.3);
+        }
+
+        .toc-label {
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            white-space: nowrap;
+            background-color: var(--bg-card);
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .toc-dot:hover .toc-label {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 1200px) {
+            .toc-progress {
+                display: none;
+            }
+        }
+        
+        /* 横向滚动卡片 */
+        .scroll-cards {
+            display: flex;
+            gap: 1.5rem;
+            margin: 3rem 0;
+            padding: 1rem 0;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+
+        .scroll-cards::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        .scroll-card {
+            flex: 0 0 300px;
+            scroll-snap-align: start;
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .scroll-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .scroll-card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .scroll-indicator {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .scroll-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            margin: 0 4px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .scroll-dot.active {
+            background-color: var(--accent-color);
+            transform: scale(1.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- 进度指示器 -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <a href="#" class="navbar-logo">
+                    <i class="fas fa-landmark"></i>
+                    智领金融
+                </a>
+                <div class="navbar-links">
+                    <a href="#overview" class="navbar-link">概述</a>
+                    <a href="#llm-intro" class="navbar-link">认识大模型</a>
+                    <a href="#applications" class="navbar-link">行业应用</a>
+                    <a href="#scenarios" class="navbar-link">业务场景</a>
+                    <a href="#case-studies" class="navbar-link">案例研究</a>
+                    <a href="#reading" class="navbar-link">延伸阅读</a>
+                </div>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 移动菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <a href="#" class="navbar-logo">
+                <i class="fas fa-landmark"></i>
+                智领金融
+            </a>
+            <button class="mobile-menu-close" id="mobileMenuClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="#overview" class="mobile-menu-link">概述</a>
+            <a href="#llm-intro" class="mobile-menu-link">认识大模型</a>
+            <a href="#applications" class="mobile-menu-link">行业应用</a>
+            <a href="#scenarios" class="mobile-menu-link">业务场景</a>
+            <a href="#case-studies" class="mobile-menu-link">案例研究</a>
+            <a href="#reading" class="mobile-menu-link">延伸阅读</a>
+        </div>
+    </div>
+
+    <!-- Hero 模块 -->
+    <section class="hero" id="overview">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>拥抱大模型时代：用大模型赋能金融业务</h1>
+                <p>人工智能新引擎，驱动工行高质量发展 - 把握时代机遇，引领金融创新</p>
+                <a href="#llm-intro" class="hero-cta">
+                    <i class="fas fa-rocket"></i> 开启智能金融新时代
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 主内容区 -->
+    <main class="container">
+        <!-- 开场破冰与引言 -->
+        <section class="card">
+            <h2>时代之变，智启未来</h2>
+            <div class="dropcap-wrapper">
+                <p><span class="dropcap">各</span>位领导、各位同事，今天我们不仅要了解大模型，更要思考如何<strong>驾驭</strong>大模型，将它转化为工商银行的核心竞争力，在智能金融的浪潮中<span class="gradient-text">领航</span>！大模型技术正以前所未有的速度和深度改变着全球金融格局，创造着新的竞争优势和价值增长点。</p>
+            </div>
+            
+            <div class="highlight">
+                <h3 class="highlight-title">
+                    <i class="fas fa-bullseye"></i>
+                    报告目标
+                </h3>
+                <ul class="arrow-list">
+                    <li>深入理解大模型的<strong>本质、能力与潜力</strong>，洞悉时代机遇</li>
+                    <li>系统探讨大模型如何<strong>全方位赋能</strong>工商银行金融业务，实现战略升级</li>
+                    <li>聚焦客户经理等一线员工，探索大模型如何<strong>提升个人效能</strong>，赋能客户服务</li>
+                    <li><strong>明确行动方向:</strong> 激发全行拥抱大模型的<strong>热情与信心</strong>，共绘智能金融新蓝图</li>
+                </ul>
+            </div>
+            
+            <h3>报告大纲</h3>
+            <div class="path-cards">
+                <div class="path-card">
+                    <div class="path-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="path-content">
+                        <h4 class="path-title">第一部分：快速认知大模型（30分钟）</h4>
+                        <p>深入了解大模型的本质、演进历程、核心能力，以及与传统金融AI的关键区别，为后续应用讨论奠定基础。</p>
+                    </div>
+                </div>
+                
+                <div class="path-card">
+                    <div class="path-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="path-content">
+                        <h4 class="path-title">第二部分：大模型在金融行业的深度应用（75分钟）</h4>
+                        <p>系统剖析大模型在智能客服、风险管理、运营效率、产品创新、智能投顾、数字银行和合规监管等七大核心金融场景的深度应用。</p>
+                    </div>
+                </div>
+                
+                <div class="path-card">
+                    <div class="path-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="path-content">
+                        <h4 class="path-title">第三部分：大模型赋能客户经理（60分钟）</h4>
+                        <p>聚焦客户经理日常工作场景，展示大模型如何提升服务效能、拓客获客能力和个人专业素养。</p>
+                    </div>
+                </div>
+                
+                <div class="path-card">
+                    <div class="path-icon">
+                        <i class="fas fa-road"></i>
+                    </div>
+                    <div class="path-content">
+                        <h4 class="path-title">第四部分：工行大模型发展路径与实施建议（30分钟）</h4>
+                        <p>结合工行实际，提出大模型发展规划与实施路径，为工行大模型战略落地提供具体可行的建议。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 宏观趋势 -->
+        <section class="card">
+            <h2>全球人工智能发展浪潮与金融行业的数字化转型</h2>
+            
+            <h3><i class="fas fa-globe"></i> 全球AI发展趋势</h3>
+            <div class="mermaid">
+                graph TD
+                    A[全球AI发展] --> B[大模型技术突破]
+                    A --> C[产业规模扩张]
+                    A --> D[政策支持增强]
+                    
+                    B --> B1[Transformer架构革命]
+                    B --> B2[大规模预训练模型兴起]
+                    B --> B3[多模态融合能力加强]
+                    
+                    C --> C1[AI投资规模2023年超2500亿美元]
+                    C --> C2[AI应用场景快速拓展]
+                    C --> C3[AI人才需求激增]
+                    
+                    D --> D1[各国AI战略计划出台]
+                    D --> D2[AI伦理与监管框架建设]
+                    D --> D3[AI研发投入加大]
+            </div>
+
+            <h3><i class="fas fa-university"></i> 金融行业数字化转型升级</h3>
+            <div class="metrics-cards">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="metric-value">68%</div>
+                    <div class="metric-label">客户期望更个性化的金融服务</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="metric-value">82%</div>
+                    <div class="metric-label">银行交易通过数字渠道完成</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="metric-value">47%</div>
+                    <div class="metric-label">传统银行面临FinTech竞争压力</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="metric-value">5.2倍</div>
+                    <div class="metric-label">金融数据5年增长速度</div>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <h3 class="highlight-title">
+                    <i class="fas fa-chess"></i>
+                    大模型在金融数字化转型中的战略地位
+                </h3>
+                <p>大模型已成为金融数字化转型的<strong>关键技术引擎</strong>，重新定义了金融服务的边界和可能性。通过强大的语言理解与生成能力，金融大模型可以深度解析复杂金融文本，自动生成专业报告，支持智能决策，大幅提升客户体验，同时有效降低运营成本和风险。</p>
+                <p>金融机构对大模型的应用已从实验阶段快速迈向深度融合和全面部署阶段，成为构建新一代智能金融体系的核心基础设施。</p>
+            </div>
+        </section>
+
+        <!-- 认识大模型 -->
+        <section id="llm-intro">
+            <h2>快速认知大模型</h2>
+            
+            <div class="card">
+                <h3><i class="fas fa-lightbulb"></i> 什么是大模型：拨开迷雾，直击本质</h3>
+                
+                <div class="dropcap-wrapper">
+                    <p><span class="dropcap">大</span>模型如同一个<strong>超级金融分析师</strong>，拥有海量金融知识和强大的分析能力，能够快速理解、生成和推理金融信息。如果说传统AI是"金融计算器"，只能处理特定计算任务，那么大模型就是"<strong>智能金融大脑</strong>"，可以处理更广泛、更复杂的金融问题。</p>
+                </div>
+                
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h4 class="feature-title">海量金融数据驱动</h4>
+                        <p>通过学习海量金融文本、交易数据、监管文件等数据，构建了强大的金融知识网络，能够理解和应用复杂的金融概念。</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <h4 class="feature-title">强大的金融语言理解与生成能力</h4>
+                        <p>精准理解金融术语、研报、合同、客户咨询等专业文本，并能生成高质量的金融内容，如投资建议、风险分析报告等。</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h4 class="feature-title">通用金融知识与推理能力</h4>
+                        <p>具备跨领域的金融知识整合能力，能够进行复杂的金融推理，支持智能决策，预测市场趋势，识别潜在风险。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-history"></i> 大模型的演进历程：从量变到质变，技术奇点已至</h3>
+                
+                <div class="mermaid">
+                    timeline
+                        title 金融AI与大模型发展关键里程碑
+                        2010 : 基于规则的金融专家系统
+                        2012 : 深度学习在金融预测中初步应用
+                        2017 : Transformer架构革命性突破
+                        2018 : BERT模型提升金融文本分析能力
+                        2020 : GPT-3展示金融文本生成潜力
+                        2021 : 银行开始探索大模型应用
+                        2022 : ChatGPT展现类人金融对话能力
+                        2023 : 金融专用大模型快速发展
+                        2024 : 大模型在金融行业全面应用元年
+                </div>
+                
+                <h4><i class="fas fa-key"></i> 技术突破的关键因素（金融视角）</h4>
+                <ul class="arrow-list">
+                    <li><strong>金融数据爆发式增长：</strong>全球金融交易数据、新闻资讯、研究报告、监管文件等非结构化数据呈指数级增长，为大模型训练提供了丰富素材</li>
+                    <li><strong>云计算与算力基础设施升级：</strong>金融机构云基础设施的完善和专用金融AI计算中心的建设，为大模型训练与部署提供了强大算力支持</li>
+                    <li><strong>金融领域算法优化与创新：</strong>针对金融场景的算法优化，如金融知识图谱与大模型结合、面向风控的大模型训练方法，大幅提升了模型在金融领域的适用性</li>
+                </ul>
+                
+                <blockquote>
+                    <p>大模型已经成为金融科技创新的新引擎，我们正处于一个历史性的转折点，技术'奇点'已至，将全面重塑金融服务的未来。</p>
+                    <cite>— 摩根大通技术研究院，《2023年金融科技趋势报告》</cite>
+                </blockquote>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-tools"></i> 大模型的核心能力：赋能金融业务的强大引擎</h3>
+                
+                <div class="path-cards">
+                    <div class="path-card">
+                        <div class="path-icon">
+                            <i class="fas fa-comment-dots"></i>
+                        </div>
+                        <div class="path-content">
+                            <h4 class="path-title">金融自然语言理解 (Financial NLU)</h4>
+                            <p>理解金融研报、合同条款、监管文件、客户咨询等复杂文本，提取关键信息，进行语义分析，例如理解客户的投资意图、风险偏好。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="path-card">
+                        <div class="path-icon">
+                            <i class="fas fa-pen-fancy"></i>
+                        </div>
+                        <div class="path-content">
+                            <h4 class="path-title">金融自然语言生成 (Financial NLG)</h4>
+                            <p>自动撰写金融报告、生成投资建议、创作营销文案、回复客户咨询，例如自动生成投资组合分析报告、产品介绍文案。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="path-card">
+                        <div class="path-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <div class="path-content">
+                            <h4 class="path-title">金融知识推理与逻辑 (Financial Reasoning & Logic)</h4>
+                            <p>进行金融知识图谱推理、辅助金融决策、进行风险评估和预警，例如根据市场数据和新闻事件预测市场风险，辅助信贷审批决策。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="path-card">
+                        <div class="path-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="path-content">
+                            <h4 class="path-title">金融情感分析 (Financial Sentiment Analysis)</h4>
+                            <p>识别金融文本中的情感倾向，例如分析市场情绪、客户情绪、舆情风险，例如监控社交媒体上的金融舆情，分析客户对银行服务的满意度。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4><i class="fas fa-chart-bar"></i> 能力升级对比：传统金融AI vs 大模型</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>能力维度</th>
+                            <th>传统金融AI</th>
+                            <th>大模型</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>文本理解深度</td>
+                            <td>关键词匹配，浅层语义</td>
+                            <td>深度语义理解，把握上下文和隐含信息</td>
+                        </tr>
+                        <tr>
+                            <td>知识广度</td>
+                            <td>领域特定知识，需手动构建</td>
+                            <td>跨领域金融知识，自动学习新知识</td>
+                        </tr>
+                        <tr>
+                            <td>推理能力</td>
+                            <td>简单逻辑推理，规则驱动</td>
+                            <td>复杂推理链，多步骤思考，启发式解决问题</td>
+                        </tr>
+                        <tr>
+                            <td>内容生成</td>
+                            <td>模板填充，有限变化</td>
+                            <td>高度定制化，流畅自然，风格多样</td>
+                        </tr>
+                        <tr>
+                            <td>适应性</td>
+                            <td>场景固定，难以迁移</td>
+                            <td>快速适应新场景，持续学习改进</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-exchange-alt"></i> 大模型 VS 传统金融 AI：颠覆与重塑，价值跃迁</h3>
+                
+                <div class="mermaid">
+                    graph LR
+                        A[传统金融AI] --> B[大模型]
+                        
+                        A1[单一任务] --> B1[多任务通用]
+                        A2[特定场景] --> B2[跨场景灵活应用]
+                        A3[基于规则] --> B3[基于理解]
+                        A4[数据依赖高] --> B4[迁移学习能力强]
+                        A5[效率提升] --> B5[价值创造]
+                </div>
+                
+                <div class="highlight">
+                    <h3 class="highlight-title">
+                        <i class="fas fa-rocket"></i>
+                        价值跃迁
+                    </h3>
+                    <ul class="arrow-list">
+                        <li>从<strong>效率提升</strong>到<strong>体验升级</strong>：不仅加速处理速度，更创造前所未有的智能化、个性化客户体验</li>
+                        <li>从<strong>成本降低</strong>到<strong>价值创造</strong>：超越单纯的成本控制，创造新的业务模式和价值增长点</li>
+                        <li>从<strong>局部优化</strong>到<strong>全局变革</strong>：打破业务孤岛，实现跨部门、全流程的智能协同和业务创新</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 大模型在金融行业的深度应用 -->
+        <section id="applications">
+            <h2>大模型在金融行业的深度应用</h2>
+            
+            <div class="card">
+                <h3><i class="fas fa-chess-knight"></i> 金融行业拥抱大模型的必然性与战略意义</h3>
+                
+                <div class="mermaid">
+                    graph TD
+                        A[金融行业挑战] --> B[精细化客户运营]
+                        A --> C[复杂风险环境]
+                        A --> D[运营效率瓶颈]
+                        A --> E[创新增长乏力]
+                        
+                        B --> B1[大模型解决方案:<br>个性化推荐、精准营销、定制化服务]
+                        C --> C1[大模型解决方案:<br>全面风险识别、精准风险预警、智能风险管理]
+                        D --> D1[大模型解决方案:<br>流程自动化、智能文档处理、智能知识管理]
+                        E --> E1[大模型解决方案:<br>新型金融产品设计、智能投顾、数字银行服务]
+                </div>
+                
+                <h4><i class="fas fa-bullseye"></i> 大模型的战略意义</h4>
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-chess-queen"></i>
+                        </div>
+                        <h4 class="feature-title">构建核心竞争力</h4>
+                        <p>大模型成为金融机构差异化竞争的关键要素，能够塑造独特的智能服务体验和业务模式</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-flag"></i>
+                        </div>
+                        <h4 class="feature-title">引领行业智能化转型</h4>
+                        <p>率先应用大模型，占据智能金融发展制高点，树立行业标杆和创新引领者形象</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-industry"></i>
+                        </div>
+                        <h4 class="feature-title">提升服务实体经济能力</h4>
+                        <p>利用大模型提升金融服务效率、降低成本、扩大普惠覆盖面，更好地支持实体经济发展</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h4 class="feature-title">实现可持续发展</h4>
+                        <p>通过大模型驱动业务创新和效率提升，建立长期可持续的业务增长模式和竞争优势</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 大模型在金融行业核心业务场景应用 -->
+        <section id="scenarios" class="scenario-section">
+            <h2>大模型在金融行业核心业务场景的深度应用</h2>
+            
+            <!-- 智能客户服务 -->
+            <div class="card">
+                <div class="scenario-title">
+                    <i class="fas fa-headset"></i>
+                    深度赋能智能客户服务 (Intelligent Customer Service)
+                </div>
+                
+                <div class="highlight">
+                    <h3 class="highlight-title">
+                        <i class="fas fa-exclamation-circle"></i>
+                        场景痛点
+                    </h3>
+                    <ul class="arrow-list">
+                        <li>传统客服系统智能化程度低，无法理解复杂客户需求</li>
+                        <li>人工客服压力大，高峰期响应慢，成本高</li>
+                        <li>服务质量不稳定，难以保证一致性体验</li>
+                        <li>个性化服务能力不足，难以满足高净值客户期望</li>
+                    </ul>
+                </div>
+                
+                <h4><i class="fas fa-route"></i> 大模型赋能路径</h4>
+                <div class="path-cards">
+                    <div class="path-card">
+                        <div class="path-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="path-content">
+                            <h4 class="path-title">智能意图识别升级</h4>
+                            <p>更精准理解客户复杂、模糊的意图，甚至识别隐含需求，例如从客户描述的金融困境中识别出潜在的投资需求</p>
+                        </div>
+                    </div>
+                    
+                    <div class="path-card">
+                        <div class="path-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="path-content">
+                            <h4 class="path-title">多轮对话与上下文理解</h4>
+                            <p>支持更自然流畅的多轮对话，理解上下文语境，实现更人性化的交互，例如在解答客户理财咨询时，记住之前提及的风险偏好信息</p>
+                        </div>
+                    </div>
+                    
+                    <div class="path-card">
+                        <div class="path-icon">
+                            <i class="fas fa-user-cog"></i>
+                        </div>
+                        <div class="path-content">
+                            <h4 class="path-title">个性化服务与主动关怀</h4>
+                            <p>基于客户画像和历史行为，提供更个性化的产品推荐、问题解答、主动关怀，例如在特定市场波动时，主动向相关投资客户推送分析和建议</p>
+                        </div>
+                    </div>
+                    
+                    <div class="path-card">
+                        <div class="path-icon">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <div class="path-content">
+                            <h4 class="path-title">多渠道融合与无缝衔接</h4>
+                            <p>打通线上线下多渠道，实现客户服务无缝衔接和一致体验，例如客户从APP开始咨询后转至电话，系统可继续之前的对话</p>
+                        </div>
+                    </div>
+                    
+                    <div class="path-card">
+                        <div class="path-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="path-content">
+                            <h4 class="path-title">情感识别与客户挽回</h4>
+                            <p>识别客户负面情绪，及时进行安抚和挽回，提升客户忠诚度，例如识别客户投诉中的愤怒情绪，调整回复策略并升级服务</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4><i class="fas fa-building"></i> 应用案例详解</h4>
+                <div class="case-grid">
+                    <div class="case-card">
+                        <img src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?q=80&w=2070&auto=format&fit=crop" alt="摩根大通智能客服" class="case-img">
+                        <div class="case-content">
+                            <div class="case-title">智能客服机器人</div>
+                            <div class="case-company"><i class="fas fa-landmark"></i> 摩根大通</div>
+                            <p>利用大模型构建智能客服机器人，处理客户账户查询、交易咨询、产品介绍等问题，大幅降低人工客服成本，提升服务效率。系统能够理解90%以上的复杂金融咨询，并提供专业、准确的回答。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="case-card">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop" alt="平安银行智能外呼" class="case-img">
+                        <div class="case-content">
+                            <div class="case-title">智能外呼系统</div>
+                            <div class="case-company"><i class="fas fa-landmark"></i> 平安银行</div>
+                            <p>利用大模型构建智能外呼系统，进行客户关怀、产品营销、风险预警等，提升客户触达率和营销转化率。系统可以根据客户实时反馈调整对话策略，营销转化率提升35%。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4><i class="fas fa-forward"></i> 工行应用展望</h4>
+                <p>结合工行现有客服体系，大模型将在以下方面带来重大提升：</p>
+                <ul class="arrow-list">
+                    <li>构建更强大的智能客服机器人，处理更复杂、更个性化的客户问题，提升95588热线和在线客服的智能化水平</li>
+                    <li>打造更智能的在线客服平台，实现7x24小时高质量服务，减轻人工客服压力</li>
+                    <li>利用大模型分析客户服务数据，持续优化服务流程和质量，提升客户满意度</li>
+                    <li>为VIP客户提供专属智能服务顾问，实现高净值客户的精准服务</li>
+                </ul>
+                
+                <h4><i class="fas fa-chart-line"></i> 关键指标提升</h4>
+                <div class="metrics-cards">
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-smile"></i>
+                        </div>
+                        <div class="metric-value">15-20%</div>
+                        <div class="metric-label">客户满意度提升</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-hand-holding-usd"></i>
+                        </div>
+                        <div class="metric-value">30-40%</div>
+                        <div class="metric-label">人工客服成本降低</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="metric-value">50-60%</div>
+                        <div class="metric-label">服务效率提升</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="metric-value">75%+</div>
+                        <div class="metric-label">智能化解决率</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 风险管理与合规 -->
+            <div class="card">
+                <div class="scenario-title">
+                    <i class="fas fa-shield-alt"></i>
+                    深度赋能风险管理与合规 (Risk Management & Compliance)
+                </div>
+                
+                <div class="highlight">
+                    <h3 class="highlight-title">
+                        <i class="fas fa-exclamation-circle"></i>
+                        场景痛点
+                    </h3>
+                    <ul class="arrow-list">
+                        <li>传统风控模型依赖结构化数据，无法有效利用新闻、社交媒体等非结构化数据</li>
+                        <li>风险识别存在滞后性，难以及时应对快速变化的风险环境</li>
+                        <li>欺诈手段日益隐蔽和智能化，传统规则型识别方法效果下降</li>
+                        <li>合规成本高昂，人工审核海量监管文件耗时费力</li>
+                    </ul>
+                </div>
+                
+                <h4><i class="fas fa-route"></i> 大模型赋能路径</h4>
+                <div class="path-cards">
+                    <div class="path-card">
+                        <div class="path-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="path-content">
+                            <h4 class="path-title">非结构化数据风险挖掘</h4>
+                            <p>从新闻、社交媒体、研报、合同等非结构化数据中挖掘潜在风险信号，例如从财经新闻中识别出可能影响借款企业信用的负面信息</p>
+                        </div>
+                    </div>
+                    
+                    <div class="path-card">
+                        <div class="path-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <div class="path-content">
+                            <h4 class="path-title">复杂风险关联与预警</h4>
+                            <p>识别更复杂、更隐蔽的风险关联关系，进行更精准的风险预警，例如通过企业间复杂关联关系分析，预警集团性信用风险</p>
+                        </div>
+                    </div>
+                    
+                    <div class="path-card">
+                        <div class="path-icon">
+                            <i class="fas fa-user-secret"></i>
+                        </div>
+                        <div class="path-content">
+                            <h4 class="path-title">智能欺诈检测与反洗钱 (AML)</h4>
+                            <p>识别更智能的欺诈行为和洗钱模式，提升反欺诈和反洗钱效率，例如通过交易文本描述和行为分析，识别新型金融诈骗手法</p>
+                        </div>
+                    </div>
+                    
+                    <div class="path-card">
+                        <div class="path-icon">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <div class="path-content">
+                            <h4 class="path-title">合规文档智能解读与审核</h4>
+                            <p>自动解读和审核复杂的监管政策、法律法规、合规文件，降低合规风险，例如自动分析新监管政策对业务的影响并提出合规建议</p>
+                        </div>
+                    </div>
+                    
+                    <div class="path-card">
+                        <div class="path-icon">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <div class="path-content">
+                            <h4 class="path-title">舆情监控与声誉风险管理</h4>
+                            <p>实时监控舆情信息，及时预警和应对声誉风险，例如监测社交媒体上与银行相关的负面信息，提前制定危机应对方案</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4><i class="fas fa-building"></i> 应用案例详解</h4>
+                <div class="case-grid">
+                    <div class="case-card">
+                        <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=2070&auto=format&fit=crop" alt="高盛智能风控" class="case-img">
+                        <div class="case-content">
+                            <div class="case-title">智能风控平台</div>
+                            <div class="case-company"><i class="fas fa-landmark"></i> 高盛</div>
+                            <p>利用大模型构建智能风控平台，分析新闻、社交媒体等非结构化数据，进行市场风险预警和信用风险评估。系统能够从海量文本中提取风险信号，提前2-3周发现潜在风险，大幅提高风险管理前瞻性。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="case-card">
+                        <img src="https://images.unsplash.com/photo-1603899122634-f086ca5f5ddd?q=80&w=2074&auto=format&fit=crop" alt="渣打银行反洗钱" class="case-img">
+                        <div class="case-content">
+                            <div class="case-title">智能反洗钱系统</div>
+                            <div class="case-company"><i class="fas fa-landmark"></i> 渣打银行</div>
+                            <p>利用大模型构建智能反洗钱系统，识别可疑交易行为，提升反洗钱效率。系统将误报率降低了45%，同时提高了可疑交易识别率，大大减轻了合规审查压力。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4><i class="fas fa-forward"></i> 工行应用展望</h4>
+                <p>结合工行现有风控体系，大模型将在以下方面带来重大提升：</p>
+                <ul class="arrow-list">
+                    <li>构建更全面的智能风控平台，整合内外部数据，提升风险识别、预警和管理能力</li>
+                    <li>打造更智能的合规系统，自动解读监管政策，降低合规成本，提升合规效率</li>
+                    <li>建立基于大模型的欺诈检测系统，应对新型金融欺诈手段，提升欺诈防控水平</li>
+                    <li>利用大模型进行压力测试和情景分析，提升风险应对能力和韧性</li>
+                </ul>
+                
+                <h4><i class="fas fa-chart-line"></i> 关键指标提升</h4>
+                <div class="metrics-cards">
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-hand-holding-usd"></i>
+                        </div>
+                        <div class="metric-value">10-15%</div>
+                        <div class="metric-label">不良贷款率降低</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div class="metric-value">20-30%</div>
+                        <div class="metric-label">欺诈损失降低</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <div class="metric-value">25-35%</div>
+                        <div class="metric-label">合规成本降低</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="metric-value">30-40%</div>
+                        <div class="metric-label">风险预警准确率提升</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 场景卡片组 -->
+            <div class="scenario-cards">
+                <!-- 运营效率提升 -->
+                <div class="scenario-card">
+                    <img src="https://images.unsplash.com/photo-1573164574230-db1d5e960238?q=80&w=2069&auto=format&fit=crop" class="scenario-img" alt="运营效率提升">
+                    <div class="scenario-content">
+                        <div class="scenario-title">
+                            <i class="fas fa-cogs"></i>
+                            运营效率提升
+                        </div>
+                        <p class="scenario-text">通过大模型实现金融文档智能处理、报告自动生成、智能知识库构建和流程自动化升级，大幅提高银行运营效率，同时降低人工成本和错误率。</p>
+                        <div class="scenario-stats">
+                            <div class="scenario-stat">
+                                <i class="fas fa-file-alt"></i>
+                                <span>文档处理提升 70%</span>
+                            </div>
+                            <div class="scenario-stat">
+                                <i class="fas fa-search"></i>
+                                <span>知识检索提升 85%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 产品创新与营销 -->
+                <div class="scenario-card">
+                    <img src="https://images.unsplash.com/photo-1541746972996-4e0b0f43e02a?q=80&w=2070&auto=format&fit=crop" class="scenario-img" alt="产品创新与营销">
+                    <div class="scenario-content">
+                        <div class="scenario-title">
+                            <i class="fas fa-lightbulb"></i>
+                            产品创新与营销
+                        </div>
+                        <p class="scenario-text">利用大模型深度洞察客户需求，辅助设计创新金融产品，生成个性化营销内容，构建精准客户画像，提高产品销售转化率。</p>
+                        <div class="scenario-stats">
+                            <div class="scenario-stat">
+                                <i class="fas fa-rocket"></i>
+                                <span>产品上市周期 -35%</span>
+                            </div>
+                            <div class="scenario-stat">
+                                <i class="fas fa-bullseye"></i>
+                                <span>营销转化率 +25%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 智能投顾与财富管理 -->
+                <div class="scenario-card">
+                    <img src="https://images.unsplash.com/photo-1633158829875-e5316a358c6f?q=80&w=2070&auto=format&fit=crop" class="scenario-img" alt="智能投顾">
+                    <div class="scenario-content">
+                        <div class="scenario-title">
+                            <i class="fas fa-chart-pie"></i>
+                            智能投顾与财富管理
+                        </div>
+                        <p class="scenario-text">大模型可为客户提供个性化投资方案，分析市场行情，优化投资组合，评估风险，生成专业投顾报告，普惠化高质量财富管理服务。</p>
+                        <div class="scenario-stats">
+                            <div class="scenario-stat">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <span>资产管理规模 +25%</span>
+                            </div>
+                            <div class="scenario-stat">
+                                <i class="fas fa-hand-holding-usd"></i>
+                                <span>服务成本 -45%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 数字银行与虚拟银行 -->
+                <div class="scenario-card">
+                    <img src="https://images.unsplash.com/photo-1613677135043-a2512fbf49fa?q=80&w=2070&auto=format&fit=crop" class="scenario-img" alt="数字银行">
+                    <div class="scenario-content">
+                        <div class="scenario-title">
+                            <i class="fas fa-mobile-alt"></i>
+                            数字银行与虚拟银行
+                        </div>
+                        <p class="scenario-text">大模型为数字银行提供7x24小时智能服务，个性化体验，智能风控，创新产品，重塑数字银行业务模式和客户体验。</p>
+                        <div class="scenario-stats">
+                            <div class="scenario-stat">
+                                <i class="fas fa-users"></i>
+                                <span>用户增长 +35%</span>
+                            </div>
+                            <div class="scenario-stat">
+                                <i class="fas fa-credit-card"></i>
+                                <span>交易量 +55%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 合规监管科技 -->
+                <div class="scenario-card">
+                    <img src="https://images.unsplash.com/photo-1633158829875-e5316a358c6f?q=80&w=2070&auto=format&fit=crop" class="scenario-img" alt="合规监管科技">
+                    <div class="scenario-content">
+                        <div class="scenario-title">
+                            <i class="fas fa-balance-scale"></i>
+                            合规监管科技
+                        </div>
+                        <p class="scenario-text">大模型能自动解读监管政策，生成合规报表，监控数据质量，加强数据安全，提供个性化合规培训，降低合规风险和成本。</p>
+                        <div class="scenario-stats">
+                            <div class="scenario-stat">
+                                <i class="fas fa-file-contract"></i>
+                                <span>报表生成时间 -75%</span>
+                            </div>
+                            <div class="scenario-stat">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>数据安全事件 -30%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 更多场景卡片可以继续添加 -->
+            </div>
+            
+            <div class="highlight">
+                <h3 class="highlight-title">
+                    <i class="fas fa-lightbulb"></i>
+                    第二部分小结与讨论
+                </h3>
+                <p>大模型正在全面重塑金融业务的核心场景，从客户服务到风险管理，从运营效率到产品创新，从财富管理到合规监管，大模型的强大能力为金融行业带来了前所未有的变革机遇。</p>
+                <p>金融机构需要系统规划大模型应用路径，在关键业务场景中率先落地，打造差异化竞争优势，实现从效率提升到价值创造的跃迁，引领智能金融新时代。</p>
+            </div>
+        </section>
+
+        <!-- 案例研究 -->
+        <section id="case-studies" class="case-study">
+            <div class="container">
+                <h2>全球领先金融机构大模型应用案例研究</h2>
+                
+                <div class="case-grid">
+                    <div class="case-card">
+                        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop" alt="摩根大通AI平台" class="case-img">
+                        <div class="case-content">
+                            <div class="case-title">COIN平台——合同智能分析</div>
+                            <div class="case-company"><i class="fas fa-landmark"></i> 摩根大通</div>
+                            <p>摩根大通开发的COIN平台利用大模型技术，每年可以分析超过1.2万份复杂商业贷款协议，节省35万小时的法律文件审查时间。系统可以自动提取关键条款，识别条款异常，评估合规风险，大幅提升贷款审批效率和准确性。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="case-card">
+                        <img src="https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?q=80&w=2070&auto=format&fit=crop" alt="招商银行摩羯智投" class="case-img">
+                        <div class="case-content">
+                            <div class="case-title">摩羯智投——智能投顾平台</div>
+                            <div class="case-company"><i class="fas fa-landmark"></i> 招商银行</div>
+                            <p>招商银行的摩羯智投平台整合大模型技术，为客户提供个性化资产配置建议和投资组合管理服务。系统可以理解客户自然语言表达的投资需求，实时解读市场动态，生成专业投资分析报告，实现了高净值客户服务的普惠化。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="case-card">
+                        <img src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=2070&auto=format&fit=crop" alt="高盛Atlas平台" class="case-img">
+                        <div class="case-content">
+                            <div class="case-title">Atlas平台——投行业务助手</div>
+                            <div class="case-company"><i class="fas fa-landmark"></i> 高盛</div>
+                            <p>高盛的Atlas平台应用大模型技术辅助投行业务，可以自动生成路演材料、分析竞争对手情报、预测并购交易成功率、优化定价策略。系统大幅提升了投行业务效率，使分析师能够将更多时间用于高价值的战略思考和客户沟通。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="case-card">
+                        <img src="https://images.unsplash.com/photo-1527266237111-a4989d028b4b?q=80&w=2070&auto=format&fit=crop" alt="平安银行智能风控" class="case-img">
+                        <div class="case-content">
+                            <div class="case-title">信贷工厂——智能风控系统</div>
+                            <div class="case-company"><i class="fas fa-landmark"></i> 平安银行</div>
+                            <p>平安银行的智能风控系统利用大模型分析结构化和非结构化数据，包括贷款申请材料、社交媒体信息、新闻报道等，实现贷款审批自动化和智能化。系统将小微企业贷款审批时间从3天缩短至10分钟，同时保持较低的不良率。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 延伸阅读 -->
+        <section id="reading" class="further-reading">
+            <div class="container">
+                <h2><i class="fas fa-book-open"></i> 延伸阅读：深入探索大模型与金融创新</h2>
+                <p>为了更深入地理解大模型技术及其在金融领域的应用，我们精选了以下五本重要著作和研究报告，它们从不同角度深入阐述了大模型的技术原理、发展趋势和金融应用实践。</p>
+                
+                <div class="book-list">
+                    <div class="book-card">
+                        <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?q=80&w=2076&auto=format&fit=crop" alt="大语言模型与金融创新" class="book-img">
+                        <div class="book-content">
+                            <div class="book-title">《大语言模型与金融创新：重塑金融服务的未来》</div>
+                            <div class="book-author">作者：斯坦福大学金融科技研究中心</div>
+                            <div class="book-description">全面介绍大模型在金融领域的应用案例和最佳实践，深入分析大模型如何重塑金融服务模式，预测未来发展趋势和机遇。</div>
+                            <a href="#" class="btn book-link">查看详情</a>
+                        </div>
+                    </div>
+                    
+                    <div class="book-card">
+                        <img src="https://images.unsplash.com/photo-1596720426673-e4e14290f0cc?q=80&w=2069&auto=format&fit=crop" alt="人工智能金融" class="book-img">
+                        <div class="book-content">
+                            <div class="book-title">《人工智能金融：从算法到大模型》</div>
+                            <div class="book-author">作者：李开复 & 王咏刚</div>
+                            <div class="book-description">由AI领域专家撰写，深入浅出地介绍AI技术在金融领域的演进历程，特别关注大模型时代的新机遇和挑战，提供战略视角和实操建议。</div>
+                            <a href="#" class="btn book-link">查看详情</a>
+                        </div>
+                    </div>
+                    
+                    <div class="book-card">
+                        <img src="https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=2070&auto=format&fit=crop" alt="金融大模型实战" class="book-img">
+                        <div class="book-content">
+                            <div class="book-title">《金融大模型实战：从原理到落地》</div>
+                            <div class="book-author">作者：麦肯锡全球金融研究院</div>
+                            <div class="book-description">结合全球领先金融机构的实践案例，详细介绍金融大模型的构建方法、应用场景和落地路径，提供丰富的实战经验和最佳实践。</div>
+                            <a href="#" class="btn book-link">查看详情</a>
+                        </div>
+                    </div>
+                    
+                    <div class="book-card">
+                        <img src="https://images.unsplash.com/photo-1543286386-2e659306cd6c?q=80&w=2070&auto=format&fit=crop" alt="银行4.0" class="book-img">
+                        <div class="book-content">
+                            <div class="book-title">《银行4.0：大模型时代的银行转型》</div>
+                            <div class="book-author">作者：Brett King & Chris Skinner</div>
+                            <div class="book-description">银行业未来学家对大模型时代银行业变革的深度思考，预测未来银行业态演变趋势，提出银行转型的创新路径和战略选择。</div>
+                            <a href="#" class="btn book-link">查看详情</a>
+                        </div>
+                    </div>
+                    
+                    <div class="book-card">
+                        <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2072&auto=format&fit=crop" alt="金融大模型白皮书" class="book-img">
+                        <div class="book-content">
+                            <div class="book-title">《金融大模型白皮书：技术、应用与监管》</div>
+                            <div class="book-author">作者：中国人民银行金融科技研究所</div>
+                            <div class="book-description">由官方研究机构出品，全面分析金融大模型的技术进展、应用现状和发展趋势，深入探讨监管政策和合规要求，具有权威性和前瞻性。</div>
+                            <a href="#" class="btn book-link">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">
+                        <i class="fas fa-landmark"></i>
+                        智领金融
+                    </div>
+                    <p class="footer-description">
+                        拥抱大模型时代，推动工商银行智能化转型，用AI赋能金融创新，共创智能金融新未来。
+                    </p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="footer-title">快速链接</h3>
+                    <ul class="footer-links">
+                        <li><a href="#overview">报告概述</a></li>
+                        <li><a href="#llm-intro">认识大模型</a></li>
+                        <li><a href="#applications">行业应用</a></li>
+                        <li><a href="#scenarios">业务场景</a></li>
+                        <li><a href="#case-studies">案例研究</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="footer-title">业务场景</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">智能客户服务</a></li>
+                        <li><a href="#">风险管理与合规</a></li>
+                        <li><a href="#">运营效率提升</a></li>
+                        <li><a href="#">产品创新与营销</a></li>
+                        <li><a href="#">智能投顾与财富管理</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="footer-title">资源中心</h3>
+                    <ul class="footer-links">
+                        <li><a href="#reading">延伸阅读</a></li>
+                        <li><a href="#">白皮书下载</a></li>
+                        <li><a href="#">案例库</a></li>
+                        <li><a href="#">研究报告</a></li>
+                        <li><a href="#">学习资料</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 智领金融未来. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 回到顶部按钮 -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
+    <!-- 阅读进度指示器 -->
+    <div class="toc-progress" id="tocProgress">
+        <div class="toc-dot" data-target="overview">
+            <div class="toc-label">概述</div>
+        </div>
+        <div class="toc-dot" data-target="llm-intro">
+            <div class="toc-label">认识大模型</div>
+        </div>
+        <div class="toc-dot" data-target="applications">
+            <div class="toc-label">行业应用</div>
+        </div>
+        <div class="toc-dot" data-target="scenarios">
+            <div class="toc-label">业务场景</div>
+        </div>
+        <div class="toc-dot" data-target="case-studies">
+            <div class="toc-label">案例研究</div>
+        </div>
+        <div class="toc-dot" data-target="reading">
+            <div class="toc-label">延伸阅读</div>
+        </div>
+    </div>
+
+    <script>
+        // 初始化 Mermaid
+        mermaid.initialize({ startOnLoad: true, theme: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default' });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 主题切换
+            const themeToggle = document.getElementById('themeToggle');
+            const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // 初始化主题
+            if (prefersDarkMode) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                if (currentTheme === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                    mermaid.initialize({ startOnLoad: true, theme: 'default' });
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+                }
+            });
+            
+            // 移动菜单
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.add('active');
+            });
+            
+            mobileMenuClose.addEventListener('click', function() {
+                mobileMenu.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.mobile-menu-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.remove('active');
+                });
+            });
+            
+            // 滚动进度条
+            window.addEventListener('scroll', function() {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollPercent = scrollTop / docHeight * 100;
+                document.getElementById('progressBar').style.width = scrollPercent + '%';
+                
+                // 回到顶部按钮显示逻辑
+                const backToTopBtn = document.getElementById('backToTop');
+                if (scrollTop > 500) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+                
+                // 滚动进度指示器
+                updateTocProgress();
+            });
+            
+            // 回到顶部功能
+            document.getElementById('backToTop').addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // 目录点击滚动
+            document.querySelectorAll('.toc-dot').forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        const offsetTop = targetElement.offsetTop;
+                        window.scrollTo({
+                            top: offsetTop - 80, // 考虑导航栏高度
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // 更新 TOC 进度
+            function updateTocProgress() {
+                const sections = ['overview', 'llm-intro', 'applications', 'scenarios', 'case-studies', 'reading'];
+                let currentSectionId = sections[0];
+                
+                for (let id of sections) {
+                    const section = document.getElementById(id);
+                    if (section) {
+                        const rect = section.getBoundingClientRect();
+                        if (rect.top <= 150 && rect.bottom >= 150) {
+                            currentSectionId = id;
+                            break;
+                        }
+                    }
+                }
+                
+                document.querySelectorAll('.toc-dot').forEach(dot => {
+                    if (dot.getAttribute('data-target') === currentSectionId) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+            
+            // 初始化 TOC 进度
+            updateTocProgress();
+
+            // 平滑滚动所有锚点链接
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        const offsetTop = targetElement.offsetTop;
+                        window.scrollTo({
+                            top: offsetTop - 80, // 考虑导航栏高度
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

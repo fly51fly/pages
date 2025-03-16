@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人工智能的数学本质</title>
+    <link href="https://cdn.staticfile.org/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #3B82F6;
+            --secondary-color: #EC4899;
+            --accent-color: #8B5CF6;
+            --text-color: #1F2937;
+            --bg-color: #FFFFFF;
+            --bg-secondary: #F3F4F6;
+            --border-color: #E5E7EB;
+            --highlight: #FEF3C7;
+            --code-bg: #F9FAFB;
+        }
+
+        .dark {
+            --primary-color: #60A5FA;
+            --secondary-color: #F472B6;
+            --accent-color: #A78BFA;
+            --text-color: #F9FAFB;
+            --bg-color: #111827;
+            --bg-secondary: #1F2937;
+            --border-color: #374151;
+            --highlight: #4B5563;
+            --code-bg: #282A36;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', Tahoma, Arial, Roboto, "Droid Sans", "Helvetica Neue", "Droid Sans Fallback", "Heiti SC", "Hiragino Sans GB", Simsun, sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .concept-card {
+            background-color: var(--bg-secondary);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .formula {
+            padding: 1rem;
+            background-color: var(--code-bg);
+            border-radius: 0.5rem;
+            font-family: 'Noto Serif SC', serif;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .nav-link {
+            position: relative;
+            padding-bottom: 0.25rem;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .drop-cap p:first-child:first-letter {
+            float: left;
+            font-size: 4rem;
+            line-height: 0.8;
+            padding-right: 0.5rem;
+            color: var(--primary-color);
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background-color: rgba(var(--bg-color-rgb), 0.8);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .dark .sticky-header {
+            background-color: rgba(17, 24, 39, 0.8);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            width: 4rem;
+            height: 4rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .data-visual {
+            border-radius: 0.5rem;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+
+        .function-diagram {
+            border: 2px solid var(--border-color);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .mermaid {
+            background-color: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+        
+        .learning-card {
+            border-left: 4px solid;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .learning-card.supervised {
+            border-color: #10B981; /* emerald-500 */
+        }
+        
+        .learning-card.unsupervised {
+            border-color: #F59E0B; /* amber-500 */
+        }
+        
+        .learning-card.semi-supervised {
+            border-color: #3B82F6; /* blue-500 */
+        }
+        
+        .learning-card.transfer {
+            border-color: #8B5CF6; /* violet-500 */
+        }
+        
+        .learning-card.reinforcement {
+            border-color: #EC4899; /* pink-500 */
+        }
+        
+        .learning-card.adversarial {
+            border-color: #EF4444; /* red-500 */
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--primary-color);
+            cursor: help;
+        }
+        
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--bg-secondary);
+            color: var(--text-color);
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            font-size: 0.875rem;
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        
+        /* Function animation */
+        .function-animation {
+            position: relative;
+            height: 200px;
+            width: 100%;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+        
+        .function-item {
+            position: absolute;
+            transition: all 0.5s ease;
+        }
+        
+        .input-item {
+            left: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .process-item {
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .output-item {
+            right: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .arrow {
+            position: absolute;
+            top: 50%;
+            width: 15%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .arrow-left {
+            left: 25%;
+        }
+        
+        .arrow-right {
+            right: 25%;
+        }
+        
+        .arrow::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-top: 2px solid var(--primary-color);
+            border-right: 2px solid var(--primary-color);
+        }
+        
+        .arrow-left::after {
+            right: 0;
+            transform: translateY(-50%) rotate(45deg);
+        }
+        
+        .arrow-right::after {
+            right: 0;
+            transform: translateY(-50%) rotate(45deg);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .hero-section {
+                padding: 2rem 1rem;
+            }
+            
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .concept-card {
+                margin-bottom: 1rem;
+            }
+        }
+
+        /* Toggle Switch for Dark Mode */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 30px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        .toggle-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 8px;
+            box-sizing: border-box;
+            color: white;
+            font-size: 14px;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 50;
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Navigation -->
+    <header class="sticky-header bg-opacity-90 shadow-sm">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-xl font-bold flex items-center">
+                    <i class="fas fa-brain text-gradient-to-r from-blue-500 to-purple-600 mr-2"></i>
+                    <span class="gradient-text">人工智能导论</span>
+                </a>
+                <div class="flex items-center space-x-6">
+                    <a href="#mathematical-essence" class="nav-link hidden md:block hover:text-blue-500 transition-colors">数学本质</a>
+                    <a href="#ai-structure" class="nav-link hidden md:block hover:text-blue-500 transition-colors">知识体系</a>
+                    <a href="#function-composition" class="nav-link hidden md:block hover:text-blue-500 transition-colors">智能函数</a>
+                    <a href="#learning-methods" class="nav-link hidden md:block hover:text-blue-500 transition-colors">学习方式</a>
+                    <div class="flex items-center ml-4">
+                        <span class="mr-2 text-sm hidden md:block">
+                            <i class="fas fa-sun"></i>
+                        </span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="darkModeToggle">
+                            <div class="toggle-icons">
+                                <i class="fas fa-sun"></i>
+                                <i class="fas fa-moon"></i>
+                            </div>
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <span class="ml-2 text-sm hidden md:block">
+                            <i class="fas fa-moon"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section relative">
+        <div class="hero-pattern"></div>
+        <div class="container mx-auto py-16 md:py-24 px-4 z-10 relative">
+            <div class="max-w-3xl mx-auto text-center">
+                <span class="bg-white bg-opacity-20 text-white px-4 py-1 rounded-full text-sm font-medium inline-block mb-4">
+                    2025春季未来学院授课
+                </span>
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">人工智能的数学本质</h1>
+                <p class="text-xl md:text-2xl mb-8 opacity-90">解析人工智能系统背后的数学范式与原理</p>
+                <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
+                    <a href="#mathematical-essence" class="bg-white text-blue-600 hover:bg-blue-50 font-medium px-6 py-3 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                        <i class="fas fa-book-open mr-2"></i>
+                        开始学习
+                    </a>
+                    <a href="#ai-visualization" class="bg-transparent border-2 border-white text-white hover:bg-white hover:bg-opacity-10 font-medium px-6 py-3 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                        <i class="fas fa-project-diagram mr-2"></i>
+                        查看可视化
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Takeaways -->
+    <section class="py-12 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-gray-900 dark:to-indigo-900">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold">人工智能的关键洞察</h2>
+                    <p class="mt-4 text-lg text-gray-600 dark:text-gray-300">什么是人工智能？其背后的科学原理是什么？</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md animate-fade-in delay-100">
+                        <div class="rounded-full bg-blue-100 dark:bg-blue-900 w-16 h-16 flex items-center justify-center mb-4">
+                            <i class="fas fa-flask text-blue-600 dark:text-blue-300 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">人工智能是科学</h3>
+                        <p class="text-gray-600 dark:text-gray-300">人工智能并非玄学，而是基于严谨数学模型的科学，其核心是可验证、可解释的数学原理。</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md animate-fade-in delay-200">
+                        <div class="rounded-full bg-purple-100 dark:bg-purple-900 w-16 h-16 flex items-center justify-center mb-4">
+                            <i class="fas fa-square-root-alt text-purple-600 dark:text-purple-300 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">数学本质是智能函数</h3>
+                        <p class="text-gray-600 dark:text-gray-300">人工智能的核心是智能函数，它接收输入数据，通过复杂的数学运算，输出预测或决策结果。</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md animate-fade-in delay-300">
+                        <div class="rounded-full bg-pink-100 dark:bg-pink-900 w-16 h-16 flex items-center justify-center mb-4">
+                            <i class="fas fa-code-branch text-pink-600 dark:text-pink-300 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">复合参数可学习函数</h3>
+                        <p class="text-gray-600 dark:text-gray-300">智能函数是由大量简单函数复合而成，这些函数的参数可以通过数据驱动的方式进行学习和优化。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Visual Essence Section -->
+    <section id="mathematical-essence" class="py-16 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="section-title text-3xl font-bold mb-4">人工智能的数学本质</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <div class="drop-cap">
+                        <p class="mb-4 text-lg">人工智能并非黑魔法，而是建立在严谨数学基础上的科学。虽然AI系统常被视为"黑盒子"，其生成内容有时难以预测，但其核心运作原理却是清晰而明确的数学模型。机器学习作为AI的主要驱动力，基于可验证、可解释的数学框架，使我们能够系统地理解和改进AI系统。</p>
+                        <p class="mb-4">从数学角度看，人工智能的本质是一个智能函数，它接收各种形式的输入数据（图像、文本、音频等），经过复杂的数学变换，最终输出预测结果或决策。这一智能函数并非天生完美，而是通过大量数据的训练和参数优化，不断逼近理想状态。</p>
+                    </div>
+                    <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold mb-4">人工智能的数学表达</h3>
+                        <div class="formula text-center">
+                            <span class="block text-2xl mb-2">𝑦 = 𝑓𝜃(𝑥)</span>
+                            <div class="grid grid-cols-3 gap-4 text-center mt-4">
+                                <div>
+                                    <span class="block text-xl">𝑥</span>
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">输入数据</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xl">𝑓𝜃</span>
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">参数化智能函数</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xl">𝑦</span>
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">输出结果</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-gray-700 dark:text-gray-300 text-sm">其中，𝜃 代表函数的可学习参数，通过优化这些参数使得函数能够准确地完成特定任务。</p>
+                    </div>
+                </div>
+
+                <div class="mb-12">
+                    <h3 class="text-2xl font-bold mb-4">大模型时代的智能函数扩展</h3>
+                    <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg mb-6">
+                        <div class="formula text-center">
+                            <span class="block text-2xl mb-2">𝑦 = 𝑓𝜃(𝑥, 𝑇)</span>
+                            <div class="grid grid-cols-4 gap-4 text-center mt-4">
+                                <div>
+                                    <span class="block text-xl">𝑥</span>
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">输入数据</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xl">𝑇</span>
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">任务指令</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xl">𝑓𝜃</span>
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">参数化智能函数</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xl">𝑦</span>
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">输出结果</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-lg">在大模型时代，人工智能正经历范式转变：预训练模型或基座模型能够通过同一组参数处理多种下游任务，展现出前所未有的跨领域泛化能力。这种新型智能函数不仅接收数据输入，还接受任务指令(𝑇)，使其能够根据指令灵活切换不同功能。</p>
+                </div>
+
+                <!-- Real-world examples -->
+                <div class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 p-6 rounded-lg mb-8">
+                    <h3 class="text-xl font-bold mb-4">大模型应用示例</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead>
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">输入文本</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">任务指令</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">功能</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">输出结果</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">"What is the capital of China?"</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">帮我把这句话翻译为中文</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">中英文翻译</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">"中国的首都在哪里？"</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">"What is the capital of China?"</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">请回答我</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">问答系统</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">"中国的首都在北京"</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Structure Section -->
+    <section id="ai-structure" class="py-16 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="section-title text-3xl font-bold mb-4">人工智能知识体系</h2>
+                <p class="text-lg mb-8">人工智能的知识体系呈现出独特的圈层结构，从外向内，技术细节逐渐过渡到本质原理，显示出"大道至简"的规律。</p>
+                
+                <div id="ai-visualization" class="data-visual mb-12">
+                    <div class="mermaid">
+                        graph TD
+                            subgraph 大道至简
+                                A["数学原理 (智能函数的本质)"]
+                            end
+                            subgraph 层级II
+                                B["算法模型 (BP算法, CNN, Transformer)"]
+                            end
+                            subgraph 层级III
+                                C["软硬件平台 (TensorFlow, PyTorch, GPU, TPU)"]
+                            end
+                            subgraph 层级IV
+                                D["应用技术 (计算机视觉, 机器翻译, 智能机器人)"]
+                            end
+                            
+                            A --> B
+                            B --> C
+                            C --> D
+                            
+                            style A fill:#f9a8d4,stroke:#be185d
+                            style B fill:#a5b4fc,stroke:#4f46e5
+                            style C fill:#93c5fd,stroke:#2563eb
+                            style D fill:#6ee7b7,stroke:#047857
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">圈层结构特点</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-circle-notch text-blue-500 mt-1 mr-2"></i>
+                                <span><strong>越往外层内容越丰富</strong> - 应用领域和技术实现多种多样</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-bullseye text-blue-500 mt-1 mr-2"></i>
+                                <span><strong>越往内层原理越单纯</strong> - 核心数学本质简洁而统一</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-compress-arrows-alt text-blue-500 mt-1 mr-2"></i>
+                                <span><strong>从复杂到简单的收敛</strong> - 展现了科学探索"大道至简"的规律</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">中国AI技术力量</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+                                <h4 class="font-bold mb-2">百度飞桨</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">国产开源深度学习平台</p>
+                                <i class="fas fa-code text-blue-500 text-2xl"></i>
+                            </div>
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+                                <h4 class="font-bold mb-2">华为昇腾</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">自主AI处理芯片</p>
+                                <i class="fas fa-microchip text-red-500 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Intelligence Function Input Section -->
+    <section class="py-16 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="section-title text-3xl font-bold mb-4">智能函数的输入形式</h2>
+                <p class="text-lg mb-8">智能函数处理各种数据类型，关键在于将这些数据转换为计算机可理解的数学表达。</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                    <div class="concept-card">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">图像数据</h3>
+                        <p class="mb-4">用像素矩阵表示，每个像素包含RGB值</p>
+                        <div class="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <span class="text-sm font-medium text-gray-600 dark:text-gray-400">数学表示</span>
+                            <p class="font-mono text-sm">三维矩阵 (高 × 宽 × 通道)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="concept-card">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">视频数据</h3>
+                        <p class="mb-4">表示为图像帧序列，增加时间维度</p>
+                        <div class="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <span class="text-sm font-medium text-gray-600 dark:text-gray-400">数学表示</span>
+                            <p class="font-mono text-sm">四维张量 (时间 × 高 × 宽 × 通道)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="concept-card">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">音频数据</h3>
+                        <p class="mb-4">表示为时间序列的波形或频谱图</p>
+                        <div class="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <span class="text-sm font-medium text-gray-600 dark:text-gray-400">数学表示</span>
+                            <p class="font-mono text-sm">一维/二维数组 (时间 × 频率)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="concept-card">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-font"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">文本数据</h3>
+                        <p class="mb-4">通过词向量表示，捕捉语义关系</p>
+                        <div class="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <span class="text-sm font-medium text-gray-600 dark:text-gray-400">数学表示</span>
+                            <p class="font-mono text-sm">词嵌入向量 (独热编码或高维向量)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 p-6 rounded-lg mb-12">
+                    <h3 class="text-xl font-bold mb-4">文本数据的向量表示演进</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold mb-2">独热编码（早期）</h4>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full text-sm">
+                                    <thead>
+                                        <tr>
+                                            <th class="px-4 py-2 text-left">词</th>
+                                            <th class="px-4 py-2 text-left">向量</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="px-4 py-2">猫</td>
+                                            <td class="px-4 py-2 font-mono">[1, 0, 0]</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2">狗</td>
+                                            <td class="px-4 py-2 font-mono">[0, 1, 0]</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2">鸟</td>
+                                            <td class="px-4 py-2 font-mono">[0, 0, 1]</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">简单但无法表达词与词之间的关系</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">词嵌入（现代）</h4>
+                            <p class="mb-2">词被映射到高维空间，相似词在向量空间中距离较近：</p>
+                            <ul class="list-disc list-inside space-y-1 text-sm">
+                                <li>王 - 男人 + 女人 ≈ 女王</li>
+                                <li>巴黎 - 法国 + 意大利 ≈ 罗马</li>
+                            </ul>
+                            <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">能够捕捉词汇间的语义关系和相似度</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-purple-50 dark:bg-purple-900 dark:bg-opacity-20 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-4">大模型时代的统一表示</h3>
+                    <p class="mb-4">大模型时代催生了不同类型的模型，它们采用统一的标记化（Tokenize）方法处理各类数据：</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                            <i class="fas fa-comment text-purple-500 text-2xl mb-2"></i>
+                            <h4 class="font-bold">LLM</h4>
+                            <p class="text-sm">语言大模型</p>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                            <i class="fas fa-eye text-purple-500 text-2xl mb-2"></i>
+                            <h4 class="font-bold">VLM</h4>
+                            <p class="text-sm">视觉大模型</p>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                            <i class="fas fa-cubes text-purple-500 text-2xl mb-2"></i>
+                            <h4 class="font-bold">MLM</h4>
+                            <p class="text-sm">多模态大模型</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Intelligence Function Output Section -->
+    <section class="py-16 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="section-title text-3xl font-bold mb-4">智能函数的输出形式</h2>
+                <p class="text-lg mb-8">智能函数的输出形式取决于任务性质，主要分为离散的分类输出和连续的回归输出。</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">分类任务</h3>
+                        <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow mb-6">
+                            <h4 class="font-bold mb-2">二分类（判断题）</h4>
+                            <p class="mb-4">输出为0或1的判断结果</p>
+                            <div class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-30 p-4 rounded">
+                                <p class="font-medium">问题："这是一只猫吗？"</p>
+                                <div class="mt-2 grid grid-cols-2 gap-2">
+                                    <div class="bg-white dark:bg-gray-800 p-2 rounded text-center">
+                                        <span>是</span>
+                                        <span class="ml-2 font-mono">1</span>
+                                    </div>
+                                    <div class="bg-white dark:bg-gray-800 p-2 rounded text-center">
+                                        <span>否</span>
+                                        <span class="ml-2 font-mono">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                            <h4 class="font-bold mb-2">多分类（选择题）</h4>
+                            <p class="mb-4">输出为多选一的类别标签</p>
+                            <div class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-30 p-4 rounded">
+                                <p class="font-medium">问题："这张图片是什么动物？"</p>
+                                <div class="mt-2 grid grid-cols-3 gap-2">
+                                    <div class="bg-white dark:bg-gray-800 p-2 rounded text-center">
+                                        <span>猫</span>
+                                        <span class="block font-mono text-sm">[0]</span>
+                                    </div>
+                                    <div class="bg-white dark:bg-gray-800 p-2 rounded text-center">
+                                        <span>狗</span>
+                                        <span class="block font-mono text-sm">[1]</span>
+                                    </div>
+                                    <div class="bg-white dark:bg-gray-800 p-2 rounded text-center">
+                                        <span>鸟</span>
+                                        <span class="block font-mono text-sm">[2]</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">回归任务</h3>
+                        <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow mb-6">
+                            <h4 class="font-bold mb-2">股票价格预测</h4>
+                            <p class="mb-2">输入：时间节点、历史数据</p>
+                            <p class="mb-2">输出：连续的预测价格值</p>
+                            <div class="bg-green-50 dark:bg-green-900 dark:bg-opacity-30 p-4 rounded">
+                                <div class="flex justify-between items-center">
+                                    <span>预测价格:</span>
+                                    <span class="font-mono">¥235.67</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                            <h4 class="font-bold mb-2">天气预报</h4>
+                            <p class="mb-2">输入：时间、地点、历史数据</p>
+                            <p class="mb-2">输出：温度、湿度等连续值</p>
+                            <div class="bg-green-50 dark:bg-green-900 dark:bg-opacity-30 p-4 rounded">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <span>预测温度:</span>
+                                        <span class="block font-mono">25.3°C</span>
+                                    </div>
+                                    <div>
+                                        <span>预测湿度:</span>
+                                        <span class="block font-mono">68.7%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Function Composition Section -->
+    <section id="function-composition" class="py-16 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="section-title text-3xl font-bold mb-4">智能函数的组成形式</h2>
+                <p class="text-lg mb-8">人工智能的数学本质是大量基元函数的复合，基元函数虽简单，但通过大规模复合可实现复杂功能。</p>
+                
+                <div class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 p-6 rounded-lg mb-12">
+                    <h3 class="text-xl font-bold mb-4">神经元：基本计算单元</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <div class="formula text-center">
+                                <span class="block text-2xl mb-2">y = f(∑ωᵢxᵢ + b)</span>
+                            </div>
+                            <ul class="mt-4 space-y-2">
+                                <li class="flex items-start">
+                                    <i class="fas fa-arrow-right text-blue-500 mt-1 mr-2"></i>
+                                    <span><strong>xᵢ</strong>：输入信号</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-arrow-right text-blue-500 mt-1 mr-2"></i>
+                                    <span><strong>ωᵢ</strong>：连接权重（可学习参数）</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-arrow-right text-blue-500 mt-1 mr-2"></i>
+                                    <span><strong>b</strong>：偏置项</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-arrow-right text-blue-500 mt-1 mr-2"></i>
+                                    <span><strong>f</strong>：激活函数</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="text-center">
+                            <div class="mermaid">
+                                graph LR
+                                    X0((x₀)) --> |ω₀| N((+))
+                                    X1((x₁)) --> |ω₁| N
+                                    X2((x₂)) --> |ω₂| N
+                                    B((b)) --> N
+                                    N --> F[f] --> Y((y))
+                                    
+                                    style N fill:#93c5fd,stroke:#3b82f6
+                                    style F fill:#a5b4fc,stroke:#4f46e5
+                                    style Y fill:#f9a8d4,stroke:#be185d
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">单个神经元的基本结构</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-12">
+                    <h3 class="text-xl font-bold mb-6">常见基元函数</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="concept-card">
+                            <h4 class="text-lg font-bold mb-2">线性变换</h4>
+                            <div class="formula">
+                                <span class="block text-center">y = ω⊤x</span>
+                            </div>
+                            <p class="mt-2 text-sm">将输入向量与权重向量做内积运算，是神经网络的基础计算。</p>
+                        </div>
+                        
+                        <div class="concept-card">
+                            <h4 class="text-lg font-bold mb-2">Sigmoid函数</h4>
+                            <div class="formula">
+                                <span class="block text-center">σ(x) = 1/(1 + e⁻ᵏˣ)</span>
+                            </div>
+                            <p class="mt-2 text-sm">S形连续函数，将输入映射到(0,1)区间，传统神经网络常用激活函数。</p>
+                        </div>
+                        
+                        <div class="concept-card">
+                            <h4 class="text-lg font-bold mb-2">ReLU函数</h4>
+                            <div class="formula">
+                                <span class="block text-center">f(x) = max(0, x)</span>
+                            </div>
+                            <p class="mt-2 text-sm">整流线性单元，负值输出为0，正值保持不变，现代深度网络常用激活函数。</p>
+                        </div>
+                        
+                        <div class="concept-card">
+                            <h4 class="text-lg font-bold mb-2">卷积操作</h4>
+                            <div class="formula">
+                                <span class="block text-center">y = x * w</span>
+                            </div>
+                            <p class="mt-2 text-sm">滑动窗口计算局部特征，通过共享权重提取空间特征，广泛用于图像处理。</p>
+                        </div>
+                        
+                        <div class="concept-card">
+                            <h4 class="text-lg font-bold mb-2">池化操作</h4>
+                            <div class="formula">
+                                <span class="block text-center">y = pool(x)</span>
+                            </div>
+                            <p class="mt-2 text-sm">降采样操作，如最大池化和平均池化，压缩特征并保留重要信息。</p>
+                        </div>
+                        
+                        <div class="concept-card">
+                            <h4 class="text-lg font-bold mb-2">注意力机制</h4>
+                            <div class="formula">
+                                <span class="block text-center">Attention(Q,K,V)</span>
+                            </div>
+                            <p class="mt-2 text-sm">计算输入序列中的相关性权重，是Transformer和现代大模型的核心机制。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-4">深度神经网络：函数组合的艺术</h3>
+                    <p class="mb-4">深度神经网络通过超大量基元函数的组合，实现从简单到复杂的能力构建。</p>
+                    <div class="mermaid">
+                        graph LR
+                            Input[输入层] --> Conv1[卷积层1]
+                            Conv1 --> Pool1[池化层1]
+                            Pool1 --> Conv2[卷积层2]
+                            Conv2 --> Pool2[池化层2]
+                            Pool2 --> FC1[全连接层1]
+                            FC1 --> FC2[全连接层2]
+                            FC2 --> Output[输出层]
+                            
+                            style Input fill:#bfdbfe,stroke:#3b82f6
+                            style Conv1 fill:#93c5fd,stroke:#3b82f6
+                            style Pool1 fill:#93c5fd,stroke:#3b82f6
+                            style Conv2 fill:#93c5fd,stroke:#3b82f6
+                            style Pool2 fill:#93c5fd,stroke:#3b82f6
+                            style FC1 fill:#a5b4fc,stroke:#4f46e5
+                            style FC2 fill:#a5b4fc,stroke:#4f46e5
+                            style Output fill:#f9a8d4,stroke:#be185d
+                    </div>
+                    <p class="mt-4 text-center text-sm text-gray-600 dark:text-gray-300">典型卷积神经网络的结构</p>
+                    <div class="mt-6 text-center">
+                        <p class="italic">"智能函数是'聚沙成塔'的结果！"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learning Methods Section -->
+    <section id="learning-methods" class="py-16 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="section-title text-3xl font-bold mb-4">智能函数的学习过程</h2>
+                <p class="text-lg mb-8">智能函数通过数据驱动、信息反馈不断优化参数，从随机输出到符合预期。</p><br/>
+                
+                    <svg width="600" height="280" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg">
+  <!-- 标题 -->
+  <text x="300" y="30" font-size="24" font-weight="bold" text-anchor="middle">智能函数的学习过程</text>
+  
+  <!-- 描述文字 -->
+  <text x="300" y="60" font-size="14" text-anchor="middle">智能函数通过数据驱动、信息反馈不断优化参数，从随机输出到符合预期。</text>
+  
+  <!-- 输入数据框 -->
+  <rect x="50" y="100" width="120" height="120" rx="8" ry="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1"/>
+  <text x="110" y="130" font-size="16" font-weight="bold" text-anchor="middle">输入数据</text>
+  <!-- 数据库图标 -->
+  <path d="M110,150 m-15,0 a15,5 0 1,0 30,0 a15,5 0 1,0 -30,0 v20 a15,5 0 1,0 30,0 v-20" fill="none" stroke="#3b82f6" stroke-width="2"/>
+  <path d="M110,165 m-15,0 a15,5 0 1,0 30,0 a15,5 0 1,0 -30,0" fill="none" stroke="#3b82f6" stroke-width="2"/>
+  
+  <!-- 左箭头 -->
+  <line x1="180" y1="160" x2="230" y2="160" stroke="#6b7280" stroke-width="2"/>
+  <polygon points="230,160 220,155 220,165" fill="#6b7280"/>
+  
+  <!-- 智能函数框 -->
+  <rect x="240" y="100" width="120" height="120" rx="8" ry="8" fill="#f3e8ff" stroke="#9333ea" stroke-width="1"/>
+  <text x="300" y="130" font-size="16" font-weight="bold" text-anchor="middle">智能函数</text>
+  <!-- 齿轮图标 -->
+  <circle cx="300" cy="160" r="18" fill="none" stroke="#9333ea" stroke-width="2"/>
+  <circle cx="300" cy="160" r="12" fill="none" stroke="#9333ea" stroke-width="2"/>
+  <path d="M300,142 L300,134 M300,178 L300,186 M318,160 L326,160 M274,160 L282,160 M313,147 L319,141 M281,147 L275,141 M313,173 L319,179 M281,173 L275,179" stroke="#9333ea" stroke-width="2"/>
+  <text x="300" y="195" font-size="12" text-anchor="middle">参数优化</text>
+  
+  <!-- 右箭头 -->
+  <line x1="370" y1="160" x2="420" y2="160" stroke="#6b7280" stroke-width="2"/>
+  <polygon points="420,160 410,155 410,165" fill="#6b7280"/>
+  
+  <!-- 输出结果框 -->
+  <rect x="430" y="100" width="120" height="120" rx="8" ry="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1"/>
+  <text x="490" y="130" font-size="16" font-weight="bold" text-anchor="middle">输出结果</text>
+  <!-- 勾选图标 -->
+  <circle cx="490" cy="160" r="18" fill="none" stroke="#22c55e" stroke-width="2"/>
+  <path d="M480,160 L487,167 L500,154" fill="none" stroke="#22c55e" stroke-width="3"/>
+</svg>
+                
+                <div class="mb-12">
+                    <h3 class="text-xl font-bold mb-6">主要学习方式</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <div class="learning-card supervised bg-white dark:bg-gray-700 p-6 rounded-lg shadow mb-6">
+                                <h4 class="font-bold mb-2 flex items-center">
+                                    <i class="fas fa-chalkboard-teacher text-green-500 mr-2"></i>
+                                    监督学习
+                                </h4>
+                                <p class="mb-2">使用带标注的训练数据，明确指导模型学习正确输出。</p>
+                                <div class="mt-2 bg-green-50 dark:bg-green-900 dark:bg-opacity-20 p-3 rounded">
+                                    <p class="text-sm"><i class="fas fa-lightbulb text-yellow-500 mr-1"></i> 例如：识别图片中的动物，每张图片都有正确的标签（"猫"、"狗"等）</p>
+                                </div>
+                            </div>
+                            
+                            <div class="learning-card unsupervised bg-white dark:bg-gray-700 p-6 rounded-lg shadow mb-6">
+                                <h4 class="font-bold mb-2 flex items-center">
+                                    <i class="fas fa-robot text-yellow-500 mr-2"></i>
+                                    无监督学习
+                                </h4>
+                                <p class="mb-2">使用无标注数据，模型自主发现数据中的模式和结构。</p>
+                                <div class="mt-2 bg-yellow-50 dark:bg-yellow-900 dark:bg-opacity-20 p-3 rounded">
+                                    <p class="text-sm"><i class="fas fa-lightbulb text-yellow-500 mr-1"></i> 例如：客户分群，根据购买行为将客户自动分类</p>
+                                </div>
+                            </div>
+                            
+                            <div class="learning-card semi-supervised bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                                <h4 class="font-bold mb-2 flex items-center">
+                                    <i class="fas fa-user-graduate text-blue-500 mr-2"></i>
+                                    半监督学习
+                                </h4>
+                                <p class="mb-2">结合少量标注数据和大量无标注数据进行学习。</p>
+                                <div class="mt-2 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 p-3 rounded">
+                                    <p class="text-sm"><i class="fas fa-lightbulb text-yellow-500 mr-1"></i> 例如：医学影像分析，少量由专家标注的样本与大量未标注扫描</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="learning-card transfer bg-white dark:bg-gray-700 p-6 rounded-lg shadow mb-6">
+                                <h4 class="font-bold mb-2 flex items-center">
+                                    <i class="fas fa-exchange-alt text-purple-500 mr-2"></i>
+                                    迁移学习
+                                </h4>
+                                <p class="mb-2">将一个任务上训练好的模型应用到相关的新任务上。</p>
+                                <div class="mt-2 bg-purple-50 dark:bg-purple-900 dark:bg-opacity-20 p-3 rounded">
+                                    <p class="text-sm"><i class="fas fa-lightbulb text-yellow-500 mr-1"></i> 例如：用ImageNet预训练模型识别特定物体，只需少量新数据</p>
+                                </div>
+                            </div>
+                            
+                            <div class="learning-card reinforcement bg-white dark:bg-gray-700 p-6 rounded-lg shadow mb-6">
+                                <h4 class="font-bold mb-2 flex items-center">
+                                    <i class="fas fa-gamepad text-pink-500 mr-2"></i>
+                                    强化学习
+                                </h4>
+                                <p class="mb-2">通过环境反馈的奖惩信号学习最优策略。</p>
+                                <div class="mt-2 bg-pink-50 dark:bg-pink-900 dark:bg-opacity-20 p-3 rounded">
+                                    <p class="text-sm"><i class="fas fa-lightbulb text-yellow-500 mr-1"></i> 例如：AlphaGo通过自我对弈学习下围棋策略</p>
+                                </div>
+                            </div>
+                            
+                            <div class="learning-card adversarial bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                                <h4 class="font-bold mb-2 flex items-center">
+                                    <i class="fas fa-chess text-red-500 mr-2"></i>
+                                    对抗学习
+                                </h4>
+                                <p class="mb-2">两个模型相互对抗，互相促进提升性能。</p>
+                                <div class="mt-2 bg-red-50 dark:bg-red-900 dark:bg-opacity-20 p-3 rounded">
+                                    <p class="text-sm"><i class="fas fa-lightbulb text-yellow-500 mr-1"></i> 例如：GAN中生成器创造假样本，判别器区分真假</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Summary Section -->
+    <section class="py-16 bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-8">总结</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white bg-opacity-10 p-6 rounded-lg backdrop-filter backdrop-blur-sm">
+                        <i class="fas fa-flask text-4xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">AI是科学</h3>
+                        <p>基于严谨的数学原理，可验证、可解释、可预测</p>
+                    </div>
+                    <div class="bg-white bg-opacity-10 p-6 rounded-lg backdrop-filter backdrop-blur-sm">
+                        <i class="fas fa-square-root-alt text-4xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">AI的数学本质</h3>
+                        <p>智能函数是构建人工智能系统的核心数学框架</p>
+                    </div>
+                    <div class="bg-white bg-opacity-10 p-6 rounded-lg backdrop-filter backdrop-blur-sm">
+                        <i class="fas fa-code-branch text-4xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">参数可学习</h3>
+                        <p>智能函数通过数据驱动优化参数，实现复杂功能</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Further Reading Section -->
+    <section class="py-16 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="section-title text-3xl font-bold mb-4">延伸阅读</h2>
+                <p class="text-lg mb-8">以下书籍和资源可以帮助你更深入地了解人工智能的数学基础：</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold mb-2">《深度学习》</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">作者：Ian Goodfellow, Yoshua Bengio, Aaron Courville</p>
+                        <p class="mb-2">该书系统地介绍了深度学习的数学基础、主要算法和实践应用，被誉为深度学习领域的"圣经"。</p>
+                        <a href="https://www.deeplearningbook.org/" target="_blank" class="text-blue-500 hover:text-blue-700 inline-flex items-center">
+                            前往阅读 <i class="fas fa-external-link-alt ml-1"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold mb-2">《模式识别与机器学习》</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">作者：Christopher M. Bishop</p>
+                        <p class="mb-2">本书从贝叶斯角度阐述了机器学习的理论基础，对模式识别和机器学习的概率方法进行了全面深入的介绍。</p>
+                        <a href="https://www.microsoft.com/en-us/research/people/cmbishop/prml-book/" target="_blank" class="text-blue-500 hover:text-blue-700 inline-flex items-center">
+                            前往阅读 <i class="fas fa-external-link-alt ml-1"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold mb-2">《神经网络与深度学习》</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">作者：邱锡鹏</p>
+                        <p class="mb-2">这本中文教材系统介绍了神经网络与深度学习的基础理论、主要模型以及前沿进展，适合入门学习。</p>
+                        <a href="https://nndl.github.io/" target="_blank" class="text-blue-500 hover:text-blue-700 inline-flex items-center">
+                            前往阅读 <i class="fas fa-external-link-alt ml-1"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold mb-2">《动手学深度学习》</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">作者：李沐, Aston Zhang等</p>
+                        <p class="mb-2">结合理论与代码实践，通过动手实验的方式讲解深度学习原理，中英文版本均可免费在线阅读。</p>
+                        <a href="https://zh.d2l.ai/" target="_blank" class="text-blue-500 hover:text-blue-700 inline-flex items-center">
+                            前往阅读 <i class="fas fa-external-link-alt ml-1"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold mb-2">《强化学习导论》</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">作者：Richard S. Sutton, Andrew G. Barto</p>
+                        <p class="mb-2">这本书是强化学习领域的经典著作，详细介绍了强化学习的数学基础和核心算法，适合想要深入了解强化学习的读者。</p>
+                        <a href="http://incompleteideas.net/book/the-book-2nd.html" target="_blank" class="text-blue-500 hover:text-blue-700 inline-flex items-center">
+                            前往阅读 <i class="fas fa-external-link-alt ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">人工智能导论</h3>
+                        <p class="text-gray-400">2025春季未来学院授课</p>
+                        <p class="text-gray-400">郭亨</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">课程导航</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#mathematical-essence" class="text-gray-400 hover:text-white transition-colors">数学本质</a></li>
+                            <li><a href="#ai-structure" class="text-gray-400 hover:text-white transition-colors">知识体系</a></li>
+                            <li><a href="#function-composition" class="text-gray-400 hover:text-white transition-colors">智能函数</a></li>
+                            <li><a href="#learning-methods" class="text-gray-400 hover:text-white transition-colors">学习方式</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">联系我们</h3>
+                        <div class="flex space-x-4 mb-4">
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                                <i class="fab fa-weixin text-2xl"></i>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                                <i class="fab fa-weibo text-2xl"></i>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                                <i class="fab fa-github text-2xl"></i>
+                            </a>
+                        </div>
+                        <p class="text-gray-400">future_academy@example.com</p>
+                    </div>
+                </div>
+                <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500 text-sm">
+                    <p>© 2025 未来学院. 保留所有权利.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default',
+            flowchart: {
+                curve: 'cardinal'
+            }
+        });
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+        
+        // Check for saved preference or system preference
+        if (localStorage.getItem('darkMode') === 'true' || 
+            (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches && localStorage.getItem('darkMode') !== 'false')) {
+            html.classList.add('dark');
+            darkModeToggle.checked = true;
+        }
+        
+        // Toggle dark mode
+        darkModeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                html.classList.add('dark');
+                localStorage.setItem('darkMode', 'true');
+                mermaid.initialize({ 
+                    startOnLoad: true,
+                    theme: 'dark',
+                    flowchart: {
+                        curve: 'cardinal'
+                    }
+                });
+            } else {
+                html.classList.remove('dark');
+                localStorage.setItem('darkMode', 'false');
+                mermaid.initialize({ 
+                    startOnLoad: true,
+                    theme: 'dark',
+                    flowchart: {
+                        curve: 'cardinal'
+                    }
+                });
+            }
+            // Reinitialize mermaid diagrams
+            const mermaidDivs = document.querySelectorAll('.mermaid');
+            mermaidDivs.forEach((mermaidDiv) => {
+                const graphDefinition = mermaidDiv.textContent;
+                mermaidDiv.removeAttribute('data-processed');
+                mermaidDiv.innerHTML = graphDefinition;
+                mermaid.init(undefined, mermaidDiv);
+            });
+        });
+        
+        // Scroll to top button
+        const scrollToTopButton = document.getElementById('scrollToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopButton.classList.add('visible');
+            } else {
+                scrollToTopButton.classList.remove('visible');
+            }
+        });
+        
+        scrollToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Function Animation
+        const animateFunction = () => {
+            const inputItem = document.querySelector('.input-item');
+            const processItem = document.querySelector('.process-item');
+            const outputItem = document.querySelector('.output-item');
+            
+            setTimeout(() => {
+                inputItem.style.transform = 'translateY(-70%)';
+                setTimeout(() => {
+                    inputItem.style.transform = 'translateY(-50%)';
+                    processItem.style.transform = 'translate(-50%, -70%)';
+                    setTimeout(() => {
+                        processItem.style.transform = 'translate(-50%, -50%)';
+                        outputItem.style.transform = 'translateY(-70%)';
+                        setTimeout(() => {
+                            outputItem.style.transform = 'translateY(-50%)';
+                            setTimeout(animateFunction, 3000);
+                        }, 300);
+                    }, 300);
+                }, 300);
+            }, 3000);
+        };
+        
+        // Start the animation after page load
+        window.addEventListener('load', () => {
+            setTimeout(animateFunction, 1000);
+        });
+    </script>
+</body>
+</html>

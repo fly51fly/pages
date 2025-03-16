@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek R1 使用指南 - 现代AI交互的艺术</title>
+    
+    <!-- 引入外部资源 -->
+    <link href="https://cdn.staticfile.org/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+
+    <style>
+        /* 自定义样式 */
+        :root {
+            --primary: #2563eb;
+            --secondary: #4f46e5;
+            --accent: #f59e0b;
+            --text: #1f2937;
+            --bg: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --primary: #60a5fa;
+            --secondary: #818cf8;
+            --accent: #fbbf24;
+            --text: #f3f4f6;
+            --bg: #111827;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            color: var(--text);
+            background-color: var(--bg);
+            transition: all 0.3s ease;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* 首字下沉效果 */
+        .dropcap::first-letter {
+            float: left;
+            font-size: 3em;
+            line-height: 1;
+            margin-right: 0.2em;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="fixed w-full bg-opacity-90 backdrop-filter backdrop-blur-lg z-50 border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-primary">DeepSeek R1 指南</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <header class="hero-gradient text-white pt-24 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4">DeepSeek R1 使用指南</h1>
+                <p class="text-xl md:text-2xl opacity-90 mb-8">探索AI交互的新境界 [citation](1)</p>
+                <div class="flex justify-center space-x-4">
+                    <a href="#guide" class="bg-white text-primary px-6 py-3 rounded-full font-medium hover:bg-opacity-90 transition-all">
+                        开始阅读 <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <!-- 核心特点卡片 -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <div class="card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                <i class="fas fa-brain text-3xl text-primary mb-4"></i>
+                <h3 class="text-xl font-bold mb-2">推理能力超群</h3>
+                <p>相比传统指令模型，R1展现出卓越的推理和问题解决能力 [citation](1)</p>
+            </div>
+            <div class="card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                <i class="fas fa-lightbulb text-3xl text-primary mb-4"></i>
+                <h3 class="text-xl font-bold mb-2">简单即强大</h3>
+                <p>无需复杂提示词，清晰表达需求即可获得优质回答 [citation](1)</p>
+            </div>
+            <div class="card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                <i class="fas fa-clock text-3xl text-primary mb-4"></i>
+                <h3 class="text-xl font-bold mb-2">知识时效性</h3>
+                <p>模型具有知识截止期，需要通过联网获取最新信息 [citation](1)</p>
+            </div>
+        </section>
+
+        <!-- 使用技巧部分 -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8">核心使用技巧</h2>
+            <div class="space-y-8">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">
+                        <i class="fas fa-check-circle text-primary mr-2"></i>
+                        明确表达需求
+                    </h3>
+                    <p class="dropcap">能说清楚的信息，不要让DeepSeek去猜。DeepSeek虽然很聪明，但它不是你肚子中的蛔虫，你需要明确告诉DeepSeek需要他帮你做什么，做到什么程度 [citation](1)</p>
+                </div>
+                <!-- 其他技巧卡片... -->
+            </div>
+        </section>
+
+        <!-- 可视化部分 -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8">DeepSeek R1 工作原理</h2>
+            <div class="mermaid">
+                graph TD
+                    A[用户输入] --> B{模型处理}
+                    B --> C[知识库检索]
+                    B --> D[推理分析]
+                    C --> E[生成回答]
+                    D --> E
+                    E --> F[输出结果]
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-100 dark:bg-gray-900 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-gray-600 dark:text-gray-400">
+                © 2024 DeepSeek R1 使用指南
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化 Mermaid
+        mermaid.initialize({ theme: 'default' });
+
+        // 深色模式切换
+        const themeToggle = document.getElementById('themeToggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function setTheme(isDark) {
+            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        }
+
+        // 初始化主题
+        setTheme(prefersDark.matches);
+
+        // 监听系统主题变化
+        prefersDark.addListener((e) => setTheme(e.matches));
+
+        // 手动切换主题
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            setTheme(!isDark);
+        });
+    </script>
+</body>
+</html>

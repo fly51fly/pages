@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coze入门干货教程 | 手把手教你搭建AI机器人</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-light: #bfdbfe;
+            --primary-dark: #1e40af;
+            --secondary-color: #f97316;
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f3f4f6;
+            --accent-color: #8b5cf6;
+            --success-color: #10b981;
+        }
+
+        .dark {
+            --primary-color: #3b82f6;
+            --primary-light: #1e3a8a;
+            --primary-dark: #60a5fa;
+            --secondary-color: #f97316;
+            --text-primary: #f3f4f6;
+            --text-secondary: #d1d5db;
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --accent-color: #a78bfa;
+            --success-color: #34d399;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', Tahoma, Arial, Roboto, "Droid Sans", "Helvetica Neue", "Droid Sans Fallback", "Heiti SC", "Hiragino Sans GB", Simsun, sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 700;
+        }
+
+        .heading-underline {
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .heading-underline::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+        }
+
+        .step-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .feature-icon {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s;
+        }
+
+        .dark .feature-icon {
+            background-color: var(--primary-dark);
+            color: var(--primary-light);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .quote {
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1.5rem;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .first-letter::first-letter {
+            font-size: 3.5rem;
+            font-weight: 700;
+            float: left;
+            line-height: 0.8;
+            margin: 0.1em 0.1em 0 0;
+            color: var(--primary-color);
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .nav-pill {
+            border-radius: 9999px;
+            padding: 0.5rem 1.25rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-pill:hover, .nav-pill.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .workflow-step {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 1.5rem;
+        }
+
+        .workflow-step::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+        }
+
+        .workflow-step::after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 26px;
+            width: 2px;
+            height: calc(100% - 12px);
+            background-color: var(--primary-color);
+            opacity: 0.5;
+        }
+
+        .workflow-step:last-child::after {
+            display: none;
+        }
+
+        .image-caption {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        .highlight-box {
+            background-color: var(--primary-light);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .dark .highlight-box {
+            background-color: var(--primary-dark);
+            opacity: 0.8;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .delayed-1 { animation-delay: 0.1s; opacity: 0; }
+        .delayed-2 { animation-delay: 0.2s; opacity: 0; }
+        .delayed-3 { animation-delay: 0.3s; opacity: 0; }
+        .delayed-4 { animation-delay: 0.4s; opacity: 0; }
+        .delayed-5 { animation-delay: 0.5s; opacity: 0; }
+
+        /* Button styles */
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            background-color: transparent;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Table of contents */
+        .toc {
+            position: sticky;
+            top: 2rem;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+            padding-right: 1rem;
+        }
+
+        .toc-link {
+            display: block;
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            border-left: 2px solid transparent;
+            padding-left: 1rem;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .toc-link:hover, .toc-link.active {
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+            padding-left: 1.25rem;
+        }
+        
+        /* Image style with shadow and border */
+        .img-feature {
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .img-feature:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Dark mode toggle button */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+            background-color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Dark mode toggle button -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <!-- Header and Hero Section -->
+    <header class="w-full py-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl font-bold">扣子</span>
+                    <span class="text-sm bg-white bg-opacity-20 px-2 py-1 rounded">Coze教程</span>
+                </div>
+                <nav class="hidden md:flex space-x-1">
+                    <a href="#what-is-coze" class="nav-pill">Coze介绍</a>
+                    <a href="#coze-basics" class="nav-pill">基础功能</a>
+                    <a href="#workflow-tutorial" class="nav-pill">工作流教程</a>
+                    <a href="#further-reading" class="nav-pill">延伸阅读</a>
+                </nav>
+                <div class="md:hidden">
+                    <button class="p-2 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="relative overflow-hidden bg-gradient-to-b from-blue-600 to-blue-500 text-white">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8 py-16 md:py-24">
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="animate-fadeIn">
+                    <span class="inline-block px-3 py-1 bg-blue-700 bg-opacity-50 rounded-full text-sm font-medium mb-4">
+                        <i class="fas fa-robot mr-2"></i>智能体专题
+                    </span>
+                    <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">Coze入门干货教程</h1>
+                    <p class="text-xl md:text-2xl mb-6 opacity-90">手把手教你使用Coze来搭建AI机器人</p>
+                    <p class="mb-8 text-lg opacity-80">
+                        经常有人发coze，发工作流，发 AI 100%效率提升神器，说AI能自动办公做重复工作，这到底是什么？今天我们将分三部分带你入门这个能实现自动办公的国产AI工具——Coze。
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#workflow-tutorial" class="btn-primary">
+                            <i class="fas fa-play-circle mr-2"></i>
+                            开始学习
+                        </a>
+                        <a href="https://www.coze.cn" target="_blank" class="btn-outline">
+                            <i class="fas fa-external-link-alt mr-2"></i>
+                            访问官网
+                        </a>
+                    </div>
+                </div>
+                <div class="relative hidden md:block animate-fadeIn delayed-1">
+                    <div class="absolute -right-16 -top-16 w-64 h-64 bg-blue-400 rounded-full mix-blend-multiply filter blur-2xl opacity-70"></div>
+                    <div class="absolute -right-4 -bottom-16 w-64 h-64 bg-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-70"></div>
+                    <div class="absolute left-20 top-16 w-64 h-64 bg-pink-400 rounded-full mix-blend-multiply filter blur-2xl opacity-70"></div>
+                    <div class="relative">
+                        <img src="https://oss.zhangxinxu.com/coze.webp" alt="Coze界面预览" class="rounded-lg shadow-xl mx-auto">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white dark:from-gray-900 to-transparent"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 md:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- Sidebar with TOC -->
+            <div class="lg:col-span-1 hidden lg:block">
+                <div class="toc">
+                    <h3 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-200">目录</h3>
+                    <a href="#what-is-coze" class="toc-link">什么是Coze？</a>
+                    <a href="#coze-basics" class="toc-link">Coze页面的基础功能</a>
+                    <a href="#personal-space" class="toc-link pl-6">个人空间</a>
+                    <a href="#bot-store" class="toc-link pl-6">Bot商店</a>
+                    <a href="#plugin-store" class="toc-link pl-6">插件商店</a>
+                    <a href="#workflow-store" class="toc-link pl-6">工作流商店</a>
+                    <a href="#workflow-example" class="toc-link pl-6">工作流示例</a>
+                    <a href="#workflow-nodes" class="toc-link pl-6">工作流节点</a>
+                    <a href="#workflow-tutorial" class="toc-link">案例：抖音链接文案提取工作流</a>
+                    <a href="#step-1" class="toc-link pl-6">第一步：创建工作流</a>
+                    <a href="#step-2" class="toc-link pl-6">第二步：识别视频链接</a>
+                    <a href="#step-3" class="toc-link pl-6">第三步：提取标题和内容</a>
+                    <a href="#step-4" class="toc-link pl-6">第四步：文本处理</a>
+                    <a href="#step-5" class="toc-link pl-6">第五步：整理输出</a>
+                    <a href="#further-reading" class="toc-link">延伸阅读</a>
+                </div>
+            </div>
+
+            <!-- Main content area -->
+            <div class="lg:col-span-3">
+                <!-- What is Coze Section -->
+                <section id="what-is-coze" class="mb-16 animate-fadeIn">
+                    <h2 class="text-3xl font-bold mb-6 heading-underline">什么是Coze？</h2>
+                    <div class="first-letter">
+                        <p class="text-lg mb-6">Coze是由字节跳动推出的 AI 聊天机器人和应用程序编辑开发平台。它集成超过 60 款插件，涵盖资讯阅读、旅游出行、效率办公、图片理解等功能，同时支持用户创建自定义插件，以扩展 Bot 的能力。</p>
+                    </div>
+                    
+                    <div class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-30 p-6 rounded-lg mb-8">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fas fa-lightbulb text-yellow-500 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold mb-2">Coze的核心功能</h3>
+                                <p class="mb-4">这些Bot可以用于各种场景，比如聊天机器人、内容推荐、数据分析等。还能放到微信、飞书等主流社交和办公平台上。</p>
+                                <p class="font-medium">Coze就是一个降低普通人搭建工具的平台，简单理解，类似于让普通人能够用coze平台做AI工具和小程序。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-6 mb-8">
+                        <div class="feature-card p-6 rounded-lg bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="feature-icon mb-4">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">AI聊天机器人</h3>
+                            <p class="text-gray-600 dark:text-gray-300">创建智能对话助手，处理用户问询并提供回应</p>
+                        </div>
+                        <div class="feature-card p-6 rounded-lg bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="feature-icon mb-4">
+                                <i class="fas fa-plug"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">丰富插件生态</h3>
+                            <p class="text-gray-600 dark:text-gray-300">超过60款插件，轻松扩展机器人的能力范围</p>
+                        </div>
+                        <div class="feature-card p-6 rounded-lg bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="feature-icon mb-4">
+                                <i class="fas fa-project-diagram"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">工作流自动化</h3>
+                            <p class="text-gray-600 dark:text-gray-300">可视化工作流设计，实现复杂任务自动化</p>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center mb-8">
+                        <img src="https://oss.zhangxinxu.com/coze.webp" alt="Coze界面" class="rounded-lg shadow-lg img-feature max-w-full h-auto">
+                    </div>
+                </section>
+
+                <!-- Coze Basics Section -->
+                <section id="coze-basics" class="mb-16 animate-fadeIn delayed-1">
+                    <h2 class="text-3xl font-bold mb-6 heading-underline">Coze页面的基础功能</h2>
+                    <p class="text-lg mb-8">对于0基础的学习者，学习Coze的第一步是认识界面。</p>
+                    
+                    <div class="bg-yellow-50 dark:bg-yellow-900 dark:bg-opacity-20 p-4 rounded-lg mb-8">
+                        <div class="flex items-center">
+                            <i class="fas fa-info-circle text-yellow-500 mr-3 text-xl"></i>
+                            <p>打开：<a href="https://www.coze.cn" class="text-blue-600 dark:text-blue-400 underline" target="_blank">www.Coze.cn</a> 先选择基础版登录。</p>
+                        </div>
+                    </div>
+                    
+                    <p class="mb-6">点开左侧菜单栏，我们先认识界面。</p>
+                    
+                    <div class="flex justify-center mb-8">
+                        <img src="https://tva4.sinaimg.cn/large/6aabe3dclgy1hnh6jmzrk9j218u0tvguv" alt="Coze界面导航" class="rounded-lg shadow-lg img-feature max-w-full h-auto">
+                    </div>
+
+                    <!-- Personal Space -->
+                    <div id="personal-space" class="step-card mb-8 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold mb-3">
+                            <i class="fas fa-user-circle mr-2 text-blue-500"></i>
+                            个人空间
+                        </h3>
+                        <p class="mb-4">是仅自己可见，存放自己做的和收藏的bot、插件和工作流的地方。</p>
+                        <p>相对应的<span class="font-semibold">【团队空间】</span>，就是团队成员均可见的空间。</p>
+                    </div>
+
+                    <!-- Bot Store -->
+                    <div id="bot-store" class="step-card mb-8 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold mb-3">
+                            <i class="fas fa-store mr-2 text-blue-500"></i>
+                            Bot商店
+                        </h3>
+                        <p class="mb-1">Bot，即机器人，通常指的是能够执行自动化任务的软件程序。那么Bot商店就是他人和官方分享的AI机器人的地方。</p>
+                        <p>你创建的Bot上架后，也会出现在这个地方。</p>
+                    </div>
+
+                    <!-- Plugin Store -->
+                    <div id="plugin-store" class="step-card mb-8 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold mb-3">
+                            <i class="fas fa-puzzle-piece mr-2 text-blue-500"></i>
+                            插件商店
+                        </h3>
+                        <p class="mb-1">是一个集成官方插件和个人插件的地方，和bot商店一致。插件越有实用价值，使用量越高；</p>
+                        <p>有的插件和软件一样，比如："墨迹天气"就是让插件直接返回查询的天气结果。</p>
+                    </div>
+
+                    <!-- Workflow Store -->
+                    <div id="workflow-store" class="step-card mb-8 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold mb-3">
+                            <i class="fas fa-project-diagram mr-2 text-blue-500"></i>
+                            工作流商店
+                        </h3>
+                        <p class="mb-4">"工作流"是为了完成某项任务而进行的一系列有序的步骤。在Coze等技术平台上，将某一个任务进行完成步骤拆分，再把每个步骤所需的工具按照设定的流程连接，实现自动化完成任务，减少人工重复操作。</p>
+                    </div>
+
+                    <!-- Workflow Example -->
+                    <div id="workflow-example" class="mb-8">
+                        <h3 class="text-2xl font-bold mb-4">工作流实例：推书自媒体</h3>
+                        <p class="mb-4">举个例子：推书自媒体博主，需要完成书籍推荐文案，可以分解为以下几个步骤。</p>
+                        
+                        <div class="flex justify-center mb-6">
+                            <img src="https://tva1.sinaimg.cn/large/6aabe3dclgy1hnh6jpfqqaj21440ndaf4" alt="工作流示例" class="rounded-lg shadow-lg img-feature max-w-full h-auto">
+                        </div>
+                        
+                        <p class="mb-4">我们把上面的步骤拆分成AI工具能够实现的步骤。</p>
+                        
+                        <div class="space-y-6 mb-8">
+                            <div class="workflow-step">
+                                <h4 class="font-bold text-lg mb-2">第一步：分析需求，生成书籍信息</h4>
+                                <p>用豆包等大语言模型分析生活需求，输出对应的书籍信息。</p>
+                                <div class="mt-3">
+                                    <img src="https://tva1.sinaimg.cn/large/6aabe3dclgy1hnh6jqaggpj21450nqtbv" alt="第一步：分析需求" class="rounded-lg shadow-md img-feature max-w-full h-auto">
+                                </div>
+                            </div>
+                            
+                            <div class="workflow-step">
+                                <h4 class="font-bold text-lg mb-2">第二步：在线搜书</h4>
+                                <p>用在线搜书插件，实现书籍搜索。</p>
+                                <div class="mt-3">
+                                    <img src="https://tva1.sinaimg.cn/large/6aabe3dclgy1hnh6jt35l6j21440qeaee" alt="第二步：在线搜书" class="rounded-lg shadow-md img-feature max-w-full h-auto">
+                                </div>
+                            </div>
+                            
+                            <div class="workflow-step">
+                                <h4 class="font-bold text-lg mb-2">第三步：内容整理</h4>
+                                <p>用代码节点对上一步输出的内容进行整理，输出为书名、作者、简介等固定格式。</p>
+                            </div>
+                            
+                            <div class="workflow-step">
+                                <h4 class="font-bold text-lg mb-2">第四步：生成推书文案</h4>
+                                <p>再次用豆包等大语言模型分析书籍信息，并要求根据书籍信息输出对应的推书文案。</p>
+                                <div class="mt-3">
+                                    <img src="https://tva1.sinaimg.cn/large/6aabe3dclgy1hnh6juct76j214b0p61j2" alt="第四步：生成推书文案" class="rounded-lg shadow-md img-feature max-w-full h-auto">
+                                </div>
+                            </div>
+                            
+                            <div class="workflow-step">
+                                <h4 class="font-bold text-lg mb-2">第五步：最终输出</h4>
+                                <p>加上一个输出节点，完成整个工作流。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Workflow Nodes -->
+                    <div id="workflow-nodes" class="mb-8">
+                        <h3 class="text-2xl font-bold mb-4">Coze中支持的工作流节点</h3>
+                        <p class="mb-4">以下是 Coze 中的工作流支持的节点：</p>
+                        
+                        <div class="flex justify-center mb-6">
+                            <img src="https://tva4.sinaimg.cn/large/6aabe3dclgy1hnh6jvaupuj21440mqwg4" alt="工作流节点类型" class="rounded-lg shadow-lg img-feature max-w-full h-auto">
+                        </div>
+                        
+                        <div class="highlight-box">
+                            <h4 class="font-bold text-lg mb-3">工作流节点分类</h4>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-center">
+                                            <i class="fas fa-brain text-purple-500 mr-2"></i>
+                                            <span>大语言模型节点</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fas fa-puzzle-piece text-green-500 mr-2"></i>
+                                            <span>插件节点</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fas fa-code text-blue-500 mr-2"></i>
+                                            <span>代码节点</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-center">
+                                            <i class="fas fa-random text-orange-500 mr-2"></i>
+                                            <span>条件分支节点</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fas fa-reply-all text-red-500 mr-2"></i>
+                                            <span>输出节点</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fas fa-terminal text-gray-500 mr-2"></i>
+                                            <span>终止节点</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Workflow Tutorial Section -->
+                <section id="workflow-tutorial" class="mb-16 animate-fadeIn delayed-2">
+                    <h2 class="text-3xl font-bold mb-6 heading-underline">案例：抖音链接文案提取工作流</h2>
+                    
+                    <div class="quote mb-8">
+                        <p>如果前面的内容依然有理解难度，下面我们不妨试一下一个案例实操。</p>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold mb-4" id="step-1">第一步：创建工作流</h3>
+                        <p class="mb-4">首先我们需要创建工作流。</p>
+                        
+                        <div class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-30 p-4 rounded-lg mb-6">
+                            <ol class="list-decimal list-inside space-y-2 ml-4">
+                                <li>选择创建工作流</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="flex justify-center mb-6">
+                            <img src="https://tva1.sinaimg.cn/large/6aabe3dclgy1hnh6jwcs8oj21440fvdh2" alt="创建工作流" class="rounded-lg shadow-lg img-feature max-w-full h-auto">
+                        </div>
+                        
+                        <p class="mb-4">这里有两个必填项目，可以根据下图填写。</p>
+                        
+                        <div class="flex justify-center mb-6">
+                            <img src="https://tva1.sinaimg.cn/large/6aabe3dclgy1hnh6jxk992j214f0kijsj" alt="工作流设置" class="rounded-lg shadow-lg img-feature max-w-full h-auto">
+                        </div>
+                        
+                        <p class="mb-4">创建后，会出现一个工作流制作界面，开始和结束的环节已经预设好了。</p>
+                        
+                        <p class="mb-6">接下来，我们来拆解一下这个工作流的制作思路。把抖音链接变为文字一共要分为多少步？</p>
+                        
+                        <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg mb-8">
+                            <h4 class="font-bold text-lg mb-3">工作流步骤拆解</h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center mr-3">1</span>
+                                    <span>识别视频链接</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center mr-3">2</span>
+                                    <span>提取链接中的标题和内容</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center mr-3">3</span>
+                                    <span>对文本进行处理，纠正转化中产生的错字等</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center mr-3">4</span>
+                                    <span>整理输出</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold mb-4" id="step-2">第二步：识别视频链接</h3>
+                        <p class="mb-4">第一步：识别视频链接。这里我们需要用到大模型处理。</p>
+                        
+                        <div class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-30 p-4 rounded-lg mb-6">
+                            <ol class="list-decimal list-inside space-y-2 ml-4">
+                                <li>点击左侧节点，新增一个大模型节点</li>
+                                <li>将大模型的名字更改为一个更好识别的名称，比如"识别各类非标准化链接"</li>
+                                <li>在提示词框中输入大模型的处理原则。要求大模型只输出链接中的网址</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="flex justify-center mb-6">
+                            <img src="https://tva4.sinaimg.cn/large/6aabe3dclgy1hnh6jzqxk3j214n0pbn01" alt="识别视频链接" class="rounded-lg shadow-lg img-feature max-w-full h-auto">
+                        </div>
+                        
+                        <p class="mb-4">在该节点的输入中，选择引用，选择开始节点中的输出变量。</p>
+                        
+                        <div class="flex justify-center mb-6">
+                            <img src="https://tva1.sinaimg.cn/large/6aabe3dclgy1hnh6k0ywyrj215i0hg3yx" alt="节点输入设置" class="rounded-lg shadow-lg img-feature max-w-full h-auto">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold mb-4" id="step-3">第三步：提取标题和内容</h3>
+                        <p class="mb-4">第二步，从链接中提取出标题和内容。这一步需要用到一个插件。</p>
+                        
+                        <div class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-30 p-4 rounded-lg mb-6">
+                            <ol class="list-decimal list-inside space-y-2 ml-4">
+                                <li>点击左侧节点，选择新增一个插件</li>
+                                <li>在弹出的插件商店里，搜索【链接读取】，然后添加该插件为新的节点</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="flex justify-center mb-6">
+                            <img src="https://tva4.sinaimg.cn/large/6aabe3dclgy1hnh6k1rlzlj214f0lvdhh" alt="添加链接读取插件" class="rounded-lg shadow-lg img-feature max-w-full h-auto">
+                        </div>
+                        
+                        <p class="mb-4">然后在该节点的输入设置中，将type改为输入，内容为"全文"，url则引用上一个节点中的输出内容。</p>
+                        
+                        <div class="flex justify-center mb-6">
+                            <img src="https://tva4.sinaimg.cn/large/6aabe3dclgy1hnh6k38a2gj215w0h10un" alt="配置链接读取插件" class="rounded-lg shadow-lg img-feature max-w-full h-auto">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold mb-4" id="step-4">第四步：文本处理</h3>
+                        <p class="mb-4">三是对文本进行处理，输出的文本可能有错字，需要一个新的大模型来纠正修改输出中产生的错字。</p>
+                        
+                        <div class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-30 p-4 rounded-lg mb-6">
+                            <ol class="list-decimal list-inside space-y-2 ml-4">
+                                <li>依然是点击左侧节点，新增一个大模型节点</li>
+                                <li>将大模型的名字更改为一个更好识别的名称，比如"文本处理"</li>
+                                <li>输入设置中，选择引用上一个节点中输出的内容</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="flex justify-center mb-6">
+                            <img src="https://tva1.sinaimg.cn/large/6aabe3dclgy1hnh6k4jqvsj216z0hgdhm" alt="添加文本处理节点" class="rounded-lg shadow-lg img-feature max-w-full h-auto">
+                        </div>
+                        
+                        <p class="mb-4">在提示语中，输出处理方法。</p>
+                        
+                        <div class="flex justify-center mb-6">
+                            <img src="https://tva1.sinaimg.cn/large/6aabe3dclgy1hnh6k5v8zdj21g20h1760" alt="文本处理提示语" class="rounded-lg shadow-lg img-feature max-w-full h-auto">
+                        </div>
+                        
+                        <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg my-6">
+                            <pre class="text-sm overflow-x-auto"><code>检查以下【文章内容】中是否存在错别字、歧义、语句不通顺之处，如有请优化
+
+接下来，我给你一个主题{{input}}，你帮我生成相对应的格式文本。
+
+输出：
+
+-标题
+
+-正文：</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold mb-4" id="step-5">第五步：整理输出</h3>
+                        <p class="mb-4">四是整理输出。最后就是连接各个节点，同时在结束节点中设置输出变量，引用文本处理大模型处理后的内容。</p>
+                        
+                        <div class="flex justify-center mb-6">
+                            <img src="https://tva1.sinaimg.cn/large/6aabe3dclgy1hnh6k77cepj21ey0fr3ze" alt="整理输出" class="rounded-lg shadow-lg img-feature max-w-full h-auto">
+                        </div>
+                        
+                        <p class="mb-6">最后，记得输入一个链接，试运行一次，如果成功啦，那就说明这个工作流OK啦~</p>
+                        
+                        <p class="mb-4">以下就是这个完整的工作流：</p>
+                        
+                        <div class="flex justify-center mb-6">
+                            <img src="https://tva3.sinaimg.cn/large/6aabe3dclgy1hnh6k8lhzwj21ce0ol0uc" alt="完整工作流" class="rounded-lg shadow-lg img-feature max-w-full h-auto">
+                        </div>
+                        
+                        <div class="text-center mt-10">
+                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">你学会了吗？</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Further Reading Section -->
+                <section id="further-reading" class="mb-16 animate-fadeIn delayed-3">
+                    <h2 class="text-3xl font-bold mb-6 heading-underline">延伸阅读</h2>
+                    
+                    <div class="mb-8">
+                        <p class="mb-6">如果您想深入了解AI工作流和自动化，以下是一些推荐的资源：</p>
+                        
+                        <div class="space-y-6">
+                            <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-book text-2xl text-blue-500"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h3 class="text-xl font-bold mb-2">《生成式AI实战：基于大型语言模型的应用开发》</h3>
+                                        <p class="text-gray-600 dark:text-gray-300 mb-2">作者：徐涛</p>
+                                        <p class="mb-2">本书介绍如何利用大型语言模型构建实用的AI应用，包括工作流自动化和AI助手开发。</p>
+                                        <a href="#" class="text-blue-600 dark:text-blue-400 hover:underline flex items-center">
+                                            <span>了解更多</span>
+                                            <i class="fas fa-arrow-right ml-1 text-sm"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-book text-2xl text-blue-500"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h3 class="text-xl font-bold mb-2">《Prompt Engineering实战指南》</h3>
+                                        <p class="text-gray-600 dark:text-gray-300 mb-2">作者：刘慈欣</p>
+                                        <p class="mb-2">这本书深入探讨如何编写有效的AI提示，以获得最佳的AI生成结果，对于优化Coze工作流非常有帮助。</p>
+                                        <a href="#" class="text-blue-600 dark:text-blue-400 hover:underline flex items-center">
+                                            <span>了解更多</span>
+                                            <i class="fas fa-arrow-right ml-1 text-sm"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-file-alt text-2xl text-blue-500"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h3 class="text-xl font-bold mb-2">《AI工作流自动化：从理论到实践》</h3>
+                                        <p class="text-gray-600 dark:text-gray-300 mb-2">作者：李彦宏</p>
+                                        <p class="mb-2">这篇论文探讨了AI工作流自动化的最新进展和实践经验，包括多个实际案例分析。</p>
+                                        <a href="#" class="text-blue-600 dark:text-blue-400 hover:underline flex items-center">
+                                            <span>了解更多</span>
+                                            <i class="fas fa-arrow-right ml-1 text-sm"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-graduation-cap text-2xl text-blue-500"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h3 class="text-xl font-bold mb-2">《深度学习在流程自动化中的应用》</h3>
+                                        <p class="text-gray-600 dark:text-gray-300 mb-2">作者：科技前沿学会</p>
+                                        <p class="mb-2">这一系列教程详细介绍了如何将深度学习技术应用于业务流程自动化，包括实例代码和案例研究。</p>
+                                        <a href="#" class="text-blue-600 dark:text-blue-400 hover:underline flex items-center">
+                                            <span>了解更多</span>
+                                            <i class="fas fa-arrow-right ml-1 text-sm"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-laptop-code text-2xl text-blue-500"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h3 class="text-xl font-bold mb-2">《AI驱动的工作流程设计：最佳实践指南》</h3>
+                                        <p class="text-gray-600 dark:text-gray-300 mb-2">作者：王小波</p>
+                                        <p class="mb-2">本书提供了设计AI驱动工作流的全面指南，包括需求分析、流程设计、实现和测试的完整方法论。</p>
+                                        <a href="#" class="text-blue-600 dark:text-blue-400 hover:underline flex items-center">
+                                            <span>了解更多</span>
+                                            <i class="fas fa-arrow-right ml-1 text-sm"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Workflow Visualization using Mermaid -->
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold mb-4">Coze工作流程概念图</h3>
+                        <p class="mb-6">以下是Coze平台中工作流的基本概念和组件关系图：</p>
+                        
+                        <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                            <div class="mermaid">
+graph TB
+    A[用户输入] --> B{工作流处理}
+    B --> C[大模型节点]
+    B --> D[插件节点]
+    B --> E[代码节点]
+    B --> F[条件分支节点]
+    C --> G[输出节点]
+    D --> G
+    E --> G
+    F --> G
+    F --> H[终止节点]
+    G --> I[最终结果]
+    
+    style A fill:#f9d5e5,stroke:#333,stroke-width:2px
+    style B fill:#eeeeee,stroke:#333,stroke-width:2px
+    style C fill:#d5f5e3,stroke:#333,stroke-width:2px
+    style D fill:#d6eaf8,stroke:#333,stroke-width:2px
+    style E fill:#fadbd8,stroke:#333,stroke-width:2px
+    style F fill:#e8daef,stroke:#333,stroke-width:2px
+    style G fill:#fcf3cf,stroke:#333,stroke-width:2px
+    style H fill:#f5b7b1,stroke:#333,stroke-width:2px
+    style I fill:#abebc6,stroke:#333,stroke-width:2px
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Specific Workflow Example Visualization -->
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold mb-4">抖音链接文案提取工作流示意图</h3>
+                        <p class="mb-6">以下是我们在本教程中构建的抖音链接文案提取工作流的可视化流程图：</p>
+                        
+                        <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                            <div class="mermaid">
+graph TD
+    A[开始] --> B[识别视频链接<br>大模型节点]
+    B --> C[提取内容<br>链接读取插件]
+    C --> D[文本处理<br>大模型节点]
+    D --> E[结束<br>输出结果]
+    
+    style A fill:#ffcccb,stroke:#ff6b6b,stroke-width:2px
+    style B fill:#c8e6c9,stroke:#4caf50,stroke-width:2px
+    style C fill:#bbdefb,stroke:#2196f3,stroke-width:2px
+    style D fill:#e1bee7,stroke:#9c27b0,stroke-width:2px
+    style E fill:#ffe0b2,stroke:#ff9800,stroke-width:2px
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">关于扣子</h3>
+                    <p class="mb-4">扣子是一个专注于AI技术和应用的教程平台，致力于帮助用户掌握最新的AI工具和方法。</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-white hover:text-blue-400 transition-colors">
+                            <i class="fab fa-weixin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-blue-400 transition-colors">
+                            <i class="fab fa-weibo text-xl"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-blue-400 transition-colors">
+                            <i class="fab fa-bilibili text-xl"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-blue-400 transition-colors">
+                            <i class="fab fa-zhihu text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">快速链接</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="#what-is-coze" class="text-gray-300 hover:text-white transition-colors">什么是Coze？</a>
+                        </li>
+                        <li>
+                            <a href="#coze-basics" class="text-gray-300 hover:text-white transition-colors">Coze基础功能</a>
+                        </li>
+                        <li>
+                            <a href="#workflow-tutorial" class="text-gray-300 hover:text-white transition-colors">工作流教程</a>
+                        </li>
+                        <li>
+                            <a href="#further-reading" class="text-gray-300 hover:text-white transition-colors">延伸阅读</a>
+                        </li>
+                        <li>
+                            <a href="https://www.coze.cn" target="_blank" class="text-gray-300 hover:text-white transition-colors">Coze官网</a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">联系我们</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2 text-blue-400"></i>
+                            <a href="mailto:contact@example.com" class="text-gray-300 hover:text-white transition-colors">contact@example.com</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-2 text-blue-400"></i>
+                            <span class="text-gray-300">+86 123 4567 8901</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-2 text-blue-400"></i>
+                            <span class="text-gray-300">上海市浦东新区科技园区</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 扣子 | Coze教程. 保留所有权利。</p>
+                <p class="mt-2 text-sm">
+                    <span>语言服务行业 2024年11月06日 00:01 上海</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default',
+            flowchart: { curve: 'basis' },
+            securityLevel: 'loose'
+        });
+        
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const toggleIcon = themeToggle.querySelector('i');
+        
+        // Function to set theme based on user preference or system setting
+        function setTheme() {
+            // Check for saved theme preference or use system preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                toggleIcon.classList.remove('fa-moon');
+                toggleIcon.classList.add('fa-sun');
+                if (mermaid) {
+                    mermaid.initialize({ theme: 'dark' });
+                    document.querySelectorAll('.mermaid').forEach(el => {
+                        const content = el.innerHTML;
+                        el.innerHTML = content;
+                    });
+                }
+            } else {
+                document.documentElement.classList.remove('dark');
+                toggleIcon.classList.remove('fa-sun');
+                toggleIcon.classList.add('fa-moon');
+                if (mermaid) {
+                    mermaid.initialize({ theme: 'default' });
+                    document.querySelectorAll('.mermaid').forEach(el => {
+                        const content = el.innerHTML;
+                        el.innerHTML = content;
+                    });
+                }
+            }
+        }
+        
+        // Set theme on initial load
+        setTheme();
+        
+        // Toggle theme when button is clicked
+        themeToggle.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                toggleIcon.classList.remove('fa-sun');
+                toggleIcon.classList.add('fa-moon');
+                if (mermaid) {
+                    mermaid.initialize({ theme: 'default' });
+                    document.querySelectorAll('.mermaid').forEach(el => {
+                        const content = el.innerHTML;
+                        el.innerHTML = content;
+                    });
+                }
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                toggleIcon.classList.remove('fa-moon');
+                toggleIcon.classList.add('fa-sun');
+                if (mermaid) {
+                    mermaid.initialize({ theme: 'dark' });
+                    document.querySelectorAll('.mermaid').forEach(el => {
+                        const content = el.innerHTML;
+                        el.innerHTML = content;
+                    });
+                }
+            }
+        });
+        
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setTheme);
+        
+        // Animation on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.animate-fadeIn');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+            
+            // Active link tracking for TOC
+            const sections = document.querySelectorAll('section[id]');
+            const tocLinks = document.querySelectorAll('.toc-link');
+            
+            const scrollHandler = () => {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                tocLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            };
+            
+            window.addEventListener('scroll', scrollHandler);
+        });
+    </script>
+</body>
+</html>

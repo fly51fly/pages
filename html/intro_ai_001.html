@@ -1,0 +1,1575 @@
+<!--ARTISTIC HTML PORTFOLIO PAGE FOR AI001 COURSE -->
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人工智能导论 - 第一讲：认识人工智能</title>
+    <!-- TailwindCSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans SC', 'sans-serif']
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/css">
+        /* Custom animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        .animate-delay-100 { animation-delay: 100ms; }
+        .animate-delay-200 { animation-delay: 200ms; }
+        .animate-delay-300 { animation-delay: 300ms; }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* Prevent FOUC (Flash of Unstyled Content) */
+        html.dark {
+            color-scheme: dark;
+        }
+    </style>
+</head>
+<body class="antialiased font-sans bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+    <!-- Toggle Dark/Light Mode Button -->
+    <button id="theme-toggle" class="fixed top-4 right-4 z-50 p-2 rounded-full bg-gray-200 dark:bg-gray-700 transition-colors duration-300">
+        <svg id="sun-icon" class="w-5 h-5 text-gray-800 hidden dark:block" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+        </svg>
+        <svg id="moon-icon" class="w-5 h-5 text-gray-800 block dark:hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+        </svg>
+    </button>
+
+    <!-- Header -->
+    <header class="relative bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-800 dark:to-primary-900 overflow-hidden">
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-50"></div>
+        </div>
+        <div class="container max-w-7xl mx-auto px-4 py-24 sm:py-32 relative z-10">
+            <div class="animate-fadeIn opacity-0">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">人工智能导论</h1>
+                <p class="text-xl md:text-2xl text-primary-100 font-medium">第一讲：认识人工智能</p>
+            </div>
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white/10 dark:bg-gray-800/30 backdrop-blur-lg rounded-xl shadow-lg p-6 opacity-0 animate-fadeIn animate-delay-100">
+                    <div class="text-primary-100 mb-3">
+                        <i class="fas fa-lightbulb text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">导认识</h3>
+                    <p class="text-primary-100">引导学生认识人工智能的本质属性和内在逻辑，建立对人工智能的正确认知。</p>
+                </div>
+                <div class="bg-white/10 dark:bg-gray-800/30 backdrop-blur-lg rounded-xl shadow-lg p-6 opacity-0 animate-fadeIn animate-delay-200">
+                    <div class="text-primary-100 mb-3">
+                        <i class="fas fa-rocket text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">导兴趣</h3>
+                    <p class="text-primary-100">激发学生对人工智能的学习兴趣，让学生爱上人工智能。</p>
+                </div>
+                <div class="bg-white/10 dark:bg-gray-800/30 backdrop-blur-lg rounded-xl shadow-lg p-6 opacity-0 animate-fadeIn animate-delay-300">
+                    <div class="text-primary-100 mb-3">
+                        <i class="fas fa-brain text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">导原理与重点</h3>
+                    <p class="text-primary-100">引导学生理解人工智能的基本原理，掌握核心技术，明确学习方向。</p>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white dark:from-gray-900 to-transparent"></div>
+    </header>
+
+    <!-- Table of Contents -->
+    <section class="py-12 bg-gray-50 dark:bg-gray-800">
+        <div class="container max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-center">课程内容概览</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <a href="#introduction" class="group">
+                    <div class="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6 transition duration-300 hover:shadow-lg hover:scale-[1.02] h-full flex flex-col">
+                        <div class="text-primary-600 dark:text-primary-400 mb-3">
+                            <i class="fas fa-question-circle text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition duration-300">引入与课程概览</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mt-auto">从核心问题出发，了解课程建设历程与目标。</p>
+                    </div>
+                </a>
+                <a href="#challenges" class="group">
+                    <div class="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6 transition duration-300 hover:shadow-lg hover:scale-[1.02] h-full flex flex-col">
+                        <div class="text-primary-600 dark:text-primary-400 mb-3">
+                            <i class="fas fa-exclamation-triangle text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition duration-300">教学挑战与方案</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mt-auto">AI通识教育面临的挑战及北邮的应对策略。</p>
+                    </div>
+                </a>
+                <a href="#course-design" class="group">
+                    <div class="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6 transition duration-300 hover:shadow-lg hover:scale-[1.02] h-full flex flex-col">
+                        <div class="text-primary-600 dark:text-primary-400 mb-3">
+                            <i class="fas fa-drafting-compass text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition duration-300">课程设计与特色</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mt-auto">《AI在大前》课程的设计原则与特色。</p>
+                    </div>
+                </a>
+                <a href="#ai-history" class="group">
+                    <div class="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6 transition duration-300 hover:shadow-lg hover:scale-[1.02] h-full flex flex-col">
+                        <div class="text-primary-600 dark:text-primary-400 mb-3">
+                            <i class="fas fa-history text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition duration-300">人工智能的历史与概念</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mt-auto">人工智能的起源、定义和发展历程。</p>
+                    </div>
+                </a>
+                <a href="#pioneers" class="group">
+                    <div class="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6 transition duration-300 hover:shadow-lg hover:scale-[1.02] h-full flex flex-col">
+                        <div class="text-primary-600 dark:text-primary-400 mb-3">
+                            <i class="fas fa-user-graduate text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition duration-300">人工智能的先驱者</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mt-auto">对AI领域杰出贡献者的介绍与致敬。</p>
+                    </div>
+                </a>
+                <a href="#tech-innovation" class="group">
+                    <div class="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6 transition duration-300 hover:shadow-lg hover:scale-[1.02] h-full flex flex-col">
+                        <div class="text-primary-600 dark:text-primary-400 mb-3">
+                            <i class="fas fa-microchip text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition duration-300">技术创新与大模型革命</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mt-auto">人工智能发展的驱动力与最新技术突破。</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section id="introduction" class="py-16 bg-white dark:bg-gray-900">
+        <div class="container max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center">引入与课程概览</h2>
+            
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg mb-12">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold mb-4 text-primary-700 dark:text-primary-400">核心问题</h3>
+                    <div class="text-xl italic text-center my-8 border-l-4 border-primary-500 pl-6 py-2">
+                        "你觉得人工智能是什么？"
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300">
+                        这个简单的提问旨在引发大家对人工智能的初步思考，为接下来的课程内容做铺垫。课程将从最基本的问题出发，逐步深入探讨人工智能的各个方面。
+                    </p>
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold mb-6 text-primary-700 dark:text-primary-400">课程与教材建设概览</h3>
+                    
+                    <div class="relative overflow-hidden">
+                        <div class="absolute top-0 bottom-0 left-0 w-1 bg-primary-500"></div>
+                        <div class="pl-8 relative mb-12">
+                            <div class="absolute left-0 -translate-x-1/2 w-6 h-6 rounded-full bg-primary-500 flex items-center justify-center text-white">
+                                <i class="fas fa-building-columns"></i>
+                            </div>
+                            <h4 class="text-xl font-semibold mb-4">课程发展时间线</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+                                    <div class="font-bold text-gray-700 dark:text-gray-200 mb-2">早期 (1990s-2000s)</div>
+                                    <p class="text-gray-600 dark:text-gray-300">
+                                        课程建设起步阶段，主要包括网络管理、数字图像处理、语音信号处理、模式识别与机器学习等基础课程。
+                                    </p>
+                                </div>
+                                <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+                                    <div class="font-bold text-gray-700 dark:text-gray-200 mb-2">发展期 (2000s-2010s)</div>
+                                    <p class="text-gray-600 dark:text-gray-300">
+                                        随着互联网发展，增加了Web搜索、Python编程等实用性课程。
+                                    </p>
+                                </div>
+                                <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+                                    <div class="font-bold text-gray-700 dark:text-gray-200 mb-2">成熟期 (2010s-至今)</div>
+                                    <p class="text-gray-600 dark:text-gray-300">
+                                        进入人工智能快速发展时期，课程建设聚焦人工智能核心技术，如神经网络、深度学习，并开设了人工智能导论、概论等通识课程。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pl-8 relative">
+                            <div class="absolute left-0 -translate-x-1/2 w-6 h-6 rounded-full bg-primary-500 flex items-center justify-center text-white">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <h4 class="text-xl font-semibold mb-4">教材建设</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                为了配合课程教学，学院配套建设了丰富的教材体系，涵盖了图像处理、智能信息技术、网络管理、程序设计、面向对象方法、数据结构与算法、人工智能导论等多个方面，并不断更新和迭代教材版本，力求内容的前沿性和实用性。
+                            </p>
+                            <div class="bg-white dark:bg-gray-700 p-5 rounded-lg shadow-inner flex flex-wrap gap-3 justify-center">
+                                <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm">图像处理</span>
+                                <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm">智能信息技术</span>
+                                <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm">网络管理</span>
+                                <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm">程序设计</span>
+                                <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm">面向对象方法</span>
+                                <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm">数据结构与算法</span>
+                                <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm">人工智能导论</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Challenges and Solutions Section -->
+    <section id="challenges" class="py-16 bg-gray-50 dark:bg-gray-800">
+        <div class="container max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center">教学挑战与方案</h2>
+            
+            <div class="bg-white dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg mb-12">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold mb-6 text-primary-700 dark:text-primary-400">人工智能通识教育面临的教学挑战</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl shadow">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-400 mr-4">
+                                    <i class="fas fa-user-graduate text-2xl"></i>
+                                </div>
+                                <h4 class="text-lg font-semibold">教学内容挑战</h4>
+                            </div>
+                            <h5 class="font-medium text-primary-600 dark:text-primary-400 mb-2">零基础学生的高要求</h5>
+                            <p class="text-gray-600 dark:text-gray-300 mb-3">
+                                针对大学一年级新生开设人工智能通识课程，学生通常没有专业基础，但对人工智能的学习需求又很高。
+                            </p>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                人工智能本身是专业性很强的学科，课程体系庞大，内容广泛且深入，对于没有相关基础的大一新生来说，学习难度大。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl shadow">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-400 mr-4">
+                                    <i class="fas fa-bolt text-2xl"></i>
+                                </div>
+                                <h4 class="text-lg font-semibold">教学方法挑战</h4>
+                            </div>
+                            <h5 class="font-medium text-primary-600 dark:text-primary-400 mb-2">技术快速发展与教学内容僵化</h5>
+                            <p class="text-gray-600 dark:text-gray-300 mb-3">
+                                人工智能技术日新月异，新的知识和方法层出不穷，传统的教学方法难以快速跟上技术发展步伐。
+                            </p>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                人工智能领域缺乏成熟的理论体系和工程知识体系，教学内容容易落后于技术发展，难以将最前沿的技术融入教学。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl shadow">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-400 mr-4">
+                                    <i class="fas fa-flag text-2xl"></i>
+                                </div>
+                                <h4 class="text-lg font-semibold">课程思政挑战</h4>
+                            </div>
+                            <h5 class="font-medium text-primary-600 dark:text-primary-400 mb-2">国外技术领先与思政教育结合</h5>
+                            <p class="text-gray-600 dark:text-gray-300 mb-3">
+                                在人工智能关键技术领域，我们国家与世界领先水平仍有差距，核心技术和生态系统被国外掌握。
+                            </p>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                课程建设需要结合国家战略，融入思政教育，强调自主创新，加强国产人工智能技术链的教学设计，例如百度、华为等国内技术，将思政元素与技术知识有机结合，培养学生的民族自豪感和创新精神。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold mb-6 text-primary-700 dark:text-primary-400">北邮人工智能通识教育的特色与目标</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 p-6 rounded-xl border border-primary-200 dark:border-primary-700">
+                            <div class="flex items-center mb-4">
+                                <div class="text-primary-600 dark:text-primary-400 mr-3">
+                                    <i class="fas fa-heart text-2xl"></i>
+                                </div>
+                                <h4 class="text-lg font-semibold text-primary-800 dark:text-primary-300">思政引领</h4>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mb-3">
+                                将课程与国家战略紧密结合，强调人工智能领域的大国竞争意义，培养学生的爱国情怀和强国责任感。
+                            </p>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                深入挖掘人工智能领域中的中国力量，设计交互式案例，激发学生的学习兴趣和价值追求。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 p-6 rounded-xl border border-primary-200 dark:border-primary-700">
+                            <div class="flex items-center mb-4">
+                                <div class="text-primary-600 dark:text-primary-400 mr-3">
+                                    <i class="fas fa-compass text-2xl"></i>
+                                </div>
+                                <h4 class="text-lg font-semibold text-primary-800 dark:text-primary-300">四导创新</h4>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mb-3">
+                                采用"导认识、导兴趣、导重点、导原理"的教学方法，注重创新实践教学内容。
+                            </p>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                帮助学生正确认识人工智能的能力、工具和应用属性，培养学生的实际应用能力和创新思维。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 p-6 rounded-xl border border-primary-200 dark:border-primary-700">
+                            <div class="flex items-center mb-4">
+                                <div class="text-primary-600 dark:text-primary-400 mr-3">
+                                    <i class="fas fa-bridge text-2xl"></i>
+                                </div>
+                                <h4 class="text-lg font-semibold text-primary-800 dark:text-primary-300">理工贯通</h4>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mb-3">
+                                提出"广义智能函数"的概念，将机器学习、神经网络、自然语言处理、机器视觉等领域的数学模型统一起来，用智能函数导入人工智能工程化概念，打牢数理基础。
+                            </p>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                避免工科教育理论化，培养学生的实际应用能力和工程思维。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 p-6 rounded-xl border border-primary-200 dark:border-primary-700">
+                            <div class="flex items-center mb-4">
+                                <div class="text-primary-600 dark:text-primary-400 mr-3">
+                                    <i class="fas fa-question-circle text-2xl"></i>
+                                </div>
+                                <h4 class="text-lg font-semibold text-primary-800 dark:text-primary-300">问题驱动</h4>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mb-3">
+                                以问题为导向，激发学生的学习主动性。课程指明人工智能领域的问题方向，设置挑战性任务，增加学生的学习负担，促使学生转变学习方式。
+                            </p>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                培养学生自主学习能力，掌握线上线下学习、利用开源社区资源进行知识迭代更新的能力。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 p-6 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-600">
+                        <h4 class="text-lg font-semibold mb-3 text-center">核心理念</h4>
+                        <p class="text-gray-700 dark:text-gray-300 text-center">
+                            课程舍弃传统人工智能中抽象的符号主义和因果推理，<br class="hidden md:block">
+                            侧重于新一代人工智能中的机器学习和深度学习，<br class="hidden md:block">
+                            引导学生构建工程化的体系化人工智能概念。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Design Section -->
+    <section id="course-design" class="py-16 bg-white dark:bg-gray-900">
+        <div class="container max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center">课程设计与特色</h2>
+            
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg mb-12">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold mb-6 text-primary-700 dark:text-primary-400">人工智能通识教育的北邮方案</h3>
+                    
+                    <div class="mb-8">
+                        <h4 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-cube text-primary-500 mr-2"></i>
+                            课程框架：A1<sup>3</sup> 体系
+                        </h4>
+                        <p class="text-gray-700 dark:text-gray-300 mb-6">
+                            北邮构建了"A1<sup>3</sup>"人工智能通识教育课程体系，总共96学时，学习内容模块化设计，从大一到大四逐步深入。
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5 border-t-4 border-primary-500">
+                                <div class="text-lg font-bold mb-2">A (AP Class)</div>
+                                <div class="text-primary-600 dark:text-primary-400 font-medium mb-2">零基础入门AI通识素养先修课</div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 mb-3">32学时 · 第1学期</div>
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    人工智能入门知识，培养学生对人工智能的基本认知和兴趣。
+                                </p>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5 border-t-4 border-primary-500">
+                                <div class="text-lg font-bold mb-2">I (Intensified)</div>
+                                <div class="text-primary-600 dark:text-primary-400 font-medium mb-2">强基赋能AI课</div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 mb-3">16+16学时 · 第2-3学期</div>
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    强化人工智能基础理论和技能，为后续专业学习打下基础。
+                                </p>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5 border-t-4 border-primary-500">
+                                <div class="text-lg font-bold mb-2">I (Interdisciplinary)</div>
+                                <div class="text-primary-600 dark:text-primary-400 font-medium mb-2">学科交叉前沿AI课</div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 mb-3">16学时 · 第3-5学期</div>
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    探讨人工智能在不同学科领域的应用，拓展学生的视野。
+                                </p>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5 border-t-4 border-primary-500">
+                                <div class="text-lg font-bold mb-2">I (Innovation)</div>
+                                <div class="text-primary-600 dark:text-primary-400 font-medium mb-2">双创与科研实践引导</div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 mb-3">16学时 · 第6-8学期</div>
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    引导学生参与科研项目和创新创业实践，提升实践能力。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-5 bg-primary-50 dark:bg-primary-900/20 rounded-lg border border-primary-100 dark:border-primary-800">
+                        <p class="text-gray-700 dark:text-gray-300 italic text-center">
+                            各个专业的学生可以根据自身的人才培养需求，灵活选择不同模块进行组合学习。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold mb-6 text-primary-700 dark:text-primary-400">《AI在大前》的课程设计原则</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex">
+                                <div class="mr-4 flex-shrink-0">
+                                    <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-400">
+                                        <i class="fas fa-layer-group"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold mb-2">基础性</h4>
+                                    <p class="text-gray-600 dark:text-gray-300">
+                                        打好基础，让学生掌握人工智能的核心概念，理解基本原理，了解应用场景，建立对人工智能的整体认知框架。
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex">
+                                <div class="mr-4 flex-shrink-0">
+                                    <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-400">
+                                        <i class="fas fa-forward"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold mb-2">前置性</h4>
+                                    <p class="text-gray-600 dark:text-gray-300">
+                                        课程内容具有前瞻性，引导学生建立对人工智能基本认知的，了解相关概念和技术发展趋势。
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex">
+                                <div class="mr-4 flex-shrink-0">
+                                    <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-400">
+                                        <i class="fas fa-laptop-code"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold mb-2">实践性</h4>
+                                    <p class="text-gray-600 dark:text-gray-300">
+                                        强调实践应用，引导学生运用所学知识解决实际问题，培养动手能力和创新思维。
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex">
+                                <div class="mr-4 flex-shrink-0">
+                                    <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-400">
+                                        <i class="fas fa-magic"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold mb-2">趣味性</h4>
+                                    <p class="text-gray-600 dark:text-gray-300">
+                                        提升学习兴趣，注重课程的趣味性和吸引力，采用生动活泼的语言和案例，激发学生对人工智能的学习热情。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold mb-6 text-primary-700 dark:text-primary-400">《AI在大前》课程特色</h3>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="bg-white dark:bg-gray-700 p-3 rounded shadow flex items-center">
+                                <i class="fas fa-graduation-cap text-primary-500 mr-3"></i>
+                                <span class="text-gray-700 dark:text-gray-300 text-sm">对标国外大学先修课程</span>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 p-3 rounded shadow flex items-center">
+                                <i class="fas fa-digital-tachograph text-primary-500 mr-3"></i>
+                                <span class="text-gray-700 dark:text-gray-300 text-sm">数字化学习</span>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 p-3 rounded shadow flex items-center">
+                                <i class="fas fa-door-open text-primary-500 mr-3"></i>
+                                <span class="text-gray-700 dark:text-gray-300 text-sm">开放学习</span>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 p-3 rounded shadow flex items-center">
+                                <i class="fas fa-users text-primary-500 mr-3"></i>
+                                <span class="text-gray-700 dark:text-gray-300 text-sm">社区化学习</span>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 p-3 rounded shadow flex items-center">
+                                <i class="fas fa-thumbtack text-primary-500 mr-3"></i>
+                                <span class="text-gray-700 dark:text-gray-300 text-sm">精选主题</span>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 p-3 rounded shadow flex items-center">
+                                <i class="fas fa-photo-video text-primary-500 mr-3"></i>
+                                <span class="text-gray-700 dark:text-gray-300 text-sm">新媒体形式</span>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 p-3 rounded shadow flex items-center">
+                                <i class="fas fa-clock text-primary-500 mr-3"></i>
+                                <span class="text-gray-700 dark:text-gray-300 text-sm">每模块20-30分钟</span>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 p-3 rounded shadow flex items-center">
+                                <i class="fab fa-bilibili text-primary-500 mr-3"></i>
+                                <span class="text-gray-700 dark:text-gray-300 text-sm">B站首发，方便交互传播</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-primary-50 dark:bg-primary-900/20 p-5 rounded-lg">
+                            <h4 class="text-lg font-semibold mb-3 text-center">课程模块示例</h4>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="p-2 border border-primary-200 dark:border-primary-700 rounded bg-white dark:bg-gray-700">
+                                    <div class="text-sm font-medium text-primary-700 dark:text-primary-300">无处不在的AI</div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">乔媛媛主讲</div>
+                                </div>
+                                
+                                <div class="p-2 border border-primary-200 dark:border-primary-700 rounded bg-white dark:bg-gray-700">
+                                    <div class="text-sm font-medium text-primary-700 dark:text-primary-300">AI的功能是函数</div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">徐蔚然主讲</div>
+                                </div>
+                                
+                                <div class="p-2 border border-primary-200 dark:border-primary-700 rounded bg-white dark:bg-gray-700">
+                                    <div class="text-sm font-medium text-primary-700 dark:text-primary-300">神奇的AIGC</div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">乔媛媛主讲</div>
+                                </div>
+                                
+                                <div class="p-2 border border-primary-200 dark:border-primary-700 rounded bg-white dark:bg-gray-700">
+                                    <div class="text-sm font-medium text-primary-700 dark:text-primary-300">大型语言模型</div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">陈光主讲</div>
+                                </div>
+                                
+                                <div class="p-2 border border-primary-200 dark:border-primary-700 rounded bg-white dark:bg-gray-700">
+                                    <div class="text-sm font-medium text-primary-700 dark:text-primary-300">AI的具身</div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">陈光主讲</div>
+                                </div>
+                                
+                                <div class="p-2 border border-primary-200 dark:border-primary-700 rounded bg-white dark:bg-gray-700">
+                                    <div class="text-sm font-medium text-primary-700 dark:text-primary-300">AI for Science</div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">吴铭主讲</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI History Section -->
+    <section id="ai-history" class="py-16 bg-gray-50 dark:bg-gray-800">
+        <div class="container max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center">人工智能的历史与概念</h2>
+            
+            <div class="bg-white dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg mb-12">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold mb-6 text-primary-700 dark:text-primary-400">人工智能之直观</h3>
+                    
+                    <div class="max-w-3xl mx-auto bg-gray-50 dark:bg-gray-800 p-8 rounded-xl border border-gray-200 dark:border-gray-600 text-center">
+                        <p class="text-xl text-gray-700 dark:text-gray-300 italic mb-6">
+                            "智者灵也，能者动也。"
+                        </p>
+                        <p class="text-xl text-gray-700 dark:text-gray-300 italic mb-6">
+                            "人工智能则乃人类所创造之灵动者也。"
+                        </p>
+                        <p class="text-xl text-gray-700 dark:text-gray-300 italic mb-6">
+                            "其魅自神奇，其功在造化。"
+                        </p>
+                        <p class="text-xl text-gray-700 dark:text-gray-300 italic">
+                            "其诱人也深焉，其助人也劲焉！"
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold mb-6 text-primary-700 dark:text-primary-400">名可名 非常名</h3>
+                        
+                        <div class="mb-8">
+                            <h4 class="text-xl font-semibold mb-4">人工智能的诞生</h4>
+                            <div class="flex flex-col md:flex-row items-center mb-6">
+                                <div class="mb-4 md:mb-0 md:mr-6">
+                                    <div class="bg-gray-200 dark:bg-gray-600 rounded-lg h-40 w-56 flex items-center justify-center">
+                                        <i class="fas fa-image text-4xl text-gray-400 dark:text-gray-500"></i>
+                                        <span class="ml-2 text-gray-500 dark:text-gray-400">达特茅斯会议照片</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-gray-700 dark:text-gray-300 mb-3">
+                                        <strong>AI: Artificial Intelligence</strong> 诞生于 1956 年达特茅斯会议
+                                    </p>
+                                    <p class="text-gray-700 dark:text-gray-300">
+                                        一群年轻人探讨机器如何模拟人类思维，最终提出这一划时代的名词
+                                    </p>
+                                    <div class="mt-4">
+                                        <div class="text-sm font-semibold text-gray-600 dark:text-gray-400">参会人员：</div>
+                                        <div class="flex flex-wrap gap-2 mt-1">
+                                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded text-xs">摩尔</span>
+                                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded text-xs">麦卡锡</span>
+                                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded text-xs">明斯基</span>
+                                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded text-xs">赛弗里奇</span>
+                                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded text-xs">所罗门诺夫</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold mb-6 text-primary-700 dark:text-primary-400">名可名 非常名</h3>
+                        
+                        <div class="mb-8">
+                            <h4 class="text-xl font-semibold mb-4">Artificial Intelligence 的含义</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg">
+                                    <div class="text-lg font-bold text-primary-600 dark:text-primary-400 mb-2">Artificial</div>
+                                    <p class="text-gray-700 dark:text-gray-300">
+                                        人造的
+                                    </p>
+                                </div>
+                                
+                                <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg">
+                                    <div class="text-lg font-bold text-primary-600 dark:text-primary-400 mb-2">Intelligence</div>
+                                    <p class="text-gray-700 dark:text-gray-300">
+                                        学习、判断、理解等人类大脑的能力
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 p-4 rounded-lg">
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-exclamation-circle text-yellow-500 mt-1"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-gray-700 dark:text-gray-300 mb-2">
+                                            能力客观存在，是与精神或意识完全不同的概念
+                                        </p>
+                                        <p class="text-gray-700 dark:text-gray-300 font-semibold">
+                                            能力是人工智能最本质的属性，需牢牢把握
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-semibold mb-4">"智能"的辨析</h4>
+                            <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg">
+                                <p class="text-gray-700 dark:text-gray-300 mb-3">
+                                    人工智能：是AI的中文直译，本身没有问题
+                                </p>
+                                <p class="text-gray-700 dark:text-gray-300 mb-3">
+                                    但 "智能" 一词意义较复杂，并可做形容词
+                                </p>
+                                <p class="text-gray-700 dark:text-gray-300 font-bold">
+                                    需要注意 Intelligence ≠ Intelligent
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold mb-6 text-primary-700 dark:text-primary-400">两起两落终有今</h3>
+                    
+                    <div class="mb-8">
+                        <h4 class="text-xl font-semibold mb-4">人工智能发展简史</h4>
+                        
+                        <div class="relative">
+                            <!-- Timeline bar -->
+                            <div class="absolute top-0 bottom-0 left-16 md:left-24 w-1 bg-primary-200 dark:bg-primary-700"></div>
+                            
+                            <!-- Timeline items -->
+                            <div class="mb-12 relative">
+                                <div class="flex">
+                                    <div class="flex-shrink-0 w-32 md:w-48 text-right pr-8">
+                                        <div class="text-primary-600 dark:text-primary-400 font-bold">1956-1960s</div>
+                                        <div class="text-gray-500 dark:text-gray-400 text-sm">第一起</div>
+                                    </div>
+                                    <div class="relative">
+                                        <div class="absolute top-1 left-0 w-5 h-5 rounded-full bg-primary-500 -translate-x-1/2"></div>
+                                        <div class="pl-8">
+                                            <h5 class="font-bold text-gray-800 dark:text-gray-200 mb-2">AI研究启航，机器逻辑推理掀热潮</h5>
+                                            <p class="text-gray-600 dark:text-gray-300">
+                                                人工智能诞生初期，科学家们对机器智能充满乐观，逻辑推理成为研究热点。
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-12 relative">
+                                <div class="flex">
+                                    <div class="flex-shrink-0 w-32 md:w-48 text-right pr-8">
+                                        <div class="text-primary-600 dark:text-primary-400 font-bold">1970s</div>
+                                        <div class="text-gray-500 dark:text-gray-400 text-sm">第一落</div>
+                                    </div>
+                                    <div class="relative">
+                                        <div class="absolute top-1 left-0 w-5 h-5 rounded-full bg-primary-500 -translate-x-1/2"></div>
+                                        <div class="pl-8">
+                                            <h5 class="font-bold text-gray-800 dark:text-gray-200 mb-2">AI Winter，研究目标落空</h5>
+                                            <p class="text-gray-600 dark:text-gray-300">
+                                                由于技术瓶颈和应用场景受限，人工智能发展进入寒冬期。
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-12 relative">
+                                <div class="flex">
+                                    <div class="flex-shrink-0 w-32 md:w-48 text-right pr-8">
+                                        <div class="text-primary-600 dark:text-primary-400 font-bold">1980s</div>
+                                        <div class="text-gray-500 dark:text-gray-400 text-sm">第二起</div>
+                                    </div>
+                                    <div class="relative">
+                                        <div class="absolute top-1 left-0 w-5 h-5 rounded-full bg-primary-500 -translate-x-1/2"></div>
+                                        <div class="pl-8">
+                                            <h5 class="font-bold text-gray-800 dark:text-gray-200 mb-2">专家系统异军突起，五代机雄心勃勃</h5>
+                                            <p class="text-gray-600 dark:text-gray-300">
+                                                专家系统取得一定成功，日本提出"第五代计算机"计划，人工智能迎来第二次发展高潮。
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-12 relative">
+                                <div class="flex">
+                                    <div class="flex-shrink-0 w-32 md:w-48 text-right pr-8">
+                                        <div class="text-primary-600 dark:text-primary-400 font-bold">1990s</div>
+                                        <div class="text-gray-500 dark:text-gray-400 text-sm">第二落</div>
+                                    </div>
+                                    <div class="relative">
+                                        <div class="absolute top-1 left-0 w-5 h-5 rounded-full bg-primary-500 -translate-x-1/2"></div>
+                                        <div class="pl-8">
+                                            <h5 class="font-bold text-gray-800 dark:text-gray-200 mb-2">2nd AI Winter，市场预期落空</h5>
+                                            <p class="text-gray-600 dark:text-gray-300">
+                                                专家系统应用局限性显现，加上硬件发展瓶颈，人工智能再次进入寒冬期。
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-12 relative">
+                                <div class="flex">
+                                    <div class="flex-shrink-0 w-32 md:w-48 text-right pr-8">
+                                        <div class="text-primary-600 dark:text-primary-400 font-bold">2000s-至今</div>
+                                        <div class="text-gray-500 dark:text-gray-400 text-sm">第三起</div>
+                                    </div>
+                                    <div class="relative">
+                                        <div class="absolute top-1 left-0 w-5 h-5 rounded-full bg-primary-500 -translate-x-1/2"></div>
+                                        <div class="pl-8">
+                                            <h5 class="font-bold text-gray-800 dark:text-gray-200 mb-2">深度学习渐显神威，产业应用遂成大势</h5>
+                                            <p class="text-gray-600 dark:text-gray-300">
+                                                深度学习技术的突破，以及大数据和计算能力的提升，推动人工智能进入第三次发展高潮，并开始大规模产业应用。
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative">
+                                <div class="flex">
+                                    <div class="flex-shrink-0 w-32 md:w-48 text-right pr-8">
+                                        <div class="text-primary-600 dark:text-primary-400 font-bold">2020s</div>
+                                        <div class="text-gray-500 dark:text-gray-400 text-sm">未来展望</div>
+                                    </div>
+                                    <div class="relative">
+                                        <div class="absolute top-1 left-0 w-5 h-5 rounded-full bg-primary-500 -translate-x-1/2"></div>
+                                        <div class="pl-8">
+                                            <h5 class="font-bold text-gray-800 dark:text-gray-200 mb-2">大语言模型引领发展，人工智能时代来临</h5>
+                                            <p class="text-gray-600 dark:text-gray-300">
+                                                以 ChatGPT 为代表的大语言模型取得巨大成功，预示着人工智能时代真正来临。
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4">技术变迁与发展关键</h4>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <h5 class="font-semibold mb-3 text-gray-800 dark:text-gray-200">技术变迁的两大特征</h5>
+                                <ul class="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
+                                    <li>核心内容：从早期的"符号演算"转变为"与应用紧密结合的机器学习"</li>
+                                    <li>基本方法：从"精准推理"转变为"概率推断"</li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h5 class="font-semibold mb-3 text-gray-800 dark:text-gray-200">正确的路线和方法</h5>
+                                <ul class="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
+                                    <li>与应用紧密结合的机器学习是人工智能的牛鼻子</li>
+                                    <li>深度神经网络是最有效的方法</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pioneers Section -->
+    <section id="pioneers" class="py-16 bg-white dark:bg-gray-900">
+        <div class="container max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center">人工智能的先驱者</h2>
+            
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg mb-12">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold mb-6 text-primary-700 dark:text-primary-400">执牛耳者有其人</h3>
+                    
+                    <div class="max-w-3xl mx-auto">
+                        <div class="text-center mb-8">
+                            <p class="text-xl text-gray-700 dark:text-gray-300 mb-4">
+                                人工智能的发展离不开其奠基者和开拓者的卓越贡献
+                            </p>
+                            <p class="text-xl text-gray-700 dark:text-gray-300">
+                                认识人工智能需要学习他们的思想
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow">
+                            <h4 class="text-lg font-semibold mb-4 text-center">学习先驱思想的目的</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg border border-primary-100 dark:border-primary-800 flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-800 flex items-center justify-center text-primary-600 dark:text-primary-400 mr-3">
+                                        <i class="fas fa-eye"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700 dark:text-gray-300">
+                                            了解人工智能的本来面目
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg border border-primary-100 dark:border-primary-800 flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-800 flex items-center justify-center text-primary-600 dark:text-primary-400 mr-3">
+                                        <i class="fas fa-brain"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700 dark:text-gray-300">
+                                            领悟人工智能的逻辑精髓
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div class="bg-white dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg">
+                    <div class="p-8">
+                        <div class="flex flex-col md:flex-row items-center mb-6">
+                            <div class="mb-4 md:mb-0 md:mr-6 flex-shrink-0">
+                                <div class="h-40 w-40 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden flex items-center justify-center">
+                                    <i class="fas fa-user text-5xl text-gray-400 dark:text-gray-500"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold mb-2 text-primary-700 dark:text-primary-400">艾伦·图灵</h3>
+                                <p class="text-gray-600 dark:text-gray-400 mb-3">
+                                    1912-1954 · 英国数学家、逻辑学家
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm">计算机科学之父</span>
+                                    <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm">人工智能先驱</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg">
+                                <h4 class="font-semibold mb-3 text-gray-800 dark:text-gray-200">图灵机模型</h4>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    以记忆为核心的计算机模型，是现代计算机的理论基础，也是人工智能的理论基石。
+                                </p>
+                            </div>
+                            
+                            <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg">
+                                <h4 class="font-semibold mb-3 text-gray-800 dark:text-gray-200">图灵测试</h4>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    以能力为标准判定机器是否具有智能，定义了能力是人工智能最本质的属性。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg">
+                    <div class="p-8">
+                        <div class="flex flex-col md:flex-row items-center mb-6">
+                            <div class="mb-4 md:mb-0 md:mr-6 flex-shrink-0">
+                                <div class="h-40 w-40 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden flex items-center justify-center">
+                                    <i class="fas fa-user text-5xl text-gray-400 dark:text-gray-500"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold mb-2 text-primary-700 dark:text-primary-400">诺姆·乔姆斯基</h3>
+                                <p class="text-gray-600 dark:text-gray-400 mb-3">
+                                    1928- · 美国MIT教授、现代语言学家和认知科学家
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm">现代语言学之父</span>
+                                    <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm">NLP奠基人</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg">
+                                <h4 class="font-semibold mb-3 text-gray-800 dark:text-gray-200">转换语法理论</h4>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    奠定了计算语言学基础，对自然语言处理产生了深远影响。
+                                </p>
+                            </div>
+                            
+                            <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg">
+                                <h4 class="font-semibold mb-3 text-gray-800 dark:text-gray-200">认知科学研究</h4>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    提出以脑功能和语言为基础研究认知科学，大模型的成功证明了其思想的前瞻性和正确性。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg">
+                    <div class="p-8">
+                        <div class="flex flex-col md:flex-row items-center mb-6">
+                            <div class="mb-4 md:mb-0 md:mr-6 flex-shrink-0">
+                                <div class="h-40 w-40 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden flex items-center justify-center">
+                                    <i class="fas fa-user text-5xl text-gray-400 dark:text-gray-500"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold mb-2 text-primary-700 dark:text-primary-400">吴文俊</h3>
+                                <p class="text-gray-600 dark:text-gray-400 mb-3">
+                                    1919-2017 · 中国数学家、中科院院士、人工智能学会名誉理事长
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm">中国AI研究先驱</span>
+                                    <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm">数学机械化奠基人</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg">
+                                <h4 class="font-semibold mb-3 text-gray-800 dark:text-gray-200">数学机械化</h4>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    建立数学机械化的基础，并将其应用于证明力学、物理学、机器人等高技术领域核心问题。
+                                </p>
+                            </div>
+                            
+                            <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg">
+                                <h4 class="font-semibold mb-3 text-gray-800 dark:text-gray-200">"吴方法"</h4>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    利用计算机技术进行几何定理的机器证明，阐释了人工智能的数学本质，使其牢牢植根于科学范畴。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg">
+                    <div class="p-8">
+                        <div class="flex flex-col md:flex-row items-center mb-6">
+                            <div class="mb-4 md:mb-0 md:mr-6 flex-shrink-0">
+                                <div class="h-40 w-40 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden flex items-center justify-center">
+                                    <i class="fas fa-user text-5xl text-gray-400 dark:text-gray-500"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold mb-2 text-primary-700 dark:text-primary-400">杰弗里·辛顿</h3>
+                                <p class="text-gray-600 dark:text-gray-400 mb-3">
+                                    1947- · 加拿大多伦多大学教授、认知心理学家和计算机科学家
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm">深度学习之父</span>
+                                    <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm">人工神经网络先驱</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg">
+                                <h4 class="font-semibold mb-3 text-gray-800 dark:text-gray-200">深度学习理论</h4>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    将机器学习作为推动人工智能发展的主要动力，领导创立深度学习理论，推动概率方法的应用。
+                                </p>
+                            </div>
+                            
+                            <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg">
+                                <h4 class="font-semibold mb-3 text-gray-800 dark:text-gray-200">大数据与概率理论</h4>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    概率论的方法使大数据成为人工智能的关键要素，推动了深度学习在图像识别等领域的突破性进展。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Inner Logic Section -->
+    <section class="py-16 bg-gray-50 dark:bg-gray-800">
+        <div class="container max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center">AI能力的内在逻辑</h2>
+            
+            <div class="bg-white dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg mb-12">
+                <div class="p-8">
+                    <div class="text-center mb-8">
+                        <p class="text-xl text-gray-700 dark:text-gray-300 mb-4">
+                            <strong>人工智能是大脑能力的机器实现</strong>
+                        </p>
+                        <p class="text-lg text-gray-600 dark:text-gray-400">
+                            基本能力包括记忆、计算、学习、判别、决策......
+                        </p>
+                    </div>
+                    
+                    <div class="flex justify-center my-12">
+                        <div class="relative">
+                            <!-- Flow chart -->
+                            <div class="flex flex-col md:flex-row items-center justify-center">
+                                <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg border border-primary-100 dark:border-primary-800 mb-4 md:mb-0 md:mr-4 text-center w-52">
+                                    <div class="font-bold text-primary-700 dark:text-primary-400 mb-2">记忆</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">所有智能的基础</div>
+                                </div>
+                                
+                                <div class="hidden md:block text-primary-400 mb-4 md:mb-0 md:mr-4">
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                                <div class="block md:hidden text-primary-400 mb-4">
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                                
+                                <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg border border-primary-100 dark:border-primary-800 mb-4 md:mb-0 md:mr-4 text-center w-52">
+                                    <div class="font-bold text-primary-700 dark:text-primary-400 mb-2">计算</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">通过经验获取知识</div>
+                                </div>
+                                
+                                <div class="hidden md:block text-primary-400 mb-4 md:mb-0 md:mr-4">
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                                <div class="block md:hidden text-primary-400 mb-4">
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                                
+                                <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg border border-primary-100 dark:border-primary-800 mb-4 md:mb-0 md:mr-4 text-center w-52">
+                                    <div class="font-bold text-primary-700 dark:text-primary-400 mb-2">学习</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">提升能力</div>
+                                </div>
+                                
+                                <div class="hidden md:block text-primary-400 mb-4 md:mb-0 md:mr-4">
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                                <div class="block md:hidden text-primary-400 mb-4">
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                                
+                                <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg border border-primary-100 dark:border-primary-800 mb-4 md:mb-0 md:mr-4 text-center w-52">
+                                    <div class="font-bold text-primary-700 dark:text-primary-400 mb-2">判别</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">事物分类、模式识别</div>
+                                </div>
+                                
+                                <div class="hidden md:block text-primary-400 mb-4 md:mb-0 md:mr-4">
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                                <div class="block md:hidden text-primary-400 mb-4">
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                                
+                                <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg border border-primary-100 dark:border-primary-800 text-center w-52">
+                                    <div class="font-bold text-primary-700 dark:text-primary-400 mb-2">决策</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">权衡利弊做出选择</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-4">人工智能发展路径与未来展望</h4>
+                        
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            人工智能发展的现实路径也遵从了上述逻辑：
+                        </p>
+                        
+                        <ul class="list-disc pl-5 space-y-3 text-gray-700 dark:text-gray-300 mb-6">
+                            <li>计算机的发明基本解决了记忆和计算的问题</li>
+                            <li>深度学习的突破性进展带来了人工智能系统能力的显著跃升</li>
+                            <li>在深度学习模型中，记忆、计算、学习、判别、决策等能力有机融合，使其整体智能得以爆发式增长</li>
+                        </ul>
+                        
+                        <div class="text-center text-primary-600 dark:text-primary-400 font-semibold italic">
+                            "在AI系统中，基本能力被一体化贯穿，展现了清晰的内在逻辑"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Tech Innovation Section -->
+    <section id="tech-innovation" class="py-16 bg-white dark:bg-gray-900">
+        <div class="container max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center">技术创新与大模型革命</h2>
+            
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg mb-12">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold mb-6 text-primary-700 dark:text-primary-400">技术创新：经典问题 持续驱动</h3>
+                    
+                    <div class="mb-8">
+                        <p class="text-gray-700 dark:text-gray-300 mb-6">
+                            技术创新是人工智能实用属性的必然要求。开发者们长期聚焦博弈、问答识别、运动等经典问题，通过技术不断创新、性能不断提升、实用性越来越强，推动了人工智能的发展。
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5">
+                                <div class="flex items-center mb-3">
+                                    <div class="w-10 h-10 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400 mr-3">
+                                        <i class="fas fa-chess"></i>
+                                    </div>
+                                    <h4 class="font-semibold">博弈领域</h4>
+                                </div>
+                                <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+                                    <li>1988: 奥赛罗黑白棋</li>
+                                    <li>1994: 西洋跳棋</li>
+                                    <li>1997: 深蓝战胜卡斯帕罗夫</li>
+                                    <li>2016: AlphaGo战胜围棋世界冠军</li>
+                                    <li>2023: ChatGPT在复杂博弈中的表现</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5">
+                                <div class="flex items-center mb-3">
+                                    <div class="w-10 h-10 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400 mr-3">
+                                        <i class="fas fa-comments"></i>
+                                    </div>
+                                    <h4 class="font-semibold">问答识别领域</h4>
+                                </div>
+                                <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+                                    <li>1993: Sphinx语音识别系统</li>
+                                    <li>2011: 苹果Siri</li>
+                                    <li>2011: IBM Watson</li>
+                                    <li>2012: Google Brain</li>
+                                    <li>2014: Pepper机器人</li>
+                                    <li>2022: ChatGPT智能对话</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-5">
+                                <div class="flex items-center mb-3">
+                                    <div class="w-10 h-10 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400 mr-3">
+                                        <i class="fas fa-running"></i>
+                                    </div>
+                                    <h4 class="font-semibold">运动控制领域</h4>
+                                </div>
+                                <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+                                    <li>2010: 微软Kinect</li>
+                                    <li>2014: Facebook DeepFace</li>
+                                    <li>2016: Google无人驾驶汽车</li>
+                                    <li>2017: 波士顿动力Atlas机器人</li>
+                                    <li>2021: AlphaFold蛋白质结构预测</li>
+                                    <li>2024: Sora视频生成</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6 bg-primary-50 dark:bg-primary-900/20 rounded-xl border border-primary-100 dark:border-primary-800">
+                            <h4 class="font-semibold mb-3 text-gray-800 dark:text-gray-200">技术创新的重要意义</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                技术创新不仅使得人工智能为世人所知，还使其成为走进社会和每个人身边的实用技术和工具，成为强大的生产力。
+                            </p>
+                            <p class="text-gray-700 dark:text-gray-300 font-medium">
+                                了解如何通过技术创新使理论落地，也是学习人工智能必不可少的内容。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold mb-8 text-primary-700 dark:text-primary-400 text-center">大模型革命</h3>
+                    
+                    <div class="text-center mb-10">
+                        <p class="text-xl text-gray-700 dark:text-gray-300 font-medium">
+                            大模型引领了新一代人工智能技术革命
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
+                        <div class="bg-white dark:bg-gray-700 rounded-xl shadow p-6 flex flex-col items-center">
+                            <div class="w-16 h-16 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400 mb-4">
+                                <i class="fas fa-microchip text-2xl"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2 text-center">超大的模型规模</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
+                                百亿级、千亿级参数量，万亿级预训练数据
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 rounded-xl shadow p-6 flex flex-col items-center">
+                            <div class="w-16 h-16 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400 mb-4">
+                                <i class="fas fa-comments text-2xl"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2 text-center">强大的对话能力</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
+                                连贯合理的回复，善解人意的沟通
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 rounded-xl shadow p-6 flex flex-col items-center">
+                            <div class="w-16 h-16 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400 mb-4">
+                                <i class="fas fa-tools text-2xl"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2 text-center">非凡的实用功能</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
+                                代码生成、网页制作、表格制作等实用功能
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 rounded-xl shadow p-6 flex flex-col items-center">
+                            <div class="w-16 h-16 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400 mb-4">
+                                <i class="fas fa-brain text-2xl"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2 text-center">灵巧的学习机制</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
+                                提示学习、上下文学习、思维链提示
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 rounded-xl shadow p-6 flex flex-col items-center">
+                            <div class="w-16 h-16 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400 mb-4">
+                                <i class="fas fa-paint-brush text-2xl"></i>
+                            </div>
+                            <h4 class="font-semibold mb-2 text-center">无限的内容生成</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
+                                文本、图像、视频、蛋白质结构、动画等
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <h4 class="text-xl font-semibold mb-6 text-center">发展动因：四轮驱动 相得益彰</h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-white dark:bg-gray-700 rounded-xl shadow p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400 mr-4">
+                                    <i class="fas fa-code text-2xl"></i>
+                                </div>
+                                <h4 class="font-semibold">算法</h4>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3">
+                                更先进、更有效的算法是大模型发展的核心驱动力。
+                            </p>
+                            <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                <li>• 浅层感知机</li>
+                                <li>• 图神经网络</li>
+                                <li>• 卷积神经网络</li>
+                                <li>• Transformer架构</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 rounded-xl shadow p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400 mr-4">
+                                    <i class="fas fa-microchip text-2xl"></i>
+                                </div>
+                                <h4 class="font-semibold">算力</h4>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3">
+                                更强大的计算能力(GPU)为大模型训练提供了硬件支撑。
+                            </p>
+                            <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                <li>• 单卡GPU</li>
+                                <li>• GPU集群</li>
+                                <li>• 大规模并行计算</li>
+                                <li>• 分布式训练系统</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 rounded-xl shadow p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400 mr-4">
+                                    <i class="fas fa-database text-2xl"></i>
+                                </div>
+                                <h4 class="font-semibold">数据</h4>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3">
+                                更大规模、更高质量的数据是训练大模型的必要条件。
+                            </p>
+                            <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                <li>• ImageNet图像数据集</li>
+                                <li>• 3D数据集Objaverse-XL</li>
+                                <li>• B站视频数据</li>
+                                <li>• 新浪微博文本数据</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 rounded-xl shadow p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400 mr-4">
+                                    <i class="fas fa-share-alt text-2xl"></i>
+                                </div>
+                                <h4 class="font-semibold">开源</h4>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3">
+                                开源社区的繁荣和开放共享精神加速了技术创新和传播。
+                            </p>
+                            <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                <li>• arXiv.org论文平台</li>
+                                <li>• GitHub代码仓库</li>
+                                <li>• TensorFlow/PyTorch</li>
+                                <li>• PaddlePaddle飞桨</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Summary Section -->
+    <section class="py-16 bg-gray-50 dark:bg-gray-800">
+        <div class="container max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center">总结</h2>
+            
+            <div class="bg-white dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg">
+                <div class="p-8">
+                    <div class="max-w-3xl mx-auto">
+                        <h3 class="text-2xl font-semibold mb-8 text-center text-primary-700 dark:text-primary-400">
+                            第一讲：认识人工智能
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div class="bg-primary-50 dark:bg-primary-900/20 p-5 rounded-lg border border-primary-100 dark:border-primary-800">
+                                <h4 class="font-semibold mb-3 text-gray-800 dark:text-gray-200 text-center">名可名、非常名</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
+                                    名词溯源，了解人工智能的定义和起源
+                                </p>
+                            </div>
+                            
+                            <div class="bg-primary-50 dark:bg-primary-900/20 p-5 rounded-lg border border-primary-100 dark:border-primary-800">
+                                <h4 class="font-semibold mb-3 text-gray-800 dark:text-gray-200 text-center">两起两落终有今</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
+                                    发展简史，了解人工智能的发展历程
+                                </p>
+                            </div>
+                            
+                            <div class="bg-primary-50 dark:bg-primary-900/20 p-5 rounded-lg border border-primary-100 dark:border-primary-800">
+                                <h4 class="font-semibold mb-3 text-gray-800 dark:text-gray-200 text-center">执牛耳者有其人</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
+                                    思想根基，了解人工智能的先驱者
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-primary-50 dark:bg-primary-900/20 p-5 rounded-lg border border-primary-100 dark:border-primary-800">
+                                <h4 class="font-semibold mb-3 text-gray-800 dark:text-gray-200 text-center">经典问题、持续推动</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
+                                    技术创新，了解人工智能的发展动力
+                                </p>
+                            </div>
+                            
+                            <div class="bg-primary-50 dark:bg-primary-900/20 p-5 rounded-lg border border-primary-100 dark:border-primary-800">
+                                <h4 class="font-semibold mb-3 text-gray-800 dark:text-gray-200 text-center">四轮驱动、相得益彰</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
+                                    发展动因，了解大模型快速发展的原因
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-10 text-center">
+                            <p class="text-gray-700 dark:text-gray-300">
+                                第一讲"认识人工智能"从名词定义、发展历程、思想根基、技术创新和发展动因等多个方面，对人工智能进行了全面而深入的剖析，为后续课程的学习奠定了基础。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-2">人工智能导论</h3>
+                    <p class="text-gray-400">第一讲：认识人工智能</p>
+                </div>
+                
+                <div class="flex flex-col items-center md:items-end">
+                    <div class="flex space-x-4 mb-3">
+                        <a href="https://weibo.com/fly51fly" target="_blank" class="text-gray-400 hover:text-white transition duration-300">
+                            <i class="fab fa-weibo text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                    </div>
+                    <p class="text-gray-500 text-sm">
+                        © 2024 <span class="text-gray-400">fly51fly</span>. 保留所有权利。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode toggle
+        const htmlElement = document.documentElement;
+        const themeToggle = document.getElementById('theme-toggle');
+        
+        // Check system preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            htmlElement.classList.add('dark');
+        }
+        
+        // Toggle dark mode
+        themeToggle.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Lazy load images
+        document.addEventListener("DOMContentLoaded", function() {
+            const lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
+            
+            if ("IntersectionObserver" in window) {
+                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            let lazyImage = entry.target;
+                            lazyImage.src = lazyImage.dataset.src;
+                            lazyImage.classList.remove("lazy");
+                            lazyImageObserver.unobserve(lazyImage);
+                        }
+                    });
+                });
+                
+                lazyImages.forEach(function(lazyImage) {
+                    lazyImageObserver.observe(lazyImage);
+                });
+            }
+        });
+        
+        // Animate elements on scroll
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementPosition < windowHeight * 0.9) {
+                    element.classList.add('animate-fadeIn');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', animateOnScroll);
+        document.addEventListener('DOMContentLoaded', animateOnScroll);
+    </script>
+</body>
+</html>

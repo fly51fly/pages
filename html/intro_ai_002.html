@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人工智能的数学本质</title>
+    <!-- 引入TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入字体图标 -->
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+        
+        :root {
+            --primary-color: #4F46E5;
+            --secondary-color: #7C3AED;
+            --accent-color: #EC4899;
+            --text-color-light: #1E293B;
+            --text-color-dark: #E2E8F0;
+            --bg-color-light: #FFFFFF;
+            --bg-color-dark: #0F172A;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* 深色模式 */
+        .dark {
+            color-scheme: dark;
+        }
+        
+        .dark body {
+            color: var(--text-color-dark);
+            background-color: var(--bg-color-dark);
+        }
+        
+        /* 卡片悬停效果 */
+        .concept-card {
+            transition: all 0.3s ease;
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* 加载动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .section {
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+        .section:nth-child(5) { animation-delay: 0.5s; }
+        .section:nth-child(6) { animation-delay: 0.6s; }
+        
+        /* 滚动平滑效果 */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* 进度条 */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            z-index: 100;
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            width: 0%;
+            transition: width 0.1s;
+        }
+        
+        /* 代码块样式 */
+        .code-block {
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        
+        .dark .code-block {
+            background-color: #1E293B;
+        }
+        
+        /* 深色/浅色模式切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 50;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .dark .theme-toggle {
+            background-color: #334155;
+            color: #FCD34D;
+        }
+        
+        .light .theme-toggle {
+            background-color: #E2E8F0;
+            color: #4B5563;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        /* 数学公式样式 */
+        .math-formula {
+            font-style: italic;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            overflow-x: auto;
+            display: inline-block;
+        }
+        
+        .dark .math-formula {
+            background-color: #1E293B;
+        }
+        
+        .light .math-formula {
+            background-color: #F1F5F9;
+        }
+        
+        /* 导航栏样式 */
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        
+        .dark .nav-link::after {
+            background-color: var(--accent-color);
+        }
+    </style>
+</head>
+<body class="light bg-white text-gray-800">
+    <!-- 进度条 -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="sticky top-0 z-40 backdrop-blur-md bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-700">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="text-xl font-bold text-indigo-600 dark:text-indigo-400">
+                人工智能的数学本质
+            </a>
+            <div class="hidden md:flex space-x-6">
+                <a href="#intro" class="nav-link text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">导论</a>
+                <a href="#knowledge" class="nav-link text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">知识体系</a>
+                <a href="#input" class="nav-link text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">输入形式</a>
+                <a href="#output" class="nav-link text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">输出形式</a>
+                <a href="#function" class="nav-link text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">组成形式</a>
+                <a href="#learning" class="nav-link text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">学习方式</a>
+            </div>
+            <button id="menuButton" class="md:hidden text-gray-700 dark:text-gray-300">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+        <div id="mobileMenu" class="hidden md:hidden container mx-auto px-4 py-2 flex flex-col space-y-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+            <a href="#intro" class="nav-link text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">导论</a>
+            <a href="#knowledge" class="nav-link text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">知识体系</a>
+            <a href="#input" class="nav-link text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">输入形式</a>
+            <a href="#output" class="nav-link text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">输出形式</a>
+            <a href="#function" class="nav-link text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">组成形式</a>
+            <a href="#learning" class="nav-link text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">学习方式</a>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 引言部分 -->
+        <header class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">人工智能的数学本质</h1>
+            <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                揭开AI背后的数学面纱，理解智能函数如何工作
+            </p>
+        </header>
+
+        <!-- 导论：认识人工智能 -->
+        <section id="intro" class="section mb-20">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200 flex items-center">
+                    <i class="fas fa-robot mr-3 text-indigo-500"></i>
+                    导论：认识人工智能
+                </h2>
+                <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">
+                    人工智能（AI）经常出现在我们的新闻和日常对话中，它既让人着迷，又带有神秘感。当我们听到"两个AI用人类听不懂的加密语言沟通"或看到"由AI生成的不存在的人脸"时，很容易让我们觉得AI像是某种玄学或魔法。但实际上，人工智能是建立在坚实的数学基础之上的科学。
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    <div class="bg-indigo-50 dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-3 text-indigo-600 dark:text-indigo-400">
+                            <i class="fas fa-question-circle mr-2"></i>科学 or 玄学？
+                        </h3>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            人工智能虽然有时表现得不可预测，特别是在生成内容和复杂决策方面，但它的本质是科学，而非玄学。机器学习理论基于严谨的数学模型，通过数据驱动和参数优化实现"智能"行为。
+                        </p>
+                    </div>
+                    <div class="bg-purple-50 dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-3 text-purple-600 dark:text-purple-400">
+                            <i class="fas fa-brain mr-2"></i>机器学习的核心地位
+                        </h3>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            机器学习是推动AI发展的主要动力。它使计算机系统能够从数据中学习，优化其性能，而无需显式编程。深度学习，作为机器学习的一个子集，允许模型通过多层神经网络自动学习复杂的特征表示。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mb-10">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">人工智能的数学本质</h3>
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">人工智能的数学本质可以用一句话概括：<strong class="text-indigo-600 dark:text-indigo-400">人工智能的数学本质是智能函数</strong>。</p>
+                        
+                        <div class="flex flex-col md:flex-row items-center justify-center bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                            <div class="text-center p-4">
+                                <div class="text-indigo-600 dark:text-indigo-400 text-6xl mb-2">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <p class="font-medium">输入数据</p>
+                            </div>
+                            <div class="my-2 md:mx-4 text-4xl text-gray-400">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                            <div class="text-center p-4 bg-indigo-100 dark:bg-indigo-900 rounded-lg">
+                                <div class="text-indigo-600 dark:text-indigo-400 text-6xl mb-2">
+                                    <i class="fas fa-cogs"></i>
+                                </div>
+                                <p class="font-medium">智能函数</p>
+                            </div>
+                            <div class="my-2 md:mx-4 text-4xl text-gray-400">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                            <div class="text-center p-4">
+                                <div class="text-indigo-600 dark:text-indigo-400 text-6xl mb-2">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <p class="font-medium">输出结果</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">人工智能的关键要素</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="concept-card p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                            <h4 class="font-medium text-blue-700 dark:text-blue-300 mb-2">智能函数知识体系</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">由数学原理、算法模型、软硬件平台和应用技术组成的多层次知识结构</p>
+                        </div>
+                        <div class="concept-card p-4 bg-green-50 dark:bg-green-900/30 rounded-lg">
+                            <h4 class="font-medium text-green-700 dark:text-green-300 mb-2">智能函数输入形式</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">将各类数据（图像、视频、文本、音频）转换为计算机可理解的数学表达</p>
+                        </div>
+                        <div class="concept-card p-4 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg">
+                            <h4 class="font-medium text-yellow-700 dark:text-yellow-300 mb-2">智能函数输出形式</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">根据任务类型生成不同形式的输出（如分类标签或连续数值）</p>
+                        </div>
+                        <div class="concept-card p-4 bg-purple-50 dark:bg-purple-900/30 rounded-lg">
+                            <h4 class="font-medium text-purple-700 dark:text-purple-300 mb-2">智能函数组成形式</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">由基元函数（如线性变换、激活函数）复合而成，参数可学习</p>
+                        </div>
+                        <div class="concept-card p-4 bg-red-50 dark:bg-red-900/30 rounded-lg">
+                            <h4 class="font-medium text-red-700 dark:text-red-300 mb-2">智能函数学习方式</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">通过监督学习、无监督学习等方式优化参数，提高性能</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 人工智能知识体系 -->
+        <section id="knowledge" class="section mb-20">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200 flex items-center">
+                    <i class="fas fa-book mr-3 text-indigo-500"></i>
+                    人工智能知识体系
+                </h2>
+                <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">
+                    人工智能的知识体系呈现出明显的圈层结构，从内到外分别是数学原理、算法模型、软硬件平台和应用技术。这种结构有一个特点：越往外内容越丰富多样，越往内原理越单纯统一。
+                </p>
+
+                <div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mb-10">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-6 text-center text-gray-800 dark:text-gray-200">人工智能知识体系圈层结构</h3>
+                        
+                        <div class="flex flex-col md:flex-row items-center justify-center">
+                            <div class="relative mx-auto w-64 h-64 md:w-80 md:h-80">
+                                <!-- 最外层：应用技术 -->
+                                <div class="absolute inset-0 rounded-full bg-purple-50 dark:bg-purple-900/20 border-2 border-purple-200 dark:border-purple-800 flex items-center justify-center">
+                                    <div class="text-sm text-purple-800 dark:text-purple-300 font-medium">应用技术</div>
+                                </div>
+                                
+                                <!-- 第三层：软硬件平台 -->
+                                <div class="absolute inset-0 m-6 rounded-full bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 flex items-center justify-center">
+                                    <div class="text-sm text-blue-800 dark:text-blue-300 font-medium">软硬件平台</div>
+                                </div>
+                                
+                                <!-- 第二层：算法模型 -->
+                                <div class="absolute inset-0 m-16 rounded-full bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800 flex items-center justify-center">
+                                    <div class="text-sm text-green-800 dark:text-green-300 font-medium">算法模型</div>
+                                </div>
+                                
+                                <!-- 最内层：数学原理 -->
+                                <div class="absolute inset-0 m-24 rounded-full bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 flex items-center justify-center">
+                                    <div class="text-sm text-red-800 dark:text-red-300 font-medium">数学原理</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 md:mt-0 md:ml-8 space-y-4">
+                                <div class="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                                    <h4 class="font-medium text-red-700 dark:text-red-300">数学原理</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">线性代数、概率论、微积分、优化理论等基础数学知识</p>
+                                </div>
+                                
+                                <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                                    <h4 class="font-medium text-green-700 dark:text-green-300">算法模型</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">CNN、RNN、Transformer等深度学习模型，以及各种机器学习算法</p>
+                                </div>
+                                
+                                <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                                    <h4 class="font-medium text-blue-700 dark:text-blue-300">软硬件平台</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">TensorFlow、PyTorch、飞桨等框架，以及GPU、TPU等AI芯片</p>
+                                </div>
+                                
+                                <div class="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                                    <h4 class="font-medium text-purple-700 dark:text-purple-300">应用技术</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">计算机视觉、自然语言处理、语音识别、智能推荐等应用领域</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">软硬件平台：中国力量</h3>
+                            <div class="mb-4">
+                                <img src="https://via.placeholder.com/600x300/4F46E5/FFFFFF?text=飞桨+EasyDL" alt="百度飞桨EasyDL" class="w-full h-auto rounded-lg">
+                                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">百度飞桨（PaddlePaddle）是国内领先的深度学习平台，EasyDL提供了低代码AI开发能力</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">AI芯片：算力支撑</h3>
+                            <div class="mb-4">
+                                <img src="https://via.placeholder.com/600x300/7C3AED/FFFFFF?text=华为昇腾AI芯片" alt="华为昇腾AI芯片" class="w-full h-auto rounded-lg">
+                                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">华为昇腾910是国产AI芯片的代表，为人工智能提供强大的计算能力支持</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mb-10">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">经典算法模型</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-medium text-indigo-600 dark:text-indigo-400 mb-2">卷积神经网络（CNN）</h4>
+                                <p class="text-sm text-gray-700 dark:text-gray-300 mb-4">
+                                    CNN特别擅长处理具有网格结构的数据，如图像。其核心是卷积操作，可以自动学习空间层次特征。
+                                </p>
+                                <img src="https://via.placeholder.com/400x200/4F46E5/FFFFFF?text=CNN结构示意图" alt="CNN结构示意图" class="w-full h-auto rounded-lg">
+                            </div>
+                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Transformer</h4>
+                                <p class="text-sm text-gray-700 dark:text-gray-300 mb-4">
+                                    基于自注意力机制的模型，最初为NLP设计，现已扩展到视觉等领域。是GPT、BERT等大型语言模型的基础架构。
+                                </p>
+                                <img src="https://via.placeholder.com/400x200/7C3AED/FFFFFF?text=Transformer结构示意图" alt="Transformer结构示意图" class="w-full h-auto rounded-lg">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 智能函数的输入形式 -->
+        <section id="input" class="section mb-20">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200 flex items-center">
+                    <i class="fas fa-sign-in-alt mr-3 text-indigo-500"></i>
+                    智能函数的输入形式
+                </h2>
+                <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">
+                    智能函数能处理各种类型的数据，但在处理前，都需要将这些数据转换为计算机可理解的数学表达。不同类型的数据有不同的数学表示方法。
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    <div class="concept-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-red-100 dark:bg-red-900/30">
+                                    <i class="fas fa-image text-2xl text-red-600 dark:text-red-400"></i>
+                                </div>
+                                <h3 class="ml-4 text-xl font-semibold text-gray-800 dark:text-gray-200">图像数据</h3>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                图像在计算机中被表示为数字矩阵，每个数字代表一个像素的颜色值。
+                            </p>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <img src="https://via.placeholder.com/300x200/333333/FFFFFF?text=原始图像" alt="原始图像" class="w-full h-auto rounded-lg">
+                                    <p class="mt-2 text-sm text-center text-gray-600 dark:text-gray-400">人眼看到的图像</p>
+                                </div>
+                                <div class="bg-gray-100 dark:bg-gray-700 p-2 rounded-lg overflow-x-auto">
+                                    <pre class="text-xs text-gray-800 dark:text-gray-200">
+[
+  [24, 31, 45, 52, 61, ...],
+  [18, 27, 39, 47, 55, ...],
+  [15, 23, 37, 46, 58, ...],
+  [19, 28, 41, 50, 63, ...],
+  ...
+]</pre>
+                                    <p class="mt-2 text-sm text-center text-gray-600 dark:text-gray-400">计算机看到的矩阵</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="concept-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/30">
+                                    <i class="fas fa-video text-2xl text-blue-600 dark:text-blue-400"></i>
+                                </div>
+                                <h3 class="ml-4 text-xl font-semibold text-gray-800 dark:text-gray-200">视频数据</h3>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                视频本质上是随时间变化的图像序列，可以表示为三维数据体：宽度、高度和时间。
+                            </p>
+                            <div class="relative h-40 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <i class="fas fa-film text-4xl text-gray-500 dark:text-gray-400 mb-2"></i>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">视频 = 图像矩阵序列</p>
+                                    </div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-r from-blue-500 to-purple-500 opacity-30 dark:opacity-50"></div>
+                                <div class="absolute top-0 left-0 w-16 h-full bg-gradient-to-b from-blue-500 to-blue-700 opacity-10 dark:opacity-20">
+                                    <div class="h-full w-1 bg-gray-400 dark:bg-gray-500 opacity-50 ml-8"></div>
+                                </div>
+                                <div class="absolute top-0 right-0 h-full w-16 bg-gradient-to-l from-purple-500 to-purple-700 opacity-10 dark:opacity-20">
+                                    <div class="h-full w-1 bg-gray-400 dark:bg-gray-500 opacity-50 ml-8"></div>
+                                </div>
+                            </div>
+                            <div class="mt-4 grid grid-cols-4 gap-2">
+                                <div class="bg-gray-100 dark:bg-gray-700 p-1 rounded">
+                                    <p class="text-xs text-center text-gray-600 dark:text-gray-400">帧1</p>
+                                </div>
+                                <div class="bg-gray-100 dark:bg-gray-700 p-1 rounded">
+                                    <p class="text-xs text-center text-gray-600 dark:text-gray-400">帧2</p>
+                                </div>
+                                <div class="bg-gray-100 dark:bg-gray-700 p-1 rounded">
+                                    <p class="text-xs text-center text-gray-600 dark:text-gray-400">帧3</p>
+                                </div>
+                                <div class="bg-gray-100 dark:bg-gray-700 p-1 rounded">
+                                    <p class="text-xs text-center text-gray-600 dark:text-gray-400">...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    <div class="concept-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-green-100 dark:bg-green-900/30">
+                                    <i class="fas fa-music text-2xl text-green-600 dark:text-green-400"></i>
+                                </div>
+                                <h3 class="ml-4 text-xl font-semibold text-gray-800 dark:text-gray-200">音频数据</h3>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                音频是随时间变化的波形，通常表示为一维信号序列，记录声音在不同时间点的振幅。
+                            </p>
+                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                                <div class="h-24 relative">
+                                    <div class="absolute inset-0">
+                                        <svg viewBox="0 0 100 50" class="w-full h-full">
+                                            <path d="M0,25 Q5,10 10,25 T20,25 T30,25 T40,25 T50,25 T60,25 T70,25 T80,25 T90,25 T100,25" stroke="rgba(16, 185, 129, 0.5)" stroke-width="1" fill="none" />
+                                            <path d="M0,25 Q5,40 10,25 T20,25 T30,25 T40,25 T50,25 T60,25 T70,25 T80,25 T90,25 T100,25" stroke="rgba(16, 185, 129, 0.5)" stroke-width="1" fill="none" />
+                                            <path d="M0,25 Q5,5 10,25 T20,5 T30,45 T40,15 T50,35 T60,10 T70,40 T80,20 T90,30 T100,25" stroke="rgb(16, 185, 129)" stroke-width="2" fill="none" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="text-center mt-2">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">音频波形 = 随时间变化的振幅序列</p>
+                                </div>
+                            </div>
+                            <div class="mt-4 overflow-x-auto">
+                                <pre class="text-xs text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 p-2 rounded-lg">
+[0.01, 0.02, 0.05, 0.09, 0.14, 0.21, 0.30, 0.25, 0.18, 0.10, 0.05, -0.02, -0.08, ...]</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="concept-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-yellow-100 dark:bg-yellow-900/30">
+                                    <i class="fas fa-font text-2xl text-yellow-600 dark:text-yellow-400"></i>
+                                </div>
+                                <h3 class="ml-4 text-xl font-semibold text-gray-800 dark:text-gray-200">文本数据</h3>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                文本需要转换为向量表示，常用方法包括独热编码和词嵌入（Word Embedding）。
+                            </p>
+                            <div class="grid grid-cols-1 gap-4">
+                                <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                                    <h4 class="font-medium text-yellow-700 dark:text-yellow-300 mb-2">独热编码（One-Hot Encoding）</h4>
+                                    <div class="mb-2 space-y-2">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-sm text-gray-700 dark:text-gray-300 w-12">猫：</span>
+                                            <code class="text-xs bg-white dark:bg-gray-800 px-2 py-1 rounded">[1, 0, 0]</code>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-sm text-gray-700 dark:text-gray-300 w-12">狗：</span>
+                                            <code class="text-xs bg-white dark:bg-gray-800 px-2 py-1 rounded">[0, 1, 0]</code>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-sm text-gray-700 dark:text-gray-300 w-12">鸟：</span>
+                                            <code class="text-xs bg-white dark:bg-gray-800 px-2 py-1 rounded">[0, 0, 1]</code>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                                    <h4 class="font-medium text-yellow-700 dark:text-yellow-300 mb-2">词嵌入（Word Embedding）</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">词嵌入将词语映射到低维稠密向量空间，能够捕捉词语间的语义关系</p>
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full text-xs">
+                                            <thead>
+                                                <tr>
+                                                    <th class="py-1 px-2 bg-yellow-50 dark:bg-yellow-900/50 text-left">词语</th>
+                                                    <th class="py-1 px-2 bg-yellow-50 dark:bg-yellow-900/50 text-left">词嵌入向量</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="py-1 px-2 border-t border-gray-200 dark:border-gray-700">cat</td>
+                                                    <td class="py-1 px-2 border-t border-gray-200 dark:border-gray-700">[0.12, -0.48, 0.42, 0.95]</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-1 px-2 border-t border-gray-200 dark:border-gray-700">dog</td>
+                                                    <td class="py-1 px-2 border-t border-gray-200 dark:border-gray-700">[0.24, -0.28, 0.43, 0.84]</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-1 px-2 border-t border-gray-200 dark:border-gray-700">apple</td>
+                                                    <td class="py-1 px-2 border-t border-gray-200 dark:border-gray-700">[-0.34, 0.76, 0.12, -0.35]</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mb-10">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">大模型时代：一切Tokenize</h3>
+                        <p class="text-gray-700 dark:text-gray-300 mb-6">
+                            在大模型时代，为了统一处理不同类型的数据，出现了Tokenize的趋势：将各种类型的数据都切分成小单元（Token），然后统一输入到模型中。
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 p-4 rounded-lg">
+                                <h4 class="font-medium text-indigo-700 dark:text-indigo-300 mb-2">输入统一化</h4>
+                                <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                    Tokenize使不同形式的数据可以用同一种方式表示和处理，例如：
+                                </p>
+                                <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2 list-disc list-inside">
+                                    <li>文本：分解成词或子词</li>
+                                    <li>图像：分解成图像块（patches）</li>
+                                    <li>音频：分解成时间段</li>
+                                </ul>
+                            </div>
+                            <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 p-4 rounded-lg">
+                                <h4 class="font-medium text-purple-700 dark:text-purple-300 mb-2">由此诞生的模型</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full flex items-center justify-center bg-purple-100 dark:bg-purple-900/50">
+                                            <i class="fas fa-language text-purple-600 dark:text-purple-400"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <h5 class="font-medium text-gray-800 dark:text-gray-200">LLM</h5>
+                                            <p class="text-xs text-gray-600 dark:text-gray-400">大型语言模型（GPT系列等）</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full flex items-center justify-center bg-indigo-100 dark:bg-indigo-900/50">
+                                            <i class="fas fa-eye text-indigo-600 dark:text-indigo-400"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <h5 class="font-medium text-gray-800 dark:text-gray-200">VLM</h5>
+                                            <p class="text-xs text-gray-600 dark:text-gray-400">视觉-语言模型（CLIP等）</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full flex items-center justify-center bg-pink-100 dark:bg-pink-900/50">
+                                            <i class="fas fa-cubes text-pink-600 dark:text-pink-400"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <h5 class="font-medium text-gray-800 dark:text-gray-200">MLM</h5>
+                                            <p class="text-xs text-gray-600 dark:text-gray-400">多模态大模型（融合多种数据类型）</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 智能函数的输出形式 -->
+        <section id="output" class="section mb-20">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200 flex items-center">
+                    <i class="fas fa-sign-out-alt mr-3 text-indigo-500"></i>
+                    智能函数的输出形式
+                </h2>
+                <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">
+                    智能函数的输出形式与任务类型密切相关。不同类型的任务需要不同形式的输出，主要分为分类任务和回归任务两大类。
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    <div class="concept-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-green-100 dark:bg-green-900/30">
+                                    <i class="fas fa-tags text-2xl text-green-600 dark:text-green-400"></i>
+                                </div>
+                                <h3 class="ml-4 text-xl font-semibold text-gray-800 dark:text-gray-200">分类任务</h3>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                分类任务的目标是将输入数据划分到预定义的类别中，输出是离散的类别标签。
+                            </p>
+                            
+                            <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg mb-4">
+                                <h4 class="font-medium text-green-700 dark:text-green-300 mb-2">二分类任务（判断题）</h4>
+                                <div class="flex items-center space-x-4">
+                                    <img src="https://via.placeholder.com/100x100/4ADE80/FFFFFF?text=猫" alt="猫" class="w-16 h-16 rounded-lg">
+                                    <div class="flex-1">
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">这是一只猫吗？</p>
+                                        <div class="flex items-center mt-2">
+                                            <div class="w-8 h-8 rounded-full flex items-center justify-center bg-white dark:bg-gray-700 border-2 border-green-500">
+                                                <span class="text-green-600 dark:text-green-400 font-bold">1</span>
+                                            </div>
+                                            <p class="ml-2 text-sm text-gray-600 dark:text-gray-400">是（正类）</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                                <h4 class="font-medium text-blue-700 dark:text-blue-300 mb-2">多分类任务（选择题）</h4>
+                                <div class="grid grid-cols-2 gap-2 mb-3">
+                                    <img src="https://via.placeholder.com/100x100/3B82F6/FFFFFF?text=猫" alt="猫" class="w-full h-auto rounded-lg">
+                                    <img src="https://via.placeholder.com/100x100/8B5CF6/FFFFFF?text=狗" alt="狗" class="w-full h-auto rounded-lg">
+                                </div>
+                                <div class="bg-white dark:bg-gray-700 p-2 rounded-lg">
+                                    <h5 class="font-medium text-sm text-gray-800 dark:text-gray-200 mb-1">输出：</h5>
+                                    <div class="flex items-center space-x-4">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/50 border-2 border-blue-500">
+                                            <span class="text-blue-600 dark:text-blue-400 font-bold">0</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">猫</p>
+                                    </div>
+                                    <div class="flex items-center space-x-4 mt-2">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600">
+                                            <span class="text-gray-600 dark:text-gray-400 font-bold">1</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">狗</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="concept-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-purple-100 dark:bg-purple-900/30">
+                                    <i class="fas fa-chart-line text-2xl text-purple-600 dark:text-purple-400"></i>
+                                </div>
+                                <h3 class="ml-4 text-xl font-semibold text-gray-800 dark:text-gray-200">回归任务</h3>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                回归任务的目标是预测连续的数值，输出是连续的预测值。这类似于"简答题"，需要给出具体的数值回答。
+                            </p>
+                            
+                            <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg mb-4">
+                                <h4 class="font-medium text-purple-700 dark:text-purple-300 mb-2">股票价格预测</h4>
+                                <div class="mb-3">
+                                    <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">输入：时间节点、历史数据</p>
+                                    <div class="bg-white dark:bg-gray-700 p-2 rounded-lg h-32 relative">
+                                        <svg viewBox="0 0 100 50" class="w-full h-full">
+                                            <path d="M0,40 L10,38 L20,35 L30,38 L40,30 L50,32 L60,25 L70,20 L80,15 L90,10 L100,5" stroke="rgb(168, 85, 247)" stroke-width="2" fill="none" />
+                                            <path d="M0,40 L10,38 L20,35 L30,38 L40,30 L50,32 L60,25 L70,20 L80,15 L90,10 L100,5" stroke="rgba(168, 85, 247, 0.2)" stroke-width="8" fill="none" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="bg-white dark:bg-gray-700 p-2 rounded-lg">
+                                    <div class="flex justify-between items-center">
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">输出：股票价格</p>
+                                        <div class="font-medium text-purple-700 dark:text-purple-300">¥ 283.45</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-pink-50 dark:bg-pink-900/20 p-4 rounded-lg">
+                                <h4 class="font-medium text-pink-700 dark:text-pink-300 mb-2">天气预报</h4>
+                                <div class="mb-3">
+                                    <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">输入：时间、地点、历史数据</p>
+                                    <div class="bg-white dark:bg-gray-700 p-2 rounded-lg flex items-center">
+                                        <i class="fas fa-map-marker-alt text-pink-500 mr-2"></i>
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">北京</span>
+                                        <i class="fas fa-calendar-alt text-pink-500 ml-4 mr-2"></i>
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">明天</span>
+                                    </div>
+                                </div>
+                                <div class="bg-white dark:bg-gray-700 p-2 rounded-lg">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">温度：</p>
+                                        <div class="font-medium text-pink-700 dark:text-pink-300">24.5°C</div>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">湿度：</p>
+                                        <div class="font-medium text-pink-700 dark:text-pink-300">68%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mb-10">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">输出形式总结</h3>
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="flex-1 bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 p-4 rounded-lg">
+                                <h4 class="font-medium text-indigo-700 dark:text-indigo-300 mb-3">分类任务输出</h4>
+                                <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-2 list-disc list-inside">
+                                    <li>二分类：离散的0/1数值（是/否、正类/负类）</li>
+                                    <li>多分类：离散的类别标签（数字索引或类别名称）</li>
+                                    <li>应用：图像分类、垃圾邮件检测、情感分析等</li>
+                                </ul>
+                            </div>
+                            <div class="flex-1 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-4 rounded-lg">
+                                <h4 class="font-medium text-indigo-700 dark:text-indigo-300 mb-3">回归任务输出</h4>
+                                <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-2 list-disc list-inside">
+                                    <li>连续的预测数值（可以是整数或小数）</li>
+                                    <li>应用：股票价格预测、房价预测、温度预测等</li>
+                                    <li>通常需要使用回归算法，如线性回归、决策树回归等</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 智能函数的组成形式 -->
+        <section id="function" class="section mb-20">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200 flex items-center">
+                    <i class="fas fa-puzzle-piece mr-3 text-indigo-500"></i>
+                    智能函数的组成形式
+                </h2>
+                <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">
+                    智能函数的组成形式可以概括为"参数可学习的基元函数复合"。这种复杂的组成形式赋予了AI强大的表达能力和学习能力。
+                </p>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mb-10">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">人类大脑与神经网络的类比</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center">
+                                <h4 class="font-medium text-indigo-700 dark:text-indigo-300 mb-3">人脑的复杂性</h4>
+                                <img src="https://via.placeholder.com/400x300/4F46E5/FFFFFF?text=人脑神经元网络" alt="人脑神经元网络" class="w-full h-auto rounded-lg mb-3">
+                                <p class="text-sm text-gray-700 dark:text-gray-300 text-center">
+                                    人脑由数百亿个神经细胞组成，形成极其复杂的神经网络
+                                </p>
+                            </div>
+                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center">
+                                <h4 class="font-medium text-indigo-700 dark:text-indigo-300 mb-3">人工神经网络</h4>
+                                <img src="https://via.placeholder.com/400x300/7C3AED/FFFFFF?text=人工神经网络" alt="人工神经网络" class="w-full h-auto rounded-lg mb-3">
+                                <p class="text-sm text-gray-700 dark:text-gray-300 text-center">
+                                    人工智能模拟人脑结构，通过大量神经元的复合构建复杂网络
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <div class="math-formula bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-center">
+                                <p class="text-lg text-gray-800 dark:text-gray-200">y = f₁(f₂(...f<sub>n</sub>(x)...))</p>
+                            </div>
+                            <p class="mt-3 text-gray-700 dark:text-gray-300">
+                                这个函数复合公式简洁地表达了深度神经网络的基本结构：输入x经过多层函数的层层变换，最终得到输出y。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mb-10">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">单个神经元模型</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <img src="https://via.placeholder.com/500x300/4F46E5/FFFFFF?text=神经元模型" alt="神经元模型" class="w-full h-auto rounded-lg mb-4">
+                                <div class="text-center">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">神经元模型示意图</p>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-indigo-700 dark:text-indigo-300 mb-3">神经元的组成</h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 mt-1 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/50">
+                                            <i class="fas fa-arrow-right text-xs text-blue-600 dark:text-blue-400"></i>
+                                        </div>
+                                        <p class="ml-2 text-gray-700 dark:text-gray-300"><span class="font-medium">输入</span>：神经元接收来自其他神经元的信号</p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 mt-1 rounded-full flex items-center justify-center bg-green-100 dark:bg-green-900/50">
+                                            <i class="fas fa-weight-hanging text-xs text-green-600 dark:text-green-400"></i>
+                                        </div>
+                                        <p class="ml-2 text-gray-700 dark:text-gray-300"><span class="font-medium">权重</span>：每个输入都有对应的权重，表示重要性</p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 mt-1 rounded-full flex items-center justify-center bg-yellow-100 dark:bg-yellow-900/50">
+                                            <i class="fas fa-plus text-xs text-yellow-600 dark:text-yellow-400"></i>
+                                        </div>
+                                        <p class="ml-2 text-gray-700 dark:text-gray-300"><span class="font-medium">加权求和</span>：计算所有输入的加权和</p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 mt-1 rounded-full flex items-center justify-center bg-purple-100 dark:bg-purple-900/50">
+                                            <i class="fas fa-bolt text-xs text-purple-600 dark:text-purple-400"></i>
+                                        </div>
+                                        <p class="ml-2 text-gray-700 dark:text-gray-300"><span class="font-medium">激活函数</span>：引入非线性，增强表达能力</p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-5 h-5 mt-1 rounded-full flex items-center justify-center bg-red-100 dark:bg-red-900/50">
+                                            <i class="fas fa-external-link-alt text-xs text-red-600 dark:text-red-400"></i>
+                                        </div>
+                                        <p class="ml-2 text-gray-700 dark:text-gray-300"><span class="font-medium">输出</span>：激活函数处理后的结果</p>
+                                    </li>
+                                </ul>
+                                <div class="mt-4 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                    <p class="text-center text-lg text-gray-800 dark:text-gray-200 font-medium">
+                                        f(Σωᵢxᵢ + b)
+                                    </p>
+                                    <p class="mt-2 text-sm text-gray-600 dark:text-gray-400 text-center">
+                                        神经元数学表达式：输入乘以权重，求和，加上偏置，经过激活函数
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mb-10">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">常见的基元函数</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="concept-card bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                                <h4 class="font-medium text-blue-700 dark:text-blue-300 mb-3">线性变换</h4>
+                                <div class="flex items-center justify-center mb-4">
+                                    <div class="math-formula bg-white dark:bg-gray-800 px-4 py-2 rounded-lg">
+                                        <p class="text-lg text-gray-800 dark:text-gray-200">y = wᵀx</p>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                                    线性变换是神经网络中最基本的运算，通常表示为输入向量与权重向量的点积。
+                                </p>
+                                <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1 list-disc list-inside">
+                                    <li>w表示权重向量，连接神经元与输入或其他神经元</li>
+                                    <li>在全连接层中广泛使用</li>
+                                    <li>提供神经网络的基本变换能力</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="concept-card bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                                <h4 class="font-medium text-purple-700 dark:text-purple-300 mb-3">Sigmoid函数</h4>
+                                <div class="flex items-center justify-center mb-4">
+                                    <div class="math-formula bg-white dark:bg-gray-800 px-4 py-2 rounded-lg">
+                                        <p class="text-lg text-gray-800 dark:text-gray-200">s(x) = 1 / (1 + e⁻ᵃˣ)</p>
+                                    </div>
+                                </div>
+                                <div class="h-20 relative mb-4">
+                                    <svg viewBox="0 0 100 50" class="w-full h-full">
+                                        <path d="M0,45 C10,45 20,45 30,40 C40,35 50,15 60,10 C70,5 80,5 100,5" stroke="rgb(168, 85, 247)" stroke-width="2" fill="none" />
+                                    </svg>
+                                </div>
+                                <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1 list-disc list-inside">
+                                    <li>函数值在[0,1]之间，可解释为概率</li>
+                                    <li>S形的连续可导逻辑函数</li>
+                                    <li>在深度网络中易导致梯度消失问题</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="concept-card bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                                <h4 class="font-medium text-green-700 dark:text-green-300 mb-3">ReLU函数</h4>
+                                <div class="flex items-center justify-center mb-4">
+                                    <div class="math-formula bg-white dark:bg-gray-800 px-4 py-2 rounded-lg">
+                                        <p class="text-lg text-gray-800 dark:text-gray-200">y = max{0, x}</p>
+                                    </div>
+                                </div>
+                                <div class="h-20 relative mb-4">
+                                    <svg viewBox="0 0 100 50" class="w-full h-full">
+                                        <path d="M0,25 L50,25 L100,0" stroke="rgb(34, 197, 94)" stroke-width="2" fill="none" />
+                                    </svg>
+                                </div>
+                                <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1 list-disc list-inside">
+                                    <li>对非正输入零输出，对正值输入等值输出</li>
+                                    <li>将双极性输入变为单极性输出</li>
+                                    <li>在正值区间无饱和性，可避免梯度消失</li>
+                                    <li>现代深度网络中最常用的激活函数之一</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="concept-card bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
+                                <h4 class="font-medium text-red-700 dark:text-red-300 mb-3">离散卷积</h4>
+                                <div class="flex items-center justify-center mb-4">
+                                    <div class="math-formula bg-white dark:bg-gray-800 px-4 py-2 rounded-lg">
+                                        <p class="text-lg text-gray-800 dark:text-gray-200">y = x * w</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-center mb-4">
+                                    <img src="https://via.placeholder.com/400x200/EF4444/FFFFFF?text=卷积操作示意图" alt="卷积操作示意图" class="w-full h-auto rounded-lg">
+                                </div>
+                                <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1 list-disc list-inside">
+                                    <li>计算局部区域与卷积核的相关性/匹配度</li>
+                                    <li>在x上滑动w，计算被覆盖部分与w的内积</li>
+                                    <li>卷积神经网络(CNN)的核心操作</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="concept-card bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
+                            <h4 class="font-medium text-yellow-700 dark:text-yellow-300 mb-3">池化操作</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                                        池化操作通过降采样进行特征约简，减少计算量并提高模型的鲁棒性。
+                                    </p>
+                                    <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1 list-disc list-inside mb-4">
+                                        <li>最大池化(Max Pooling)：取区域内最大值</li>
+                                        <li>平均池化(Average Pooling)：取区域内平均值</li>
+                                        <li>常与卷积层搭配使用，降低特征维度</li>
+                                    </ul>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <div class="bg-white dark:bg-gray-700 p-3 rounded-lg">
+                                        <p class="text-center text-gray-800 dark:text-gray-200 font-medium mb-2">4x4 特征图池化示例</p>
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div class="bg-yellow-100 dark:bg-yellow-900/30 p-2 rounded">
+                                                <div class="grid grid-cols-4 gap-1">
+                                                    <div class="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 rounded">1</div>
+                                                    <div class="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 rounded">2</div>
+                                                    <div class="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 rounded">3</div>
+                                                    <div class="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 rounded">4</div>
+                                                    <div class="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 rounded">5</div>
+                                                    <div class="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 rounded">6</div>
+                                                    <div class="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 rounded">7</div>
+                                                    <div class="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 rounded">8</div>
+                                                    <div class="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 rounded">9</div>
+                                                    <div class="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 rounded">10</div>
+                                                    <div class="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 rounded">11</div>
+                                                    <div class="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 rounded">12</div>
+                                                    <div class="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 rounded">13</div>
+                                                    <div class="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 rounded">14</div>
+                                                    <div class="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 rounded">15</div>
+                                                    <div class="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 rounded">16</div>
+                                                </div>
+                                                <p class="text-xs text-center mt-1">原始4x4特征图</p>
+                                            </div>
+                                            <div class="bg-yellow-100 dark:bg-yellow-900/30 p-2 rounded">
+                                                <div class="grid grid-cols-2 gap-1">
+                                                    <div class="w-12 h-12 flex items-center justify-center bg-white dark:bg-gray-800 rounded font-bold">6</div>
+                                                    <div class="w-12 h-12 flex items-center justify-center bg-white dark:bg-gray-800 rounded font-bold">8</div>
+                                                    <div class="w-12 h-12 flex items-center justify-center bg-white dark:bg-gray-800 rounded font-bold">14</div>
+                                                    <div class="w-12 h-12 flex items-center justify-center bg-white dark:bg-gray-800 rounded font-bold">16</div>
+                                                </div>
+                                                <p class="text-xs text-center mt-1">2x2最大池化后</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mb-10">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">深度神经网络对基元函数的集成</h3>
+                        <p class="text-gray-700 dark:text-gray-300 mb-6">
+                            深度神经网络是通过大量基元函数的组合集成而成的，虽然每个基元函数的功能相对简单，但大量组合后能产生强大的计算能力。
+                        </p>
+                        
+                        <div class="mb-6">
+                            <img src="https://via.placeholder.com/800x300/4F46E5/FFFFFF?text=深度神经网络结构示例" alt="深度神经网络结构示例" class="w-full h-auto rounded-lg">
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-lg">
+                                <h4 class="font-medium text-indigo-700 dark:text-indigo-300 mb-3">层级结构</h4>
+                                <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-2 list-disc list-inside">
+                                    <li>输入层：接收原始数据</li>
+                                    <li>隐藏层：由多层基元函数组成，逐层提取特征</li>
+                                    <li>输出层：产生最终结果</li>
+                                    <li>每一层可以包含不同类型的基元函数</li>
+                                </ul>
+                            </div>
+                            <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                                <h4 class="font-medium text-purple-700 dark:text-purple-300 mb-3">聚沙成塔的效果</h4>
+                                <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-2 list-disc list-inside">
+                                    <li>简单基元函数的大量组合产生复杂行为</li>
+                                    <li>较深的网络可以学习更抽象的特征表示</li>
+                                    <li>多层变换使模型能够拟合任意复杂的函数</li>
+                                    <li>具有"涌现"特性：整体大于部分之和</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 text-center p-4 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-lg">
+                            <p class="text-lg font-medium text-gray-800 dark:text-gray-200">
+                                智能函数的本质：参数可学习的复杂复合函数
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 智能函数的学习方式 -->
+        <section id="learning" class="section mb-20">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200 flex items-center">
+                    <i class="fas fa-graduation-cap mr-3 text-indigo-500"></i>
+                    智能函数的学习方式
+                </h2>
+                <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">
+                    智能函数的学习过程基于数据驱动和信息反馈，通过不断调整参数来优化性能。不同的学习方式适用于不同的任务场景。
+                </p>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mb-10">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">智能函数的学习过程</h3>
+                        <div class="flex flex-col md:flex-row items-center justify-center gap-6 mb-6">
+                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg w-full md:w-1/2">
+                                <img src="https://via.placeholder.com/400x300/4F46E5/FFFFFF?text=学习过程示意图" alt="学习过程示意图" class="w-full h-auto rounded-lg">
+                            </div>
+                            <div class="w-full md:w-1/2">
+                                <div class="flex flex-col space-y-4">
+                                    <div class="flex items-start space-x-3">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400">
+                                            <span class="font-bold">1</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-gray-800 dark:text-gray-200">数据输入</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">提供智能函数学习的原材料，如图像、文本等</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-400">
+                                            <span class="font-bold">2</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-gray-800 dark:text-gray-200">参数初始化</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">随机设置初始参数值，开始学习过程</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center bg-yellow-100 dark:bg-yellow-900/50 text-yellow-600 dark:text-yellow-400">
+                                            <span class="font-bold">3</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-gray-800 dark:text-gray-200">反馈信息监督</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">提供学习方向的指导，可以是标签、奖励信号等</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400">
+                                            <span class="font-bold">4</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-gray-800 dark:text-gray-200">参数优化</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">根据反馈调整参数，提高模型性能</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400">
+                                            <span class="font-bold">5</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-gray-800 dark:text-gray-200">输出符合预期</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">经过足够训练后，模型输出符合预期效果</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    <div class="concept-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/30">
+                                    <i class="fas fa-chalkboard-teacher text-2xl text-blue-600 dark:text-blue-400"></i>
+                                </div>
+                                <h3 class="ml-4 text-xl font-semibold text-gray-800 dark:text-gray-200">监督学习</h3>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                训练数据中包含输入和对应的标签，模型通过比较预测输出与真实标签之间的差距来学习。
+                            </p>
+                            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg mb-4">
+                                <h4 class="font-medium text-blue-700 dark:text-blue-300 mb-2">主要特点</h4>
+                                <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-2 list-disc list-inside">
+                                    <li>对训练样本进行人工标注</li>
+                                    <li>标注信息直接出现在目标函数或误差函数中</li>
+                                    <li>常用于分类和回归任务</li>
+                                </ul>
+                            </div>
+                            <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
+                                <div class="flex items-center">
+                                    <img src="https://via.placeholder.com/100x100/3B82F6/FFFFFF?text=狗" alt="狗" class="w-16 h-16 rounded-lg">
+                                    <div class="ml-3 flex-1">
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">输入：狗的图像</p>
+                                        <div class="mt-1 flex items-center">
+                                            <p class="text-sm text-gray-700 dark:text-gray-300">标签：</p>
+                                            <span class="ml-2 px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded">狗</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="concept-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-green-100 dark:bg-green-900/30">
+                                    <i class="fas fa-compass text-2xl text-green-600 dark:text-green-400"></i>
+                                </div>
+                                <h3 class="ml-4 text-xl font-semibold text-gray-800 dark:text-gray-200">无监督学习</h3>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                训练数据没有标签，模型需要自己发现数据中的结构和模式。
+                            </p>
+                            <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg mb-4">
+                                <h4 class="font-medium text-green-700 dark:text-green-300 mb-2">主要特点</h4>
+                                <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-2 list-disc list-inside">
+                                    <li>训练数据没有人工标签</li>
+                                    <li>参数初始化后，迭代进行"样本归属"和"更新参数"直至收敛</li>
+                                    <li>常用于聚类任务、降维和特征学习</li>
+                                </ul>
+                            </div>
+                            <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
+                                <h5 class="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">聚类示例</h5>
+                                <div class="h-32 relative bg-white dark:bg-gray-800 rounded p-2">
+                                    <svg viewBox="0 0 100 50" class="w-full h-full">
+                                        <!-- 第一个聚类 -->
+                                        <circle cx="20" cy="15" r="2" fill="#10B981" />
+                                        <circle cx="22" cy="18" r="2" fill="#10B981" />
+                                        <circle cx="18" cy="17" r="2" fill="#10B981" />
+                                        <circle cx="25" cy="15" r="2" fill="#10B981" />
+                                        <circle cx="23" cy="13" r="2" fill="#10B981" />
+                                        <circle cx="19" cy="12" r="2" fill="#10B981" />
+                                        
+                                        <!-- 第二个聚类 -->
+                                        <circle cx="70" cy="35" r="2" fill="#8B5CF6" />
+                                        <circle cx="73" cy="38" r="2" fill="#8B5CF6" />
+                                        <circle cx="68" cy="37" r="2" fill="#8B5CF6" />
+                                        <circle cx="75" cy="33" r="2" fill="#8B5CF6" />
+                                        <circle cx="72" cy="32" r="2" fill="#8B5CF6" />
+                                        <circle cx="69" cy="30" r="2" fill="#8B5CF6" />
+                                        
+                                        <!-- 聚类边界 -->
+                                        <circle cx="21" cy="15" r="10" stroke="#10B981" stroke-width="1" fill="none" stroke-dasharray="2" />
+                                        <circle cx="71" cy="34" r="10" stroke="#8B5CF6" stroke-width="1" fill="none" stroke-dasharray="2" />
+                                        
+                                        <text x="21" y="15" text-anchor="middle" fill="#10B981" font-size="4">Class 1</text>
+                                        <text x="71" y="34" text-anchor="middle" fill="#8B5CF6" font-size="4">Class 2</text>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <div class="concept-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-purple-100 dark:bg-purple-900/30">
+                                    <i class="fas fa-project-diagram text-2xl text-purple-600 dark:text-purple-400"></i>
+                                </div>
+                                <h3 class="ml-4 text-xl font-semibold text-gray-800 dark:text-gray-200">半监督学习</h3>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                同时使用少量标记数据和大量未标记数据，结合监督学习和无监督学习的优点。
+                            </p>
+                            <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                                <h4 class="font-medium text-purple-700 dark:text-purple-300 mb-2">主要特点</h4>
+                                <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-2 list-disc list-inside">
+                                    <li>对部分训练样本进行人工标注</li>
+                                    <li>根据样本之间的距离或流形结构传播标签</li>
+                                    <li>完成标签传播后，进行有监督学习</li>
+                                    <li>适用于标注成本高但未标注数据丰富的场景</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="concept-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/30">
+                                    <i class="fas fa-exchange-alt text-2xl text-blue-600 dark:text-blue-400"></i>
+                                </div>
+                                <h3 class="ml-4 text-xl font-semibold text-gray-800 dark:text-gray-200">迁移学习</h3>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                将在源任务上学到的知识迁移到目标任务上，提高目标任务的学习效率。
+                            </p>
+                            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                                <h4 class="font-medium text-blue-700 dark:text-blue-300 mb-2">主要特点</h4>
+                                <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-2 list-disc list-inside">
+                                    <li>也称少样本学习(few-shot)</li>
+                                    <li>将已完成训练的模型通过新任务的少量样本迁移为新模型</li>
+                                    <li>新模型的大部分参数与原模型一致，只需做少量特殊调整</li>
+                                    <li>适用于目标任务数据不足的场景</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="concept-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-green-100 dark:bg-green-900/30">
+                                    <i class="fas fa-gamepad text-2xl text-green-600 dark:text-green-400"></i>
+                                </div>
+                                <h3 class="ml-4 text-xl font-semibold text-gray-800 dark:text-gray-200">强化学习</h3>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                智能体通过与环境交互，根据奖励信号调整行为，逐步学习最优策略。
+                            </p>
+                            <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                                <h4 class="font-medium text-green-700 dark:text-green-300 mb-2">主要特点</h4>
+                                <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-2 list-disc list-inside">
+                                    <li>通过建立智能体与环境的循环交互关系实现</li>
+                                    <li>智能体感知环境的状态，根据当前的策略函数选择动作</li>
+                                    <li>环境根据动作改变状态，并给出对智能体动作的奖罚</li>
+                                    <li>智能体根据奖罚的指导调整参数，进入新的循环</li>
+                                    <li>代表应用：AlphaGo围棋AI、智能控制系统</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mb-10">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center bg-red-100 dark:bg-red-900/30">
+                                <i class="fas fa-sync-alt text-2xl text-red-600 dark:text-red-400"></i>
+                            </div>
+                            <h3 class="ml-4 text-xl font-semibold text-gray-800 dark:text-gray-200">对抗学习</h3>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 mb-6">
+                            两个智能函数相互对抗、竞争，在这个过程中共同提高性能。生成对抗网络（GANs）是最著名的对抗学习应用。
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
+                                <h4 class="font-medium text-red-700 dark:text-red-300 mb-2">主要特点</h4>
+                                <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-2 list-disc list-inside">
+                                    <li>用两个智能函数组成一个对抗体，以打败对手为目标相互提供优化方法</li>
+                                    <li>如同"高手对决"，通过竞争促进双方能力提升</li>
+                                    <li>GAN中的生成器和判别器相互博弈，共同进步</li>
+                                    <li>生成器：努力生成逼真样本欺骗判别器</li>
+                                    <li>判别器：努力准确区分真实样本和生成样本</li>
+                                </ul>
+                            </div>
+                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center justify-center">
+                                <img src="https://via.placeholder.com/400x200/EF4444/FFFFFF?text=GAN对抗学习示意图" alt="GAN对抗学习示意图" class="w-full h-auto rounded-lg mb-4">
+                                <div class="grid grid-cols-2 gap-4 w-full">
+                                    <div class="bg-white dark:bg-gray-800 p-2 rounded text-center">
+                                        <p class="font-medium text-gray-800 dark:text-gray-200 mb-1">生成器</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">生成伪造样本</p>
+                                    </div>
+                                    <div class="bg-white dark:bg-gray-800 p-2 rounded text-center">
+                                        <p class="font-medium text-gray-800 dark:text-gray-200 mb-1">判别器</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">区分样本真伪</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 总结 -->
+        <section class="section mb-20">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200 flex items-center">
+                    <i class="fas fa-flag-checkered mr-3 text-indigo-500"></i>
+                    总结
+                </h2>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                            <div class="concept-card bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-lg">
+                                <h3 class="font-medium text-indigo-700 dark:text-indigo-300 mb-3">AI是科学</h3>
+                                <p class="text-sm text-gray-700 dark:text-gray-300">
+                                    人工智能不是玄学，而是建立在数学、统计学和计算机科学基础上的科学。尽管某些AI行为看似不可预测，但其背后都有科学原理支撑。
+                                </p>
+                            </div>
+                            <div class="concept-card bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                                <h3 class="font-medium text-purple-700 dark:text-purple-300 mb-3">AI的数学本质是智能函数</h3>
+                                <p class="text-sm text-gray-700 dark:text-gray-300">
+                                    人工智能系统本质上是一个或多个智能函数的组合，接收输入数据，进行数学运算，产生输出结果，实现各种智能任务。
+                                </p>
+                            </div>
+                            <div class="concept-card bg-pink-50 dark:bg-pink-900/20 p-4 rounded-lg">
+                                <h3 class="font-medium text-pink-700 dark:text-pink-300 mb-3">智能函数是参数可学习的复合函数</h3>
+                                <p class="text-sm text-gray-700 dark:text-gray-300">
+                                    智能函数由大量基元函数复合而成，这些基元函数包含可学习的参数。通过学习算法，系统能从数据中自动优化这些参数，提高性能。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-4 rounded-lg mb-6">
+                            <h3 class="font-medium text-gray-800 dark:text-gray-200 mb-3 text-center">人工智能认识框架</h3>
+                            <div class="flex flex-wrap justify-center gap-4">
+                                <div class="px-4 py-2 bg-white dark:bg-gray-800 rounded shadow-sm">
+                                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">知识体系</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-arrow-right text-gray-400"></i>
+                                </div>
+                                <div class="px-4 py-2 bg-white dark:bg-gray-800 rounded shadow-sm">
+                                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">输入形式</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-arrow-right text-gray-400"></i>
+                                </div>
+                                <div class="px-4 py-2 bg-white dark:bg-gray-800 rounded shadow-sm">
+                                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">输出形式</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-arrow-right text-gray-400"></i>
+                                </div>
+                                <div class="px-4 py-2 bg-white dark:bg-gray-800 rounded shadow-sm">
+                                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">组成形式</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-arrow-right text-gray-400"></i>
+                                </div>
+                                <div class="px-4 py-2 bg-white dark:bg-gray-800 rounded shadow-sm">
+                                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">学习方式</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <p class="text-lg text-gray-700 dark:text-gray-300">
+                                通过理解人工智能的数学本质，我们能够拨开云雾见青天，对AI有更清晰、更深入、更科学的认识。
+                            </p>
+                            <p class="mt-4 text-indigo-600 dark:text-indigo-400 font-medium">
+                                人工智能的未来发展前景广阔，期待大家学好数学，掌握AI技术，在科技浪潮中乘风破浪！
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 延伸阅读 -->
+        <section class="section mb-10">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200 flex items-center">
+                    <i class="fas fa-book-open mr-3 text-indigo-500"></i>
+                    延伸阅读
+                </h2>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="font-medium text-lg text-gray-800 dark:text-gray-200 mb-4">推荐书籍</h3>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center bg-indigo-100 dark:bg-indigo-900/50">
+                                            <i class="fas fa-book text-indigo-600 dark:text-indigo-400"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-gray-800 dark:text-gray-200 font-medium">《深度学习》</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Ian Goodfellow, Yoshua Bengio, Aaron Courville 著</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center bg-indigo-100 dark:bg-indigo-900/50">
+                                            <i class="fas fa-book text-indigo-600 dark:text-indigo-400"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-gray-800 dark:text-gray-200 font-medium">《统计学习方法》</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">李航 著</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center bg-indigo-100 dark:bg-indigo-900/50">
+                                            <i class="fas fa-book text-indigo-600 dark:text-indigo-400"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-gray-800 dark:text-gray-200 font-medium">《模式识别与机器学习》</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Christopher Bishop 著</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-lg text-gray-800 dark:text-gray-200 mb-4">在线课程</h3>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center bg-purple-100 dark:bg-purple-900/50">
+                                            <i class="fas fa-laptop-code text-purple-600 dark:text-purple-400"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-gray-800 dark:text-gray-200 font-medium">Deep Learning Specialization</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Coursera - Andrew Ng</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center bg-purple-100 dark:bg-purple-900/50">
+                                            <i class="fas fa-laptop-code text-purple-600 dark:text-purple-400"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-gray-800 dark:text-gray-200 font-medium">Practical Deep Learning for Coders</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">fast.ai</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center bg-purple-100 dark:bg-purple-900/50">
+                                            <i class="fas fa-laptop-code text-purple-600 dark:text-purple-400"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-gray-800 dark:text-gray-200 font-medium">Machine Learning</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Coursera - Stanford University</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-100 dark:bg-gray-800 py-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h2 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">人工智能的数学本质</h2>
+                    <p class="text-gray-600 dark:text-gray-400">揭开AI背后的数学面纱，理解智能函数如何工作</p>
+                </div>
+                <div class="flex flex-col items-center md:items-end">
+                    <p class="text-gray-700 dark:text-gray-300 mb-2">作者: fly51fly</p>
+                    <div class="flex space-x-4 mb-2">
+                        <a href="https://weibo.com/fly51fly" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                            <i class="fab fa-weibo text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-500">© 2023 版权所有</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    ```
+<!-- 深色/浅色模式切换按钮 -->
+<button id="themeToggle" class="theme-toggle light shadow-lg">
+    <i id="themeIcon" class="fas fa-moon"></i>
+</button>
+
+<!-- JavaScript -->
+<script>
+    // 深色/浅色模式切换
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    
+    // 检查系统偏好
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.remove('light');
+        document.body.classList.add('dark');
+        themeToggle.classList.remove('light');
+        themeToggle.classList.add('dark');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+    }
+    
+    // 切换主题
+    themeToggle.addEventListener('click', () => {
+        if (document.body.classList.contains('dark')) {
+            document.body.classList.remove('dark');
+            document.body.classList.add('light');
+            themeToggle.classList.remove('dark');
+            themeToggle.classList.add('light');
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        } else {
+            document.body.classList.remove('light');
+            document.body.classList.add('dark');
+            themeToggle.classList.remove('light');
+            themeToggle.classList.add('dark');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+    });
+    
+    // 滚动进度条
+    window.onscroll = function() {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('progressBar').style.width = scrolled + '%';
+        
+        // 突出显示当前章节
+        highlightCurrentSection();
+    };
+    
+    // 突出显示当前章节
+    function highlightCurrentSection() {
+        const sections = document.querySelectorAll('section[id]');
+        let currentSectionId = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            if (window.scrollY >= sectionTop - 100 && window.scrollY < sectionTop + sectionHeight - 100) {
+                currentSectionId = section.getAttribute('id');
+            }
+        });
+        
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + currentSectionId) {
+                link.classList.add('active');
+            }
+        });
+    }
+    
+    // 移动端菜单
+    const menuButton = document.getElementById('menuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    menuButton.addEventListener('click', () => {
+        if (mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.remove('hidden');
+        } else {
+            mobileMenu.classList.add('hidden');
+        }
+    });
+    
+    // 点击导航链接后关闭移动菜单
+    const mobileLinks = mobileMenu.querySelectorAll('a');
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+        });
+    });
+    
+    // 懒加载图片
+    document.addEventListener("DOMContentLoaded", function() {
+        const lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
+        
+        if ("IntersectionObserver" in window) {
+            let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        let lazyImage = entry.target;
+                        lazyImage.src = lazyImage.dataset.src;
+                        lazyImage.classList.remove("lazy");
+                        lazyImageObserver.unobserve(lazyImage);
+                    }
+                });
+            });
+            
+            lazyImages.forEach(function(lazyImage) {
+                lazyImageObserver.observe(lazyImage);
+            });
+        } else {
+            // 回退到传统的方法，适用于不支持IntersectionObserver的浏览器
+            let active = false;
+            
+            const lazyLoad = function() {
+                if (active === false) {
+                    active = true;
+                    
+                    setTimeout(function() {
+                        lazyImages.forEach(function(lazyImage) {
+                            if ((lazyImage.getBoundingClientRect().top <= window.innerHeight && lazyImage.getBoundingClientRect().bottom >= 0) && getComputedStyle(lazyImage).display !== "none") {
+                                lazyImage.src = lazyImage.dataset.src;
+                                lazyImage.classList.remove("lazy");
+                                
+                                lazyImages = lazyImages.filter(function(image) {
+                                    return image !== lazyImage;
+                                });
+                                
+                                if (lazyImages.length === 0) {
+                                    document.removeEventListener("scroll", lazyLoad);
+                                    window.removeEventListener("resize", lazyLoad);
+                                    window.removeEventListener("orientationChange", lazyLoad);
+                                }
+                            }
+                        });
+                        
+                        active = false;
+                    }, 200);
+                }
+            };
+            
+            document.addEventListener("scroll", lazyLoad);
+            window.addEventListener("resize", lazyLoad);
+            window.addEventListener("orientationChange", lazyLoad);
+        }
+    });
+    
+    // 平滑滚动到锚点
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // 初始化页面
+    window.onload = function() {
+        // 显示正确的初始主题图标
+        if (document.body.classList.contains('dark')) {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        } else {
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        }
+        
+        // 初始化导航高亮
+        highlightCurrentSection();
+        
+        // 添加淡入动画效果
+        document.querySelectorAll('.section').forEach((section, index) => {
+            setTimeout(() => {
+                section.style.opacity = '1';
+            }, 100 * index);
+        });
+    };
+</script>
+</body>
+</html>

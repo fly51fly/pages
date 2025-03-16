@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智领金融未来：大模型驱动的银行智能化转型</title>
+    <link href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.staticfile.org/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1C3879;
+            --secondary-color: #607EAA;
+            --accent-color: #F05454;
+            --light-bg: #F9F7F7;
+            --dark-bg: #1A202C;
+            --light-text: #F9F7F7;
+            --dark-text: #2D3748;
+            --card-light: #FFFFFF;
+            --card-dark: #2D3748;
+            --highlight-light: #EEF5FF;
+            --highlight-dark: #2C3E50;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', Tahoma, Arial, Roboto, "Droid Sans", "Helvetica Neue", "Droid Sans Fallback", "Heiti SC", "Hiragino Sans GB", Simsun, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 600;
+        }
+
+        .light {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+        }
+
+        .dark {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .light .card {
+            background-color: var(--card-light);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark .card {
+            background-color: var(--card-dark);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .dark .card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        .highlight-box {
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .light .highlight-box {
+            background-color: var(--highlight-light);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .dark .highlight-box {
+            background-color: var(--highlight-dark);
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .icon-box {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            transition: all 0.3s ease;
+        }
+
+        .light .icon-box {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(28, 56, 121, 0.3);
+        }
+
+        .dark .icon-box {
+            background-color: var(--accent-color);
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(240, 84, 84, 0.3);
+        }
+
+        .icon-box:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .prose-lg {
+            font-size: 1.125rem;
+            line-height: 1.75;
+        }
+
+        .prose-lg p, .prose-lg ul, .prose-lg ol {
+            margin-top: 1.2em;
+            margin-bottom: 1.2em;
+        }
+
+        .hero-section {
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(28, 56, 121, 0.9) 0%, rgba(96, 126, 170, 0.8) 100%);
+            z-index: 1;
+        }
+
+        .dark .hero-section::before {
+            background: linear-gradient(135deg, rgba(26, 32, 44, 0.9) 0%, rgba(45, 55, 72, 0.8) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .light .lead {
+            color: var(--secondary-color);
+        }
+
+        .dark .lead {
+            color: #A0AEC0;
+        }
+
+        .first-letter::first-letter {
+            font-size: 3.5em;
+            float: left;
+            line-height: 0.8;
+            margin-right: 0.1em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .dark .first-letter::first-letter {
+            color: var(--accent-color);
+        }
+
+        .theme-toggle {
+            width: 50px;
+            height: 25px;
+            background-color: #4A5568;
+            border-radius: 25px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .theme-toggle.dark {
+            background-color: #A0AEC0;
+        }
+
+        .theme-toggle:before {
+            content: '';
+            position: absolute;
+            width: 21px;
+            height: 21px;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            background-color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle.dark:before {
+            transform: translateX(25px);
+        }
+
+        .challenge-card {
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .light .challenge-card {
+            border: 1px solid #E2E8F0;
+        }
+
+        .dark .challenge-card {
+            border: 1px solid #4A5568;
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .light .challenge-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .dark .challenge-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: var(--secondary-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -39px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            border: 4px solid white;
+        }
+
+        .dark .timeline-item::before {
+            border-color: var(--dark-bg);
+        }
+
+        .rounded-tag {
+            border-radius: 30px;
+            padding: 5px 15px;
+            display: inline-block;
+            font-size: 0.875rem;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .light .rounded-tag {
+            background-color: var(--highlight-light);
+            color: var(--primary-color);
+        }
+
+        .dark .rounded-tag {
+            background-color: var(--highlight-dark);
+            color: var(--light-text);
+        }
+
+        .rounded-tag:hover {
+            transform: translateY(-2px);
+        }
+
+        .light .rounded-tag:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .dark .rounded-tag:hover {
+            background-color: var(--accent-color);
+        }
+        
+        /* 增加打字机效果 */
+        .typewriter {
+            overflow: hidden;
+            border-right: .15em solid var(--accent-color);
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: .15em;
+            animation: 
+                typing 3.5s steps(40, end),
+                blink-caret .75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--accent-color); }
+        }
+        
+        /* 滚动动效 */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="light">
+    <!-- 导航栏 -->
+    <nav class="sticky top-0 z-50 backdrop-filter backdrop-blur-lg bg-opacity-80 light:bg-white dark:bg-gray-900 shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-landmark text-3xl text-blue-800 dark:text-red-500"></i>
+                <span class="font-serif font-bold text-xl">智领金融未来</span>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#overview" class="nav-link">概览</a>
+                <a href="#part3" class="nav-link">大模型赋能客户经理</a>
+                <a href="#challenges" class="nav-link">挑战与展望</a>
+                <a href="#roadmap" class="nav-link">工行行动路线图</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div id="themeToggle" class="theme-toggle" title="切换深色/浅色模式">
+                    <span class="sr-only">切换主题</span>
+                </div>
+                <button class="md:hidden text-gray-800 dark:text-gray-200 focus:outline-none" id="menuToggle">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- 移动端菜单 -->
+        <div id="mobileMenu" class="hidden md:hidden px-4 py-3 shadow-inner light:bg-gray-100 dark:bg-gray-800">
+            <div class="flex flex-col space-y-3">
+                <a href="#overview" class="nav-link">概览</a>
+                <a href="#part3" class="nav-link">大模型赋能客户经理</a>
+                <a href="#challenges" class="nav-link">挑战与展望</a>
+                <a href="#roadmap" class="nav-link">工行行动路线图</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <section class="hero-section py-20 md:py-32" style="background-image: url('https://source.unsplash.com/random/1920x1080/?finance,technology');">
+        <div class="container mx-auto px-4 hero-content text-white">
+            <div class="max-w-3xl">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 typewriter">智领金融未来</h1>
+                <p class="text-xl md:text-2xl mb-8">大模型驱动的银行智能化转型</p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#part3" class="bg-accent-color hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 flex items-center">
+                        <i class="fas fa-robot mr-2"></i> 探索大模型赋能
+                    </a>
+                    <a href="#roadmap" class="bg-transparent hover:bg-white hover:text-blue-900 text-white font-bold py-3 px-6 border-2 border-white rounded-full transition duration-300 flex items-center">
+                        <i class="fas fa-road mr-2"></i> 查看行动路线图
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 概览部分 -->
+    <section id="overview" class="py-16 fade-in-section">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">大模型与银行智能化转型</h2>
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="md:w-1/2">
+                    <div class="prose-lg max-w-none">
+                        <p class="first-letter mb-4">随着人工智能技术的飞速发展，大模型正以前所未有的速度和深度重塑金融服务业。银行作为金融体系的核心，正面临数字化转型的巨大机遇与挑战。</p>
+                        <p class="mb-4">工商银行作为中国乃至全球领先的金融机构，拥有海量数据、丰富场景和强大的技术基础，在大模型应用方面具有得天独厚的优势。通过战略性地拥抱大模型技术，工行有望在客户服务、风险管理、运营效率等多方面实现质的飞跃。</p>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold mb-4 text-primary-color dark:text-accent-color">
+                            <i class="fas fa-chart-line mr-2"></i>大模型驱动的银行智能化转型
+                        </h3>
+                        <div class="mermaid">
+                            graph TD
+                                A[大模型技术] --> B[智能客户服务]
+                                A --> C[智能风险管理]
+                                A --> D[智能运营]
+                                A --> E[智能营销]
+                                B --> F[提升客户体验]
+                                C --> G[降低风险成本]
+                                D --> H[提高运营效率]
+                                E --> I[精准营销转化]
+                                F & G & H & I --> J[银行智能化转型]
+                                J --> K[构建差异化竞争优势]
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第三部分：大模型赋能客户经理 -->
+    <section id="part3" class="py-16 bg-gray-50 dark:bg-gray-900 fade-in-section">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">大模型赋能客户经理日常办公与效能提升</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400">贴近一线，实战演练</p>
+            </div>
+
+            <!-- Slide 17 内容 -->
+            <div class="max-w-6xl mx-auto mb-16 fade-in-section">
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-user-tie text-primary-color dark:text-accent-color mr-3"></i>
+                        聚焦客户经理：大模型赋能一线，提升服务质效
+                    </h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-xl font-semibold mb-4">客户经理的核心价值与挑战</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <i class="fas fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <p>客户需求日益复杂和个性化，服务难度加大</p>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <p>信息获取和处理量巨大，效率要求高</p>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <p>竞争压力日益增大，专业能力要求提升</p>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <p>重复性工作繁琐，占用大量时间</p>
+                                </div>
+                            </div>
+                            
+                            <h4 class="text-xl font-semibold mt-8 mb-4">大模型赋能客户经理的战略意义</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                    <p>提升客户经理服务效率和质量，增强客户满意度和忠诚度</p>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                    <p>赋能客户经理更专注于高价值的客户互动和业务拓展</p>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                    <p>提升客户经理专业能力和竞争力，适应数字化转型要求</p>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                    <p>打造更高效、更智能的客户经理团队，提升银行整体效能</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-semibold mb-6">客户经理应用场景概览</h4>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="card p-5 hover:shadow-lg transition-all">
+                                    <div class="icon-box mb-4">
+                                        <i class="fas fa-info-circle text-2xl"></i>
+                                    </div>
+                                    <h5 class="font-bold text-lg mb-2 text-center">智能客户信息助手</h5>
+                                    <p class="text-sm text-center">快速获取和分析客户全方位信息</p>
+                                </div>
+                                
+                                <div class="card p-5 hover:shadow-lg transition-all">
+                                    <div class="icon-box mb-4">
+                                        <i class="fas fa-gift text-2xl"></i>
+                                    </div>
+                                    <h5 class="font-bold text-lg mb-2 text-center">智能产品推荐</h5>
+                                    <p class="text-sm text-center">个性化产品匹配与方案生成</p>
+                                </div>
+                                
+                                <div class="card p-5 hover:shadow-lg transition-all">
+                                    <div class="icon-box mb-4">
+                                        <i class="fas fa-file-alt text-2xl"></i>
+                                    </div>
+                                    <h5 class="font-bold text-lg mb-2 text-center">智能报告撰写</h5>
+                                    <p class="text-sm text-center">自动化文档处理与高效报告生成</p>
+                                </div>
+                                
+                                <div class="card p-5 hover:shadow-lg transition-all">
+                                    <div class="icon-box mb-4">
+                                        <i class="fas fa-comments text-2xl"></i>
+                                    </div>
+                                    <h5 class="font-bold text-lg mb-2 text-center">智能沟通话术</h5>
+                                    <p class="text-sm text-center">场景化沟通指导与客户互动增强</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8">
+                                <img src="https://source.unsplash.com/random/600x300/?business,team" alt="客户经理团队" class="rounded-lg w-full h-48 object-cover shadow-lg">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 应用场景展示 -->
+            <div class="space-y-16">
+                <!-- 智能客户信息助手 -->
+                <div class="max-w-6xl mx-auto fade-in-section">
+                    <div class="card p-8">
+                        <div class="flex flex-col md:flex-row gap-8">
+                            <div class="md:w-2/5">
+                                <img src="https://source.unsplash.com/random/600x800/?data,analysis" alt="智能客户信息助手" class="rounded-lg w-full h-64 object-cover shadow-lg mb-6">
+                                <div class="highlight-box">
+                                    <h4 class="font-bold text-lg mb-3">应用价值与效果分析</h4>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center justify-between">
+                                            <span>信息查找时间节省</span>
+                                            <div class="w-1/2 bg-gray-300 rounded-full h-4">
+                                                <div class="bg-green-600 h-4 rounded-full" style="width: 75%"></div>
+                                            </div>
+                                            <span class="font-bold">75%</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span>客户信息整理效率提升</span>
+                                            <div class="w-1/2 bg-gray-300 rounded-full h-4">
+                                                <div class="bg-green-600 h-4 rounded-full" style="width: 85%"></div>
+                                            </div>
+                                            <span class="font-bold">85%</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span>客户拜访准备时间缩短</span>
+                                            <div class="w-1/2 bg-gray-300 rounded-full h-4">
+                                                <div class="bg-green-600 h-4 rounded-full" style="width: 80%"></div>
+                                            </div>
+                                            <span class="font-bold">80%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="md:w-3/5">
+                                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                                    <i class="fas fa-info-circle text-primary-color dark:text-accent-color mr-3"></i>
+                                    智能客户信息助手 (Smart Customer Info Assistant)
+                                </h3>
+                                
+                                <div class="mb-6">
+                                    <h4 class="text-xl font-semibold mb-3">场景痛点再现</h4>
+                                    <p class="mb-4">客户经理在拜访客户前，需要花费大量时间查找和整理客户信息，效率低下。</p>
+                                    <div class="bg-red-100 dark:bg-red-900 dark:bg-opacity-30 rounded-lg p-4 mb-4">
+                                        <div class="flex">
+                                            <i class="fas fa-exclamation-triangle text-red-500 mr-3 mt-1"></i>
+                                            <div>
+                                                <p class="font-medium">传统工作流程的痛点：</p>
+                                                <ul class="list-disc list-inside mt-2 space-y-1 text-sm">
+                                                    <li>需要登录多个系统查询客户基本信息</li>
+                                                    <li>交易记录分散，需手动汇总分析</li>
+                                                    <li>历史沟通记录整理耗时</li>
+                                                    <li>客户画像构建依赖人工经验</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h4 class="text-xl font-semibold mb-3">大模型解决方案演示</h4>
+                                    <div class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg p-6 mb-4">
+                                        <div class="flex flex-col space-y-4">
+                                            <div class="flex items-start bg-white dark:bg-gray-800 p-3 rounded-lg shadow-sm">
+                                                <div class="font-medium mr-3">客户经理:</div>
+                                                <div>查一下张先生最近半年的理财产品购买记录和风险偏好</div>
+                                            </div>
+                                            <div class="flex items-start bg-primary-color bg-opacity-10 dark:bg-accent-color dark:bg-opacity-10 p-3 rounded-lg shadow-sm">
+                                                <div class="font-medium mr-3">智能助手:</div>
+                                                <div>
+                                                    <p class="mb-2">张先生(客户号: 1001XXXX)近半年理财产品购买记录如下:</p>
+                                                    <ul class="list-disc list-inside space-y-1 text-sm">
+                                                        <li>2023年3月: "安鑫享"固定收益类，50万元，预期年化收益4.2%</li>
+                                                        <li>2023年5月: "鑫动力"混合型基金，30万元</li>
+                                                        <li>2023年7月: "环球精选"QDII，20万元</li>
+                                                    </ul>
+                                                    <p class="mt-2">根据张先生的投资行为分析和风险评测问卷，其风险偏好为"平衡型"，可接受中等风险，但近期交易显示其对海外市场投资兴趣逐渐增强。</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-start bg-white dark:bg-gray-800 p-3 rounded-lg shadow-sm">
+                                                <div class="font-medium mr-3">客户经理:</div>
+                                                <div>帮我整理一份张先生的完整客户画像，明天需要拜访他</div>
+                                            </div>
+                                            <div class="flex items-start bg-primary-color bg-opacity-10 dark:bg-accent-color dark:bg-opacity-10 p-3 rounded-lg shadow-sm">
+                                                <div class="font-medium mr-3">智能助手:</div>
+                                                <div>
+                                                    <p class="mb-2">已为您生成张先生的完整客户画像，包含以下内容:</p>
+                                                    <ul class="list-disc list-inside space-y-1 text-sm">
+                                                        <li>基本信息与家庭状况</li>
+                                                        <li>资产负债情况分析</li>
+                                                        <li>投资偏好与风险承受能力</li>
+                                                        <li>近期金融需求趋势</li>
+                                                        <li>服务历史与满意度分析</li>
+                                                        <li>潜在需求与产品推荐</li>
+                                                    </ul>
+                                                    <p class="mt-2">完整报告已发送至您的工作邮箱，同时可在客户管理系统中查看。建议关注其对海外资产配置的兴趣增强这一变化。</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="text-xl font-semibold mb-3">工行推广建议</h4>
+                                    <div class="bg-green-50 dark:bg-green-900 dark:bg-opacity-20 p-4 rounded-lg">
+                                        <div class="flex">
+                                            <i class="fas fa-lightbulb text-yellow-500 mr-3 mt-1"></i>
+                                            <div>
+                                                <p>建议在客户经理工作平台集成智能客户信息助手功能，重点关注以下方面:</p>
+                                                <ul class="list-disc list-inside mt-2 space-y-1 text-sm">
+                                                    <li>系统整合：打通内部各系统数据，实现一站式查询</li>
+                                                    <li>权限管理：设置合理的客户信息访问权限体系</li>
+                                                    <li>移动端优化：支持手机、平板等移动设备随时查询</li>
+                                                    <li>离线功能：支持关键客户信息离线访问</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 智能产品推荐与方案生成 -->
+                <div class="max-w-6xl mx-auto fade-in-section">
+                    <div class="card p-8">
+                        <div class="flex flex-col md:flex-row gap-8">
+                            <div class="md:w-3/5">
+                                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                                    <i class="fas fa-gift text-primary-color dark:text-accent-color mr-3"></i>
+                                    智能产品推荐与方案生成
+                                </h3>
+                                
+                                <div class="mb-6">
+                                    <h4 class="text-xl font-semibold mb-3">场景痛点再现</h4>
+                                    <p class="mb-4">客户经理为客户推荐产品时，需要手动查找产品信息，对比分析，制作方案，耗时费力，且难以保证推荐的个性化和精准度。</p>
+                                    <div class="bg-red-100 dark:bg-red-900 dark:bg-opacity-30 rounded-lg p-4 mb-4">
+                                        <div class="flex">
+                                            <i class="fas fa-exclamation-triangle text-red-500 mr-3 mt-1"></i>
+                                            <div>
+                                                <p class="font-medium">产品推荐的挑战：</p>
+                                                <ul class="list-disc list-inside mt-2 space-y-1 text-sm">
+                                                    <li>银行产品种类繁多，难以全面掌握产品特点</li>
+                                                    <li>客户需求多样化，匹配度要求高</li>
+                                                    <li>产品组合方案制作耗时</li>
+                                                    <li>同质化推荐难以打动客户</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h4 class="text-xl font-semibold mb-3">大模型解决方案演示</h4>
+                                    <div class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg p-6 mb-4">
+                                        <div class="flex flex-col space-y-4">
+                                            <div class="flex items-start bg-white dark:bg-gray-800 p-3 rounded-lg shadow-sm">
+                                                <div class="font-medium mr-3">客户经理:</div>
+                                                <div>客户李女士想购买稳健型理财产品，收益率在4%以上，投资期限1年以内，有100万资金</div>
+                                            </div>
+                                            <div class="flex items-start bg-primary-color bg-opacity-10 dark:bg-accent-color dark:bg-opacity-10 p-3 rounded-lg shadow-sm">
+                                                <div class="font-medium mr-3">智能助手:</div>
+                                                <div>
+                                                    <p class="mb-2">根据李女士的需求，为她推荐以下产品组合:</p>
+                                                    <ol class="list-decimal list-inside space-y-2 text-sm">
+                                                        <li>
+                                                            <span class="font-medium">工银安盛"安享财富"(60万配置)</span>
+                                                            <ul class="list-disc list-inside ml-5 mt-1">
+                                                                <li>期限: 6个月</li>
+                                                                <li>预期年化收益: 4.2%</li>
+                                                                <li>风险等级: PR2(稳健型)</li>
+                                                                <li>优势: 保本型，收益稳定，可提前支取</li>
+                                                            </ul>
+                                                        </li>
+                                                        <li>
+                                                            <span class="font-medium">工银理财"鑫得利"(40万配置)</span>
+                                                            <ul class="list-disc list-inside ml-5 mt-1">
+                                                                <li>期限: 9个月</li>
+                                                                <li>预期年化收益: 4.5%</li>
+                                                                <li>风险等级: PR2(稳健型)</li>
+                                                                <li>优势: 收益较高，投资标的透明</li>
+                                                            </ul>
+                                                        </li>
+                                                    </ol>
+                                                    <p class="mt-2">组合综合收益约4.32%，完全符合客户需求。已生成完整产品方案，含风险提示、收益测算和对比分析。</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="text-xl font-semibold mb-3">工行推广建议</h4>
+                                    <div class="bg-green-50 dark:bg-green-900 dark:bg-opacity-20 p-4 rounded-lg">
+                                        <div class="flex">
+                                            <i class="fas fa-lightbulb text-yellow-500 mr-3 mt-1"></i>
+                                            <div>
+                                                <p>建议为客户经理配备智能产品推荐与方案生成工具，重点关注:</p>
+                                                <ul class="list-disc list-inside mt-2 space-y-1 text-sm">
+                                                    <li>产品库实时更新：确保系统内产品信息及时更新</li>
+                                                    <li>客户画像深度整合：将客户画像与推荐引擎深度整合</li>
+                                                    <li>方案模板丰富：提供多样化的方案模板</li>
+                                                    <li>合规审核嵌入：嵌入风险评级匹配和合规性审核</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="md:w-2/5">
+                                <img src="https://source.unsplash.com/random/600x800/?finance,product" alt="智能产品推荐" class="rounded-lg w-full h-64 object-cover shadow-lg mb-6">
+                                <div class="highlight-box">
+                                    <h4 class="font-bold text-lg mb-3">应用价值与效果分析</h4>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center justify-between">
+                                            <span>产品推荐效率提升</span>
+                                            <div class="w-1/2 bg-gray-300 rounded-full h-4">
+                                                <div class="bg-green-600 h-4 rounded-full" style="width: 55%"></div>
+                                            </div>
+                                            <span class="font-bold">55%</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span>方案制作时间缩短</span>
+                                            <div class="w-1/2 bg-gray-300 rounded-full h-4">
+                                                <div class="bg-green-600 h-4 rounded-full" style="width: 65%"></div>
+                                            </div>
+                                            <span class="font-bold">65%</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span>推荐精准度提升</span>
+                                            <div class="w-1/2 bg-gray-300 rounded-full h-4">
+                                                <div class="bg-green-600 h-4 rounded-full" style="width: 70%"></div>
+                                            </div>
+                                            <span class="font-bold">70%</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                                        <h5 class="font-medium mb-2">客户反馈提升</h5>
+                                        <div class="flex items-center space-x-1 text-yellow-500">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                            <span class="ml-2 text-gray-700 dark:text-gray-300">4.5/5</span>
+                                        </div>
+                                        <p class="text-sm mt-2 italic">"推荐的产品非常符合我的需求，客户经理准备的方案很专业"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 智能报告撰写与文档处理 -->
+                <div class="max-w-6xl mx-auto fade-in-section">
+                    <div class="card p-8">
+                        <div class="flex flex-col md:flex-row gap-8">
+                            <div class="md:w-2/5">
+                                <img src="https://source.unsplash.com/random/600x800/?report,document" alt="智能报告撰写" class="rounded-lg w-full h-64 object-cover shadow-lg mb-6">
+                                <div class="highlight-box">
+                                    <h4 class="font-bold text-lg mb-3">应用价值与效果分析</h4>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center justify-between">
+                                            <span>报告撰写时间缩短</span>
+                                            <div class="w-1/2 bg-gray-300 rounded-full h-4">
+                                                <div class="bg-green-600 h-4 rounded-full" style="width: 75%"></div>
+                                            </div>
+                                            <span class="font-bold">75%</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span>文档处理效率提升</span>
+                                            <div class="w-1/2 bg-gray-300 rounded-full h-4">
+                                                <div class="bg-green-600 h-4 rounded-full" style="width: 65%"></div>
+                                            </div>
+                                            <span class="font-bold">65%</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span>客户业务时间增加</span>
+                                            <div class="w-1/2 bg-gray-300 rounded-full h-4">
+                                                <div class="bg-green-600 h-4 rounded-full" style="width: 60%"></div>
+                                            </div>
+                                            <span class="font-bold">60%</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                                        <h5 class="font-medium mb-2">每周节省工作时间</h5>
+                                        <div class="text-center">
+                                            <span class="text-4xl font-bold text-primary-color dark:text-accent-color">8.5</span>
+                                            <span class="text-xl">小时</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="md:w-3/5">
+                                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                                    <i class="fas fa-file-alt text-primary-color dark:text-accent-color mr-3"></i>
+                                    智能报告撰写与文档处理
+                                </h3>
+                                
+                                <div class="mb-6">
+                                    <h4 class="text-xl font-semibold mb-3">场景痛点再现</h4>
+                                    <p class="mb-4">客户经理需要撰写大量的客户拜访报告、业务分析报告、市场分析报告等，耗费大量时间，且容易重复劳动。</p>
+                                    <div class="bg-red-100 dark:bg-red-900 dark:bg-opacity-30 rounded-lg p-4 mb-4">
+                                        <div class="flex">
+                                            <i class="fas fa-exclamation-triangle text-red-500 mr-3 mt-1"></i>
+                                            <div>
+                                                <p class="font-medium">报告撰写的困扰：</p>
+                                                <ul class="list-disc list-inside mt-2 space-y-1 text-sm">
+                                                    <li>每周需撰写多份客户拜访报告，格式固定但内容耗时</li>
+                                                    <li>业务分析报告需要整合多方数据，费时费力</li>
+                                                    <li>KYC文档、合同等文件处理繁琐</li>
+                                                    <li>报告质量参差不齐，缺乏标准化</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h4 class="text-xl font-semibold mb-3">大模型解决方案演示</h4>
+                                    <div class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg p-6 mb-4">
+                                        <div class="flex flex-col space-y-4">
+                                            <div class="flex items-start bg-white dark:bg-gray-800 p-3 rounded-lg shadow-sm">
+                                                <div class="font-medium mr-3">客户经理:</div>
+                                                <div>今天拜访了王总，讨论了他公司的融资需求，想扩大生产线，需要约2000万元贷款。他对我们的供应链金融方案很感兴趣。请帮我生成一份拜访报告。</div>
+                                            </div>
+                                            <div class="flex items-start bg-primary-color bg-opacity-10 dark:bg-accent-color dark:bg-opacity-10 p-3 rounded-lg shadow-sm">
+                                                <div class="font-medium mr-3">智能助手:</div>
+                                                <div>
+                                                    <p class="mb-2">已为您生成客户拜访报告，报告摘要如下:</p>
+                                                    <div class="p-3 bg-white dark:bg-gray-700 rounded-lg text-sm">
+                                                        <h5 class="font-bold mb-2">客户拜访报告</h5>
+                                                        <p><span class="font-medium">客户名称:</span> 王总(XX公司)</p>
+                                                        <p><span class="font-medium">拜访时间:</span> 2023年10月20日</p>
+                                                        <p><span class="font-medium">拜访地点:</span> 客户公司会议室</p>
+                                                        <p><span class="font-medium">拜访目的:</span> 了解客户融资需求，推介供应链金融方案</p>
+                                                        <p class="mt-2"><span class="font-medium">客户需求:</span></p>
+                                                        <ul class="list-disc list-inside ml-2">
+                                                            <li>扩大生产线融资需求，约2000万元</li>
+                                                            <li>贷款期限要求：2-3年</li>
+                                                            <li>对供应链金融方案表示浓厚兴趣</li>
+                                                        </ul>
+                                                        <p class="mt-2"><span class="font-medium">初步方案:</span></p>
+                                                        <ul class="list-disc list-inside ml-2">
+                                                            <li>建议1000万元固定资产贷款+1000万元供应链融资</li>
+                                                            <li>可考虑核心企业担保模式，降低融资成本</li>
+                                                        </ul>
+                                                        <p class="mt-2"><span class="font-medium">后续计划:</span></p>
+                                                        <ul class="list-disc list-inside ml-2">
+                                                            <li>一周内提供详细融资方案</li>
+                                                            <li>协调风控团队进行初步评估</li>
+                                                        </ul>
+                                                    </div>
+                                                    <p class="mt-2">完整报告已自动生成并保存至客户管理系统。同时已设置后续跟进提醒。</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="text-xl font-semibold mb-3">工行推广建议</h4>
+                                    <div class="bg-green-50 dark:bg-green-900 dark:bg-opacity-20 p-4 rounded-lg">
+                                        <div class="flex">
+                                            <i class="fas fa-lightbulb text-yellow-500 mr-3 mt-1"></i>
+                                            <div>
+                                                <p>建议在客户经理办公系统集成智能报告撰写与文档处理功能:</p>
+                                                <ul class="list-disc list-inside mt-2 space-y-1 text-sm">
+                                                    <li>多样化报告模板：提供客户拜访、业务分析等多种报告模板</li>
+                                                    <li>语音转文字：支持录音自动转换为结构化报告</li>
+                                                    <li>智能文档识别：支持合同、KYC文件等自动识别与处理</li>
+                                                    <li>审批流程整合：与内部审批流程整合，实现一键提交</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 智能客户沟通与话术支持 -->
+                <div class="max-w-6xl mx-auto fade-in-section">
+                    <div class="card p-8">
+                        <div class="flex flex-col md:flex-row gap-8">
+                            <div class="md:w-3/5">
+                                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                                    <i class="fas fa-comments text-primary-color dark:text-accent-color mr-3"></i>
+                                    智能客户沟通与话术支持
+                                </h3>
+                                
+                                <div class="mb-6">
+                                    <h4 class="text-xl font-semibold mb-3">场景痛点再现</h4>
+                                    <p class="mb-4">客户经理在与客户沟通时，有时难以准确把握客户需求，话术缺乏个性化和针对性，沟通效果不佳。</p>
+                                    <div class="bg-red-100 dark:bg-red-900 dark:bg-opacity-30 rounded-lg p-4 mb-4">
+                                        <div class="flex">
+                                            <i class="fas fa-exclamation-triangle text-red-500 mr-3 mt-1"></i>
+                                            <div>
+                                                <p class="font-medium">客户沟通的难点：</p>
+                                                <ul class="list-disc list-inside mt-2 space-y-1 text-sm">
+                                                    <li>面对不同性格客户缺乏针对性沟通策略</li>
+                                                    <li>复杂金融产品解释不够清晰易懂</li>
+                                                    <li>难以应对客户突发问题和异议</li>
+                                                    <li>缺乏有效的沟通技巧培训和工具支持</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h4 class="text-xl font-semibold mb-3">大模型解决方案演示</h4>
+                                    <div class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg p-6 mb-4">
+                                        <div class="flex flex-col space-y-4">
+                                            <div class="flex items-start bg-white dark:bg-gray-800 p-3 rounded-lg shadow-sm">
+                                                <div class="font-medium mr-3">客户经理:</div>
+                                                <div>客户对我们的外汇理财产品有顾虑，担心汇率风险太高，如何回应？</div>
+                                            </div>
+                                            <div class="flex items-start bg-primary-color bg-opacity-10 dark:bg-accent-color dark:bg-opacity-10 p-3 rounded-lg shadow-sm">
+                                                <div class="font-medium mr-3">智能助手:</div>
+                                                <div>
+                                                    <p class="mb-2">针对客户对外汇产品汇率风险的顾虑，建议以下沟通策略:</p>
+                                                    <div class="p-3 bg-white dark:bg-gray-700 rounded-lg text-sm">
+                                                        <p class="font-bold mb-1">确认顾虑</p>
+                                                        <p class="italic">"我理解您对汇率波动风险的担忧，这是很多投资者的共同顾虑。"</p>
+                                                        
+                                                        <p class="font-bold mt-3 mb-1">解释风险管理机制</p>
+                                                        <p class="italic">"我们的'环球臻选'外汇理财产品设有多重风险对冲机制，包括货币篮子分散风险和期权保护策略，可以有效控制极端汇率波动带来的损失。"</p>
+                                                        
+                                                        <p class="font-bold mt-3 mb-1">提供具体数据</p>
+                                                        <p class="italic">"过去三年，即使在全球金融市场动荡期间，该产品的最大回撤仅为3.2%，远低于同类产品平均水平。"</p>
+                                                        
+                                                        <p class="font-bold mt-3 mb-1">个性化资产配置建议</p>
+                                                        <p class="italic">"根据您的风险偏好，我们可以为您设计一个更平衡的投资组合，外汇产品仅占整体资产的15%-20%，这样既能获得国际市场的收益机会，又能控制总体风险。"</p>
+                                                    </div>
+                                                    <p class="mt-2">建议根据客户反应灵活调整沟通策略，关注客户的非语言反馈，及时回应进一步疑虑。</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="text-xl font-semibold mb-3">工行推广建议</h4>
+                                    <div class="bg-green-50 dark:bg-green-900 dark:bg-opacity-20 p-4 rounded-lg">
+                                        <div class="flex">
+                                            <i class="fas fa-lightbulb text-yellow-500 mr-3 mt-1"></i>
+                                            <div>
+                                                <p>建议为客户经理提供智能客户沟通与话术支持工具:</p>
+                                                <ul class="list-disc list-inside mt-2 space-y-1 text-sm">
+                                                    <li>场景化话术库：构建丰富的场景化话术库</li>
+                                                    <li>实时沟通辅助：开发移动端应用，支持实时沟通辅助</li>
+                                                    <li>客户画像融合：将客户画像与沟通策略深度融合</li>
+                                                    <li>话术学习模块：设计话术学习与演练模块，提升沟通技巧</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="md:w-2/5">
+                                <img src="https://source.unsplash.com/random/600x800/?conversation,meeting" alt="智能客户沟通" class="rounded-lg w-full h-64 object-cover shadow-lg mb-6">
+                                <div class="highlight-box">
+                                    <h4 class="font-bold text-lg mb-3">应用价值与效果分析</h4>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center justify-between">
+                                            <span>客户沟通效率提升</span>
+                                            <div class="w-1/2 bg-gray-300 rounded-full h-4">
+                                                <div class="bg-green-600 h-4 rounded-full" style="width: 35%"></div>
+                                            </div>
+                                            <span class="font-bold">35%</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span>客户满意度提升</span>
+                                            <div class="w-1/2 bg-gray-300 rounded-full h-4">
+                                                <div class="bg-green-600 h-4 rounded-full" style="width: 40%"></div>
+                                            </div>
+                                            <span class="font-bold">40%</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span>异议处理成功率提升</span>
+                                            <div class="w-1/2 bg-gray-300 rounded-full h-4">
+                                                <div class="bg-green-600 h-4 rounded-full" style="width: 45%"></div>
+                                            </div>
+                                            <span class="font-bold">45%</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                                        <h5 class="font-medium mb-2">客户转化率变化</h5>
+                                        <div class="flex items-center">
+                                            <div class="w-1/3 text-center">
+                                                <div class="text-lg font-bold">18.5%</div>
+                                                <div class="text-xs text-gray-500">应用前</div>
+                                            </div>
+                                            <div class="w-1/3 text-center">
+                                                <i class="fas fa-arrow-right text-green-500"></i>
+                                            </div>
+                                            <div class="w-1/3 text-center">
+                                                <div class="text-lg font-bold text-green-600">26.2%</div>
+                                                <div class="text-xs text-gray-500">应用后</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 客户经理赋能总结 -->
+                <div class="max-w-6xl mx-auto fade-in-section">
+                    <div class="card p-8 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:from-opacity-30 dark:to-indigo-900 dark:to-opacity-30">
+                        <h3 class="text-2xl font-bold mb-6 text-center">客户经理赋能总结与行动倡议</h3>
+                        <div class="max-w-3xl mx-auto">
+                            <div class="prose-lg">
+                                <p class="mb-4">大模型技术为客户经理日常工作带来了革命性变化，显著提升了信息获取、产品推荐、报告撰写和客户沟通等关键环节的效率与质量。从数据上看，大模型应用可为客户经理每周节省8-10小时的时间，将这些时间重新投入到高价值的客户服务和业务拓展中。</p>
+                                <div class="p-5 bg-white dark:bg-gray-800 rounded-lg shadow-md mt-6 mb-6">
+                                    <h4 class="font-bold text-xl mb-4 text-center text-primary-color dark:text-accent-color">行动倡议</h4>
+                                    <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="bg-blue-100 dark:bg-blue-900 dark:bg-opacity-50 w-12 h-12 rounded-full flex items-center justify-center">
+                                                <i class="fas fa-lightbulb text-yellow-500 text-xl"></i>
+                                            </div>
+                                            <span>拥抱变革</span>
+                                        </div>
+                                        <div class="hidden md:block">
+                                            <i class="fas fa-angle-right text-gray-400"></i>
+                                        </div>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="bg-blue-100 dark:bg-blue-900 dark:bg-opacity-50 w-12 h-12 rounded-full flex items-center justify-center">
+                                                <i class="fas fa-book-reader text-blue-600 dark:text-blue-400 text-xl"></i>
+                                            </div>
+                                            <span>持续学习</span>
+                                        </div>
+                                        <div class="hidden md:block">
+                                            <i class="fas fa-angle-right text-gray-400"></i>
+                                        </div>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="bg-blue-100 dark:bg-blue-900 dark:bg-opacity-50 w-12 h-12 rounded-full flex items-center justify-center">
+                                                <i class="fas fa-tools text-indigo-600 dark:text-indigo-400 text-xl"></i>
+                                            </div>
+                                            <span>工具实践</span>
+                                        </div>
+                                        <div class="hidden md:block">
+                                            <i class="fas fa-angle-right text-gray-400"></i>
+                                        </div>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="bg-blue-100 dark:bg-blue-900 dark:bg-opacity-50 w-12 h-12 rounded-full flex items-center justify-center">
+                                                <i class="fas fa-crown text-yellow-600 text-xl"></i>
+                                            </div>
+                                            <span>领先发展</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p>让我们一起积极拥抱大模型技术，提升自身数字化能力，充分利用智能工具，持续提升专业价值，为客户提供更卓越的服务，共同迎接智能金融的新时代！</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 挑战与展望 -->
+    <section id="challenges" class="py-16 fade-in-section">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">大模型应用的挑战与应对</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- 挑战1 -->
+                <div class="challenge-card p-6 hover:shadow-lg transition-all">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-red-100 dark:bg-red-900 dark:bg-opacity-30 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-shield-alt text-red-600 dark:text-red-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">数据安全与隐私风险</h3>
+                    </div>
+                    <p class="mb-4">大模型应用涉及大量敏感客户数据，存在数据泄露和隐私侵犯风险。</p>
+                    <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <h4 class="font-bold mb-2">应对策略</h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>建立全流程数据安全防护体系</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>实施数据脱敏和隐私计算技术</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>加强员工数据安全意识培训</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- 挑战2 -->
+                <div class="challenge-card p-6 hover:shadow-lg transition-all">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-yellow-100 dark:bg-yellow-900 dark:bg-opacity-30 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-balance-scale text-yellow-600 dark:text-yellow-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">模型偏见与公平性</h3>
+                    </div>
+                    <p class="mb-4">大模型可能继承训练数据中的偏见，导致不公平决策和歧视性结果。</p>
+                    <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <h4 class="font-bold mb-2">应对策略</h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>加强模型偏见检测与评估</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>采用多元化、平衡的训练数据</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>建立人机协作决策机制</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- 挑战3 -->
+                <div class="challenge-card p-6 hover:shadow-lg transition-all">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 dark:bg-blue-900 dark:bg-opacity-30 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-search text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">模型可解释性</h3>
+                    </div>
+                    <p class="mb-4">大模型决策过程往往不透明，难以解释，这在金融行业监管严格的环境下是一大挑战。</p>
+                    <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <h4 class="font-bold mb-2">应对策略</h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>开发可解释AI技术与工具</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>建立模型决策解释机制</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>加强与监管机构沟通合作</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- 挑战4 -->
+                <div class="challenge-card p-6 hover:shadow-lg transition-all">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-green-100 dark:bg-green-900 dark:bg-opacity-30 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-cogs text-green-600 dark:text-green-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">技术成熟度与落地</h3>
+                    </div>
+                    <p class="mb-4">大模型技术仍在快速发展中，银行业应用面临技术成熟度不足和落地障碍。</p>
+                    <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <h4 class="font-bold mb-2">应对策略</h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>采用渐进式应用策略</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>加强产学研合作与技术追踪</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>打造内部技术创新试验场</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- 挑战5 -->
+                <div class="challenge-card p-6 hover:shadow-lg transition-all">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-purple-100 dark:bg-purple-900 dark:bg-opacity-30 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-users text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">人才缺口与技能升级</h3>
+                    </div>
+                    <p class="mb-4">大模型应用需要大量AI人才和数字技能升级，银行业面临人才缺口挑战。</p>
+                    <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <h4 class="font-bold mb-2">应对策略</h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>建立AI人才培养体系</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>开展员工数字技能培训</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>与高校合作建立人才培养基地</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- 挑战6 -->
+                <div class="challenge-card p-6 hover:shadow-lg transition-all">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-indigo-100 dark:bg-indigo-900 dark:bg-opacity-30 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-gavel text-indigo-600 dark:text-indigo-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">伦理与监管挑战</h3>
+                    </div>
+                    <p class="mb-4">大模型应用涉及伦理问题和监管合规要求，需要妥善应对。</p>
+                    <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <h4 class="font-bold mb-2">应对策略</h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>建立AI伦理委员会</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>制定AI应用伦理指南</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>积极参与监管沙盒试点</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 max-w-4xl mx-auto fade-in-section">
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold mb-6 text-center">工商银行应对策略</h3>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-xl font-semibold mb-4 flex items-center">
+                                <i class="fas fa-shield-alt text-primary-color dark:text-accent-color mr-3"></i>
+                                安全与合规体系
+                            </h4>
+                            <p>构建全面的大模型应用安全与合规管理体系，包括数据安全、模型风险、伦理治理等方面，确保大模型应用合规合法。</p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold mb-4 flex items-center">
+                                <i class="fas fa-graduation-cap text-primary-color dark:text-accent-color mr-3"></i>
+                                人才培养计划
+                            </h4>
+                            <p>启动"AI人才千人计划"，培养既懂金融业务又懂AI技术的复合型人才，建立内部AI知识分享社区，促进技术传播。</p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold mb-4 flex items-center">
+                                <i class="fas fa-flask text-primary-color dark:text-accent-color mr-3"></i>
+                                创新实验室
+                            </h4>
+                            <p>设立大模型创新实验室，聚焦技术突破和应用创新，建立敏捷开发和快速试错机制，加速技术成熟和落地。</p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold mb-4 flex items-center">
+                                <i class="fas fa-handshake text-primary-color dark:text-accent-color mr-3"></i>
+                                生态合作
+                            </h4>
+                            <p>与顶尖科技公司、高校和研究机构建立战略合作，共同解决技术难题，加强产学研深度融合，构建开放创新生态。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 行动路线图 -->
+    <section id="roadmap" class="py-16 bg-gray-50 dark:bg-gray-900 fade-in-section">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">工商银行拥抱大模型：战略布局与行动路线图</h2>
+            
+            <div class="max-w-6xl mx-auto mb-16">
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold mb-8 text-center">工商银行的优势与机遇</h3>
+                    
+                    <div class="grid md:grid-cols-4 gap-6">
+                        <div class="text-center p-5">
+                            <div class="icon-box mb-4">
+                                <i class="fas fa-database text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2">海量数据</h4>
+                            <p class="text-sm">6亿+客户数据</p>
+                            <p class="text-sm">数十年交易记录</p>
+                            <p class="text-sm">丰富的多领域数据</p>
+                        </div>
+                        
+                        <div class="text-center p-5">
+                            <div class="icon-box mb-4">
+                                <i class="fas fa-microchip text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2">技术基础</h4>
+                            <p class="text-sm">领先的金融科技投入</p>
+                            <p class="text-sm">完善的IT基础设施</p>
+                            <p class="text-sm">成熟的数据中心</p>
+                        </div>
+                        
+                        <div class="text-center p-5">
+                            <div class="icon-box mb-4">
+                                <i class="fas fa-users text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2">人才优势</h4>
+                            <p class="text-sm">高素质专业团队</p>
+                            <p class="text-sm">多学科人才储备</p>
+                            <p class="text-sm">创新文化氛围</p>
+                        </div>
+                        
+                        <div class="text-center p-5">
+                            <div class="icon-box mb-4">
+                                <i class="fas fa-sitemap text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2">场景丰富</h4>
+                            <p class="text-sm">全面的业务场景</p>
+                            <p class="text-sm">多元的客户群体</p>
+                            <p class="text-sm">线上线下全渠道</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 战略布局 -->
+            <div class="max-w-6xl mx-auto mb-16 fade-in-section">
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold mb-8">工商银行大模型战略布局</h3>
+                    
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-100 dark:bg-blue-900 dark:bg-opacity-50 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-server text-blue-600 dark:text-blue-400"></i>
+                                </div>
+                                <h4 class="text-xl font-bold">自主可控平台</h4>
+                            </div>
+                            <p>构建自主研发或合作共建的大模型平台，掌握核心技术，满足银行特定需求，保障数据安全。</p>
+                            <div class="mt-4">
+                                <span class="rounded-tag">自主研发</span>
+                                <span class="rounded-tag">技术掌控</span>
+                                <span class="rounded-tag">安全可控</span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-100 dark:bg-blue-900 dark:bg-opacity-50 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-bullseye text-blue-600 dark:text-blue-400"></i>
+                                </div>
+                                <h4 class="text-xl font-bold">核心场景优先</h4>
+                            </div>
+                            <p>优先在客户服务、风险管理、运营效率等核心业务场景应用大模型，取得突破，形成标杆案例。</p>
+                            <div class="mt-4">
+                                <span class="rounded-tag">客户服务</span>
+                                <span class="rounded-tag">风险管理</span>
+                                <span class="rounded-tag">运营效率</span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-100 dark:bg-blue-900 dark:bg-opacity-50 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-network-wired text-blue-600 dark:text-blue-400"></i>
+                                </div>
+                                <h4 class="text-xl font-bold">生态共建</h4>
+                            </div>
+                            <p>与科技公司、科研机构等合作，构建大模型应用生态，共同推进技术创新和应用落地，实现互利共赢。</p>
+                            <div class="mt-4">
+                                <span class="rounded-tag">开放合作</span>
+                                <span class="rounded-tag">资源共享</span>
+                                <span class="rounded-tag">创新共赢</span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-100 dark:bg-blue-900 dark:bg-opacity-50 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-user-graduate text-blue-600 dark:text-blue-400"></i>
+                                </div>
+                                <h4 class="text-xl font-bold">人才与组织</h4>
+                            </div>
+                            <p>加强人才培养，调整组织架构，打造既懂AI又懂金融的复合型人才团队，适应大模型应用带来的变革。</p>
+                            <div class="mt-4">
+                                <span class="rounded-tag">人才培养</span>
+                                <span class="rounded-tag">组织优化</span>
+                                <span class="rounded-tag">文化建设</span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-100 dark:bg-blue-900 dark:bg-opacity-50 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-balance-scale text-blue-600 dark:text-blue-400"></i>
+                                </div>
+                                <h4 class="text-xl font-bold">风险管控</h4>
+                            </div>
+                            <p>建立完善的伦理风险管理体系，加强与监管部门沟通，确保大模型应用合规合法，防范各类风险。</p>
+                            <div class="mt-4">
+                                <span class="rounded-tag">伦理治理</span>
+                                <span class="rounded-tag">合规管理</span>
+                                <span class="rounded-tag">风险防控</span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-100 dark:bg-blue-900 dark:bg-opacity-50 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-rocket text-blue-600 dark:text-blue-400"></i>
+                                </div>
+                                <h4 class="text-xl font-bold">创新驱动</h4>
+                            </div>
+                            <p>鼓励创新文化，设立专门的创新基金和激励机制，支持大模型创新应用，持续推动技术与业务融合创新。</p>
+                            <div class="mt-4">
+                                <span class="rounded-tag">创新激励</span>
+                                <span class="rounded-tag">试错容忍</span>
+                                <span class="rounded-tag">持续迭代</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 行动路线图 -->
+            <div class="max-w-6xl mx-auto fade-in-section">
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold mb-8">工商银行大模型行动路线图</h3>
+                    
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h4 class="text-xl font-bold mb-3">第一阶段: 探索与试点 (近期)</h4>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h5 class="font-semibold mb-2">核心任务</h5>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-start">
+                                            <i class="fas fa-caret-right text-primary-color dark:text-accent-color mt-1 mr-2"></i>
+                                            <span>开展大模型技术调研和场景探索</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-caret-right text-primary-color dark:text-accent-color mt-1 mr-2"></i>
+                                            <span>启动客户服务、客户经理赋能等试点项目</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-caret-right text-primary-color dark:text-accent-color mt-1 mr-2"></i>
+                                            <span>培养种子人才，建立初步技术能力</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-caret-right text-primary-color dark:text-accent-color mt-1 mr-2"></i>
+                                            <span>制定大模型应用安全与合规框架</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-semibold mb-2">预期成果</h5>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-start">
+                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                            <span>完成3-5个高价值场景的试点应用</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                            <span>建立初步的大模型应用技术框架</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                            <span>培养100名大模型应用人才</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                            <span>形成大模型应用安全与合规指南</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <h4 class="text-xl font-bold mb-3">第二阶段: 深化与扩展 (中期)</h4>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h5 class="font-semibold mb-2">核心任务</h5>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-start">
+                                            <i class="fas fa-caret-right text-primary-color dark:text-accent-color mt-1 mr-2"></i>
+                                            <span>构建自主可控的大模型平台</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-caret-right text-primary-color dark:text-accent-color mt-1 mr-2"></i>
+                                            <span>在核心业务场景大规模应用大模型</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-caret-right text-primary-color dark:text-accent-color mt-1 mr-2"></i>
+                                            <span>扩大人才队伍，提升组织能力</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-caret-right text-primary-color dark:text-accent-color mt-1 mr-2"></i>
+                                            <span>加强与合作伙伴生态建设</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-semibold mb-2">预期成果</h5>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-start">
+                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                            <span>建成工行特色的大模型平台</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                            <span>在20+业务场景实现规模化应用</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                            <span>培养1000名大模型应用人才</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                            <span>形成初步的大模型应用生态</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <h4 class="text-xl font-bold mb-3">第三阶段: 引领与创新 (远期)</h4>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h5 class="font-semibold mb-2">核心任务</h5>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-start">
+                                            <i class="fas fa-caret-right text-primary-color dark:text-accent-color mt-1 mr-2"></i>
+                                            <span>全面拥抱大模型，实现业务智能化转型</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-caret-right text-primary-color dark:text-accent-color mt-1 mr-2"></i>
+                                            <span>引领金融科技创新，打造行业标杆</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-caret-right text-primary-color dark:text-accent-color mt-1 mr-2"></i>
+                                            <span>构建开放共赢的大模型应用生态</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-caret-right text-primary-color dark:text-accent-color mt-1 mr-2"></i>
+                                            <span>塑造智能金融新模式</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-semibold mb-2">预期成果</h5>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-start">
+                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                            <span>大模型赋能全行80%以上业务场景</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                            <span>成为金融行业大模型应用标杆</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                            <span>构建完善的大模型创新生态</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                            <span>引领智能金融发展新方向</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 总结与展望 -->
+    <section class="py-16 fade-in-section">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="card p-8 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:from-opacity-30 dark:to-indigo-900 dark:to-opacity-30">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-center">总结与展望：共绘智能金融新蓝图</h2>
+                    
+                    <div class="prose-lg max-w-none">
+                        <p class="mb-6">大模型技术正以前所未有的速度和深度改变着金融服务业的面貌，为银行业带来了重塑业务流程、提升客户体验、增强风险管控和提高运营效率的巨大机遇。</p>
+                        
+                        <p class="mb-6">工商银行作为中国乃至全球领先的金融机构，拥有海量数据、丰富场景、强大技术基础和优秀人才团队，在大模型应用方面具有独特优势。通过实施本次分享的战略布局和行动路线图，工行有望在智能金融时代率先突破，引领行业发展，为客户创造更大价值。</p>
+                        
+                        <p class="mb-6">未来，大模型将深刻改变银行的经营模式和服务方式，催生新的金融产品和服务形态，推动银行向更智能、更开放、更普惠的方向发展。让我们携手共进，积极拥抱大模型技术，共同开创智能金融新时代，将工商银行打造成为智能金融的引领者！</p>
+                        
+                        <div class="mt-8 text-center">
+                            <h3 class="text-xl font-bold mb-4">进一步阅读</h3>
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                                    <h4 class="font-bold mb-2">《大模型与金融革新》</h4>
+                                    <p class="text-sm">探讨大模型如何重塑金融服务的前沿研究</p>
+                                </div>
+                                <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                                    <h4 class="font-bold mb-2">《银行数字化转型之路》</h4>
+                                    <p class="text-sm">全球领先银行的数字化转型实践与经验</p>
+                                </div>
+                                <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                                    <h4 class="font-bold mb-2">《AI伦理与金融监管》</h4>
+                                    <p class="text-sm">金融科技时代的伦理挑战与监管应对</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="py-12 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-8 md:mb-0">
+                        <div class="flex items-center">
+                            <i class="fas fa-landmark text-3xl text-blue-800 dark:text-red-500 mr-3"></i>
+                            <span class="font-serif font-bold text-xl">工商银行</span>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">您身边的银行，可信赖的银行</p>
+                    </div>
+                    
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-color dark:hover:text-accent-color transition-all">
+                            <i class="fab fa-weixin text-2xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-color dark:hover:text-accent-color transition-all">
+                            <i class="fab fa-weibo text-2xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-color dark:hover:text-accent-color transition-all">
+                            <i class="fas fa-envelope text-2xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-color dark:hover:text-accent-color transition-all">
+                            <i class="fas fa-phone text-2xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700 text-center text-sm text-gray-600 dark:text-gray-400">
+                    <p>© 2023 中国工商银行 版权所有</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化 Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default',
+            flowchart: { 
+                curve: 'basis' 
+            }
+        });
+        
+        // 主题切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        // 检查用户偏好和本地存储
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const currentTheme = localStorage.getItem('theme');
+        
+        if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
+            body.classList.remove('light');
+            body.classList.add('dark');
+            themeToggle.classList.add('dark');
+            mermaid.initialize({ theme: 'dark' });
+        } else {
+            body.classList.remove('dark');
+            body.classList.add('light');
+            themeToggle.classList.remove('dark');
+            mermaid.initialize({ theme: 'default' });
+        }
+        
+        // 主题切换事件
+        themeToggle.addEventListener('click', function() {
+            if (body.classList.contains('dark')) {
+                body.classList.remove('dark');
+                body.classList.add('light');
+                themeToggle.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                mermaid.initialize({ theme: 'default' });
+            } else {
+                body.classList.remove('light');
+                body.classList.add('dark');
+                themeToggle.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                mermaid.initialize({ theme: 'dark' });
+            }
+        });
+        
+        // 移动端菜单
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        menuToggle.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // 关闭移动端菜单（当点击菜单项时）
+        document.querySelectorAll('#mobileMenu a').forEach(item => {
+            item.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // 滚动渐入效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeSections = document.querySelectorAll('.fade-in-section');
+            
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            fadeSections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>

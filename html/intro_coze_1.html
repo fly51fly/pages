@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coze AI Bot开发平台: 快速入门指南与最佳实践</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4A6FFF;
+            --secondary-color: #FF5E7D;
+            --text-color: #333333;
+            --bg-color: #FFFFFF;
+            --bg-secondary: #F7F9FC;
+            --border-color: #E2E8F0;
+            --highlight-color: #FFEAA7;
+            --link-color: #3B82F6;
+            --muted-color: #718096;
+            --card-bg: #FFFFFF;
+            --gradient-start: #4A6FFF;
+            --gradient-end: #FF5E7D;
+            --code-bg: #F1F5F9;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #6D8DFF;
+            --secondary-color: #FF7D96;
+            --text-color: #E2E8F0;
+            --bg-color: #1A202C;
+            --bg-secondary: #2D3748;
+            --border-color: #4A5568;
+            --highlight-color: #805AD5;
+            --link-color: #90CDF4;
+            --muted-color: #A0AEC0;
+            --card-bg: #2D3748;
+            --gradient-start: #6D8DFF;
+            --gradient-end: #FF7D96;
+            --code-bg: #2D3748;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', Tahoma, Arial, Roboto, "Droid Sans", "Helvetica Neue", "Droid Sans Fallback", "Heiti SC", "Hiragino Sans GB", Simsun, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 6rem 0 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='rgba(255,255,255,.07)' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.8;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            font-size: 24px;
+            margin-bottom: 1.5rem;
+        }
+
+        article p {
+            margin-bottom: 1.5rem;
+        }
+
+        article h2 {
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        article h3 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .first-letter {
+            float: left;
+            font-size: 4rem;
+            line-height: 1;
+            font-weight: 700;
+            margin-right: 0.75rem;
+            margin-top: 0.5rem;
+            font-family: 'Noto Serif SC', serif;
+            color: var(--primary-color);
+        }
+
+        .diagram {
+            background-color: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .toc {
+            position: sticky;
+            top: 6rem;
+            max-height: calc(100vh - 8rem);
+            overflow-y: auto;
+            padding-right: 1rem;
+        }
+
+        .toc-link {
+            display: block;
+            padding: 0.5rem 0;
+            color: var(--muted-color);
+            border-left: 2px solid transparent;
+            padding-left: 1rem;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .toc-link:hover {
+            color: var(--link-color);
+            border-left-color: var(--link-color);
+        }
+
+        .toc-link.active {
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .toc-h3 {
+            padding-left: 2rem;
+            font-size: 0.8125rem;
+        }
+
+        code {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            background-color: var(--code-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.875em;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .theme-switch {
+            background-color: var(--bg-secondary);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .theme-switch:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .footer {
+            background-color: var(--bg-secondary);
+            padding: 4rem 0;
+            margin-top: 6rem;
+        }
+
+        @media (max-width: 768px) {
+            .toc {
+                position: static;
+                margin-bottom: 2rem;
+            }
+            
+            .hero {
+                padding: 4rem 0 2rem;
+            }
+            
+            h1 {
+                font-size: 2.25rem !important;
+            }
+            
+            .feature-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+        
+        /* 补充代码高亮样式 */
+        .highlight {
+            background-color: var(--highlight-color);
+            padding: 0 0.25em;
+            border-radius: 2px;
+        }
+        
+        /* 引用样式 */
+        blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: var(--muted-color);
+        }
+        
+        /* 步骤标记样式 */
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            margin-right: 0.75rem;
+        }
+        
+        /* 进度指示器 */
+        .progress-indicator {
+            display: flex;
+            margin: 2rem 0;
+        }
+        
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .progress-step::before {
+            content: "";
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: var(--border-color);
+            z-index: 1;
+        }
+        
+        .progress-step:first-child::before {
+            left: 50%;
+        }
+        
+        .progress-step:last-child::before {
+            right: 50%;
+        }
+        
+        .progress-marker {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            margin: 0 auto 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .progress-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 bg-opacity-90 backdrop-filter backdrop-blur-md z-50" style="background-color: var(--bg-color);">
+        <div class="container mx-auto px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center">
+                <span class="text-2xl font-bold" style="background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    扣子
+                </span>
+                <span class="ml-2 text-sm px-2 py-1 rounded-md font-medium" style="background-color: var(--bg-secondary); color: var(--muted-color);">Coze AI</span>
+            </div>
+            <div class="flex items-center">
+                <button class="theme-switch mr-4" id="themeToggle" aria-label="切换主题模式">
+                    <i class="fas fa-moon dark:hidden"></i>
+                    <i class="fas fa-sun hidden dark:block"></i>
+                </button>
+                <a href="#" class="hidden md:inline-block px-4 py-2 font-medium rounded-lg" style="background-color: var(--bg-secondary); color: var(--text-color);">
+                    <i class="fas fa-code mr-2"></i>开始使用
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 部分 -->
+    <section class="hero">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="md:w-2/3">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">Coze AI Bot 开发平台<br>快速入门指南与最佳实践</h1>
+                <p class="text-xl mb-8 opacity-90">无需编程背景，快速构建智能机器人，<br>从简单问答到复杂对话任务一站式解决方案</p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#quick-start" class="px-6 py-3 rounded-lg font-medium bg-white text-gray-900 hover:shadow-lg transition transform hover:-translate-y-1">
+                        <i class="fas fa-rocket mr-2"></i>快速开始
+                    </a>
+                    <a href="#best-practices" class="px-6 py-3 rounded-lg font-medium border border-white text-white hover:bg-white hover:bg-opacity-20 transition">
+                        <i class="fas fa-crown mr-2"></i>最佳实践
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心功能概览 -->
+    <section class="py-16 bg-opacity-50" style="background-color: var(--bg-secondary);">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">核心功能概览</h2>
+                <p class="text-lg md:w-2/3 mx-auto" style="color: var(--muted-color);">
+                    Coze 提供了丰富多样的功能，帮助您快速构建智能 AI 机器人
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="card p-6">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">角色设定</h3>
+                    <p style="color: var(--muted-color);">
+                        为您的机器人建立身份、目标和专业技能，明确其如何与用户互动
+                    </p>
+                </div>
+                
+                <div class="card p-6">
+                    <div class="feature-icon">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">插件系统</h3>
+                    <p style="color: var(--muted-color);">
+                        通过API连接各种服务，使用预装插件或创建自定义插件扩展机器人能力
+                    </p>
+                </div>
+                
+                <div class="card p-6">
+                    <div class="feature-icon">
+                        <i class="fas fa-sitemap"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">工作流系统</h3>
+                    <p style="color: var(--muted-color);">
+                        通过拖放界面设计多步骤任务，提高机器人处理复杂请求的效率
+                    </p>
+                </div>
+                
+                <div class="card p-6">
+                    <div class="feature-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">记忆库</h3>
+                    <p style="color: var(--muted-color);">
+                        保存并理解对话细节，支持添加外部知识库以补充模型知识
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 主要内容区域 -->
+    <section class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-wrap">
+                <!-- 侧边栏目录 -->
+                <div class="w-full lg:w-1/4 mb-8 lg:mb-0">
+                    <div class="toc">
+                        <h3 class="text-lg font-bold mb-4">目录</h3>
+                        <a href="#understanding-coze" class="toc-link">了解 Coze 及其核心能力</a>
+                        <a href="#foundation-features" class="toc-link toc-h3">基础功能</a>
+                        <a href="#advanced-capabilities" class="toc-link toc-h3">高级功能</a>
+                        <a href="#quick-start" class="toc-link">创建您的第一个 AI 机器人</a>
+                        <a href="#step1" class="toc-link toc-h3">步骤 1: 创建与设置</a>
+                        <a href="#step2" class="toc-link toc-h3">步骤 2: 定义角色与目标</a>
+                        <a href="#step3" class="toc-link toc-h3">步骤 3: 实现工作流</a>
+                        <a href="#step4" class="toc-link toc-h3">步骤 4: 集成知识库</a>
+                        <a href="#step5" class="toc-link toc-h3">步骤 5: 添加记忆能力</a>
+                        <a href="#step6" class="toc-link toc-h3">步骤 6: 测试与部署</a>
+                        <a href="#best-practices" class="toc-link">最佳实践与高级应用</a>
+                        <a href="#workflows" class="toc-link toc-h3">优化复杂任务工作流</a>
+                        <a href="#image-processing" class="toc-link toc-h3">利用图像处理功能</a>
+                        <a href="#knowledge-assistant" class="toc-link toc-h3">创建知识管理助手</a>
+                        <a href="#multi-agent" class="toc-link toc-h3">设计多代理系统</a>
+                        <a href="#educational" class="toc-link toc-h3">实现教育助手</a>
+                        <a href="#conclusion" class="toc-link">结论</a>
+                    </div>
+                </div>
+                
+                <!-- 正文内容 -->
+                <div class="w-full lg:w-3/4">
+                    <article>
+                        <h2 id="understanding-coze" class="text-3xl font-bold">了解 Coze 及其核心能力</h2>
+                        <p>
+                            <span class="first-letter">C</span>oze (扣子) 是由字节跳动开发的新一代一站式 AI Bot 开发平台，在 AI 开发社区中获得了广泛关注。该平台使用户无论其编程背景如何，都能快速构建由 AI 驱动的机器人，从简单的问答到复杂的对话任务，一应俱全。Coze 通过利用大型语言模型极大地简化了机器人创建过程，同时为用户提供强大的配置选项，确保其机器人能够适当地响应用户查询。
+                        </p>
+                        
+                        <h3 id="foundation-features" class="text-2xl font-bold">基础功能</h3>
+                        <p>
+                            Coze 的核心提供了几个构成任何 AI 机器人基础的基本功能:
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+                            <div class="card p-6">
+                                <h4 class="text-lg font-bold mb-3 flex items-center">
+                                    <i class="fas fa-user-cog text-xl mr-3" style="color: var(--primary-color);"></i>
+                                    角色设定与提示工程
+                                </h4>
+                                <p>
+                                    允许开发者建立机器人的身份、目标和专业技能。例如，您可以将机器人设计为产品问答助手、新闻记者或翻译助手。
+                                </p>
+                            </div>
+                            
+                            <div class="card p-6">
+                                <h4 class="text-lg font-bold mb-3 flex items-center">
+                                    <i class="fas fa-puzzle-piece text-xl mr-3" style="color: var(--primary-color);"></i>
+                                    内置插件系统
+                                </h4>
+                                <p>
+                                    通过 API 连接各种服务，扩展机器人的能力。用户可以使用预装插件或创建自定义插件来集成他们需要的特定 API。
+                                </p>
+                            </div>
+                            
+                            <div class="card p-6">
+                                <h4 class="text-lg font-bold mb-3 flex items-center">
+                                    <i class="fas fa-project-diagram text-xl mr-3" style="color: var(--primary-color);"></i>
+                                    工作流系统
+                                </h4>
+                                <p>
+                                    能够规划和实现复杂的功能逻辑。通过拖放界面，用户可以设计多步骤任务，提高机器人处理复杂请求的效率。
+                                </p>
+                            </div>
+                            
+                            <div class="card p-6">
+                                <h4 class="text-lg font-bold mb-3 flex items-center">
+                                    <i class="fas fa-memory text-xl mr-3" style="color: var(--primary-color);"></i>
+                                    记忆库功能
+                                </h4>
+                                <p>
+                                    保存并理解对话细节，同时支持添加外部知识库以补充模型的知识，从而实现更有针对性和个性化的互动。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <h3 id="advanced-capabilities" class="text-2xl font-bold">高级功能</h3>
+                        <p>
+                            除了这些基础元素外，Coze 还提供了几个进一步提升用户体验的高级功能：
+                        </p>
+                        
+                        <div class="bg-opacity-50 rounded-xl p-6 my-8" style="background-color: var(--bg-secondary);">
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <span>支持将机器人发布到各种社交应用，扩大其覆盖范围至更广泛的受众</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <span>定时任务功能，在预定时间条件下触发自动化消息</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <span>开场白功能，快速向用户介绍机器人的功能</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <span>用户问题建议功能，在每次回复后自动提供三个上下文相关的问题</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <span>语音设置，决定用于交流的语言和语调</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 功能关系可视化 -->
+                        <div class="diagram">
+                            <h4 class="text-xl font-bold mb-4 text-center">Coze 平台功能关系图</h4>
+                            <div class="mermaid">
+                                flowchart TB
+                                    A[Coze AI Bot平台] --> B[基础功能]
+                                    A --> C[高级功能]
+                                    
+                                    B --> D[角色设定与提示工程]
+                                    B --> E[插件系统]
+                                    B --> F[工作流系统]
+                                    B --> G[记忆库功能]
+                                    
+                                    C --> H[社交应用发布]
+                                    C --> I[定时任务]
+                                    C --> J[开场白]
+                                    C --> K[问题建议]
+                                    C --> L[语音设置]
+                                    
+                                    style A fill:#4A6FFF,color:#fff
+                                    style B fill:#36B37E,color:#fff
+                                    style C fill:#FF5E7D,color:#fff
+                            </div>
+                        </div>
+                        
+                        <h2 id="quick-start" class="text-3xl font-bold">创建您的第一个 AI 机器人：步骤指南</h2>
+                        <p>
+                            在 Coze 上构建 AI 机器人非常简单，无需任何编程专业知识。以下是创建您第一个机器人的系统方法：
+                        </p>
+                        
+                        <!-- 步骤进度指示器 -->
+                        <div class="progress-indicator">
+                            <div class="progress-step">
+                                <div class="progress-marker">1</div>
+                                <div class="progress-title">创建与设置</div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="progress-marker">2</div>
+                                <div class="progress-title">定义角色</div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="progress-marker">3</div>
+                                <div class="progress-title">实现工作流</div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="progress-marker">4</div>
+                                <div class="progress-title">知识库集成</div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="progress-marker">5</div>
+                                <div class="progress-title">添加记忆</div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="progress-marker">6</div>
+                                <div class="progress-title">测试与部署</div>
+                            </div>
+                        </div>
+                        
+                        <h3 id="step1" class="text-2xl font-bold mt-12">
+                            <span class="step-number">1</span> 机器人创建与设置
+                        </h3>
+                        <p>
+                            首先登录 Coze 并导航到左侧边栏中的"Plugin bot"部分开始创建过程。系统会在您的个人空间内自动建立一个个人团队，其中创建的资源（如机器人、插件和知识库）无法与其他团队成员共享。但如果需要，您可以选择创建或加入其他团队。
+                        </p>
+                        <p>
+                            在创建页面上，输入机器人的名称和描述，然后上传头像或点击图标自动生成一个。
+                        </p>
+<div class="card p-6 my-8">
+                            <div class="flex md:flex-row flex-col gap-6">
+                                <div class="md:w-1/3">
+                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23f2f7ff'/%3E%3Ccircle cx='150' cy='100' r='70' fill='%234A6FFF' opacity='0.1'/%3E%3Ccircle cx='150' cy='100' r='50' fill='%234A6FFF' opacity='0.2'/%3E%3Ccircle cx='150' cy='100' r='30' fill='%234A6FFF'/%3E%3Cpath d='M130 90 L170 90 L170 110 L130 110 Z' fill='white'/%3E%3C/svg%3E" alt="创建机器人界面示意图" class="rounded-lg w-full">
+                                </div>
+                                <div class="md:w-2/3">
+                                    <h4 class="text-lg font-bold mb-3">创建机器人小贴士</h4>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-start">
+                                            <i class="fas fa-lightbulb mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                            <span>选择一个简洁而描述性的名称，能够清晰传达机器人的主要功能</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-lightbulb mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                            <span>撰写详细的描述，包括机器人可以做什么以及它如何帮助用户</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-lightbulb mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                            <span>上传与机器人功能相匹配的独特头像，增强品牌识别度</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 id="step2" class="text-2xl font-bold">
+                            <span class="step-number">2</span> 定义角色与目标
+                        </h3>
+                        <p>
+                            创建机器人后，下一个关键步骤是通过提示工程建立其角色和目标。Coze 提供了提示优化功能，可以根据最佳实践优化您的提示，显著提高机器人的整体效果。对于可能不熟悉提示工程细微差别的用户来说，这一优化功能特别有价值。
+                        </p>
+                        
+                        <div class="bg-opacity-50 rounded-xl p-6 my-8" style="background-color: var(--bg-secondary);">
+                            <h4 class="text-lg font-bold mb-4">有效提示示例：产品支持机器人</h4>
+                            <div class="p-4 rounded-lg" style="background-color: var(--card-bg);">
+                                <p class="italic" style="color: var(--text-color);">
+                                "你是一个专业的产品支持助手，专门解答关于我们最新智能手表系列的问题。你应该能够解释产品功能、提供故障排除建议，并推荐最适合用户需求的型号。保持友好专业的语气，避免技术行话，除非用户明确要求详细技术信息。如果你不知道答案，请诚实承认并提供获取更多帮助的方式。"
+                                </p>
+                            </div>
+                            <div class="mt-4 flex items-start">
+                                <i class="fas fa-info-circle mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                <p class="text-sm" style="color: var(--muted-color);">
+                                    一个好的提示应该明确定义机器人的身份、专业领域、沟通风格和处理未知情况的方式，让其能够始终如一地执行预期功能。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <h3 id="step3" class="text-2xl font-bold">
+                            <span class="step-number">3</span> 实现工作流
+                        </h3>
+                        <p>
+                            对于设计用于处理复杂任务的机器人，实现工作流可以显著提高其功能性。这些工作流允许您编排多个步骤，并整合各种插件和模型功能。例如，城市天气助手机器人可能使用工作流调用天气 API 插件，处理数据，并生成用户友好的响应。
+                        </p>
+                        <p>
+                            工作流编辑器具有拖放界面，无需编写任何代码即可设计复杂流程。
+                        </p>
+                        
+                        <!-- 工作流示意图 -->
+                        <div class="diagram">
+                            <h4 class="text-xl font-bold mb-4 text-center">天气助手工作流示例</h4>
+                            <div class="mermaid">
+                                flowchart LR
+                                    A[用户输入] --> B[提取位置信息]
+                                    B --> C{位置是否有效?}
+                                    C -->|是| D[调用天气API]
+                                    C -->|否| E[请求有效位置]
+                                    D --> F[处理天气数据]
+                                    F --> G[生成回复]
+                                    E --> A
+                                    
+                                    style A fill:#4A6FFF,color:#fff
+                                    style G fill:#36B37E,color:#fff
+                                    style E fill:#FF5E7D,color:#fff
+                            </div>
+                        </div>
+                        
+                        <h3 id="step4" class="text-2xl font-bold mt-8">
+                            <span class="step-number">4</span> 集成知识库
+                        </h3>
+                        <p>
+                            为增强机器人的特定领域知识，Coze 支持整合各种知识格式，包括文本（txt、pdf、doc）、电子表格（xls）和图像（png、jpg）。例如，您可以通过导入相关的 PDF 文档创建 MongoDB 知识助手，使您的机器人能够提供关于 MongoDB 的准确、专业信息。
+                        </p>
+                        <p>
+                            这一知识库功能对于创建教育机器人或特定领域的专业助手特别有用。
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
+                            <div class="card p-4 text-center">
+                                <i class="fas fa-file-alt text-3xl mb-3" style="color: var(--primary-color);"></i>
+                                <h5 class="font-bold">文本文档</h5>
+                                <p class="text-sm mt-2" style="color: var(--muted-color);">
+                                    支持 TXT、PDF、DOC 等格式，适合导入详细说明文档
+                                </p>
+                            </div>
+                            <div class="card p-4 text-center">
+                                <i class="fas fa-table text-3xl mb-3" style="color: var(--primary-color);"></i>
+                                <h5 class="font-bold">电子表格</h5>
+                                <p class="text-sm mt-2" style="color: var(--muted-color);">
+                                    支持 XLS 等格式，适合导入结构化数据和统计信息
+                                </p>
+                            </div>
+                            <div class="card p-4 text-center">
+                                <i class="fas fa-image text-3xl mb-3" style="color: var(--primary-color);"></i>
+                                <h5 class="font-bold">图像文件</h5>
+                                <p class="text-sm mt-2" style="color: var(--muted-color);">
+                                    支持 PNG、JPG 等格式，适合导入图表和可视化信息
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <h3 id="step5" class="text-2xl font-bold">
+                            <span class="step-number">5</span> 添加记忆能力
+                        </h3>
+                        <p>
+                            对于需要持久性的应用，如需要记住用户信息的客户服务机器人，Coze 提供了作为记忆系统的数据库功能。这允许您的机器人存储和回忆对话中的重要细节，创造更个性化的用户体验。
+                        </p>
+                        <p>
+                            平台处理数据库管理的技术方面，使其对没有专业知识的用户也能轻松使用。
+                        </p>
+                        
+                        <div class="card p-6 my-8">
+                            <h4 class="text-lg font-bold mb-3">记忆功能应用场景</h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fas fa-user-check mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <div>
+                                        <span class="font-medium">个人助手</span>
+                                        <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                            记住用户偏好、习惯和常用查询，提供更相关的建议
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-briefcase mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <div>
+                                        <span class="font-medium">客户支持</span>
+                                        <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                            跟踪客户问题历史，避免重复询问已提供的信息
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-graduation-cap mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <div>
+                                        <span class="font-medium">教育辅导</span>
+                                        <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                            记录学习进度和难点，为学生提供个性化学习路径
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <h3 id="step6" class="text-2xl font-bold">
+                            <span class="step-number">6</span> 测试与部署
+                        </h3>
+                        <p>
+                            在发布机器人之前，使用 Coze 的调试模块彻底测试其功能。对其性能满意后，您可以将其部署到各种平台，包括微信公众号，使您的机器人能够提供情感价值的回复，而不是冰冷的自动化回应。
+                        </p>
+                        
+                        <div class="bg-opacity-50 rounded-xl p-6 my-8" style="background-color: var(--bg-secondary);">
+                            <h4 class="text-lg font-bold mb-4">部署前检查清单</h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-square mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <span>验证机器人是否能够准确理解并响应各种用户查询</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-square mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <span>测试极端情况和边缘案例，确保机器人能够优雅地处理意外输入</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-square mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <span>检查工作流和 API 调用是否按预期工作，尤其是在高负载情况下</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-square mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <span>审查机器人的回复是否保持一致的语气和品牌声音</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-square mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <span>确保机器人能够适当地处理对话转换和上下文切换</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <h2 id="best-practices" class="text-3xl font-bold">最佳实践与高级应用</h2>
+                        <p>
+                            要充分利用 Coze 的功能，请考虑这些最佳实践和由成功实施所展示的高级应用：
+                        </p>
+                        
+                        <h3 id="workflows" class="text-2xl font-bold">优化复杂任务工作流</h3>
+                        <p>
+                            工作流代表 Coze 最强大的功能之一，使您能够创建复杂的多步骤流程。对于天气预报机器人，您可以设计不仅检索天气数据，还能分析数据并根据预报提供上下文相关建议的工作流。
+                        </p>
+                        <p>
+                            工作流系统允许条件逻辑，使您的机器人能够根据特定输入或条件做出决策，显著扩展其功能。
+                        </p>
+                        
+                        <div class="card p-6 my-8">
+                            <h4 class="text-lg font-bold mb-3">工作流优化技巧</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <h5 class="font-medium flex items-center">
+                                        <i class="fas fa-code-branch mr-2" style="color: var(--primary-color);"></i>
+                                        模块化设计
+                                    </h5>
+                                    <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                        将复杂工作流分解为可重用的较小组件，提高可维护性和调试效率
+                                    </p>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium flex items-center">
+                                        <i class="fas fa-exclamation-triangle mr-2" style="color: var(--primary-color);"></i>
+                                        错误处理
+                                    </h5>
+                                    <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                        实现强大的错误处理机制，确保在 API 调用失败或收到意外输入时能够优雅地恢复
+                                    </p>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium flex items-center">
+                                        <i class="fas fa-tachometer-alt mr-2" style="color: var(--primary-color);"></i>
+                                        性能优化
+                                    </h5>
+                                    <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                        最小化 API 调用并使用缓存机制，降低延迟并提高响应时间
+                                    </p>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium flex items-center">
+                                        <i class="fas fa-users-cog mr-2" style="color: var(--primary-color);"></i>
+                                        用户体验设计
+                                    </h5>
+                                    <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                        围绕用户体验设计工作流，提供清晰的进度指示和自然的对话流程
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 id="image-processing" class="text-2xl font-bold">利用图像处理功能</h3>
+                        <p>
+                            Coze 的图像工作流功能提供强大的图像处理能力，对社交媒体管理和内容创建特别有价值。该平台提供专门的节点用于图像生成、背景替换和质量增强。
+                        </p>
+                        <p>
+                            例如，产品图像背景替换助手可以将原始图像和背景描述作为输入，然后输出带有指定背景的专业修改图像。这一功能可以显著增强营销材料和社交媒体内容，无需专业设计技能。
+                        </p>
+                        
+                        <!-- 图像处理图示 -->
+                        <div class="card p-6 my-8">
+                            <div class="flex md:flex-row flex-col gap-6">
+                                <div class="md:w-1/2">
+                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='250' viewBox='0 0 400 250'%3E%3Crect width='400' height='250' fill='%23f8fafc'/%3E%3Crect x='50' y='50' width='120' height='150' fill='%23e2e8f0' rx='5'/%3E%3Ccircle cx='110' cy='90' r='20' fill='%234A6FFF'/%3E%3Crect x='70' y='130' width='80' height='10' fill='%23475569'/%3E%3Crect x='70' y='150' width='80' height='10' fill='%23475569'/%3E%3Crect x='70' y='170' width='50' height='10' fill='%23475569'/%3E%3Cpath d='M200 125 L220 125 L230 125' stroke='%23475569' stroke-width='2' stroke-dasharray='5,5'/%3E%3Crect x='250' y='50' width='120' height='150' fill='%23e2e8f0' rx='5'/%3E%3Ccircle cx='310' cy='90' r='20' fill='%234A6FFF'/%3E%3Crect x='270' y='130' width='80' height='10' fill='%23475569'/%3E%3Crect x='270' y='150' width='80' height='10' fill='%23475569'/%3E%3Crect x='270' y='170' width='50' height='10' fill='%23475569'/%3E%3Crect x='250' y='50' width='120' height='150' fill='%23e2e8f0' rx='5' opacity='0.6'/%3E%3Cpath d='M250 50 L370 50 L370 200 L250 200 Z' fill='none' stroke='%23FF5E7D' stroke-width='2'/%3E%3C/svg%3E" alt="图像处理流程示意图" class="rounded-lg w-full">
+                                </div>
+                                <div class="md:w-1/2">
+                                    <h4 class="text-lg font-bold mb-3">图像处理应用场景</h4>
+                                    <ul class="space-y-3">
+                                        <li class="flex items-start">
+                                            <i class="fas fa-shopping-bag mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                            <div>
+                                                <span class="font-medium">电商产品展示</span>
+                                                <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                                    自动生成不同背景和场景下的产品图像，提高转化率
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-hashtag mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                            <div>
+                                                <span class="font-medium">社交媒体内容</span>
+                                                <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                                    快速创建符合品牌标准的图像和图形，保持统一的视觉风格
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-id-card mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                            <div>
+                                                <span class="font-medium">证件照处理</span>
+                                                <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                                    自动调整背景、修复瑕疵和标准化尺寸，满足各种证件照要求
+                                                </p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 id="knowledge-assistant" class="text-2xl font-bold">创建有效的知识管理助手</h3>
+                        <p>
+                            Coze 最实用的应用之一是知识管理。通过将结构化信息导入知识库，您可以创建能够对特定领域问题提供快速、准确答案的机器人。
+                        </p>
+                        <p>
+                            例如，阅读与记忆助手机器人可以以问答格式从阅读内容生成闪卡，通过间隔重复促进有效的记忆强化。这种方法通过主动提问刺激神经连接，解决了阅读后忘记信息的常见挑战。
+                        </p>
+                        
+                        <div class="diagram">
+                            <h4 class="text-xl font-bold mb-4 text-center">知识管理助手工作流</h4>
+                            <div class="mermaid">
+                                flowchart TD
+                                    A[导入文档/资料] --> B[分析与结构化知识]
+                                    B --> C[创建问答对]
+                                    C --> D[生成学习闪卡]
+                                    D --> E[实施间隔重复]
+                                    E --> F[监测学习进度]
+                                    F --> G{需要加强记忆?}
+                                    G -->|是| E
+                                    G -->|否| H[知识已掌握]
+                                    
+                                    style A fill:#4A6FFF,color:#fff
+                                    style H fill:#36B37E,color:#fff
+                            </div>
+                        </div>
+                        
+                        <h3 id="multi-agent" class="text-2xl font-bold mt-8">设计多代理系统</h3>
+                        <p>
+                            对于更复杂的应用，Coze 使您能够创建多代理系统，其中多个机器人协同工作解决问题或提供服务。一个引人入胜的例子是"谁是卧底"游戏，涉及在游戏环境中具有不同角色的多个 AI 代理互动。
+                        </p>
+                        <p>
+                            实现这类系统需要仔细考虑如何在代理之间传输上下文数据以及如何定义每个代理的行为。这种方法展示了平台在创建超越简单问答机器人的交互式、动态应用方面的灵活性。
+                        </p>
+                        
+                        <div class="card p-6 my-8">
+                            <h4 class="text-lg font-bold mb-3">多代理系统设计考虑</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <h5 class="font-medium flex items-center">
+                                        <i class="fas fa-exchange-alt mr-2" style="color: var(--primary-color);"></i>
+                                        代理间通信
+                                    </h5>
+                                    <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                        建立清晰的协议和机制，使代理能够有效地交换信息和上下文数据
+                                    </p>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium flex items-center">
+                                        <i class="fas fa-user-tag mr-2" style="color: var(--primary-color);"></i>
+                                        角色定义
+                                    </h5>
+                                    <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                        为每个代理明确定义职责和能力，确保系统组件间的互补性
+                                    </p>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium flex items-center">
+                                        <i class="fas fa-arrows-alt mr-2" style="color: var(--primary-color);"></i>
+                                        状态管理
+                                    </h5>
+                                    <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                        实现强大的状态跟踪系统，确保所有代理在不同交互阶段保持同步
+                                    </p>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium flex items-center">
+                                        <i class="fas fa-shield-alt mr-2" style="color: var(--primary-color);"></i>
+                                        冲突解决
+                                    </h5>
+                                    <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                        设计机制处理代理间的冲突或相互矛盾的行动，确保系统稳定性
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 id="educational" class="text-2xl font-bold">实现教育助手</h3>
+                        <p>
+                            教育是 Coze 机器人擅长的另一个领域。通过结合知识库、精心设计的提示和工作流，您可以创建帮助用户学习和练习特定技能的专业教育助手。
+                        </p>
+                        <p>
+                            例如，IELTS 口语练习助手可以提供结构化的练习课程，对回答进行反馈，并根据用户的表现提供有针对性的改进建议。这类应用展示了 AI 机器人如何提供适应个人学习需求的个性化教育体验。
+                        </p>
+                        
+                        <div class="bg-opacity-50 rounded-xl p-6 my-8" style="background-color: var(--bg-secondary);">
+                            <h4 class="text-lg font-bold mb-4">教育助手设计原则</h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fas fa-chart-line mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <div>
+                                        <span class="font-medium">进度追踪</span>
+                                        <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                            记录学习历程，识别强项和弱点，提供针对性辅导
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-comment-dots mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <div>
+                                        <span class="font-medium">建设性反馈</span>
+                                        <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                            提供详细、具体的改进建议，而非简单评价对错
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-sliders-h mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <div>
+                                        <span class="font-medium">难度适应</span>
+                                        <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                            根据学习者的水平动态调整内容难度，保持适当挑战
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-award mt-1 mr-3" style="color: var(--primary-color);"></i>
+                                    <div>
+                                        <span class="font-medium">激励机制</span>
+                                        <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                            通过积极鼓励、成就系统和进度可视化增强学习动力
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <h2 id="conclusion" class="text-3xl font-bold">结论</h2>
+                        <p>
+                            Coze 代表了 AI 机器人开发民主化的重大进步，使其对无论技术背景如何的用户都变得可行。平台直观的界面，结合工作流、知识库和图像处理功能等强大功能，使用户无需编程即可创建复杂的 AI 应用。
+                        </p>
+                        <p>
+                            通过遵循上述快速入门指南并实施由成功应用展示的最佳实践，用户可以充分发挥 Coze 的潜力，创建能够在各个领域提供真正价值的机器人。
+                        </p>
+                        <p>
+                            无论您想要构建简单的问答机器人、高级教育助手还是复杂的多代理系统，Coze 都提供了实现愿景所需的工具和功能。随着平台不断发展和扩展其功能，它可能在更广泛的 AI 应用生态系统中发挥越来越重要的作用，使更多人能够利用 AI 在个人和职业生活中的变革潜力。
+                        </p>
+                        
+                        <!-- 延伸阅读部分 -->
+                        <div class="card p-6 my-8">
+                            <h3 class="text-xl font-bold mb-4">延伸阅读</h3>
+                            <p class="mb-4">探索这些资源，进一步了解 AI 机器人开发和对话系统：</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-12 h-16 bg-gray-200 rounded flex items-center justify-center" style="background-color: var(--bg-secondary);">
+                                        <i class="fas fa-book text-xl" style="color: var(--primary-color);"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="font-bold">《对话式 AI》</h4>
+                                        <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                            Michael McTear 著 - 对话系统设计的全面指南，涵盖理论和实践
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-12 h-16 bg-gray-200 rounded flex items-center justify-center" style="background-color: var(--bg-secondary);">
+                                        <i class="fas fa-book text-xl" style="color: var(--primary-color);"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="font-bold">《LLM 提示工程指南》</h4>
+                                        <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                            Liu Wei 著 - 深入探讨如何优化大型语言模型的提示，提高响应质量
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-12 h-16 bg-gray-200 rounded flex items-center justify-center" style="background-color: var(--bg-secondary);">
+                                        <i class="fas fa-file-alt text-xl" style="color: var(--primary-color);"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="font-bold">《多代理系统的原理与实践》</h4>
+                                        <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                            Katia Sycara 著 - 研究论文探讨协作 AI 系统的架构和应用
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-12 h-16 bg-gray-200 rounded flex items-center justify-center" style="background-color: var(--bg-secondary);">
+                                        <i class="fas fa-graduation-cap text-xl" style="color: var(--primary-color);"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="font-bold">《AI 赋能教育》</h4>
+                                        <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                            Chen Jing 著 - 探索 AI 如何变革个性化学习和教育辅助系统
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start md:col-span-2">
+                                    <div class="flex-shrink-0 w-12 h-16 bg-gray-200 rounded flex items-center justify-center" style="background-color: var(--bg-secondary);">
+                                        <i class="fas fa-clipboard-list text-xl" style="color: var(--primary-color);"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="font-bold">《构建下一代 AI 助手》</h4>
+                                        <p class="text-sm mt-1" style="color: var(--muted-color);">
+                                            ByteDance AI Lab 白皮书 - 详细介绍 AI 助手设计的最新进展和未来趋势，包括 Coze 平台的技术细节
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 行动号召 -->
+    <section class="py-16" style="background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));">
+        <div class="container mx-auto px-6 text-center text-white">
+            <h2 class="text-3xl font-bold mb-6">准备好开始构建您的 AI 机器人了吗？</h2>
+            <p class="text-xl mb-8 opacity-90 md:w-2/3 mx-auto">
+                无论您是初学者还是有经验的开发者，Coze 都能帮助您将创意变为现实。立即开始创建您的第一个智能助手！
+            </p>
+            <a href="#" class="inline-block px-8 py-4 rounded-lg font-medium bg-white text-gray-900 hover:shadow-lg transition transform hover:-translate-y-1">
+                <i class="fas fa-rocket mr-2"></i>开始使用 Coze
+            </a>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-wrap">
+                <div class="w-full md:w-1/3 mb-8 md:mb-0">
+                    <h3 class="text-xl font-bold mb-4">Coze AI</h3>
+                    <p class="mb-4" style="color: var(--muted-color);">
+                        一站式 AI Bot 开发平台，让每个人都能轻松创建强大的 AI 应用。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-xl hover:text-primary-500 transition" style="color: var(--muted-color);">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-xl hover:text-primary-500 transition" style="color: var(--muted-color);">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-xl hover:text-primary-500 transition" style="color: var(--muted-color);">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="w-full md:w-2/3">
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                        <div>
+                            <h4 class="font-bold mb-4">产品</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" style="color: var(--muted-color);" class="hover:text-primary-500 transition">功能概览</a></li>
+                                <li><a href="#" style="color: var(--muted-color);" class="hover:text-primary-500 transition">插件系统</a></li>
+                                <li><a href="#" style="color: var(--muted-color);" class="hover:text-primary-500 transition">工作流</a></li>
+                                <li><a href="#" style="color: var(--muted-color);" class="hover:text-primary-500 transition">知识库</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-bold mb-4">资源</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" style="color: var(--muted-color);" class="hover:text-primary-500 transition">文档</a></li>
+                                <li><a href="#" style="color: var(--muted-color);" class="hover:text-primary-500 transition">教程</a></li>
+                                <li><a href="#" style="color: var(--muted-color);" class="hover:text-primary-500 transition">API 参考</a></li>
+                                <li><a href="#" style="color: var(--muted-color);" class="hover:text-primary-500 transition">示例库</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-bold mb-4">公司</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" style="color: var(--muted-color);" class="hover:text-primary-500 transition">关于我们</a></li>
+                                <li><a href="#" style="color: var(--muted-color);" class="hover:text-primary-500 transition">博客</a></li>
+                                <li><a href="#" style="color: var(--muted-color);" class="hover:text-primary-500 transition">联系我们</a></li>
+                                <li><a href="#" style="color: var(--muted-color);" class="hover:text-primary-500 transition">加入我们</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t mt-12 pt-8 text-center" style="border-color: var(--border-color);">
+                <p style="color: var(--muted-color);">© 2025 Coze AI. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化 Mermaid
+        mermaid.initialize({
+            theme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: '#4A6FFF',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#4A6FFF',
+                lineColor: '#64748B',
+                secondaryColor: '#FF5E7D',
+                tertiaryColor: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#2D3748' : '#F1F5F9'
+            }
+        });
+
+        // 深色模式切换
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+        
+        // 检查系统偏好
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            htmlElement.setAttribute('data-theme', 'dark');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+        
+        // 主题切换功能
+        themeToggle.addEventListener('click', () => {
+            if (htmlElement.getAttribute('data-theme') === 'dark') {
+                htmlElement.removeAttribute('data-theme');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                mermaid.initialize({
+                    theme: 'default',
+                    themeVariables: {
+                        primaryColor: '#4A6FFF',
+                        primaryTextColor: '#fff',
+                        primaryBorderColor: '#4A6FFF',
+                        lineColor: '#64748B',
+                        secondaryColor: '#FF5E7D',
+                        tertiaryColor: '#F1F5F9'
+                    }
+                });
+            } else {
+                htmlElement.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                mermaid.initialize({
+                    theme: 'dark',
+                    themeVariables: {
+                        primaryColor: '#4A6FFF',
+                        primaryTextColor: '#fff',
+                        primaryBorderColor: '#4A6FFF',
+                        lineColor: '#64748B',
+                        secondaryColor: '#FF5E7D',
+                        tertiaryColor: '#2D3748'
+                    }
+                });
+            }
+            
+            // 重新渲染图表
+            mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+        });
+        
+        // 活跃目录项跟踪
+        const sections = document.querySelectorAll('h2, h3');
+        const tocLinks = document.querySelectorAll('.toc-link');
+        
+        function setActiveLink() {
+            let currentSectionId = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                
+                if (window.scrollY >= sectionTop - 100) {
+                    currentSectionId = section.getAttribute('id');
+                }
+            });
+            
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSectionId}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', setActiveLink);
+        
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+            setActiveLink();
+        });
+    </script>
+</body>
+</html>

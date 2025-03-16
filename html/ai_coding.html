@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我如何使用大语言模型辅助编码 - Simon Willison</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <script>
+        // 检查用户首选颜色模式
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        // 切换深色/浅色模式
+        function toggleDarkMode() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .dark {
+            color-scheme: dark;
+        }
+        
+        .dark body {
+            background-color: #111827;
+            color: #f3f4f6;
+        }
+        
+        .card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .dark .card:hover {
+            box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.05), 0 10px 10px -5px rgba(255, 255, 255, 0.02);
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .btn {
+            transition: transform 0.2s, background-color 0.2s, color 0.2s;
+        }
+        
+        .btn:hover {
+            transform: scale(1.02);
+        }
+        
+        /* 代码块样式 */
+        .code-block {
+            border-radius: 0.5rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+        
+        .dark .code-block {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+        }
+        
+        /* 懒加载 */
+        .lazy-load {
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .lazy-load.loaded {
+            opacity: 1;
+        }
+
+        /* 列表样式 */
+        .content-list li {
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .content-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0.5rem;
+            color: #3b82f6;
+        }
+        
+        .dark .content-list li::before {
+            color: #60a5fa;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+    <!-- 导航栏 -->
+    <nav class="sticky top-0 z-50 bg-white dark:bg-gray-800 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <h1 class="text-xl font-bold">
+                        <a href="#" class="text-blue-600 dark:text-blue-400">我如何使用大语言模型辅助编码</a>
+                    </h1>
+                </div>
+                <div class="flex items-center">
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700" aria-label="切换深色模式">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 animate-fade-in">
+        <article class="prose lg:prose-xl dark:prose-invert max-w-none">
+            <header class="mb-10">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">我如何使用大语言模型辅助编码</h1>
+                <p class="text-gray-600 dark:text-gray-400">
+                    <time datetime="2025-03-11">2025年3月11日</time> · Simon Willison
+                </p>
+            </header>
+
+            <div class="card bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8">
+                <p class="mb-4">每当网上讨论<strong>使用大语言模型辅助编码</strong>时，总会有开发者表示他们的体验令人失望。他们常常会问自己做错了什么——为什么有些人报告了如此好的结果，而他们自己的实验却成效甚微？</p>
+                <p class="mb-4">使用大语言模型编写代码是<strong>困难的</strong>，也是<strong>不直观的</strong>。要找出这种使用方式的优势和局限性需要付出相当大的努力，而且几乎没有指导来帮助人们弄清楚如何最好地应用它们。</p>
+                <p class="mb-0">如果有人告诉你用大语言模型编码<strong>很容易</strong>，他们（可能是无意中）误导了你。他们可能偶然发现了有效的模式，但这些模式并不是对每个人都自然而然的。</p>
+            </div>
+
+            <p class="mb-6">我使用大语言模型进行编码已经有两年多了，并取得了很好的成果。这里我试着分享一些我的经验和直觉。</p>
+
+            <!-- 目录 -->
+            <div class="card bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8">
+                <h2 class="text-xl font-semibold mb-4">内容概要</h2>
+                <ul class="content-list space-y-2">
+                    <li><a href="#expectations" class="text-blue-600 dark:text-blue-400 hover:underline">设定合理的期望</a></li>
+                    <li><a href="#cutoff" class="text-blue-600 dark:text-blue-400 hover:underline">考虑训练截止日期</a></li>
+                    <li><a href="#context" class="text-blue-600 dark:text-blue-400 hover:underline">上下文为王</a></li>
+                    <li><a href="#options" class="text-blue-600 dark:text-blue-400 hover:underline">让它提供选项</a></li>
+                    <li><a href="#instructions" class="text-blue-600 dark:text-blue-400 hover:underline">明确告诉它该做什么</a></li>
+                    <li><a href="#testing" class="text-blue-600 dark:text-blue-400 hover:underline">你必须测试它写的代码！</a></li>
+                    <li><a href="#conversation" class="text-blue-600 dark:text-blue-400 hover:underline">记住这是一场对话</a></li>
+                    <li><a href="#tools" class="text-blue-600 dark:text-blue-400 hover:underline">使用能运行代码的工具</a></li>
+                    <li><a href="#vibe-coding" class="text-blue-600 dark:text-blue-400 hover:underline">情感编码是学习的好方法</a></li>
+                    <li><a href="#claude-code" class="text-blue-600 dark:text-blue-400 hover:underline">使用Claude Code的详细示例</a></li>
+                    <li><a href="#human-takeover" class="text-blue-600 dark:text-blue-400 hover:underline">做好人工接管的准备</a></li>
+                    <li><a href="#advantage" class="text-blue-600 dark:text-blue-400 hover:underline">最大的优势是开发速度</a></li>
+                    <li><a href="#expertise" class="text-blue-600 dark:text-blue-400 hover:underline">大语言模型放大已有专业知识</a></li>
+                    <li><a href="#bonus" class="text-blue-600 dark:text-blue-400 hover:underline">额外收获：回答代码库相关问题</a></li>
+                </ul>
+            </div>
+
+            <section id="expectations">
+                <h2 class="text-2xl font-bold mb-4">设定合理的期望</h2>
+                <p class="mb-4">忽略"通用人工智能"的炒作——大语言模型仍然只是花哨的自动补全工具。它们所做的只是预测一系列标记，但事实证明，编写代码主要是按正确的顺序组合这些标记，所以只要你能正确引导它们，它们在这方面<strong>非常</strong>有用。</p>
+                <p class="mb-4">如果你认为这项技术会完美地实现你的项目，而你不需要运用自己的任何技能，你很快就会失望。</p>
+                <p class="mb-4">相反，使用它们来<strong>增强</strong>你的能力。我目前最喜欢的心智模型是把它们想象成一个过度自信的结对编程助手，它可以闪电般快速地查找资料，随时提供相关示例，并且在执行繁琐任务时不会抱怨。</p>
+                <p class="mb-4"><strong>过度自信</strong>很重要。它们绝对会犯错——有时是微妙的，有时是巨大的。这些错误可能<strong>深度非人类化</strong>——如果一个人类合作者凭空编造了一个不存在的库或方法，你会立即失去对他们的信任。不要陷入将大语言模型拟人化的陷阱，认为那些本会让人类失信的失败也应该以同样的方式让机器失信。</p>
+                <p class="mb-0">在使用大语言模型时，你经常会发现有些事情它们就是做不到。记下这些——这些是有用的教训！它们也是值得保存下来的宝贵示例——强大的新模型的标志之一是当它在之前模型无法处理的任务上产生可用结果时。</p>
+            </section>
+
+            <section id="cutoff" class="mt-8">
+                <h2 class="text-2xl font-bold mb-4">考虑训练截止日期</h2>
+                <p class="mb-4">任何模型的一个关键特性是其<strong>训练截止日期</strong>。这是指停止收集模型训练数据的日期。对于OpenAI的模型，这通常是2023年10月。Anthropic、Gemini和其他提供商可能有更近的日期。</p>
+                <p class="mb-4">这对代码<strong>极其</strong>重要，因为它影响模型将熟悉哪些库。如果你使用的库在2023年10月之后有重大的破坏性变更，OpenAI的模型将不会知道！</p>
+                <p class="mb-0">我从大语言模型中获得了足够多的价值，现在在选择库时会特意考虑这一点——我尽量坚持使用稳定性好且足够流行的库，这样训练数据中会有很多示例。我喜欢应用<strong>无聊技术</strong>的原则——在项目的独特卖点上创新，其他方面则坚持使用经过验证的解决方案。</p>
+            </section>
+
+            <section id="context" class="mt-8">
+                <h2 class="text-2xl font-bold mb-4">上下文为王</h2>
+                <p class="mb-4">从大语言模型中获得好结果的大部分技巧都与管理其上下文有关——即当前对话中的文本。</p>
+                <p class="mb-4">这个上下文不仅仅是你输入的提示：成功的大语言模型交互通常以对话的形式出现，而上下文由当前对话线程中来自你<strong>和</strong>来自大语言模型的每条回复组成。</p>
+                <p class="mb-4">当你开始新的对话时，你会将该上下文重置为零。知道这一点很重要，因为对于已经不再有用的对话，解决办法通常是清除重来，重新开始。</p>
+                <p class="mb-0">一些大语言模型编码工具不仅仅是对话。例如，Claude Projects允许你用相当大量的文本预填充上下文——包括最近可以<strong>直接从GitHub仓库导入代码</strong>的功能，我现在<strong>大量</strong>使用这个功能。</p>
+            </section>
+
+            <section id="options" class="mt-8">
+                <h2 class="text-2xl font-bold mb-4">让它提供选项</h2>
+                <p class="mb-4">我的大多数项目都从一些开放性问题开始：我想做的事情可能吗？我可以用哪些潜在方式来实现它？哪些选择是<strong>最好的</strong>？</p>
+                <p class="mb-4">我在初始研究阶段使用大语言模型。</p>
+                <p class="mb-4">我会使用这样的提示："Rust中有哪些HTTP库的选择？包括使用示例"——或者"JavaScript中有哪些有用的拖放库？为每一个构建一个演示"（对Claude）。</p>
+                <p class="mb-0">这里训练截止日期很重要，因为它意味着不会推荐较新的库。通常这没关系——我不想要最新的，我想要最稳定的、已经存在足够长时间以便修复bug的库。</p>
+            </section>
+
+            <section id="instructions" class="mt-8">
+                <h2 class="text-2xl font-bold mb-4">明确告诉它该做什么</h2>
+                <p class="mb-4">一旦完成了初步研究，我会显著改变模式。对于生产代码，我使用大语言模型的方式更加专制：我把它当作一个数字实习生，根据我的详细指示为我编写代码。</p>
+                <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 mb-4">
+                    <p class="mb-0 text-sm">示例提示：</p>
+                    <div class="code-block bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-4 rounded my-2 text-sm">
+                        写一个使用asyncio httpx的Python函数，具有以下签名：<br>
+                        async def download_db(url, max_size_bytes=5 * 1025 * 1025): -> pathlib.Path<br><br>
+                        给定一个URL，此函数将数据库下载到临时目录并返回其路径。但它会在开始流回数据时检查内容长度标头，如果超过限制，则引发错误。当下载完成时，它使用sqlite3.connect(...)然后运行PRAGMA quick_check来确认SQLite数据有效——如果无效则引发错误。最后，如果内容长度标头对我们撒谎——如果它说2MB但我们下载了3MB——我们会在发现该问题时立即引发错误。
+                    </div>
+                </div>
+                <p class="mb-4">我可以自己编写这个函数，但要查找所有细节并让代码正常工作，我需要花费大约15分钟。Claude在<strong>15秒内</strong>就完成了。</p>
+                <p class="mb-0">我发现大语言模型对我在这里使用的函数签名反应非常好。我可以充当函数设计师，而大语言模型则负责按照我的规范构建函数体。</p>
+            </section>
+
+            <section id="testing" class="mt-8">
+                <h2 class="text-2xl font-bold mb-4">你必须测试它写的代码！</h2>
+                <p class="mb-4">我<a href="#" class="text-blue-600 dark:text-blue-400 hover:underline">上周详细写到</a>：有一件事你绝对不能外包给机器，那就是测试代码是否真正有效。</p>
+                <p class="mb-4">作为软件开发人员，你的责任是交付能工作的系统。如果你没有看到它运行，那就不是一个能工作的系统。你需要投入精力加强手动QA习惯。</p>
+                <p class="mb-0">这可能不那么有魅力，但它一直是交付良好代码的关键部分，无论是否涉及大语言模型。</p>
+            </section>
+
+            <section id="conversation" class="mt-8">
+                <h2 class="text-2xl font-bold mb-4">记住这是一场对话</h2>
+                <p class="mb-4">如果我不喜欢大语言模型写的内容，它们<strong>永远不会</strong>抱怨被告知重构！"把那些重复的代码提取到一个函数中"，"使用字符串操作方法而不是正则表达式"，或者甚至简单地"写得更好！"——大语言模型首次产生的代码很少是最终实现，但它们可以为你重写几十次而不会感到沮丧或无聊。</p>
+                <p class="mb-4">有时我的第一个提示就能得到很好的结果——随着练习越来越多，这种情况更加频繁——但我预计至少需要几次后续交流。</p>
+                <p class="mb-0">我经常想知道这是否是人们遗漏的关键技巧之一——一个糟糕的初始结果不是失败，而是推动模型朝着你真正想要的方向发展的起点。</p>
+            </section>
+
+            <section id="tools" class="mt-8">
+                <h2 class="text-2xl font-bold mb-4">使用能运行代码的工具</h2>
+                <p class="mb-4">越来越多的大语言模型编码工具现在具有为你<strong>运行代码</strong>的能力。我对其中一些工具持谨慎态度，因为错误的命令可能会造成真正的损害，所以我倾向于使用那些在安全沙箱中运行代码的工具。我现在最喜欢的是：</p>
+                <ul class="list-disc pl-6 mb-4 space-y-2">
+                    <li><strong>ChatGPT代码解释器</strong>，ChatGPT可以直接在OpenAI管理的Kubernetes沙箱VM中编写和执行Python代码。这是完全安全的——它甚至不能进行出站网络连接，所以真正可能发生的只是临时文件系统被破坏然后重置。</li>
+                    <li><strong>Claude Artifacts</strong>，Claude可以为你构建一个完整的HTML+JavaScript+CSS Web应用程序，然后在Claude界面中显示。这个Web应用程序显示在<strong>非常</strong>受限的iframe沙箱中，大大限制了它能做的事情，但防止了诸如意外泄露你的私人Claude数据等问题。</li>
+                    <li><strong>ChatGPT Canvas</strong>是一个较新的ChatGPT功能，具有与Claude Artifacts类似的功能。我自己还没有足够探索这个功能。</li>
+                </ul>
+                <p class="mb-0">如果你愿意冒更多风险：</p>
+                <ul class="list-disc pl-6 mb-4 space-y-2">
+                    <li><strong>Cursor</strong>有一个"Agent"功能可以做到这一点，<strong>Windsurf</strong>和越来越多的其他编辑器也是如此。我还没有花足够的时间与这些工具一起工作来做出推荐。</li>
+                    <li><strong>Aider</strong>是这些模式的领先开源实现，也是<strong>dogfooding</strong>的一个很好例子——Aider最近的版本<strong>80%以上</strong>是由Aider自己编写的。</li>
+                    <li><strong>Claude Code</strong>是Anthropic在这个领域的新进入者。我稍后会提供有关使用该工具的详细描述。</li>
+                </ul>
+            </section>
+
+            <section id="vibe-coding" class="mt-8">
+                <h2 class="text-2xl font-bold mb-4">情感编码是学习的好方法</h2>
+                <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg mb-4">
+                    <p class="mb-0"><a href="#" class="text-blue-600 dark:text-blue-400 font-medium">Andrej Karpathy</a>在一个多月前创造了<strong>情感编码</strong>这个术语，它很快就流行起来：</p>
+                    <blockquote class="italic border-l-4 border-blue-500 pl-4 my-2">
+                        有一种新型的编码，我称之为"情感编码"，你完全顺从于情感，拥抱指数级增长，忘记代码的存在。[...]我要求最笨的事情，比如"将侧边栏的填充减半"，因为我太懒而找不到它。我总是"接受全部"，我不再阅读差异。当我收到错误消息时，我只是复制粘贴它们而不做任何评论，通常这样就能修复问题。
+                    </blockquote>
+                </div>
+                <p class="mb-4">Andrej建议这对"一次性的周末项目不是太糟糕"。它也是探索这些模型能力的<strong>绝佳</strong>方式——而且真的很有趣。</p>
+                <p class="mb-4">学习大语言模型的最佳方式是玩它们。向它们抛出荒谬的想法，进行情感编码直到它们几乎有点工作，这是加速你建立对什么有效、什么无效的直觉的一种真正有用的方式。</p>
+                <p class="mb-0">在Andrej给它命名之前，我就一直在进行情感编码！我的<a href="https://github.com/simonw/tools" class="text-blue-600 dark:text-blue-400 hover:underline">simonw/tools</a> GitHub仓库有77个HTML+JavaScript应用和6个Python应用，每一个都是通过提示大语言模型构建的。我从构建这个集合中学到了<strong>太多东西</strong>，而且我以每周几个新原型的速度添加到它。</p>
+            </section>
+
+            <section id="claude-code" class="mt-8">
+                <h2 class="text-2xl font-bold mb-4">使用Claude Code的详细示例</h2>
+                <p class="mb-4">在写这篇文章时，我想到了<a href="https://tools.simonwillison.net/colophon" class="text-blue-600 dark:text-blue-400 hover:underline">tools.simonwillison.net/colophon</a>页面的创意——我想要一个可以链接到的东西，以比GitHub更明显的方式显示我每个工具的提交历史。</p>
+                <p class="mb-4">我决定利用这个机会来演示我的AI辅助编码过程。</p>
+                <p class="mb-4">这次我使用了<strong>Claude Code</strong>，因为我希望它能够直接针对我笔记本电脑上现有的tools仓库运行Python代码。</p>
+                <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 mb-4">
+                    <p>在会话结束时运行<code>/cost</code>命令显示：</p>
+                    <div class="code-block bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-4 rounded my-2 text-sm">
+                        > /cost <br>
+                        ⎿ Total cost: $0.61<br>
+                        Total duration (API): 5m 31.2s<br>
+                        Total duration (wall): 17m 18.7s
+                    </div>
+                </div>
+                <p class="mb-4">从开始到完成，整个项目花了我17分钟多一点，花费了我61美分的Anthropic API调用费用。</p>
+                <p class="mb-0">我使用了专制流程，告诉模型我到底想要构建什么。这是我的提示序列（<a href="#" class="text-blue-600 dark:text-blue-400 hover:underline">完整记录在这里</a>）。</p>
+            </section>
+            
+            <section id="human-takeover" class="mt-8">
+                <h2 class="text-2xl font-bold mb-4">做好人工接管的准备</h2>
+                <p class="mb-4">这个例子我很幸运，因为它帮助我说明了最后一点：预期需要人工接管。</p>
+                <p class="mb-0">大语言模型无法替代人类的直觉和经验。我已经在GitHub Actions上花了足够多的时间，知道要寻找什么样的东西，在这种情况下，我亲自接手完成项目比继续尝试通过提示来达到目标要快。</p>
+            </section>
+
+            <section id="advantage" class="mt-8">
+                <h2 class="text-2xl font-bold mb-4">最大的优势是开发速度</h2>
+                <p class="mb-4">我的新<a href="https://tools.simonwillison.net/colophon" class="text-blue-600 dark:text-blue-400 hover:underline">colophon页面</a>从构思到完成、部署的功能花了我不到半小时。</p>
+                <p class="mb-4">我确信如果没有大语言模型的帮助，我会花费更长的时间——以至于我可能根本不会费心去构建它。</p>
+                <p class="mb-4">这就是为什么我如此关心从大语言模型中获得的生产力提升：这不是为了更快地完成工作，而是能够交付那些我本来无法证明值得花时间的项目。</p>
+                <p class="mb-0">我在2023年3月写道：<a href="#" class="text-blue-600 dark:text-blue-400 hover:underline">AI增强开发使我对项目更有雄心</a>。两年后，这种效果没有任何减弱的迹象。</p>
+            </section>
+
+            <section id="expertise" class="mt-8">
+                <h2 class="text-2xl font-bold mb-4">大语言模型放大已有专业知识</h2>
+                <p class="mb-4">其他人能以同样的方式完成这个项目吗？可能不能！我在这里的提示依赖于25年以上的专业编码经验，包括我之前对GitHub Actions、GitHub Pages、GitHub本身和我使用的大语言模型工具的探索。</p>
+                <p class="mb-4">我也<strong>知道</strong>这将起作用。我已经花了足够多的时间使用这些工具，我确信构建一个新的HTML页面，其中包含从我的Git历史中提取的信息，完全在一个好的大语言模型的能力范围内。</p>
+                <p class="mb-0">我的提示反映了这一点——这里没有特别新颖的东西，所以我口述了设计，在工作时测试结果，并偶尔推动它修复bug。</p>
+            </section>
+
+            <section id="bonus" class="mt-8">
+                <h2 class="text-2xl font-bold mb-4">额外收获：回答代码库相关问题</h2>
+                <p class="mb-4">如果使用大语言模型为你编写代码的想法仍然让你感到不舒服，还有另一个你可能会觉得更有吸引力的用例。</p>
+                <p class="mb-4">好的大语言模型<strong>非常擅长</strong>回答关于代码的问题。</p>
+                <p class="mb-4">这也风险很低：最坏的情况是它们可能会出错，这可能会让你花费一点额外的时间来弄清楚。与完全靠自己挖掘数千行代码相比，它仍然可能节省你的时间。</p>
+                <p class="mb-0">这里的诀窍是将代码转储到长上下文模型中并开始提问。我目前最喜欢的是名称拗口的<strong>gemini-2.0-pro-exp-02-05</strong>，这是Google的Gemini 2.0 Pro的预览版，目前可以通过他们的API免费使用。</p>
+            </section>
+        </article>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-10 mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">作者信息</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        文章原作者: Simon Willison<br>
+                        翻译与可视化: fly51fly
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">关注作者</h3>
+                    <div class="flex space-x-4">
+                        <a href="https://weibo.com/fly51fly" class="text-gray-600 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-weibo text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8 text-center text-gray-500 dark:text-gray-400 text-sm">
+                &copy; 2025 fly51fly. 保留所有权利。文章原文：<a href="https://simonwillison.net/2025/Mar/11/using-llms-for-code/" class="text-blue-600 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer">Here's how I use LLMs to help me write code</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 懒加载实现
+        document.addEventListener('DOMContentLoaded', function() {
+            let lazyElements = document.querySelectorAll('.lazy-load');
+            
+            if ('IntersectionObserver' in window) {
+                let lazyObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            let lazyElement = entry.target;
+                            lazyElement.classList.add('loaded');
+                            lazyObserver.unobserve(lazyElement);
+                        }
+                    });
+                });
+                
+                lazyElements.forEach(function(lazyElement) {
+                    lazyObserver.observe(lazyElement);
+                });
+            } else {
+                // 降级处理
+                lazyElements.forEach(function(lazyElement) {
+                    lazyElement.classList.add('loaded');
+                });
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80, // 考虑固定导航栏的高度
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
