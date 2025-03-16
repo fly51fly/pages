@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>混合专家模型 (MoE) - 深度学习的新范式</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #3B82F6;
+            --secondary-color: #10B981;
+            --accent-color: #8B5CF6;
+            --text-color: #1F2937;
+            --bg-color: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --border-color: #E5E7EB;
+            --highlight-color: #EFF6FF;
+        }
+
+        .dark {
+            --primary-color: #60A5FA;
+            --secondary-color: #34D399;
+            --accent-color: #A78BFA;
+            --text-color: #F9FAFB;
+            --bg-color: #111827;
+            --card-bg: #1F2937;
+            --border-color: #374151;
+            --highlight-color: #1E3A8A;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', Tahoma, Arial, Roboto, "Droid Sans", "Helvetica Neue", "Droid Sans Fallback", "Heiti SC", "Hiragino Sans GB", Simsun, sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .serif {
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .sans {
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .highlight {
+            background-color: var(--highlight-color);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .first-letter::first-letter {
+            font-size: 3.5em;
+            float: left;
+            line-height: 0.8;
+            margin-right: 0.1em;
+            color: var(--primary-color);
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 700;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .btn {
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .scroll-indicator {
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            width: 0%;
+        }
+
+        .mermaid {
+            background-color: var(--card-bg);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .first-letter::first-letter {
+                font-size: 2.5em;
+            }
+        }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-color);
+        }
+
+        /* 动画效果 */
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- 滚动指示器 -->
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+
+    <!-- 导航栏 -->
+    <nav class="sticky top-0 z-50 bg-opacity-90 backdrop-filter backdrop-blur-lg" style="background-color: var(--bg-color);">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-brain text-2xl" style="color: var(--primary-color);"></i>
+                <span class="text-xl font-bold serif">混合专家模型</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#intro" class="nav-link">概述</a>
+                <a href="#experts" class="nav-link">专家定义</a>
+                <a href="#routing" class="nav-link">路由机制</a>
+                <a href="#load-balancing" class="nav-link">负载均衡</a>
+                <a href="#deepseek" class="nav-link">DeepSeek-MoE</a>
+                <a href="#further-reading" class="nav-link">延伸阅读</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="themeToggle" class="p-2 rounded-full hover:bg-opacity-20" style="background-color: var(--border-color);">
+                    <i id="themeIcon" class="fas fa-moon"></i>
+                </button>
+                <button class="md:hidden" id="mobileMenuButton">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- 移动端菜单 -->
+        <div id="mobileMenu" class="hidden md:hidden" style="background-color: var(--card-bg);">
+            <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+                <a href="#intro" class="py-2 nav-link">概述</a>
+                <a href="#experts" class="py-2 nav-link">专家定义</a>
+                <a href="#routing" class="py-2 nav-link">路由机制</a>
+                <a href="#load-balancing" class="py-2 nav-link">负载均衡</a>
+                <a href="#deepseek" class="py-2 nav-link">DeepSeek-MoE</a>
+                <a href="#further-reading" class="py-2 nav-link">延伸阅读</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 部分 -->
+    <header class="relative overflow-hidden py-20 md:py-32" id="intro">
+        <div class="absolute inset-0 z-0 opacity-10">
+            <div class="absolute inset-0" style="background: radial-gradient(circle at 30% 30%, var(--primary-color), transparent 70%), 
+                                                 radial-gradient(circle at 70% 70%, var(--accent-color), transparent 70%);">
+            </div>
+        </div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 gradient-text">混合专家模型 (MoE)</h1>
+                <p class="text-xl md:text-2xl mb-8 serif">深度学习的新范式：稀疏激活与高效扩展的完美结合</p>
+                <div class="flex justify-center space-x-4">
+                    <a href="#experts" class="btn px-6 py-3 rounded-lg font-medium text-white" style="background-color: var(--primary-color);">
+                        <i class="fas fa-book-open mr-2"></i>开始探索
+                    </a>
+                    <a href="#visualization" class="btn px-6 py-3 rounded-lg font-medium border" style="border-color: var(--primary-color); color: var(--primary-color);">
+                        <i class="fas fa-project-diagram mr-2"></i>查看可视化
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-5 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i class="fas fa-chevron-down text-2xl" style="color: var(--primary-color);"></i>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <main class="container mx-auto px-4 py-12">
+        <!-- 概述部分 -->
+        <section class="max-w-4xl mx-auto mb-20 animate-on-scroll">
+            <div class="highlight p-6 rounded-lg mb-10">
+                <p class="text-lg first-letter">混合专家模型（Mixture of Experts，MoE）是深度学习领域的一种强大方法，它通过利用稀疏激活使模型能够高效扩展。与传统模型对每个输入激活所有参数不同，MoE使用路由器选择专家子集，从而提高计算效率和泛化能力。MoE已被广泛应用于大规模模型中，如Switch Transformer、DeepSeek和GShard [citation](1)。</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="card rounded-lg p-6 text-center">
+                    <div class="text-4xl mb-4"><i class="fas fa-brain" style="color: var(--primary-color);"></i></div>
+                    <h3 class="text-xl font-bold mb-2">专家定义</h3>
+                    <p>MoE中的专家是独立的前馈神经网络，专门处理不同类型的数据</p>
+                </div>
+                <div class="card rounded-lg p-6 text-center">
+                    <div class="text-4xl mb-4"><i class="fas fa-route" style="color: var(--secondary-color);"></i></div>
+                    <h3 class="text-xl font-bold mb-2">路由机制</h3>
+                    <p>路由器为每个输入动态选择最相关的专家，实现专业化和参数效率</p>
+                </div>
+                <div class="card rounded-lg p-6 text-center">
+                    <div class="text-4xl mb-4"><i class="fas fa-balance-scale" style="color: var(--accent-color);"></i></div>
+                    <h3 class="text-xl font-bold mb-2">负载均衡</h3>
+                    <p>确保所有专家接收大致相等数量的标记，避免计算资源浪费</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 专家定义部分 -->
+        <section id="experts" class="max-w-4xl mx-auto mb-20 animate-on-scroll">
+            <h2 class="text-3xl font-bold mb-6 serif">什么是"专家"？</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <p class="mb-4">在MoE中，专家是独立的前馈神经网络（MLPs或其他架构），专门处理不同类型的数据。MoE不使用单一模型处理所有输入，而是为每个标记动态选择最相关的专家，从而实现专业化和更好的参数效率 [citation](1)。</p>
+                    <p class="mb-4">许多人常常误解专家为特定领域（如生物学或化学）的专家。然而，在这种情况下，专家专注于句子结构和语法的不同方面，如复杂词汇、标点符号、视觉描述、动词等 [citation](1)。</p>
+                    <div class="highlight p-4 rounded-lg">
+                        <h4 class="font-bold mb-2"><i class="fas fa-lightbulb mr-2" style="color: var(--secondary-color);"></i>关键洞察</h4>
+                        <p>MoE中的"专家"不是传统意义上的领域专家，而是专注于处理特定类型语言或数据模式的神经网络组件。</p>
+                    </div>
+                </div>
+                <div class="card p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-4 serif">专家特性</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--primary-color);"></i>
+                            <span>独立的神经网络，通常是前馈网络（MLP）</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--primary-color);"></i>
+                            <span>专注于特定类型的数据或语言模式</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--primary-color);"></i>
+                            <span>通过路由机制动态激活</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--primary-color);"></i>
+                            <span>允许模型在不增加计算量的情况下扩大参数规模</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--primary-color);"></i>
+                            <span>可以跨多个层共享，提高效率</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 路由机制部分 -->
+        <section id="routing" class="max-w-4xl mx-auto mb-20 animate-on-scroll">
+            <h2 class="text-3xl font-bold mb-6 serif">路由机制</h2>
+            <p class="mb-6">MoE的关键组件是路由器，它决定哪些专家处理给定的输入。路由器通常是一个学习函数，常常实现为小型神经网络或简单的线性变换后接softmax [citation](1)。</p>
+            
+            <div class="card p-6 rounded-lg mb-8">
+                <h3 class="text-xl font-bold mb-4 serif">路由过程包括：</h3>
+                <ol class="space-y-4">
+                    <li class="flex items-start">
+                        <div class="flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center mr-3" style="background-color: var(--primary-color);">
+                            <span class="text-white font-bold">1</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">计算专家分数</h4>
+                            <p>使用路由器网络为每个输入分配专家概率分布</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <div class="flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center mr-3" style="background-color: var(--primary-color);">
+                            <span class="text-white font-bold">2</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Top-k选择</h4>
+                            <p>MoE不使用所有专家，而是为每个标记选择得分最高的k个专家</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <div class="flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center mr-3" style="background-color: var(--primary-color);">
+                            <span class="text-white font-bold">3</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">分发与处理</h4>
+                            <p>选定的专家处理标记，最终输出是专家输出的加权和</p>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+
+            <!-- 可视化部分 -->
+            <div id="visualization" class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 serif">MoE路由可视化</h3>
+                <div class="mermaid">
+                    graph TD
+                        A[输入标记] --> B[路由器网络]
+                        B --> C{专家选择}
+                        C -->|高分| D[专家1]
+                        C -->|高分| E[专家2]
+                        C -->|低分| F[专家3]
+                        C -->|低分| G[专家4]
+                        D --> H[加权组合]
+                        E --> H
+                        H --> I[最终输出]
+                        
+                        style A fill:#f9f9f9,stroke:#333,stroke-width:2px
+                        style B fill:#d4e6f1,stroke:#3498db,stroke-width:2px
+                        style C fill:#d5f5e3,stroke:#2ecc71,stroke-width:2px
+                        style D fill:#fadbd8,stroke:#e74c3c,stroke-width:2px
+                        style E fill:#fadbd8,stroke:#e74c3c,stroke-width:2px
+                        style F fill:#f5eef8,stroke:#9b59b6,stroke-width:2px,stroke-dasharray: 5 5
+                        style G fill:#f5eef8,stroke:#9b59b6,stroke-width:2px,stroke-dasharray: 5 5
+                        style H fill:#fef9e7,stroke:#f1c40f,stroke-width:2px
+                        style I fill:#f9f9f9,stroke:#333,stroke-width:2px
+                </div>
+                <p class="text-sm text-center italic">图1: MoE路由机制示意图。路由器为每个输入标记选择最相关的专家，未选中的专家（虚线）不参与计算。</p>
+            </div>
+        </section>
+
+        <!-- 负载均衡部分 -->
+        <section id="load-balancing" class="max-w-4xl mx-auto mb-20 animate-on-scroll">
+            <h2 class="text-3xl font-bold mb-6 serif">MoE中的负载均衡</h2>
+            <p class="mb-6">MoE中最大的挑战之一是负载均衡——确保所有专家接收大致相等数量的标记。如果没有适当的平衡，一些专家可能过载而其他专家未被充分利用，导致计算效率低下和性能下降 [citation](1)。</p>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                <div class="card p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-4 serif">负载均衡策略</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-balance-scale mt-1 mr-2" style="color: var(--secondary-color);"></i>
+                            <div>
+                                <h4 class="font-bold">辅助负载均衡损失</h4>
+                                <p class="text-sm">通过惩罚不平衡的路由决策，鼓励专家间均匀分配标记</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-balance-scale mt-1 mr-2" style="color: var(--secondary-color);"></i>
+                            <div>
+                                <h4 class="font-bold">路由器Z损失</h4>
+                                <p class="text-sm">通过防止专家选择中的过度自信，帮助稳定路由器学习</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-balance-scale mt-1 mr-2" style="color: var(--secondary-color);"></i>
+                            <div>
+                                <h4 class="font-bold">重要性因子</h4>
+                                <p class="text-sm">衡量每个专家被选择的频率，用于指导训练以平衡利用率</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="highlight p-4 rounded-lg mb-4">
+                        <h4 class="font-bold mb-2"><i class="fas fa-exclamation-circle mr-2" style="color: var(--accent-color);"></i>负载不平衡问题</h4>
+                        <p>如果没有负载均衡，MoE模型可能会出现"马太效应"——少数专家接收大部分输入，而大多数专家几乎不被使用，导致模型容量的浪费。</p>
+                    </div>
+                    <div class="mermaid">
+                        pie
+                            title 未平衡的专家利用率
+                            "专家1" : 45
+                            "专家2" : 30
+                            "专家3" : 15
+                            "专家4" : 5
+                            "专家5" : 3
+                            "专家6" : 2
+                    </div>
+                    <p class="text-sm text-center italic mt-2">图2: 未平衡的专家利用率分布示例</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- DeepSeek-MoE部分 -->
+        <section id="deepseek" class="max-w-4xl mx-auto mb-20 animate-on-scroll">
+            <h2 class="text-3xl font-bold mb-6 serif">DeepSeek-MoE中的共享专家</h2>
+            <p class="mb-6">DeepSeek-MoE引入了一个有趣的变体，其中专家在多个层之间共享，而不是每层都有自己独立的专家集。这减少了参数冗余并提高了效率，同时保持了MoE的优势 [citation](1)。</p>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-4 serif">传统MoE vs DeepSeek-MoE</h3>
+                    <div class="mb-4">
+                        <h4 class="font-bold">传统MoE:</h4>
+                        <p>每一层都有自己独立的专家集</p>
+                        <div class="flex items-center justify-center my-4">
+                            <div class="text-center">
+                                <div class="flex space-x-2 mb-2">
+                                    <div class="w-8 h-8 rounded-full" style="background-color: var(--primary-color);"></div>
+                                    <div class="w-8 h-8 rounded-full" style="background-color: var(--primary-color);"></div>
+                                    <div class="w-8 h-8 rounded-full" style="background-color: var(--primary-color);"></div>
+                                </div>
+                                <div class="text-xs">层1专家</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center my-4">
+                            <div class="text-center">
+                                <div class="flex space-x-2 mb-2">
+                                    <div class="w-8 h-8 rounded-full" style="background-color: var(--secondary-color);"></div>
+                                    <div class="w-8 h-8 rounded-full" style="background-color: var(--secondary-color);"></div>
+                                    <div class="w-8 h-8 rounded-full" style="background-color: var(--secondary-color);"></div>
+                                </div>
+                                <div class="text-xs">层2专家</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center my-4">
+                            <div class="text-center">
+                                <div class="flex space-x-2 mb-2">
+                                    <div class="w-8 h-8 rounded-full" style="background-color: var(--accent-color);"></div>
+                                    <div class="w-8 h-8 rounded-full" style="background-color: var(--accent-color);"></div>
+                                    <div class="w-8 h-8 rounded-full" style="background-color: var(--accent-color);"></div>
+                                </div>
+                                <div class="text-xs">层3专家</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-4 serif">DeepSeek-MoE:</h3>
+                    <p>专家在多个层之间共享</p>
+                    <div class="flex items-center justify-center my-8">
+                        <div class="text-center">
+                            <div class="flex space-x-2 mb-2">
+                                <div class="w-8 h-8 rounded-full" style="background-color: var(--primary-color);"></div>
+                                <div class="w-8 h-8 rounded-full" style="background-color: var(--secondary-color);"></div>
+                                <div class="w-8 h-8 rounded-full" style="background-color: var(--accent-color);"></div>
+                            </div>
+                            <div class="text-xs">共享专家池</div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center space-y-2">
+                        <div class="w-full h-1 border-t border-dashed" style="border-color: var(--text-color);"></div>
+                        <div class="text-xs">用于层1</div>
+                        <div class="w-full h-1 border-t border-dashed" style="border-color: var(--text-color);"></div>
+                        <div class="text-xs">用于层2</div>
+                        <div class="w-full h-1 border-t border-dashed" style="border-color: var(--text-color);"></div>
+                        <div class="text-xs">用于层3</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="highlight p-6 rounded-lg mt-8">
+                <h4 class="font-bold mb-2"><i class="fas fa-lightbulb mr-2" style="color: var(--secondary-color);"></i>DeepSeek-MoE的优势</h4>
+                <ul class="space-y-2">
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--primary-color);"></i>
+                        <span>减少参数冗余，提高模型效率</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--primary-color);"></i>
+                        <span>保持MoE的稀疏激活优势</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--primary-color);"></i>
+                        <span>允许专家在不同层次的任务中重复使用知识</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 综合可视化 -->
+        <section class="max-w-5xl mx-auto mb-20 animate-on-scroll">
+            <h2 class="text-3xl font-bold mb-6 serif text-center">MoE架构综合可视化</h2>
+            <div class="mermaid">
+                flowchart TD
+                    Input[输入标记] --> Router[路由器网络]
+                    Router --> |计算专家分数| Scores[专家分数分布]
+                    Scores --> |Top-k选择| Selection[选择最相关专家]
+                    
+                    subgraph ExpertPool[专家池]
+                        E1[专家1]
+                        E2[专家2]
+                        E3[专家3]
+                        E4[专家4]
+                        E5[专家5]
+                        E6[专家6]
+                    end
+                    
+                    Selection --> |激活| E1 & E2
+                    E1 & E2 --> Combine[加权组合]
+                    Combine --> Output[输出]
+                    
+                    subgraph LoadBalancing[负载均衡机制]
+                        L1[辅助负载均衡损失]
+                        L2[路由器Z损失]
+                        L3[重要性因子]
+                    end
+                    
+                    LoadBalancing -.-> Router
+                    
+                    style Input fill:#f9f9f9,stroke:#333,stroke-width:2px
+                    style Router fill:#d4e6f1,stroke:#3498db,stroke-width:2px
+                    style Scores fill:#d5f5e3,stroke:#2ecc71,stroke-width:2px
+                    style Selection fill:#d5f5e3,stroke:#2ecc71,stroke-width:2px
+                    style ExpertPool fill:#f5eef8,stroke:#9b59b6,stroke-width:2px
+                    style E1 fill:#fadbd8,stroke:#e74c3c,stroke-width:2px
+                    style E2 fill:#fadbd8,stroke:#e74c3c,stroke-width:2px
+                    style E3 fill:#f5eef8,stroke:#9b59b6,stroke-width:2px,stroke-dasharray: 5 5
+                    style E4 fill:#f5eef8,stroke:#9b59b6,stroke-width:2px,stroke-dasharray: 5 5
+                    style E5 fill:#f5eef8,stroke:#9b59b6,stroke-width:2px,stroke-dasharray: 5 5
+                    style E6 fill:#f5eef8,stroke:#9b59b6,stroke-width:2px,stroke-dasharray: 5 5
+                    style Combine fill:#fef9e7,stroke:#f1c40f,stroke-width:2px
+                    style Output fill:#f9f9f9,stroke:#333,stroke-width:2px
+                    style LoadBalancing fill:#f8d9d5,stroke:#e74c3c,stroke-width:2px
+            </div>
+            <p class="text-sm text-center italic mt-4">图3: MoE架构综合流程图。实线表示激活路径，虚线表示未激活的专家，点线表示负载均衡对路由器的影响。</p>
+        </section>
+
+        <!-- 延伸阅读 -->
+        <section id="further-reading" class="max-w-4xl mx-auto mb-20 animate-on-scroll">
+            <h2 class="text-3xl font-bold mb-6 serif">延伸阅读</h2>
+            <p class="mb-6">想要深入了解混合专家模型？以下是我们推荐的五本相关书籍和论文：</p>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="card p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-2 serif">《Switch Transformers: Scaling to Trillion Parameter Models》</h3>
+                    <p class="mb-2 text-sm">作者: William Fedus, Barret Zoph, Noam Shazeer</p>
+                    <p class="mb-4">这篇开创性论文介绍了Switch Transformers，一种使用简单的专家选择机制实现万亿参数规模的MoE模型。</p>
+                    <a href="https://arxiv.org/abs/2101.03961" target="_blank" class="text-sm flex items-center" style="color: var(--primary-color);">
+                        <i class="fas fa-external-link-alt mr-1"></i> 查看论文
+                    </a>
+                </div>
+                
+                <div class="card p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-2 serif">《GShard: Scaling Giant Models with Conditional Computation and Automatic Sharding》</h3>
+                    <p class="mb-2 text-sm">作者: Dmitry Lepikhin, HyoukJoong Lee, Yuanzhong Xu</p>
+                    <p class="mb-4">探讨了如何使用条件计算和自动分片技术扩展MoE模型，解决了大规模分布式训练的挑战。</p>
+                    <a href="https://arxiv.org/abs/2006.16668" target="_blank" class="text-sm flex items-center" style="color: var(--primary-color);">
+                        <i class="fas fa-external-link-alt mr-1"></i> 查看论文
+                    </a>
+                </div>
+                
+                <div class="card p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-2 serif">《Mixture-of-Experts with Expert Choice Routing》</h3>
+                    <p class="mb-2 text-sm">作者: Yanqi Zhou, Tao Lei, Hanxiao Liu, Nan Du</p>
+                    <p class="mb-4">提出了一种新颖的"专家选择路由"方法，让专家而非路由器决定处理哪些标记，显著改善了负载平衡。</p>
+                    <a href="https://arxiv.org/abs/2202.09368" target="_blank" class="text-sm flex items-center" style="color: var(--primary-color);">
+                        <i class="fas fa-external-link-alt mr-1"></i> 查看论文
+                    </a>
+                </div>
+                
+                <div class="card p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-2 serif">《DeepSeek: Empowering LLMs with Mixture of Experts》</h3>
+                    <p class="mb-2 text-sm">作者: DeepSeek AI Research Team</p>
+                    <p class="mb-4">详细介绍了DeepSeek-MoE的架构，特别是其创新的跨层专家共享机制，以及如何平衡效率和性能。</p>
+                    <a href="https://arxiv.org/abs/2401.02385" target="_blank" class="text-sm flex items-center" style="color: var(--primary-color);">
+                        <i class="fas fa-external-link-alt mr-1"></i> 查看论文
+                    </a>
+                </div>
+                
+                <div class="card p-6 rounded-lg md:col-span-2">
+                    <h3 class="text-xl font-bold mb-2 serif">《Sparsely-Gated Mixture-of-Experts Layer for Language Models》</h3>
+                    <p class="mb-2 text-sm">作者: Noam Shazeer, Azalia Mirhoseini, Krzysztof Maziarz</p>
+                    <p class="mb-4">这篇经典论文首次将MoE应用于语言模型，介绍了稀疏门控技术和负载平衡的基本原理，为后续研究奠定了基础。</p>
+                    <a href="https://arxiv.org/abs/1701.06538" target="_blank" class="text-sm flex items-center" style="color: var(--primary-color);">
+                        <i class="fas fa-external-link-alt mr-1"></i> 查看论文
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer style="background-color: var(--card-bg);" class="py-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <i class="fas fa-brain text-2xl" style="color: var(--primary-color);"></i>
+                        <span class="text-xl font-bold serif">混合专家模型</span>
+                    </div>
+                    <p class="text-sm">深度学习的新范式：稀疏激活与高效扩展的完美结合</p>
+                </div>
+                <div class="flex flex-col items-center md:items-end">
+                    <div class="flex space-x-4 mb-4">
+                        <a href="#" class="text-xl hover:opacity-75" style="color: var(--primary-color);"><i class="fab fa-github"></i></a>
+                        <a href="#" class="text-xl hover:opacity-75" style="color: var(--primary-color);"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-xl hover:opacity-75" style="color: var(--primary-color);"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                    <p class="text-sm">© 2023 MoE研究团队. 保留所有权利.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="backToTop" class="fixed bottom-6 right-6 p-3 rounded-full shadow-lg opacity-0 transition-opacity duration-300" style="background-color: var(--primary-color); color: white;">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // 初始化Mermaid
+        mermaid.initialize({
+            theme: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default',
+            startOnLoad: true,
+            securityLevel: 'loose',
+        });
+
+        // 深色模式切换
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        
+        // 检查系统偏好
+        function getPreferredTheme() {
+            if (localStorage.getItem('theme') === 'dark' || 
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                return 'dark';
+            }
+            return 'light';
+        }
+        
+        // 应用主题
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                mermaid.initialize({ theme: 'dark' });
+            } else {
+                document.documentElement.classList.remove('dark');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                mermaid.initialize({ theme: 'default' });
+            }
+        }
+        
+        // 初始应用主题
+        applyTheme(getPreferredTheme());
+        
+        // 主题切换事件
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+            
+            // 重新渲染Mermaid图表
+            document.querySelectorAll('.mermaid').forEach(el => {
+                const content = el.textContent;
+                el.textContent = content;
+                mermaid.init(undefined, el);
+            });
+        });
+        
+        // 移动端菜单
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // 滚动指示器
+        const scrollIndicator = document.getElementById('scrollIndicator');
+        
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            scrollIndicator.style.width = scrolled + '%';
+            
+            // 显示/隐藏返回顶部按钮
+            const backToTopButton = document.getElementById('backToTop');
+            if (winScroll > 300) {
+                backToTopButton.style.opacity = '1';
+            } else {
+                backToTopButton.style.opacity = '0';
+            }
+        });
+        
+        // 返回顶部
+        document.getElementById('backToTop').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // 滚动动画
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementPosition < windowHeight * 0.85) {
+                    element.classList.add('visible');
+                }
+            });
+        };
+        
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 关闭移动端菜单
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

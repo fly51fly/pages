@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsloth 模型微调指南 | 专业AI训练教程</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary-color: #10b981;
+            --accent-color: #f59e0b;
+            --text-color: #1f2937;
+            --text-light: #6b7280;
+            --bg-color: #ffffff;
+            --bg-secondary: #f9fafb;
+            --border-color: #e5e7eb;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .dark {
+            --primary-color: #818cf8;
+            --primary-dark: #6366f1;
+            --secondary-color: #34d399;
+            --accent-color: #fbbf24;
+            --text-color: #f9fafb;
+            --text-light: #d1d5db;
+            --bg-color: #111827;
+            --bg-secondary: #1f2937;
+            --border-color: #374151;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+        }
+
+        body {
+            font-family: 'Noto Sans SC', Tahoma, Arial, Roboto, "Droid Sans", "Helvetica Neue", "Droid Sans Fallback", "Heiti SC", "Hiragino Sans GB", Simsun, sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .prose {
+            max-width: 65ch;
+            color: var(--text-color);
+        }
+
+        .prose h1, .prose h2, .prose h3, .prose h4 {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .prose p, .prose ul, .prose ol {
+            color: var(--text-color);
+            line-height: 1.8;
+        }
+
+        .card {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+            color: var(--text-light);
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s, left 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        .nav-link.active {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+            left: 0;
+        }
+
+        .first-letter::first-letter {
+            font-size: 3.5em;
+            font-weight: 700;
+            float: left;
+            line-height: 0.8;
+            margin-right: 0.1em;
+            color: var(--primary-color);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .step-card {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .step-number {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--text-light);
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--bg-secondary);
+            color: var(--text-color);
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: var(--bg-secondary);
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            width: 0;
+            transition: width 1s ease;
+        }
+
+        @media (max-width: 768px) {
+            .step-card {
+                padding-left: 0;
+                padding-top: 3rem;
+            }
+
+            .step-number {
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        /* 滚动动画 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="sticky top-0 z-50 bg-opacity-90 backdrop-filter backdrop-blur-lg" style="background-color: var(--bg-color);">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-brain text-2xl" style="color: var(--primary-color);"></i>
+                <span class="text-xl font-bold">Unsloth</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#" class="nav-link active">微调指南</a>
+                <a href="#" class="nav-link">模型选择</a>
+                <a href="#" class="nav-link">数据集准备</a>
+                <a href="#" class="nav-link">参数百科</a>
+                <a href="#" class="nav-link">常见问题</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="p-2 rounded-full" style="background-color: var(--bg-secondary);">
+                    <i id="theme-icon" class="fas fa-moon"></i>
+                </button>
+                <a href="#" class="btn btn-primary hidden md:block">
+                    <i class="fab fa-github mr-2"></i>开始使用
+                </a>
+                <button class="md:hidden p-2" id="mobile-menu-button">
+                    <i class="fas fa-bars text-xl" style="color: var(--text-color);"></i>
+                </button>
+            </div>
+        </div>
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden" style="background-color: var(--bg-color);">
+            <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+                <a href="#" class="nav-link active">微调指南</a>
+                <a href="#" class="nav-link">模型选择</a>
+                <a href="#" class="nav-link">数据集准备</a>
+                <a href="#" class="nav-link">参数百科</a>
+                <a href="#" class="nav-link">常见问题</a>
+                <a href="#" class="btn btn-primary text-center">
+                    <i class="fab fa-github mr-2"></i>开始使用
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 模块 -->
+    <header class="relative overflow-hidden py-20 md:py-32" style="background-color: var(--bg-secondary);">
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-3xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 gradient-text">大语言模型微调指南</h1>
+                <p class="text-xl md:text-2xl mb-8" style="color: var(--text-light);">掌握 AI 模型定制化的艺术与科学，从入门到精通的完整教程</p>
+                <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 justify-center">
+                    <a href="#guide" class="btn btn-primary">
+                        <i class="fas fa-book-open mr-2"></i>开始学习
+                    </a>
+                    <a href="#" class="btn btn-outline">
+                        <i class="fas fa-code mr-2"></i>查看示例代码
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- 背景装饰 -->
+        <div class="absolute top-0 left-0 w-full h-full opacity-10">
+            <div class="absolute top-10 left-10 w-40 h-40 rounded-full" style="background: radial-gradient(circle, var(--primary-color), transparent 70%);"></div>
+            <div class="absolute bottom-10 right-10 w-60 h-60 rounded-full" style="background: radial-gradient(circle, var(--secondary-color), transparent 70%);"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full" style="background: radial-gradient(circle, var(--accent-color), transparent 70%);"></div>
+        </div>
+    </header>
+
+    <!-- 进度指示器 -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="progress-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+            <div class="flex justify-between text-sm" style="color: var(--text-light);">
+                <span>入门</span>
+                <span>基础</span>
+                <span>进阶</span>
+                <span>专家</span>
+                <span>精通</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主要内容 -->
+    <main class="container mx-auto px-4 py-12" id="guide">
+        <!-- 介绍部分 -->
+        <section class="max-w-4xl mx-auto mb-20 fade-in">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-1 rounded" style="background-color: var(--primary-color);"></div>
+                <h2 class="text-2xl font-bold ml-4">什么是模型微调？</h2>
+            </div>
+            <div class="prose mx-auto">
+                <p class="first-letter mb-6 text-lg">微调大语言模型是一种定制化 AI 行为、增强知识和优化特定领域性能的强大技术。通过微调，您可以将通用模型转变为专门针对特定任务的专家系统，显著提升其在目标领域的表现。</p>
+                
+                <p class="mb-6">您可以将微调后的模型视为一个专门设计的智能代理，能够更有效、更精确地执行特定任务。微调不仅可以复制 RAG（检索增强生成）的所有功能，而且能够提供 RAG 无法实现的能力。</p>
+
+                <div class="card p-6 my-8">
+                    <h3 class="text-xl font-semibold mb-4">微调的主要应用场景</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-3" style="color: var(--secondary-color);"></i>
+                            <span>训练模型预测新闻标题对公司的正面或负面影响</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-3" style="color: var(--secondary-color);"></i>
+                            <span>利用历史客户互动数据，提供更准确和个性化的响应</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-3" style="color: var(--secondary-color);"></i>
+                            <span>基于法律文本微调模型，用于合同分析、案例法研究和合规检查</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 微调步骤 -->
+        <section class="max-w-4xl mx-auto mb-20">
+            <div class="flex items-center mb-10">
+                <div class="w-12 h-1 rounded" style="background-color: var(--primary-color);"></div>
+                <h2 class="text-2xl font-bold ml-4">微调全流程指南</h2>
+            </div>
+
+            <!-- 步骤 1 -->
+            <div class="step-card mb-16 fade-in">
+                <div class="step-number">1</div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-4">选择合适的模型和方法</h3>
+                    <p class="mb-4">对于初学者，建议从小型指令模型如 Llama 3.1 (8B) 开始实验。您还需要在 QLoRA 和 LoRA 训练方法之间做出选择。</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mt-8">
+                        <div class="card p-4 border-l-4" style="border-left-color: var(--primary-color);">
+                            <h4 class="font-semibold mb-2">QLoRA</h4>
+                            <p class="text-sm" style="color: var(--text-light);">使用量化技术减少内存需求，适合在有限资源环境下训练大型模型。</p>
+                        </div>
+                        <div class="card p-4 border-l-4" style="border-left-color: var(--secondary-color);">
+                            <h4 class="font-semibold mb-2">LoRA</h4>
+                            <p class="text-sm" style="color: var(--text-light);">低秩适应方法，通过训练少量参数实现高效微调，保持模型性能的同时减少计算需求。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 步骤 2 -->
+            <div class="step-card mb-16 fade-in">
+                <div class="step-number">2</div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-4">准备数据集</h3>
+                    <p class="mb-4">数据集的质量和数量将直接影响微调结果，因此这一步至关重要。</p>
+                    
+                    <div class="bg-opacity-10 p-4 rounded-lg mb-6" style="background-color: var(--primary-color);">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-lightbulb mt-1 mr-3" style="color: var(--accent-color);"></i>
+                                <span>通常需要创建包含问题和答案两列的数据集。数据质量和数量将直接反映在微调结果中。</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-lightbulb mt-1 mr-3" style="color: var(--accent-color);"></i>
+                                <span>可以使用 ChatGPT 或本地 LLM 合成数据并将数据集结构化为问答对。</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-lightbulb mt-1 mr-3" style="color: var(--accent-color);"></i>
+                                <span>微调可以永久性地整合现有文档库并持续扩展知识库，但仅仅堆砌数据效果不佳。为获得最佳结果，应精心策划结构良好的数据集，理想情况下为问答对形式。</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 步骤 3 -->
+            <div class="step-card mb-16 fade-in">
+                <div class="step-number">3</div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-4">理解模型参数</h3>
+                    <p class="mb-6">掌握关键参数对于避免过拟合和欠拟合至关重要。</p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y" style="border-color: var(--border-color);">
+                            <thead>
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold" style="background-color: var(--bg-secondary);">参数</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold" style="background-color: var(--bg-secondary);">描述</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold" style="background-color: var(--bg-secondary);">建议值</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y" style="border-color: var(--border-color);">
+                                <tr>
+                                    <td class="px-4 py-3 text-sm font-medium">学习率</td>
+                                    <td class="px-4 py-3 text-sm">控制模型学习速度</td>
+                                    <td class="px-4 py-3 text-sm">2e-4 至 5e-5</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm font-medium">批次大小</td>
+                                    <td class="px-4 py-3 text-sm">每次更新处理的样本数</td>
+                                    <td class="px-4 py-3 text-sm">1 至 8</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm font-medium">训练轮次</td>
+                                    <td class="px-4 py-3 text-sm">完整数据集的训练次数</td>
+                                    <td class="px-4 py-3 text-sm">3 至 5</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-sm font-medium">LoRA 秩</td>
+                                    <td class="px-4 py-3 text-sm">低秩矩阵的维度</td>
+                                    <td class="px-4 py-3 text-sm">8 至 64</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-8">
+                        <h4 class="font-semibold mb-4">避免过拟合与欠拟合</h4>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="card p-4">
+                                <h5 class="font-medium mb-2">过拟合（太具体）</h5>
+                                <p class="text-sm" style="color: var(--text-light);">模型过度记忆训练数据，无法泛化。解决方案：</p>
+                                <ul class="text-sm mt-2 space-y-1">
+                                    <li>• 减少训练轮次</li>
+                                    <li>• 增加数据多样性</li>
+                                    <li>• 使用正则化技术</li>
+                                </ul>
+                            </div>
+                            <div class="card p-4">
+                                <h5 class="font-medium mb-2">欠拟合（太泛泛）</h5>
+                                <p class="text-sm" style="color: var(--text-light);">模型未能从训练数据中学习，回答类似基础模型。解决方案：</p>
+                                <ul class="text-sm mt-2 space-y-1">
+                                    <li>• 增加学习率</li>
+                                    <li>• 延长训练时间</li>
+                                    <li>• 使用更相关的领域数据集</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 步骤 4 -->
+            <div class="step-card mb-16 fade-in">
+                <div class="step-number">4</div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-4">训练与评估</h3>
+                    <p class="mb-6">训练过程中，您将看到损失值不断下降，这表明模型正在学习。评估阶段至关重要，可以验证模型是否达到预期效果。</p>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-semibold mb-3">训练过程可视化</h4>
+                        <div class="h-40 bg-opacity-5 rounded-lg flex items-center justify-center" style="background-color: var(--primary-color);">
+                            <div class="text-center">
+                                <i class="fas fa-chart-line text-4xl mb-2" style="color: var(--primary-color);"></i>
+                                <p class="text-sm" style="color: var(--text-light);">训练损失曲线示意图</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold mb-3">评估方法</h4>
+                            <ul class="space-y-2">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-square mt-1 mr-2" style="color: var(--secondary-color);"></i>
+                                    <span>人工评估：检查模型回答质量</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-square mt-1 mr-2" style="color: var(--secondary-color);"></i>
+                                    <span>自动评估：使用指标如准确率、F1分数</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-square mt-1 mr-2" style="color: var(--secondary-color);"></i>
+                                    <span>对比评估：与基础模型比较性能</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-3">评估指标</h4>
+                            <ul class="space-y-2">
+                                <li class="flex items-start">
+                                    <i class="fas fa-chart-bar mt-1 mr-2" style="color: var(--accent-color);"></i>
+                                    <span>回答准确性</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-chart-bar mt-1 mr-2" style="color: var(--accent-color);"></i>
+                                    <span>回答相关性</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-chart-bar mt-1 mr-2" style="color: var(--accent-color);"></i>
+                                    <span>领域知识应用</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-chart-bar mt-1 mr-2" style="color: var(--accent-color);"></i>
+                                    <span>生成文本质量</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 步骤 5 -->
+            <div class="step-card fade-in">
+                <div class="step-number">5</div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-4">保存与部署模型</h3>
+                    <p class="mb-6">完成微调后，您可以将模型保存为小型 LoRA 适配器文件（约 100MB），或上传到 Hugging Face。</p>
+                    
+                    <div class="bg-opacity-5 p-4 rounded-lg mb-6 overflow-x-auto" style="background-color: var(--primary-color);">
+                        <pre><code class="text-sm" style="color: var(--text-color);">
+# 保存为 LoRA 适配器
+model.save_pretrained("path/to/save/model")
+
+# 上传到 Hugging Face
+model.push_to_hub("your-username/model-name")
+                        </code></pre>
+                    </div>
+                    
+                    <h4 class="font-semibold mb-3">部署选项</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="card p-3 text-center">
+                            <i class="fas fa-server text-2xl mb-2" style="color: var(--primary-color);"></i>
+                            <p class="text-sm font-medium">Ollama</p>
+                        </div>
+                        <div class="card p-3 text-center">
+                            <i class="fas fa-bolt text-2xl mb-2" style="color: var(--primary-color);"></i>
+                            <p class="text-sm font-medium">vLLM</p>
+                        </div>
+                        <div class="card p-3 text-center">
+                            <i class="fas fa-globe text-2xl mb-2" style="color: var(--primary-color);"></i>
+                            <p class="text-sm font-medium">Open WebUI</p>
+                        </div>
+                        <div class="card p-3 text-center">
+                            <i class="fas fa-microchip text-2xl mb-2" style="color: var(--primary-color);"></i>
+                            <p class="text-sm font-medium">GGUF 格式</p>
+                        </div>
+                        <div class="card p-3 text-center">
+                            <i class="fab fa-hubspot text-2xl mb-2" style="color: var(--primary-color);"></i>
+                            <p class="text-sm font-medium">Hugging Face</p>
+                        </div>
+                        <div class="card p-3 text-center">
+                            <i class="fas fa-cloud text-2xl mb-2" style="color: var(--primary-color);"></i>
+                            <p class="text-sm font-medium">API 服务</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 微调流程图 -->
+        <section class="max-w-4xl mx-auto mb-20 fade-in">
+            <div class="flex items-center mb-10">
+                <div class="w-12 h-1 rounded" style="background-color: var(--primary-color);"></div>
+                <h2 class="text-2xl font-bold ml-4">微调流程可视化</h2>
+            </div>
+            
+            <div class="card p-6">
+                <div class="mermaid-diagram">
+                    <pre class="mermaid">
+flowchart TD
+    A[选择基础模型] --> B[准备数据集]
+    B --> C[设置训练参数]
+    C --> D[训练模型]
+    D --> E{评估效果}
+    E -->|不满意| F[调整参数]
+    F --> D
+    E -->|满意| G[保存模型]
+    G --> H[部署应用]
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 常见问题 -->
+        <section class="max-w-4xl mx-auto mb-20 fade-in">
+            <div class="flex items-center mb-10">
+                <div class="w-12 h-1 rounded" style="background-color: var(--primary-color);"></div>
+                <h2 class="text-2xl font-bold ml-4">常见问题解答</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="card p-6">
+                    <button class="faq-toggle w-full flex justify-between items-center">
+                        <h3 class="text-lg font-semibold">微调和 RAG 有什么区别？</h3>
+                        <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content hidden mt-4">
+                        <p>微调可以复制 RAG（检索增强生成）的所有功能，但 RAG 无法实现微调的所有能力。微调通过修改模型权重永久性地整合知识，而 RAG 在推理时动态检索信息。微调后的模型可以更深入理解领域知识，表现出更一致的行为模式。</p>
+                    </div>
+                </div>
+                
+                <div class="card p-6">
+                    <button class="faq-toggle w-full flex justify-between items-center">
+                        <h3 class="text-lg font-semibold">我应该选择什么模型开始微调？</h3>
+                        <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content hidden mt-4">
+                        <p>对于初学者，建议从小型指令模型如 Llama 3.1 (8B) 开始实验。这类模型已经具备良好的基础能力，同时对计算资源要求较低。随着经验积累，可以尝试更大的模型以获得更好的性能。</p>
+                    </div>
+                </div>
+                
+                <div class="card p-6">
+                    <button class="faq-toggle w-full flex justify-between items-center">
+                        <h3 class="text-lg font-semibold">我需要多少数据才能进行有效微调？</h3>
+                        <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content hidden mt-4">
+                        <p>数据需求取决于任务复杂度和特定领域。一般而言，几百到几千个高质量样本就可以取得不错的效果。关键是数据质量而非数量，精心策划的小型数据集通常比大量低质量数据更有效。对于特定领域任务，甚至100-500个精心设计的样本就能显著提升性能。</p>
+                    </div>
+                </div>
+                
+                <div class="card p-6">
+                    <button class="faq-toggle w-full flex justify-between items-center">
+                        <h3 class="text-lg font-semibold">如何避免微调过程中的过拟合？</h3>
+                        <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content hidden mt-4">
+                        <p>避免过拟合的策略包括：使用更多样化的训练数据、减少训练轮次、应用早停技术、使用正则化方法（如权重衰减）、适当降低学习率，以及使用验证集监控性能。定期评估模型在未见过的数据上的表现也很重要。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 延伸阅读 -->
+        <section class="max-w-4xl mx-auto fade-in">
+            <div class="flex items-center mb-10">
+                <div class="w-12 h-1 rounded" style="background-color: var(--primary-color);"></div>
+                <h2 class="text-2xl font-bold ml-4">延伸阅读</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="card p-6">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center" style="background-color: var(--bg-secondary);">
+                            <i class="fas fa-book text-xl" style="color: var(--primary-color);"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="font-semibold mb-1">《深度学习》</h3>
+                            <p class="text-sm mb-2" style="color: var(--text-light);">Ian Goodfellow, Yoshua Bengio, Aaron Courville</p>
+                            <p class="text-sm">深度学习领域的经典教材，包含神经网络和微调的基础理论。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card p-6">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center" style="background-color: var(--bg-secondary);">
+                            <i class="fas fa-file-alt text-xl" style="color: var(--primary-color);"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="font-semibold mb-1">《Parameter-Efficient Transfer Learning for NLP》</h3>
+                            <p class="text-sm mb-2" style="color: var(--text-light);">Neil Houlsby 等</p>
+                            <p class="text-sm">介绍了适配器微调方法，是 LoRA 等技术的理论基础。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card p-6">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center" style="background-color: var(--bg-secondary);">
+                            <i class="fas fa-file-alt text-xl" style="color: var(--primary-color);"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="font-semibold mb-1">《LoRA: Low-Rank Adaptation of Large Language Models》</h3>
+                            <p class="text-sm mb-2" style="color: var(--text-light);">Edward J. Hu 等</p>
+                            <p class="text-sm">详细介绍了 LoRA 技术的原理和实现方法。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card p-6">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center" style="background-color: var(--bg-secondary);">
+                            <i class="fas fa-file-alt text-xl" style="color: var(--primary-color);"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="font-semibold mb-1">《QLoRA: Efficient Finetuning of Quantized LLMs》</h3>
+                            <p class="text-sm mb-2" style="color: var(--text-light);">Tim Dettmers 等</p>
+                            <p class="text-sm">介绍了 QLoRA 技术，结合量化和 LoRA 实现高效微调。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card p-6">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center" style="background-color: var(--bg-secondary);">
+                            <i class="fas fa-graduation-cap text-xl" style="color: var(--primary-color);"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="font-semibold mb-1">Hugging Face 课程：《微调变换器模型》</h3>
+                            <p class="text-sm mb-2" style="color: var(--text-light);">Hugging Face</p>
+                            <p class="text-sm">实用的在线课程，介绍如何使用 Transformers 库微调模型。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 底部 CTA -->
+    <section class="py-16" style="background-color: var(--bg-secondary);">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">准备好开始您的微调之旅了吗？</h2>
+            <p class="max-w-2xl mx-auto mb-8" style="color: var(--text-light);">使用 Unsloth 加速您的微调过程，获得更快的训练速度和更好的性能。</p>
+            <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
+                <a href="#" class="btn btn-primary">
+                    <i class="fab fa-github mr-2"></i>访问 GitHub
+                </a>
+                <a href="#" class="btn btn-outline">
+                    <i class="fas fa-book mr-2"></i>阅读完整文档
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="py-12" style="background-color: var(--bg-color);">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-brain text-2xl" style="color: var(--primary-color);"></i>
+                        <span class="text-xl font-bold">Unsloth</span>
+                    </div>
+                    <p class="mb-4" style="color: var(--text-light);">加速大语言模型微调的开源工具</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-xl" style="color: var(--text-light);"><i class="fab fa-github"></i></a>
+                        <a href="#" class="text-xl" style="color: var(--text-light);"><i class="fab fa-discord"></i></a>
+                        <a href="#" class="text-xl" style="color: var(--text-light);"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4">文档</h3>
+                    <ul class="space-y-2" style="color: var(--text-light);">
+                        <li><a href="#" class="hover:underline">入门指南</a></li>
+                        <li><a href="#" class="hover:underline">API 参考</a></li>
+                        <li><a href="#" class="hover:underline">示例代码</a></li>
+                        <li><a href="#" class="hover:underline">常见问题</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4">资源</h3>
+                    <ul class="space-y-2" style="color: var(--text-light);">
+                        <li><a href="#" class="hover:underline">博客</a></li>
+                        <li><a href="#" class="hover:underline">教程</a></li>
+                        <li><a href="#" class="hover:underline">社区</a></li>
+                        <li><a href="#" class="hover:underline">贡献指南</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4">联系我们</h3>
+                    <ul class="space-y-2" style="color: var(--text-light);">
+                        <li><a href="#" class="hover:underline">Discord 社区</a></li>
+                        <li><a href="#" class="hover:underline">GitHub 讨论</a></li>
+                        <li><a href="#" class="hover:underline">邮件支持</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t mt-12 pt-8 text-center" style="border-color: var(--border-color);">
+                <p class="text-sm" style="color: var(--text-light);">© 2024 Unsloth. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 回到顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 p-3 rounded-full shadow-lg opacity-0 transition-opacity duration-300" style="background-color: var(--primary-color); color: white;">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // 初始化 Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'cardinal',
+            }
+        });
+
+        // 深色模式切换
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        // 检查系统偏好
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+        
+        // 切换主题
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            
+            if (document.documentElement.classList.contains('dark')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                
+                // 更新 Mermaid 主题
+                mermaid.initialize({
+                    startOnLoad: false,
+                    theme: 'dark'
+                });
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                
+                // 更新 Mermaid 主题
+                mermaid.initialize({
+                    startOnLoad: false,
+                    theme: 'default'
+                });
+            }
+            
+            // 重新渲染图表
+            mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+        });
+
+        // 移动端菜单
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // FAQ 切换
+        const faqToggles = document.querySelectorAll('.faq-toggle');
+        
+        faqToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const content = toggle.nextElementSibling;
+                const icon = toggle.querySelector('i');
+                
+                content.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+
+        // 滚动动画
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const fadeInOnScroll = () => {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        };
+        
+        window.addEventListener('scroll', fadeInOnScroll);
+        fadeInOnScroll(); // 初始检查
+
+        // 进度条动画
+        const progressBar = document.getElementById('progress-bar');
+        
+        const updateProgressBar = () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.offsetHeight;
+            const winHeight = window.innerHeight;
+            const scrollPercent = scrollTop / (docHeight - winHeight);
+            const scrollPercentRounded = Math.round(scrollPercent * 100);
+            
+            progressBar.style.width = scrollPercentRounded + '%';
+        };
+        
+        window.addEventListener('scroll', updateProgressBar);
+        updateProgressBar(); // 初始更新
+
+        // 回到顶部按钮
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        const scrollFunction = () => {
+            if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+                backToTopButton.style.opacity = '1';
+            } else {
+                backToTopButton.style.opacity = '0';
+            }
+        };
+        
+        window.addEventListener('scroll', scrollFunction);
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
