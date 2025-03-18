@@ -1014,12 +1014,12 @@
         const themeToggle = document.getElementById('themeToggle');
         const themeIcon = themeToggle.querySelector('i');
         
-        // 检查系统偏好
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
-        }
+        // // 检查系统偏好
+        // if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        //     document.documentElement.classList.add('dark');
+        //     themeIcon.classList.remove('fa-moon');
+        //     themeIcon.classList.add('fa-sun');
+        // }
         
         // 主题切换功能
         themeToggle.addEventListener('click', () => {
