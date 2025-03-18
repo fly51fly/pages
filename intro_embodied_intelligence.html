@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI要"成精"？揭秘"具身智能"如何颠覆你的想象！</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #3B82F6;
+            --secondary-color: #10B981;
+            --accent-color: #8B5CF6;
+            --text-color: #1F2937;
+            --bg-color: #FFFFFF;
+            --bg-secondary: #F3F4F6;
+            --border-color: #E5E7EB;
+            --highlight-color: #FEF3C7;
+        }
+
+        .dark {
+            --primary-color: #60A5FA;
+            --secondary-color: #34D399;
+            --accent-color: #A78BFA;
+            --text-color: #F9FAFB;
+            --bg-color: #111827;
+            --bg-secondary: #1F2937;
+            --border-color: #374151;
+            --highlight-color: #78350F;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', Tahoma, Arial, Roboto, "Droid Sans", "Helvetica Neue", "Droid Sans Fallback", "Heiti SC", "Hiragino Sans GB", Simsun, sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 700;
+        }
+
+        .hero {
+            background-image: linear-gradient(to right, rgba(59, 130, 246, 0.8), rgba(139, 92, 246, 0.8)), url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1650&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .first-letter::first-letter {
+            font-size: 3.5em;
+            float: left;
+            line-height: 0.8;
+            margin-right: 0.1em;
+            color: var(--primary-color);
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 700;
+        }
+
+        .card {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .highlight {
+            background-color: var(--highlight-color);
+            padding: 0.2em 0.4em;
+            border-radius: 0.2em;
+        }
+
+        .quote {
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1rem;
+            font-style: italic;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 1.5rem;
+            width: 2px;
+            height: calc(100% + 1rem);
+            background-color: var(--border-color);
+        }
+
+        .timeline-item:last-child::after {
+            display: none;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .btn {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background-color: var(--accent-color);
+            z-index: 1000;
+            width: 0%;
+        }
+
+        .mermaid {
+            background-color: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .first-letter::first-letter {
+                font-size: 2.5em;
+            }
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <!-- 滚动指示器 -->
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+
+    <!-- 导航栏 -->
+    <nav class="sticky top-0 z-50 bg-opacity-95 backdrop-filter backdrop-blur-lg" style="background-color: var(--bg-color);">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-robot text-2xl" style="color: var(--primary-color);"></i>
+                <span class="font-bold text-lg">具身智能研究</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#intro" class="nav-link">概述</a>
+                <a href="#essence" class="nav-link">本质与特点</a>
+                <a href="#agent" class="nav-link">智能体与世界模型</a>
+                <a href="#learning" class="nav-link">学习与交互</a>
+                <a href="#ethics" class="nav-link">情感与伦理</a>
+                <a href="#resources" class="nav-link">延伸阅读</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="themeToggle" class="theme-toggle focus:outline-none">
+                    <i class="fas fa-moon text-xl"></i>
+                </button>
+                <button class="md:hidden focus:outline-none" id="mobileMenuButton">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- 移动端菜单 -->
+        <div id="mobileMenu" class="hidden md:hidden px-4 py-2 pb-4" style="background-color: var(--bg-color);">
+            <div class="flex flex-col space-y-3">
+                <a href="#intro" class="nav-link py-1">概述</a>
+                <a href="#essence" class="nav-link py-1">本质与特点</a>
+                <a href="#agent" class="nav-link py-1">智能体与世界模型</a>
+                <a href="#learning" class="nav-link py-1">学习与交互</a>
+                <a href="#ethics" class="nav-link py-1">情感与伦理</a>
+                <a href="#resources" class="nav-link py-1">延伸阅读</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <header class="hero min-h-screen flex items-center justify-center text-white py-20">
+        <div class="container mx-auto px-4 text-center animate-fade-in">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">AI要"成精"？</h1>
+            <p class="text-2xl md:text-4xl font-semibold mb-8">揭秘"具身智能"如何颠覆你的想象！</p>
+            <p class="text-xl md:text-2xl max-w-3xl mx-auto mb-12 opacity-90">
+                当AI不仅能"说"，还能"看"、能"动"、能"感知"，甚至能"思考"，
+                人工智能将迎来怎样的革命性突破？
+            </p>
+            <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-6">
+                <a href="#intro" class="btn bg-white text-blue-600 hover:bg-blue-50 font-bold py-3 px-8 rounded-full shadow-lg">
+                    开始探索
+                </a>
+                <a href="#visual" class="btn bg-transparent border-2 border-white text-white hover:bg-white hover:bg-opacity-10 font-bold py-3 px-8 rounded-full">
+                    查看可视化
+                </a>
+            </div>
+            <div class="mt-16 animate-bounce">
+                <i class="fas fa-chevron-down text-2xl"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="container mx-auto px-4 py-16">
+        <!-- 介绍部分 -->
+        <section id="intro" class="mb-20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center animate-fade-in">
+                    <i class="fas fa-lightbulb mr-3" style="color: var(--secondary-color);"></i>具身智能：AI的下一个前沿
+                </h2>
+                <div class="first-letter text-lg md:text-xl leading-relaxed mb-8 animate-fade-in delay-100">
+                    当我们谈论AI时，大多数人想到的是ChatGPT这样的大语言模型，但今天我们要探讨的"具身智能"，将带您进入一个全新的AI世界。具身智能的核心思想是智能是大脑、身体和环境相互作用的结果，具有鲜明的身体性和情境性。与传统AI不同，具身智能强调智能行为依赖于身体和环境的互动，而不仅仅是抽象的计算过程。
+                </div>
+                <div class="text-lg md:text-xl leading-relaxed mb-12 animate-fade-in delay-200">
+                    就像婴儿通过手抓、眼看、口尝等感知运动来认识世界，我们的思维方式也深深植根于身体经验。传统机器人大多采用模块化设计，更多地强调计算而非互动，而具身智能则试图打破这种局限，让AI真正"成精"，拥有类似人类的感知、行动和思考能力。
+                </div>
+                
+                <!-- 关键概念卡片 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div class="card p-6 animate-fade-in delay-300">
+                        <div class="text-4xl mb-4" style="color: var(--primary-color);">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">身心一体</h3>
+                        <p>具身智能认为认知和行为是紧密交织、相互塑造的。身体状态会调控思维过程，思维也会影响身体行为。</p>
+                    </div>
+                    <div class="card p-6 animate-fade-in delay-400">
+                        <div class="text-4xl mb-4" style="color: var(--secondary-color);">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">环境交互</h3>
+                        <p>具身智能强调与环境的动态交互对认知能力的塑造作用，智能体通过与环境互动不断学习和适应。</p>
+                    </div>
+                    <div class="card p-6 animate-fade-in delay-500">
+                        <div class="text-4xl mb-4" style="color: var(--accent-color);">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">智能体</h3>
+                        <p>具身智能的载体是智能体，它拥有自己的感知系统、决策系统和执行系统，能够自主行动。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 本质与特点部分 -->
+        <section id="essence" class="mb-20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center">
+                    <i class="fas fa-fingerprint mr-3" style="color: var(--primary-color);"></i>具身智能的本质与特点
+                </h2>
+                
+                <!-- 问题1 -->
+                <div class="mb-12">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style="background-color: var(--primary-color);">Q1</div>
+                        <h3 class="text-2xl font-bold ml-4">什么是具身智能？它与我们熟知的AI有什么本质区别？</h3>
+                    </div>
+                    <div class="pl-14">
+                        <p class="text-lg leading-relaxed mb-4">
+                            具身智能的核心思想是智能是大脑、身体和环境相互作用的结果，具有鲜明的身体性和情境性。与传统AI不同，具身智能强调智能行为依赖于身体和环境的互动，而不仅仅是抽象的计算过程。
+                        </p>
+                        <p class="text-lg leading-relaxed mb-4">
+                            就像婴儿通过手抓、眼看、口尝等感知运动来认识世界，我们的思维方式也深深植根于身体经验。传统机器人大多采用模块化设计，更多地强调计算而非互动，而具身智能则试图打破这种局限。
+                        </p>
+                        <div class="quote text-lg italic my-6">
+                            "没有身体的智能，就像没有水的鱼，无法真正理解和适应复杂多变的现实世界。"
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 问题2 -->
+                <div class="mb-12">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style="background-color: var(--secondary-color);">Q2</div>
+                        <h3 class="text-2xl font-bold ml-4">为什么说具身智能实现了"身心一体"？</h3>
+                    </div>
+                    <div class="pl-14">
+                        <p class="text-lg leading-relaxed mb-4">
+                            具身智能认为认知和行为是紧密交织、相互塑造的。人类对世界的认识是从感知运动经验开始的，身体状态会调控思维过程。
+                        </p>
+                        <p class="text-lg leading-relaxed mb-4">
+                            我们的大脑像一台预测机，不断地预测外界的输入，并将预测与实际输入进行比较，动态地调整内部的生成模型，以更好地适应环境。
+                        </p>
+                        <p class="text-lg leading-relaxed">
+                            这种理念颠覆了传统AI"大脑思考，身体执行"的分离模式，让我们重新思考智能的本质。具身智能的目标之一，就是让机器人像人一样，灵活、高效、稳健地行动。
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 问题3 -->
+                <div class="mb-12">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style="background-color: var(--accent-color);">Q3</div>
+                        <h3 class="text-2xl font-bold ml-4">人们对具身智能有哪些常见误解？</h3>
+                    </div>
+                    <div class="pl-14">
+                        <div class="card p-5 mb-4">
+                            <h4 class="font-bold text-lg mb-2">
+                                <i class="fas fa-exclamation-triangle mr-2" style="color: var(--primary-color);"></i>
+                                将身体视为"智能外壳"的次要角色
+                            </h4>
+                            <p class="text-lg">
+                                许多人认为具身智能的核心仍是算法和算力，身体只是执行任务的工具。实际上，具身智能强调身体形态与环境的动态交互对认知能力的塑造作用。
+                            </p>
+                        </div>
+                        <div class="card p-5 mb-4">
+                            <h4 class="font-bold text-lg mb-2">
+                                <i class="fas fa-exclamation-triangle mr-2" style="color: var(--secondary-color);"></i>
+                                将"具身智能"等同于"人形机器人"
+                            </h4>
+                            <p class="text-lg">
+                                尽管人形机器人是具身智能的重要载体，但具身智能涵盖的范围更广。自动驾驶汽车、工业机械臂、智能扫地机器人等均可通过物理身体与环境互动实现智能行为。
+                            </p>
+                        </div>
+                        <div class="card p-5 mb-4">
+                            <h4 class="font-bold text-lg mb-2">
+                                <i class="fas fa-exclamation-triangle mr-2" style="color: var(--accent-color);"></i>
+                                误认为需要"全能型"计算能力
+                            </h4>
+                            <p class="text-lg">
+                                具身智能更强调高效性与适应性，而非依赖全局暴力计算。例如，Meta的VC-1模型通过局部优化和低能耗方式处理高维数据。
+                            </p>
+                        </div>
+                        <div class="card p-5">
+                            <h4 class="font-bold text-lg mb-2">
+                                <i class="fas fa-exclamation-triangle mr-2" style="color: var(--primary-color);"></i>
+                                高估技术成熟度与商业化前景
+                            </h4>
+                            <p class="text-lg">
+                                具身智能仍面临多重瓶颈，如多模态数据融合的复杂性、硬件成本过高，以及伦理争议。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 可视化部分 -->
+        <section id="visual" class="mb-20">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">
+                    <i class="fas fa-chart-network mr-3" style="color: var(--accent-color);"></i>具身智能概念图谱
+                </h2>
+                
+                <!-- Mermaid.js 图表 -->
+                <div class="mermaid">
+                    graph TD
+                        A[具身智能] --> B[身体性]
+                        A --> C[情境性]
+                        A --> D[交互性]
+                        A --> E[自主性]
+                        
+                        B --> B1[感知系统]
+                        B --> B2[运动系统]
+                        B --> B3[身体形态]
+                        
+                        C --> C1[环境适应]
+                        C --> C2[情境理解]
+                        C --> C3[社会交互]
+                        
+                        D --> D1[环境交互]
+                        D --> D2[人机交互]
+                        D --> D3[社会交互]
+                        
+                        E --> E1[自主决策]
+                        E --> E2[自主学习]
+                        E --> E3[自主探索]
+                        
+                        F[传统AI] -.-> |对比| A
+                        F --> F1[抽象计算]
+                        F --> F2[模块化设计]
+                        F --> F3[静态知识]
+                        
+                        G[应用领域] --> G1[医疗康复]
+                        G --> G2[工业制造]
+                        G --> G3[家庭服务]
+                        G --> G4[教育陪伴]
+                        
+                        A --> G
+                </div>
+                
+                <!-- 交互式时间线 -->
+                <h3 class="text-2xl font-bold mt-16 mb-8 text-center">具身智能发展历程</h3>
+                <div class="timeline-container pl-4">
+                    <div class="timeline-item">
+                        <h4 class="text-xl font-bold">1950年代</h4>
+                        <p class="text-lg">人工智能概念诞生，但主要关注抽象符号处理和逻辑推理</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 class="text-xl font-bold">1980年代</h4>
+                        <p class="text-lg">行为主义机器人学兴起，强调感知-行动循环，减少内部表征</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 class="text-xl font-bold">1990年代</h4>
+                        <p class="text-lg">"具身认知"理论在认知科学领域形成，强调身体在认知中的作用</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 class="text-xl font-bold">2000年代</h4>
+                        <p class="text-lg">具身智能研究开始融合神经科学、认知科学和机器人学</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 class="text-xl font-bold">2010年代</h4>
+                        <p class="text-lg">深度学习兴起，为具身智能提供了更强大的感知和决策能力</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 class="text-xl font-bold">2020年代</h4>
+                        <p class="text-lg">大语言模型与具身智能结合，智能体研究成为热点，商业应用开始涌现</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 智能体与世界模型部分 -->
+        <section id="agent" class="mb-20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center">
+                    <i class="fas fa-microchip mr-3" style="color: var(--secondary-color);"></i>智能体与世界模型
+                </h2>
+                
+                <!-- 问题4 -->
+                <div class="mb-12">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style="background-color: var(--primary-color);">Q4</div>
+                        <h3 class="text-2xl font-bold ml-4">什么是智能体？它在具身智能中扮演什么角色？</h3>
+                    </div>
+                    <div class="pl-14">
+                        <p class="text-lg leading-relaxed mb-4">
+                            智能体是具身智能的核心概念和研究对象。它是指能够感知环境、自主行动的实体，拥有自己的感知系统、决策系统和执行系统。智能体的关键特性包括自主性、社会性、反应性、主动性和连续性。
+                        </p>
+                        <div class="bg-opacity-10 p-6 rounded-lg my-6" style="background-color: var(--highlight-color);">
+                            <p class="text-lg font-semibold mb-2">智能体的核心组成部分：</p>
+                            <ul class="list-disc pl-6 space-y-2 text-lg">
+                                <li><span class="font-semibold">感知系统</span>：通过各种传感器感知环境</li>
+                                <li><span class="font-semibold">决策系统</span>：处理感知信息并做出决策</li>
+                                <li><span class="font-semibold">执行系统</span>：将决策转化为具体行动</li>
+                                <li><span class="font-semibold">学习系统</span>：从经验中学习并改进行为</li>
+                            </ul>
+                        </div>
+                        <p class="text-lg leading-relaxed">
+                            没有"身体"，就没有具身智能；而"身体"的载体，正是智能体。智能体的研究极大地促进了机器人学与人工智能的融合，也大大促进了认知科学与人工智能的融合。
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 问题5 -->
+                <div class="mb-12">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style="background-color: var(--secondary-color);">Q5</div>
+                        <h3 class="text-2xl font-bold ml-4">世界模型是什么？它如何影响具身智能的发展？</h3>
+                    </div>
+                    <div class="pl-14">
+                        <p class="text-lg leading-relaxed mb-4">
+                            世界模型是智能体大脑中对世界的一种表征或映射，包含智能体对环境的理解、记忆和预期。世界模型是分层的、动态的、主观的。
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+                            <div class="card p-5">
+                                <h4 class="font-bold text-lg mb-3">具身智能如何塑造世界模型</h4>
+                                <ul class="list-disc pl-6 space-y-2">
+                                    <li>感知运动协调</li>
+                                    <li>行为交互</li>
+                                    <li>身体经验</li>
+                                    <li>社会交互</li>
+                                </ul>
+                            </div>
+                            <div class="card p-5">
+                                <h4 class="font-bold text-lg mb-3">世界模型如何指导具身智能</h4>
+                                <ul class="list-disc pl-6 space-y-2">
+                                    <li>感知预测</li>
+                                    <li>运动想象</li>
+                                    <li>推理决策</li>
+                                    <li>行为规划</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <p class="text-lg leading-relaxed">
+                            具身智能通过感知运动协调、行为交互、身体经验和社会交互等方式，不断塑造和更新世界模型。而世界模型又通过感知预测、运动想象、推理决策等方式，持续指引和优化着具身智能。这种双向互动是具身智能发展的关键。
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 问题6 -->
+                <div class="mb-12">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style="background-color: var(--accent-color);">Q6</div>
+                        <h3 class="text-2xl font-bold ml-4">如何区分具身智能与传统自动化设备？</h3>
+                    </div>
+                    <div class="pl-14">
+                        <p class="text-lg leading-relaxed mb-6">
+                            传统机械臂依赖预设程序执行固定任务，而具身智能机器人需具备动态决策能力。例如，特斯拉Optimus机器人能根据障碍物位置实时调整路径，而非仅重复固定动作。这种自主性依赖大语言模型与感知系统的深度结合。
+                        </p>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white border border-gray-200 dark:border-gray-700 dark:bg-gray-800">
+                                <thead>
+                                    <tr>
+                                        <th class="py-3 px-4 border-b border-gray-200 dark:border-gray-700 text-left">特性</th>
+                                        <th class="py-3 px-4 border-b border-gray-200 dark:border-gray-700 text-left">传统自动化设备</th>
+                                        <th class="py-3 px-4 border-b border-gray-200 dark:border-gray-700 text-left">具身智能系统</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="py-3 px-4 border-b border-gray-200 dark:border-gray-700 font-medium">决策方式</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 dark:border-gray-700">预设程序，固定逻辑</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 dark:border-gray-700">动态决策，自主适应</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 border-b border-gray-200 dark:border-gray-700 font-medium">环境适应性</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 dark:border-gray-700">低，需要结构化环境</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 dark:border-gray-700">高，可适应非结构化环境</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 border-b border-gray-200 dark:border-gray-700 font-medium">学习能力</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 dark:border-gray-700">无或有限</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 dark:border-gray-700">持续学习，经验积累</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 border-b border-gray-200 dark:border-gray-700 font-medium">交互方式</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 dark:border-gray-700">单向执行指令</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 dark:border-gray-700">双向交互，理解意图</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 font-medium">应用场景</td>
+                                        <td class="py-3 px-4">结构化、可预测环境</td>
+                                        <td class="py-3 px-4">复杂、动态、不确定环境</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <p class="text-lg leading-relaxed mt-6">
+                            这种区别将重塑未来产业格局：具身智能机器人能够适应复杂多变的环境，执行更加灵活的任务，这将大大扩展机器人的应用场景，从工业生产到家庭服务，从医疗护理到教育陪伴。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 学习与交互部分 -->
+        <section id="learning" class="mb-20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center">
+                    <i class="fas fa-graduation-cap mr-3" style="color: var(--primary-color);"></i>学习与交互
+                </h2>
+                
+                <!-- 问题7 -->
+                <div class="mb-12">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style="background-color: var(--primary-color);">Q7</div>
+                        <h3 class="text-2xl font-bold ml-4">具身智能如何学习？这与人类学习有何相似之处？</h3>
+                    </div>
+                    <div class="pl-14">
+                        <p class="text-lg leading-relaxed mb-4">
+                            具身智能让机器人能够主动探索和学习，通过与环境互动，利用传感器的反馈，不断建立和修正自身的经验模型。这与人类婴儿通过感知和运动学习认识世界的过程非常相似。
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+                            <div class="card p-5 h-full">
+                                <div class="text-3xl mb-4" style="color: var(--secondary-color);">
+                                    <i class="fas fa-copy"></i>
+                                </div>
+                                <h4 class="text-xl font-bold mb-3">模仿学习</h4>
+                                <p>
+                                    通过观察他人的示范动作，机器人可以快速掌握新的行为技能。这类似于人类儿童通过观察父母和同伴学习新技能的方式。
+                                </p>
+                            </div>
+                            <div class="card p-5 h-full">
+                                <div class="text-3xl mb-4" style="color: var(--accent-color);">
+                                    <i class="fas fa-medal"></i>
+                                </div>
+                                <h4 class="text-xl font-bold mb-3">强化学习</h4>
+                                <p>
+                                    机器人通过尝试不同的行动，根据获得的奖励或惩罚来调整自己的行为策略，逐步找到最优的行动方式。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+                            <div class="card p-5 h-full">
+                                <div class="text-3xl mb-4" style="color: var(--primary-color);">
+                                    <i class="fas fa-hands-helping"></i>
+                                </div>
+                                <h4 class="text-xl font-bold mb-3">引导学习</h4>
+                                <p>
+                                    人类教师通过物理引导或语言指导，帮助机器人学习复杂任务，类似于父母教导孩子骑自行车时的扶持和指导。
+                                </p>
+                            </div>
+                            <div class="card p-5 h-full">
+                                <div class="text-3xl mb-4" style="color: var(--secondary-color);">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <h4 class="text-xl font-bold mb-3">探索学习</h4>
+                                <p>
+                                    机器人主动探索环境，发现新的可能性和规律，这与婴儿通过触摸、抓取、摇晃等方式探索物体属性的过程相似。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <p class="text-lg leading-relaxed">
+                            模仿学习之后，机器人需要在实践中不断试错，找到最佳的行动策略，这就需要用到强化学习。这种学习方式与人类学习新技能的过程非常相似，都需要不断的实践和调整。
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 问题8 -->
+                <div class="mb-12">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style="background-color: var(--secondary-color);">Q8</div>
+                        <h3 class="text-2xl font-bold ml-4">为什么说环境交互对具身智能的学习至关重要？</h3>
+                    </div>
+                    <div class="pl-14">
+                        <p class="text-lg leading-relaxed mb-4">
+                            传统观点认为智能可通过纯数据训练实现，但具身智能强调物理交互的不可替代性。这种"试错学习"更接近人类认知发展过程，但也增加了技术实现的难度。
+                        </p>
+                        
+                        <div class="quote text-lg italic my-6">
+                            "没有交互，就没有真正的学习。智能体必须通过与环境的互动，才能真正理解世界的规律，建立准确的世界模型。"
+                        </div>
+                        
+                        <div class="bg-opacity-10 p-6 rounded-lg my-6" style="background-color: var(--highlight-color);">
+                            <p class="text-lg font-semibold mb-2">环境交互的关键价值：</p>
+                            <ul class="list-disc pl-6 space-y-2 text-lg">
+                                <li><span class="font-semibold">获取真实反馈</span>：虚拟环境无法完全模拟现实世界的复杂性和不确定性</li>
+                                <li><span class="font-semibold">发现隐藏规律</span>：某些物理规律只有通过实际交互才能被发现和理解</li>
+                                <li><span class="font-semibold">验证假设</span>：智能体可以通过交互验证自己对世界的理解是否正确</li>
+                                <li><span class="font-semibold">适应变化</span>：环境是d">适应变化</span>：环境是动态变化的，交互使智能体能够不断适应新情况</li>
+                            </ul>
+                        </div>
+                        
+                        <p class="text-lg leading-relaxed">
+                            环境交互让具身智能能够获得真实的反馈，建立更加准确的世界模型。没有这种交互，机器人就无法真正理解物理世界的规律，也无法灵活应对各种复杂情境。
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 问题9 -->
+                <div class="mb-12">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style="background-color: var(--accent-color);">Q9</div>
+                        <h3 class="text-2xl font-bold ml-4">大模型如何赋能具身智能？这种结合会带来哪些新可能？</h3>
+                    </div>
+                    <div class="pl-14">
+                        <p class="text-lg leading-relaxed mb-6">
+                            大模型能理解自然语言指令，将语言命令映射到具体的动作序列，并根据实际情况灵活调整装配步骤和参数。多模态模型能够学习不同感知模态之间的关联和互补关系，从而获得对环境更全面的认知。
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-6">
+                            <div class="card p-5">
+                                <div class="text-3xl mb-4" style="color: var(--primary-color);">
+                                    <i class="fas fa-comments"></i>
+                                </div>
+                                <h4 class="text-xl font-bold mb-3">自然语言交互</h4>
+                                <p>
+                                    大模型使机器人能够理解复杂的自然语言指令，实现更自然的人机交互。
+                                </p>
+                            </div>
+                            <div class="card p-5">
+                                <div class="text-3xl mb-4" style="color: var(--secondary-color);">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <h4 class="text-xl font-bold mb-3">多模态感知</h4>
+                                <p>
+                                    结合视觉、听觉等多种感知模态，获得对环境更全面的理解。
+                                </p>
+                            </div>
+                            <div class="card p-5">
+                                <div class="text-3xl mb-4" style="color: var(--accent-color);">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <h4 class="text-xl font-bold mb-3">常识推理</h4>
+                                <p>
+                                    利用大模型中蕴含的常识知识，进行更合理的决策和规划。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <p class="text-lg leading-relaxed mb-4">
+                            大模型还能够根据已有的数据，自主生成新的数据，为机器人创造更多的学习机会。这种结合将使具身智能更加灵活、高效，能够理解更复杂的指令，执行更精细的任务，甚至能够与人类进行更自然的交流和协作。
+                        </p>
+                        
+                        <p class="text-lg leading-relaxed">
+                            例如，一个结合了大模型的家庭服务机器人，可以理解"帮我整理一下客厅，然后准备一杯咖啡"这样的复杂指令，并根据当前环境状态，规划出最合理的行动序列，灵活应对各种意外情况。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 情感与伦理部分 -->
+        <section id="ethics" class="mb-20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center">
+                    <i class="fas fa-heart mr-3" style="color: var(--accent-color);"></i>情感与伦理
+                </h2>
+                
+                <!-- 问题10 -->
+                <div class="mb-12">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style="background-color: var(--primary-color);">Q10</div>
+                        <h3 class="text-2xl font-bold ml-4">情感计算在具身智能中有什么意义？机器人真的能"有感情"吗？</h3>
+                    </div>
+                    <div class="pl-14">
+                        <p class="text-lg leading-relaxed mb-4">
+                            情感计算让机器能够理解用户的情感需求，提供更加自然、贴心的交互体验。具身智能强调情感的具身性，认为情感与身体状态密切相关。
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+                            <div class="card p-5">
+                                <h4 class="font-bold text-lg mb-3">情感识别</h4>
+                                <p>
+                                    通过分析面部表情、语音语调、肢体动作等多模态信息，识别人类的情感状态，从而做出更合适的反应。
+                                </p>
+                            </div>
+                            <div class="card p-5">
+                                <h4 class="font-bold text-lg mb-3">情感表达</h4>
+                                <p>
+                                    通过面部表情、语音语调、肢体动作等方式表达"情感"，增强与人类的情感连接，提升交互体验。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="quote text-lg italic my-6">
+                            "机器人不需要'真正'拥有情感，但它们需要理解情感，表达情感，以便更好地与人类互动。"
+                        </div>
+                        
+                        <p class="text-lg leading-relaxed">
+                            虽然机器人不会像人类一样"感受"情感，但它们可以识别、模拟和回应情感。机器还可以主动用行为来调节自己的"情绪"，比如通过运动释放压力，通过冥想放松心情。这种情感交互能力将使人机协作更加和谐自然。
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 问题11 -->
+                <div class="mb-12">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style="background-color: var(--secondary-color);">Q11</div>
+                        <h3 class="text-2xl font-bold ml-4">发展具身智能产业面临哪些挑战和伦理问题？</h3>
+                    </div>
+                    <div class="pl-14">
+                        <p class="text-lg leading-relaxed mb-6">
+                            具身智能的发展仍面临诸多挑战，包括机器人的环境适应性、自主学习、多模态交互等难题。在伦理方面，需要建立机器人行为的道德规范和法律框架，确保其在应用中的安全性和可控性。
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+                            <div>
+                                <h4 class="text-xl font-bold mb-4">技术挑战</h4>
+                                <ul class="list-disc pl-6 space-y-3 text-lg">
+                                    <li>多模态感知与融合</li>
+                                    <li>实时决策与控制</li>
+                                    <li>能源效率与续航</li>
+                                    <li>硬件成本与可靠性</li>
+                                    <li>安全性与鲁棒性</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold mb-4">伦理问题</h4>
+                                <ul class="list-disc pl-6 space-y-3 text-lg">
+                                    <li>隐私与数据安全</li>
+                                    <li>责任归属与决策透明</li>
+                                    <li>就业影响与社会变革</li>
+                                    <li>人机关系与依赖性</li>
+                                    <li>军事应用与武器化</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <p class="text-lg leading-relaxed mb-4">
+                            我们还需要谨慎评估具身智能对就业、隐私、人际关系等方面的影响，并采取相应的应对措施。此外，加强全民数字素养教育，增强公众的数据保护意识和能力也至关重要。
+                        </p>
+                        
+                        <div class="bg-opacity-10 p-6 rounded-lg my-6" style="background-color: var(--highlight-color);">
+                            <p class="text-lg font-semibold mb-2">应对伦理挑战的建议：</p>
+                            <ul class="list-disc pl-6 space-y-2 text-lg">
+                                <li>建立具身智能的伦理准则和监管框架</li>
+                                <li>确保算法透明度和可解释性</li>
+                                <li>加强隐私保护和数据安全</li>
+                                <li>推动跨学科研究和国际合作</li>
+                                <li>开展公众教育和社会对话</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 延伸阅读部分 -->
+        <section id="resources" class="mb-20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center">
+                    <i class="fas fa-book-open mr-3" style="color: var(--primary-color);"></i>延伸阅读
+                </h2>
+                
+                <p class="text-lg text-center mb-10">
+                    想要深入了解具身智能？以下是我们精选的五本相关书籍和论文，帮助您进一步探索这个前沿领域。
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="card p-6">
+                        <div class="flex items-start">
+                            <div class="text-3xl mr-4" style="color: var(--primary-color);">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">《具身认知：认知科学的新方向》</h3>
+                                <p class="text-lg mb-2">作者：劳伦斯·夏皮罗</p>
+                                <p class="mb-4">
+                                    这本书详细介绍了具身认知的理论基础，探讨了身体如何塑造思维，以及这一理论对人工智能研究的启示。
+                                </p>
+                                <a href="#" class="inline-flex items-center text-blue-600 hover:underline">
+                                    了解更多 <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-6">
+                        <div class="flex items-start">
+                            <div class="text-3xl mr-4" style="color: var(--secondary-color);">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">《大型语言模型与具身智能》</h3>
+                                <p class="text-lg mb-2">作者：李飞飞等</p>
+                                <p class="mb-4">
+                                    这篇论文探讨了如何将大型语言模型与具身智能结合，创造出更加灵活、高效的智能系统。
+                                </p>
+                                <a href="#" class="inline-flex items-center text-blue-600 hover:underline">
+                                    了解更多 <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-6">
+                        <div class="flex items-start">
+                            <div class="text-3xl mr-4" style="color: var(--accent-color);">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">《机器人学习：原理与应用》</h3>
+                                <p class="text-lg mb-2">作者：马克斯·韦林</p>
+                                <p class="mb-4">
+                                    这本书详细介绍了机器人如何通过模仿学习、强化学习等方式获取技能，以及如何将这些学习方法应用于实际问题。
+                                </p>
+                                <a href="#" class="inline-flex items-center text-blue-600 hover:underline">
+                                    了解更多 <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-6">
+                        <div class="flex items-start">
+                            <div class="text-3xl mr-4" style="color: var(--primary-color);">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">《情感计算与具身智能》</h3>
+                                <p class="text-lg mb-2">作者：罗莎琳德·皮卡德</p>
+                                <p class="mb-4">
+                                    这篇论文探讨了情感计算在具身智能中的应用，以及如何让机器人理解和表达情感，提升人机交互体验。
+                                </p>
+                                <a href="#" class="inline-flex items-center text-blue-600 hover:underline">
+                                    了解更多 <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-6 md:col-span-2">
+                        <div class="flex items-start">
+                            <div class="text-3xl mr-4" style="color: var(--secondary-color);">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">《具身智能：从理论到实践》</h3>
+                                <p class="text-lg mb-2">作者：约书亚·本吉奥、吴恩达等</p>
+                                <p class="mb-4">
+                                    这本综合性著作汇集了多位人工智能领域顶尖专家的研究成果，全面介绍了具身智能的理论基础、技术实现和应用前景，是了解这一领域的权威指南。
+                                </p>
+                                <a href="#" class="inline-flex items-center text-blue-600 hover:underline">
+                                    了解更多 <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 结语部分 -->
+        <section class="mb-20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center">
+                    <i class="fas fa-flag-checkered mr-3" style="color: var(--accent-color);"></i>结语
+                </h2>
+                
+                <div class="card p-8">
+                    <p class="text-lg leading-relaxed mb-6">
+                        今天，我们深入探讨了具身智能的本质、特点、学习方式以及面临的挑战。具身智能不仅仅是技术的进步，更是对智能本质的重新思考。它让我们看到，真正的智能不仅仅存在于抽象的计算中，还存在于与物理世界的互动中。
+                    </p>
+                    <p class="text-lg leading-relaxed mb-6">
+                        未来，随着具身智能的发展，我们可能会看到更多像人一样思考、行动的机器人，它们将成为我们生活中不可或缺的伙伴。但同时，我们也需要谨慎应对其中的伦理挑战，确保这项技术的发展方向符合人类的共同利益。
+                    </p>
+                    <p class="text-lg leading-relaxed">
+                        感谢您参与本次线上对谈！希望这次分享能够帮助您更好地理解具身智能，并激发您对这一领域的兴趣和思考。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="py-10" style="background-color: var(--bg-secondary);">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <i class="fas fa-robot text-2xl" style="color: var(--primary-color);"></i>
+                        <span class="font-bold text-lg">具身智能研究</span>
+                    </div>
+                    <p>探索AI的下一个前沿</p>
+                </div>
+                <div class="flex space-x-6 mb-6 md:mb-0">
+                    <a href="#" class="text-2xl hover:text-blue-500 transition-colors">
+                        <i class="fab fa-weixin"></i>
+                    </a>
+                    <a href="#" class="text-2xl hover:text-blue-500 transition-colors">
+                        <i class="fab fa-weibo"></i>
+                    </a>
+                    <a href="#" class="text-2xl hover:text-blue-500 transition-colors">
+                        <i class="fab fa-zhihu"></i>
+                    </a>
+                    <a href="#" class="text-2xl hover:text-blue-500 transition-colors">
+                        <i class="fab fa-bilibili"></i>
+                    </a>
+                </div>
+                <div class="text-center md:text-right">
+                    <p>© 2025 <a href="https://weibo.com/u/1402400261" target="_blank">@爱可可-爱生活</a>. 保留所有权利.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="backToTop" class="fixed bottom-8 right-8 w-12 h-12 rounded-full flex items-center justify-center text-white text-xl shadow-lg transform transition-transform duration-300 scale-0" style="background-color: var(--primary-color);">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // 初始化 Mermaid
+        mermaid.initialize({ startOnLoad: true, theme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default' });
+
+        // 深色模式切换
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        // 检查系统偏好
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+        
+        // 主题切换功能
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            
+            if (document.documentElement.classList.contains('dark')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                mermaid.initialize({ startOnLoad: true, theme: 'default' });
+            }
+            
+            // 重新渲染 Mermaid 图表
+            document.querySelectorAll('.mermaid').forEach(el => {
+                const content = el.textContent;
+                el.textContent = '';
+                el.textContent = content;
+                mermaid.init(undefined, el);
+            });
+        });
+        
+        // 移动端菜单
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // 滚动指示器
+        const scrollIndicator = document.getElementById('scrollIndicator');
+        
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            scrollIndicator.style.width = scrolled + '%';
+            
+            // 返回顶部按钮
+            const backToTopBtn = document.getElementById('backToTop');
+            if (winScroll > 300) {
+                backToTopBtn.classList.remove('scale-0');
+                backToTopBtn.classList.add('scale-100');
+            } else {
+                backToTopBtn.classList.remove('scale-100');
+                backToTopBtn.classList.add('scale-0');
+            }
+        });
+        
+        // 返回顶部功能
+        document.getElementById('backToTop').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 关闭移动端菜单
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+        
+        // 动画效果
+        const animateElements = document.querySelectorAll('.animate-fade-in');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        animateElements.forEach(el => {
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
