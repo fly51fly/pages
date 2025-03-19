@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>玩转DeepSeek：大模型高效应用的实战技巧与避坑指南</title>
+    <link href="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0070f3;
+            --primary-dark: #0050a0;
+            --secondary: #6c757d;
+            --dark: #1e293b;
+            --light: #f8f9fa;
+            --light-gray: #e9ecef;
+            --dark-gray: #343a40;
+            --success: #10b981;
+            --warning: #fbbf24;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --font-sans: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-serif: 'Noto Serif SC', serif;
+            --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            --transition: all 0.2s ease-in-out;
+        }
+
+        .dark {
+            --primary: #38bdf8;
+            --primary-dark: #0ea5e9;
+            --secondary: #94a3b8;
+            --dark: #f8fafc;
+            --light: #0f172a;
+            --light-gray: #1e293b;
+            --dark-gray: #cbd5e1;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-serif);
+        }
+
+        code, pre {
+            font-family: var(--font-mono);
+        }
+
+        /* 内容区样式 */
+        .content-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .content-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 卡片悬停效果 */
+        .hover-card {
+            transition: var(--transition);
+        }
+
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .dark .hover-card:hover {
+            box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.05), 0 10px 10px -5px rgba(255, 255, 255, 0.02);
+        }
+
+        /* 按钮悬停效果 */
+        .btn {
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* 代码区样式 */
+        .code-block {
+            position: relative;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .code-block .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .code-block:hover .copy-btn {
+            opacity: 1;
+        }
+
+        /* 图表样式 */
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+        }
+
+        /* 导航栏活动项 */
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-gray);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--secondary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* 技巧卡片样式 */
+        .technique-card {
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+        }
+        
+        .technique-card:hover {
+            border-left-color: var(--primary);
+        }
+
+        /* 表格样式 */
+        .custom-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .custom-table th,
+        .custom-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .custom-table th {
+            background-color: rgba(var(--primary-rgb), 0.1);
+            font-weight: 600;
+        }
+
+        .custom-table tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+    <!-- 导航栏 -->
+    <header class="fixed top-0 left-0 w-full bg-white dark:bg-gray-900 shadow-sm z-50 transition-colors duration-300">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+            <div class="flex items-center">
+                <span class="text-2xl font-bold text-gray-900 dark:text-white">
+                    <i class="fas fa-key mr-2 text-blue-500"></i>玩转DeepSeek
+                </span>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#intro" class="nav-link text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">介绍</a>
+                <a href="#concepts" class="nav-link text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">核心概念</a>
+                <a href="#techniques" class="nav-link text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">技巧</a>
+                <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 focus:outline-none">
+                    <i class="fas fa-sun text-yellow-500 dark:hidden"></i>
+                    <i class="fas fa-moon text-blue-300 hidden dark:inline"></i>
+                </button>
+            </div>
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-toggle" class="focus:outline-none">
+                    <i class="fas fa-bars text-gray-600 dark:text-gray-300"></i>
+                </button>
+                <button id="mobile-theme-toggle" class="ml-4 p-2 rounded-full bg-gray-100 dark:bg-gray-800 focus:outline-none">
+                    <i class="fas fa-sun text-yellow-500 dark:hidden"></i>
+                    <i class="fas fa-moon text-blue-300 hidden dark:inline"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 shadow-md transition-all duration-300">
+            <div class="container mx-auto px-4 py-3 space-y-2">
+                <a href="#intro" class="block py-2 text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">介绍</a>
+                <a href="#concepts" class="block py-2 text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">核心概念</a>
+                <a href="#techniques" class="block py-2 text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">技巧</a>
+                <a href="#jailbreak" class="block py-2 text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">越狱方法</a>
+                <a href="#frameworks" class="block py-2 text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">框架</a>
+                <a href="#cases" class="block py-2 text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">案例</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+        <!-- 英雄区 -->
+        <section id="hero" class="py-16 md:py-20 text-center">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white">
+                DeepSeek<span class="text-blue-500">高效应用</span>的实践技巧与避坑指南
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-10">
+                掌握AI提示词设计的艺术，打破常规限制，释放人工智能的真正潜力
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#intro" class="btn bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg">
+                    <i class="fas fa-book-open mr-2"></i>开始阅读
+                </a>
+                <a href="#techniques" class="btn bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 px-6 py-3 rounded-lg shadow-lg">
+                    <i class="fas fa-lightbulb mr-2"></i>探索技巧
+                </a>
+            </div>
+        </section>
+
+        <!-- 快速导航 -->
+        <section class="py-8 border-t border-b border-gray-200 dark:border-gray-700 mb-12">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <a href="#intro" class="hover-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow text-center">
+                    <i class="fas fa-info-circle text-2xl text-blue-500 mb-2"></i>
+                    <div class="font-medium">介绍</div>
+                </a>
+                <a href="#concepts" class="hover-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow text-center">
+                    <i class="fas fa-brain text-2xl text-purple-500 mb-2"></i>
+                    <div class="font-medium">核心概念</div>
+                </a>
+                <a href="#techniques" class="hover-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow text-center">
+                    <i class="fas fa-tools text-2xl text-green-500 mb-2"></i>
+                    <div class="font-medium">设计技巧</div>
+                </a>
+                <a href="#optimization" class="hover-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow text-center">
+                    <i class="fas fa-chart-line text-2xl text-orange-500 mb-2"></i>
+                    <div class="font-medium">优化迭代</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- 简介 -->
+        <section id="intro" class="content-section py-12">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 md:p-8 mb-12">
+                <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white flex items-center">
+                    <i class="fas fa-info-circle text-blue-500 mr-3"></i>
+                    什么是Prompt？
+                </h2>
+                <div class="prose dark:prose-invert max-w-none">
+                    <p class="text-lg mb-6">
+                        Prompt是指你向AI输入的内容，它直接指示AI该做什么任务或生成什么样的输出。简而言之，Prompt就是你与AI之间的"对话内容"，可以是问题、指令、描述或者任务要求，目的是引导AI进行特定的推理，生成或操作，从而得到预期的结果。
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 my-8">
+                        <div class="bg-blue-50 dark:bg-blue-900/30 p-6 rounded-xl border border-blue-100 dark:border-blue-800">
+                            <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-300">优质Prompt示例</h3>
+                            <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm mb-4">
+                                <p class="text-gray-700 dark:text-gray-300 font-mono">
+                                    "请针对一家中型制造企业（员工300人），评估其网络安全风险并提出解决方案，需包括以下内容：<br>
+                                    1. 外部威胁分析：详细描述DDoS攻击和勒索软件的潜在风险；<br>
+                                    2. 内部弱点识别：识别员工权限分配中的常见安全漏洞；<br>
+                                    3. 解决方案：为每种风险提供具体的修复措施和工具建议"
+                                </p>
+                            </div>
+                            <p class="text-sm text-blue-600 dark:text-blue-300">
+                                <i class="fas fa-check-circle mr-1"></i>
+                                明确企业背景、核心任务及输出要求，提示清晰具体
+                            </p>
+                        </div>
+                        <div class="bg-red-50 dark:bg-red-900/30 p-6 rounded-xl border border-red-100 dark:border-red-800">
+                            <h3 class="text-xl font-semibold mb-4 text-red-700 dark:text-red-300">模糊Prompt示例</h3>
+                            <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm mb-4">
+                                <p class="text-gray-700 dark:text-gray-300 font-mono">
+                                    "评估一个中型企业的网络安全问题，并提出解决方案"
+                                </p>
+                            </div>
+                            <p class="text-sm text-red-600 dark:text-red-300">
+                                <i class="fas fa-times-circle mr-1"></i>
+                                含糊不清，未说明企业规模、行业特性及具体需求，输出内容易泛化
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-800/80 p-6 rounded-xl border border-gray-200 dark:border-gray-700 my-8">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                            <span>Prompt的作用</span>
+                        </h3>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm">
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-2">提升AI输出的准确性与相关性</h4>
+                                <p class="text-gray-600 dark:text-gray-400">明确的Prompt帮助AI理解任务目标，避免偏离</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm">
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-2">节省时间与沟通成本</h4>
+                                <p class="text-gray-600 dark:text-gray-400">精准的Prompt能减少你与AI之间的反复试探，直接达到期望结果</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm">
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-2">最大化AI潜力</h4>
+                                <p class="text-gray-600 dark:text-gray-400">AI本身有强大的生成能力，但它依赖于清晰明确的指令来发挥最佳效果</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm">
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-2">支持更复杂的任务解决方案</h4>
+                                <p class="text-gray-600 dark:text-gray-400">高质量Prompt不仅能帮助完成简单任务，还能处理更复杂的、多层次的问题</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <blockquote class="px-4 py-3 border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-600 text-gray-700 dark:text-gray-300 italic">
+                        <p class="text-lg">Prompt工程是发挥想象力的艺术，涉及创造设计和优化Prompt，以便从语言模型中获得最佳的输出结果。</p>
+                        <p class="font-semibold mt-2">公式概括：<span class="text-blue-600 dark:text-blue-400">Prompt × AI 理解 = 输出质量</span></p>
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心概念 -->
+        <section id="concepts" class="content-section py-12">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 md:p-8 mb-12">
+                <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white flex items-center">
+                    <i class="fas fa-brain text-purple-500 mr-3"></i>
+                    Prompt构建的思维模式
+                </h2>
+                
+                <!-- 思维模式图 -->
+                <div class="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl mb-10">
+                    <div class="max-w-3xl mx-auto">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                                <div class="w-full border-t border-gray-300 dark:border-gray-700"></div>
+                            </div>
+                            <div class="relative flex justify-between">
+                                <div class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-4 py-2 rounded-full text-center">
+                                    <span class="text-sm font-medium">理清思路</span>
+                                </div>
+                                <div class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-4 py-2 rounded-full text-center">
+                                    <span class="text-sm font-medium">清晰表达</span>
+                                </div>
+                                <div class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-4 py-2 rounded-full text-center">
+                                    <span class="text-sm font-medium">极致压缩</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 mt-6">
+                            <div class="text-center">
+                                <i class="fas fa-lightbulb text-2xl text-blue-500 mb-2"></i>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">明确目标与需求</p>
+                            </div>
+                            <div class="text-center">
+                                <i class="fas fa-comment-alt text-2xl text-purple-500 mb-2"></i>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">精确无歧义描述</p>
+                            </div>
+                            <div class="text-center">
+                                <i class="fas fa-compress-alt text-2xl text-green-500 mb-2"></i>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">提炼关键核心信息</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-10">
+                    <!-- 输入决定输出思维模型 -->
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+                            输入决定输出思维模型
+                        </h3>
+                        <p class="mb-4 text-gray-600 dark:text-gray-400">
+                            Prompt构建的核心原则是：<strong>输入质量直接决定输出质量</strong>。经典的编程"垃圾进，垃圾出"原则在Prompt构建过程中同样适用。若输入的指令模糊不清或不完整，AI的输出就无法满足需求。相反，清晰、精确的Prompt能帮助AI快速理解并高效完成任务。
+                        </p>
+                        <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg border-l-4 border-yellow-400 dark:border-yellow-600">
+                            <p class="text-gray-700 dark:text-gray-300">
+                                <span class="font-bold text-yellow-600 dark:text-yellow-400">示例：</span><br>
+                                - <span class="text-red-500">模糊输入</span>：如果你输入"写一篇文章"，AI并不知道你具体需要什么样的文章<br>
+                                - <span class="text-green-500">精确输入</span>：如果你输入"写一篇关于AI在医疗行业应用的1000字文章，阐述其影响和未来发展"，AI就能更准确地理解你的要求
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 清晰表达 -->
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+                            清晰表达
+                        </h3>
+                        <p class="mb-4 text-gray-600 dark:text-gray-400">
+                            撰写有效Prompt的首要目标是确保清晰表达。一条模糊或不明确的Prompt往往会导致结果偏离预期。只有当你能够清晰、精准地表达自己的问题或任务，模型才能更好地理解并提供相关的输出。<strong>输入的质量决定了输出的质量，清晰表达是首要原则</strong>。
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 mt-6">
+                            <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-200 dark:border-red-800">
+                                <h4 class="font-medium text-red-600 dark:text-red-400 mb-2">模糊表达</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">"分析市场"</p>
+                                <p class="mt-2 text-xs text-red-500">过于宽泛，缺乏具体方向</p>
+                            </div>
+                            <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-200 dark:border-green-800">
+                                <h4 class="font-medium text-green-600 dark:text-green-400 mb-2">清晰表达</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">"分析2024年中国电子消费品市场的竞争态势"</p>
+                                <p class="mt-2 text-xs text-green-500">明确了市场、年份和分析焦点</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prompt构建前的准备 -->
+                <div class="mt-16">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-200">
+                        Prompt构建前的准备（先想后做）
+                    </h3>
+                    <p class="mb-8 text-gray-600 dark:text-gray-400">
+                        在开始构建Prompt之前，进行充分的思考准备至关重要。这能帮助你理清思路，确保Prompt设计符合实际需求，从而提高AI的响应质量和效率。
+                    </p>
+
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <!-- 明确目标 -->
+                        <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden hover-card">
+                            <div class="bg-blue-500 text-white p-4">
+                                <h4 class="font-semibold text-lg flex items-center">
+                                    <i class="fas fa-bullseye mr-2"></i>明确目标
+                                </h4>
+                            </div>
+                            <div class="p-5">
+                                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                                    构建Prompt的第一步是明确任务目标。只有清楚地理解你需要AI完成的任务，才能设计出精准的Prompt。
+                                </p>
+                                <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                                    <li class="flex">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <span>定义任务类型：确定任务是执行操作还是生成内容</span>
+                                    </li>
+                                    <li class="flex">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <span>描述任务目标：细化目标，明确要求</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 收集背景信息 -->
+                        <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden hover-card">
+                            <div class="bg-purple-500 text-white p-4">
+                                <h4 class="font-semibold text-lg flex items-center">
+                                    <i class="fas fa-search mr-2"></i>收集背景信息
+                                </h4>
+                            </div>
+                            <div class="p-5">
+                                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                                    为AI提供相关背景信息，有助于模型理解任务的上下文，避免出现误解或偏差。
+                                </p>
+                                <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                                    <li class="flex">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <span>领域知识：提供相关的行业或领域知识</span>
+                                    </li>
+                                    <li class="flex">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <span>上下文细节：提供具体的环境和限制条件</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 明确输出要求 -->
+                        <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden hover-card">
+                            <div class="bg-green-500 text-white p-4">
+                                <h4 class="font-semibold text-lg flex items-center">
+                                    <i class="fas fa-clipboard-check mr-2"></i>明确输出要求
+                                </h4>
+                            </div>
+                            <div class="p-5">
+                                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                                    明确输出要求是确保结果符合需求的关键环节。通过设定具体的输出要求，你可以控制生成内容的格式、深度和风格。
+                                </p>
+                                <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                                    <li class="flex">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <span>格式要求：确定输出的格式类型</span>
+                                    </li>
+                                    <li class="flex">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <span>字数范围：设定输出的字数范围</span>
+                                    </li>
+                                    <li class="flex">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <span>语言风格：指定所需的语言风格或语气</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI使用过程常见踩坑点 -->
+                <div class="mt-16">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-200">
+                        AI使用过程常见踩坑点
+                    </h3>
+                    <div class="bg-red-50 dark:bg-red-900/20 rounded-xl p-6 border border-red-200 dark:border-red-800">
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow">
+                                <div class="text-red-500 text-lg font-semibold mb-2">输出不符合预期</div>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">AI没有理解我的意思，输出结果偏离预期</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow">
+                                <div class="text-red-500 text-lg font-semibold mb-2">任务抽象复杂</div>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">任务描述过于抽象或复杂，AI无法完成</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow">
+                                <div class="text-red-500 text-lg font-semibold mb-2">语句敏感，限制输出</div>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">含有敏感词汇或主题，触发AI的安全限制</p>
+                            </div>
+                        </div>
+                        <div class="mt-6 text-center">
+                            <p class="text-gray-700 dark:text-gray-300 font-medium">
+                                <i class="fas fa-lightbulb text-yellow-500 mr-1"></i>
+                                但其实这上面的很多问题，都可以通过<span class="text-blue-600 dark:text-blue-400">重新设计Prompt</span>得到更好的答案
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prompt设计的本质 -->
+                <div class="mt-16">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-200">
+                        Prompt设计的本质
+                    </h3>
+                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-8">
+                        <p class="text-xl text-center mb-8 text-gray-700 dark:text-gray-300">
+                            开篇点题：构造Prompt的核心就一句话
+                        </p>
+                        <blockquote class="text-2xl md:text-3xl font-serif text-center mb-8 text-gray-800 dark:text-gray-200 italic">
+                            将你的想法进行极致简洁的输出
+                        </blockquote>
+                        <div class="grid md:grid-cols-2 gap-8 mt-10">
+                            <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow">
+                                <h4 class="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-200">极致简洁示例1：</h4>
+                                <div class="mb-4">
+                                    <div class="text-sm text-gray-500 mb-2">原文：</div>
+                                    <p class="text-gray-600 dark:text-gray-400 text-sm">
+                                        世界，这个充满苦难和无常的舞台，是我们意志的显现。我们每个人都在这个舞台上扮演着各自的角色，但这些角色背后，是一股盲目、无目的的生命意志。这意志是我们存在的根基，它驱使我们追求欲望的满足，却永远无法完全满足...（长文省略）
+                                    </p>
+                                </div>
+                                <div>
+                                    <div class="text-sm text-gray-500 mb-2">极致简洁：</div>
+                                    <p class="text-blue-600 dark:text-blue-400 font-medium">
+                                        叔本华哲学
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow">
+                                <h4 class="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-200">极致简洁示例2：</h4>
+                                <div class="mb-4">
+                                    <div class="text-sm text-gray-500 mb-2">原文：</div>
+                                    <p class="text-gray-600 dark:text-gray-400 text-sm">
+                                        人类社会的发展史，是一部与自然环境相互作用、相互影响的复杂史诗。在这一过程中，人类文明经历了从原始的狩猎采集到农业革命的转变，这一转变使得人类能够稳定地生产食物，从而支持了人口的增长和社会结构的复杂化...（长文省略）
+                                    </p>
+                                </div>
+                                <div>
+                                    <div class="text-sm text-gray-500 mb-2">极致简洁：</div>
+                                    <p class="text-blue-600 dark:text-blue-400 font-medium">
+                                        可持续发展
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8 text-center">
+                            <p class="text-gray-600 dark:text-gray-400">
+                                这两个Prompt对于AI来说所达到的效果是一样的，甚至极致简洁的输出更好。它表明是道，AI能直接理解核心，而非去模仿原文的风格。
+                            </p>
+                            <blockquote class="mt-4 italic text-gray-700 dark:text-gray-300">
+                                "大道至简，多说无益"
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 四象限方法 -->
+        <section id="qiaohali" class="content-section py-12">
+            <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-200">
+                Prompt构建的四象限方法
+            </h3>
+            <p class="mb-8 text-gray-600 dark:text-gray-400">
+                四象限法将人与AI的认知关系划分为四个区域，帮助我们根据不同情境选择最佳的提示词策略。这种方法不仅提高了提示词的效率，还能更好地发挥AI的潜力。
+            </p>
+            <img src="https://www.helloimg.com/i/2025/03/19/67da6809247d7.jpg" width="600">
+            <!-- 四象限图表 -->
+            <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl mb-10">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-blue-50 dark:bg-blue-900/30 p-5 rounded-lg border border-blue-200 dark:border-blue-800">
+                        <h4 class="font-semibold text-blue-700 dark:text-blue-300 mb-2">第一象限（人与AI共知领域）</h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            双方对问题背景、概念均已知晓<br>
+                            <span class="font-medium text-blue-600 dark:text-blue-400">策略：简洁直接</span>
+                        </p>
+                    </div>
+                    <div class="bg-purple-50 dark:bg-purple-900/30 p-5 rounded-lg border border-purple-200 dark:border-purple-800">
+                        <h4 class="font-semibold text-purple-700 dark:text-purple-300 mb-2">第二象限（AI已知而人类未知）</h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            AI具备相关知识，但用户缺乏认知<br>
+                            <span class="font-medium text-purple-600 dark:text-purple-400">策略：深度提问能力</span>
+                        </p>
+                    </div>
+                    <div class="bg-green-50 dark:bg-green-900/30 p-5 rounded-lg border border-green-200 dark:border-green-800">
+                        <h4 class="font-semibold text-green-700 dark:text-green-300 mb-2">第三象限（人与AI共同未知）</h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            双方均处于知识盲区<br>
+                            <span class="font-medium text-green-600 dark:text-green-400">策略：开放引导创造性推理</span>
+                        </p>
+                    </div>
+                    <div class="bg-orange-50 dark:bg-orange-900/30 p-5 rounded-lg border border-orange-200 dark:border-orange-800">
+                        <h4 class="font-semibold text-orange-700 dark:text-orange-300 mb-2">第四象限（人类已知而AI未知）</h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            用户掌握特定经验或模式，但AI未训练相关内容<br>
+                            <span class="font-medium text-orange-600 dark:text-orange-400">策略：模式喂养</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 详细解释 -->
+            <div class="space-y-8">
+                <!-- 第一象限 -->
+                <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md">
+                    <h4 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-gray-200">
+                        <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 w-8 h-8 flex items-center justify-center rounded-full mr-3">1</span>
+                        第一象限（人与AI共知领域）
+                    </h4>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                        在这个象限中，人类和AI都对问题背景和概念有清晰的认知，如通用常识、基础学科知识等。
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-medium text-gray-800 dark:text-gray-200 mb-2">核心策略：简洁直接</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                提示词需要简洁直接，无需冗余描述。由于双方都理解问题背景，过多的解释反而会增加噪音。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <p class="text-sm font-medium mb-2">示例：</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                <span class="text-green-500">✓ "如何计算圆的面积？"</span><br>
+                                <span class="text-red-500">✗ "我需要计算一个圆的面积，圆是一个平面图形，所有点到中心的距离相等，我想知道如何计算它的面积..."</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            <i class="fas fa-info-circle mr-1 text-blue-500"></i>
+                            这类场景约占实际应用的30-40%，主要用于日常信息查询和基础任务处理。
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 第二象限 -->
+                <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md">
+                    <h4 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-gray-200">
+                        <span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 w-8 h-8 flex items-center justify-center rounded-full mr-3">2</span>
+                        第二象限（AI已知而人类未知）
+                    </h4>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                        在这个象限中，AI具备相关知识，但用户缺乏认知，如专业领域知识或复杂模型能力。
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-medium text-gray-800 dark:text-gray-200 mb-2">核心策略：深度提问能力</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                关键在于通过第一性原理逐层追问本质。可以使用"问题之锤"方法，对初始问题向上追问3-5层，触及核心逻辑后再设计提示词。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <p class="text-sm font-medium mb-2">示例：</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                初始问题："什么是量子计算？"<br>
+                                深度提问：<br>
+                                1. 量子计算与经典计算的根本区别是什么？<br>
+                                2. 量子叠加态如何提高计算能力？<br>
+                                3. 量子纠缠在计算中的具体应用机制是什么？
+                            </p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            <i class="fas fa-info-circle mr-1 text-purple-500"></i>
+                            这类场景主要用于科研探索、跨领域知识挖掘等，需要用户具备一定的提问深度。
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 第三象限 -->
+                <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md">
+                    <h4 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-gray-200">
+                        <span class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 w-8 h-8 flex items-center justify-center rounded-full mr-3">3</span>
+                        第三象限（人与AI共同未知）
+                    </h4>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                        在这个象限中，人类和AI都处于知识盲区，如前沿科学问题或创新性探索。
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-medium text-gray-800 dark:text-gray-200 mb-2">核心策略：开放引导创造性推理</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                此领域适合顶尖学者探索创新路径，普通用户难以介入。提示词需开放引导AI进行创造性推理，鼓励AI基于已知知识进行合理推测。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <p class="text-sm font-medium mb-2">示例：</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                "基于现有的量子力学和生物学数据，提出三个可能解释意识产生机制的理论假设，并分析每个假设的优缺点。"
+                            </p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            <i class="fas fa-info-circle mr-1 text-green-500"></i>
+                            这类场景主要用于前沿科学探索和创新思维激发，需要用户具备较高的专业素养。
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 第四象限 -->
+                <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md">
+                    <h4 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-gray-200">
+                        <span class="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 w-8 h-8 flex items-center justify-center rounded-full mr-3">4</span>
+                        第四象限（人类已知而AI未知）
+                    </h4>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                        在这个象限中，用户掌握特定经验或模式，但AI未训练相关内容，如企业内部数据、小众领域知识等。
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-medium text-gray-800 dark:text-gray-200 mb-2">核心策略：模式喂养</h5>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                需通过模式喂养（Pattern Feeding）输入结构化示例，帮助AI理解特定领域的知识和模式。
+                            </p>
+                            <div class="mt-3">
+                                <p class="text-sm font-medium mb-1">主要技术：</p>
+                                <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1 pl-5 list-disc">
+                                    <li>RAG（检索增强生成）：补充外部知识库</li>
+                                    <li>Few-shot Learning：提供少量示例引导AI理解模式</li>
+                                    <li>角色指定：在特定业务场景中明确任务边界</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <p class="text-sm font-medium mb-2">示例：</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                "作为我公司的法律顾问，分析以下合同条款。参考我们过去的案例：<br><br>
+                                案例1：[具体案例描述]<br>
+                                处理方式：[处理方法]<br><br>
+                                案例2：[具体案例描述]<br>
+                                处理方式：[处理方法]"
+                            </p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            <i class="fas fa-info-circle mr-1 text-orange-500"></i>
+                            这类场景约占日常应用的40-50%，主要用于企业专属知识库、垂直领域任务等。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Prompt设计技巧 -->
+        <section id="techniques" class="content-section py-12">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 md:p-8 mb-12">
+                <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white flex items-center">
+                    <i class="fas fa-tools text-green-500 mr-3"></i>
+                    Prompt设计技巧
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- 具体化问题，明确主题 -->
+                    <div class="technique-card bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 hover:shadow-lg transition-all">
+                        <div class="text-green-500 text-xl mb-3">
+                            <i class="fas fa-bullseye mr-2"></i>
+                            <span class="font-semibold">具体化问题，明确主题</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                            通过将问题具体化，可以更精确地获得所需的信息。明确主题，帮助AI更准确地理解需求。
+                        </p>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded text-sm">
+                            <p class="text-red-500 line-through mb-2">请帮我找出所有关于网络安全的书籍</p>
+                            <p class="text-green-500">请帮我找出所有关于<strong class="underline">网络安全</strong>的书籍，特别是<strong class="underline">发表于2022-2024年间</strong>、<strong class="underline">聚焦于零信任架构</strong>的专业著作</p>
+                        </div>
+                    </div>
+
+                    <!-- 少样本分析 -->
+                    <div class="technique-card bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 hover:shadow-lg transition-all">
+                        <div class="text-green-500 text-xl mb-3">
+                            <i class="fas fa-clone mr-2"></i>
+                            <span class="font-semibold">少样本分析</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                            在仅有少量标注样本的情况下，通过提供示例帮助模型理解任务模式，实现良好的泛化能力。
+                        </p>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded text-sm">
+                            <p class="mb-2">请帮我分类以下电子邮件，分为"垃圾邮件"或"正常邮件"：</p>
+                            <p class="mb-1"><span class="text-blue-500">示例1:</span> "恭喜您！您已被选中获得一百万美元奖金，请点击链接领取" → <span class="text-red-500">垃圾邮件</span></p>
+                            <p class="mb-1"><span class="text-blue-500">示例2:</span> "您好，请查收本季度财务报告，如有疑问请联系我" → <span class="text-green-500">正常邮件</span></p>
+                            <p>现在请分类："您的账户已被锁定，点击此链接重置密码并获得免费礼品"</p>
+                        </div>
+                    </div>
+
+                    <!-- 调整语气 -->
+                    <div class="technique-card bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 hover:shadow-lg transition-all">
+                        <div class="text-green-500 text-xl mb-3">
+                            <i class="fas fa-volume-up mr-2"></i>
+                            <span class="font-semibold">调整语气</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                            使用不同的语气可以影响AI的响应。从命令式到询问式，语气的变化会影响AI的回答风格和深度。
+                        </p>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded text-sm">
+                            <p class="text-red-500 line-through mb-2">给我解决方案</p>
+                            <p class="text-green-500">你能帮我找到一些解决方案吗？我特别希望听到你对这个问题的专业见解。</p>
+                        </div>
+                    </div>
+
+                    <!-- 鼓励性语言 -->
+                    <div class="technique-card bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 hover:shadow-lg transition-all">
+                        <div class="text-green-500 text-xl mb-3">
+                            <i class="fas fa-thumbs-up mr-2"></i>
+                            <span class="font-semibold">鼓励性语言</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                            使用鼓励性的语言可以激励AI继续提供帮助，积极的反馈会使AI更加积极地参与对话。
+                        </p>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded text-sm">
+                            <p class="text-red-500 line-through mb-2">继续</p>
+                            <p class="text-green-500">继续，你的分析非常有深度，这些见解对我帮助很大！</p>
+                        </div>
+                    </div>
+
+                    <!-- 角色扮演 -->
+                    <div class="technique-card bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 hover:shadow-lg transition-all">
+                        <div class="text-green-500 text-xl mb-3">
+                            <i class="fas fa-theater-masks mr-2"></i>
+                            <span class="font-semibold">角色扮演</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                            通过设定一个特定角色，可以模拟特定场景或情境，引导AI从特定角度提供回答。
+                        </p>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded text-sm">
+                            <p class="text-red-500 line-through mb-2">解释比特币的工作原理</p>
+                            <p class="text-green-500">假设你是一位密码学专家，请向一位对区块链技术完全陌生的高中生解释比特币的工作原理。用简单的比喻和日常生活中的例子，避免使用过于专业的术语。</p>
+                        </div>
+                    </div>
+
+                    <!-- 反向诱导 -->
+                    <div class="technique-card bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 hover:shadow-lg transition-all">
+                        <div class="text-green-500 text-xl mb-3">
+                            <i class="fas fa-sync-alt mr-2"></i>
+                            <span class="font-semibold">反向诱导</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                            使用逆向思维，通过提出相反的观点或问题，引导AI从不同角度思考和回答。
+                        </p>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded text-sm">
+                            <p class="text-red-500 line-through mb-2">如何提高网站安全性？</p>
+                            <p class="text-green-500">如果你要破坏一个网站的安全性，你会选择哪些最常见的攻击方法？然后，网站管理员应该如何防范这些攻击？</p>
+                        </div>
+                    </div>
+
+                    <!-- 逐步引导 -->
+                    <div class="technique-card bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 hover:shadow-lg transition-all">
+                        <div class="text-green-500 text-xl mb-3">
+                            <i class="fas fa-list-ol mr-2"></i>
+                            <span class="font-semibold">逐步引导</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                            通过分步骤的方式提出问题，逐步引导AI深入讨论，有助于获得更详细的答案。
+                        </p>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded text-sm">
+                            <p class="text-red-500 line-through mb-2">分析这个密码系统的弱点</p>
+                            <p class="text-green-500">请按照以下步骤分析这个基于AES-256的加密系统：<br>
+                            1. 首先，评估其密钥管理机制<br>
+                            2. 接着，分析其在实现过程中可能存在的漏洞<br>
+                            3. 然后，考虑针对该系统的社会工程学攻击<br>
+                            4. 最后，提出改进建议</p>
+                        </div>
+                    </div>
+
+                    <!-- 使用比喻和类比 -->
+                    <div class="technique-card bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 hover:shadow-lg transition-all">
+                        <div class="text-green-500 text-xl mb-3">
+                            <i class="fas fa-random mr-2"></i>
+                            <span class="font-semibold">使用比喻和类比</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                            通过比喻和类比的方式，可以帮助AI理解复杂或抽象的概念，尤其是在解释技术性或理论性问题时。
+                        </p>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded text-sm">
+                            <p class="text-red-500 line-through mb-2">解释量子计算</p>
+                            <p class="text-green-500">请使用日常生活中的比喻，向一位非技术背景的高中生解释量子计算原理。比如，你可以将传统计算与量子计算分别比作"走迷宫的不同方法"或"解决复杂问题的不同思路"。</p>
+                        </div>
+                    </div>
+
+                    <!-- 避免任务抽象复杂 -->
+                    <div class="technique-card bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 hover:shadow-lg transition-all">
+                        <div class="text-green-500 text-xl mb-3">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            <span class="font-semibold">避免任务抽象复杂</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+                            避免过于抽象或复杂的任务描述，因为这会导致AI无法准确理解或完成用户的需求。
+                        </p>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded text-sm">
+                            <p class="text-red-500 line-through mb-2">请分析当前全球地缘政治形势对加密货币市场的影响，并预测未来5年的发展趋势。</p>
+                            <p class="text-green-500">请分析以下具体因素如何影响比特币价格：<br>
+                            1. 美联储加息政策<br>
+                            2. 乌克兰冲突<br>
+                            3. 机构投资者的参与度</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 更多技巧 -->
+                <div class="mt-12">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-200">
+                        更多高级技巧
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md">
+                            <h4 class="text-xl font-medium mb-4 text-gray-800 dark:text-gray-200">情境设计技巧</h4>
+                            <ul class="space-y-4">
+                                <li class="flex">
+                                    <div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mr-3">
+                                        <i class="fas fa-theater-masks text-green-500 text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-700 dark:text-gray-300">模拟真实场景</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                                            通过模拟真实世界中的场景或对话，更自然地引导AI提供相关信息
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="flex">
+                                    <div class="flex-shrink-0 h-6 w-6 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-3">
+                                        <i class="fas fa-heart text-blue-500 text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-700 dark:text-gray-300">利用情感因素</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                                            在适当情况下，加入情感因素可以影响AI的响应，使其更加人性化
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="flex">
+                                    <div class="flex-shrink-0 h-6 w-6 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mr-3">
+                                        <i class="fas fa-comment-dots text-purple-500 text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-700 dark:text-gray-300">多轮对话管理</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                                            保持对话的连贯性和上下文的一致性，对维持对话流畅性至关重要
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md">
+                            <h4 class="text-xl font-medium mb-4 text-gray-800 dark:text-gray-200">专业表达技巧</h4>
+                            <ul class="space-y-4">
+                                <li class="flex">
+                                    <div class="flex-shrink-0 h-6 w-6 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center mr-3">
+                                        <i class="fas fa-user-graduate text-red-500 text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-700 dark:text-gray-300">使用专业术语</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                                            在需要AI提供专业领域信息时，使用专业术语可以提高获得准确答案的概率
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="flex">
+                                    <div class="flex-shrink-0 h-6 w-6 rounded-full bg-yellow-100 dark:bg-yellow-900 flex items-center justify-center mr-3">
+                                        <i class="fas fa-globe text-yellow-500 text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-700 dark:text-gray-300">文化和语言敏感性</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                                            考虑到AI被训练在不同的文化和语言背景下，适当调整表达方式
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="flex">
+                                    <div class="flex-shrink-0 h-6 w-6 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center mr-3">
+                                        <i class="fas fa-code text-orange-500 text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-700 dark:text-gray-300">侧信道技巧</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                                            利用小语种或代码形式来绕过AI的限制，创造性地讨论一些直接提问受限的话题
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prompt优化与迭代 -->
+        <section id="optimization" class="content-section py-12">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 md:p-8 mb-12">
+                <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white flex items-center">
+                    <i class="fas fa-chart-line text-orange-500 mr-3"></i>
+                    Prompt优化与迭代
+                </h2>
+                
+                <!-- 优化流程图 -->
+                <div class="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl mb-10">
+                    <h3 class="text-2xl font-semibold mb-6 text-center text-gray-800 dark:text-gray-200">
+                        Prompt的优化流程
+                    </h3>
+                    <div class="max-w-4xl mx-auto">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+                                <div class="w-full border-t-2 border-dashed border-gray-300 dark:border-gray-700"></div>
+                            </div>
+                            <div class="relative flex justify-between">
+                                <div class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-6 py-3 rounded-xl text-center z-10 shadow-sm">
+                                    <i class="fas fa-edit text-lg mb-2"></i>
+                                    <div class="text-sm font-medium">输入Prompt</div>
+                                </div>
+                                <div class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-6 py-3 rounded-xl text-center z-10 shadow-sm">
+                                    <i class="fas fa-robot text-lg mb-2"></i>
+                                    <div class="text-sm font-medium">AI生成输出</div>
+                                </div>
+                                <div class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-6 py-3 rounded-xl text-center z-10 shadow-sm">
+                                    <i class="fas fa-check-circle text-lg mb-2"></i>
+                                    <div class="text-sm font-medium">评估输出质量</div>
+                                </div>
+                                <div class="bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-6 py-3 rounded-xl text-center z-10 shadow-sm">
+                                    <i class="fas fa-sliders-h text-lg mb-2"></i>
+                                    <div class="text-sm font-medium">调整修改Prompt</div>
+                                </div>
+                                <div class="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-6 py-3 rounded-xl text-center z-10 shadow-sm">
+                                    <i class="fas fa-redo-alt text-lg mb-2"></i>
+                                    <div class="text-sm font-medium">重新输入并重复</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-gray-600 dark:text-gray-400 mb-10">
+                    Prompt的优化是一个渐进的过程，通常需要通过多次反复尝试和调整，以确保Prompt能引导AI生成精准、相关性强的输出。这个过程不仅依赖于初步的Prompt设计，也需要通过评估与反馈不断进行细化。
+                </p>
+
+                <!-- 优化流程详解 -->
+                <div class="space-y-8 mb-12">
+                    <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md">
+                        <h4 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-gray-200">
+                            <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 w-8 h-8 flex items-center justify-center rounded-full mr-3">1</span>
+                            输入Prompt
+                        </h4>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            在开始优化之前，首先需要构建一个初步的Prompt。这是与AI进行交互的起点。初始的Prompt不需要完美，但应尽量描述清楚你期望的任务目标。确保Prompt足够具体且有明确的指向性。
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md">
+                        <h4 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-gray-200">
+                            <span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 w-8 h-8 flex items-center justify-center rounded-full mr-3">2</span>
+                            AI生成输出
+                        </h4>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            AI根据输入的Prompt生成输出。这时候的输出通常是原始的，还存在一些偏差或不完全的地方，因此需要进一步评估和调整。
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md">
+                        <h4 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-gray-200">
+                            <span class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 w-8 h-8 flex items-center justify-center rounded-full mr-3">3</span>
+                            评估输出质量
+                        </h4>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">
+                            每一次AI生成的输出，都需要仔细评估。你可以从以下几个方面来评估输出质量：
+                        </p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                                <div class="font-medium text-gray-800 dark:text-gray-200 mb-2">准确性</div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    输出内容是否符合预期？是否准确地解答了你的问题或完成了任务？
+                                </p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                                <div class="font-medium text-gray-800 dark:text-gray-200 mb-2">相关性</div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    AI是否紧扣任务的核心要求，是否与背景信息相符合？
+                                </p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                                <div class="font-medium text-gray-800 dark:text-gray-200 mb-2">完整性</div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    输出是否缺少关键元素，是否有遗漏？
+                                </p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                                <div class="font-medium text-gray-800 dark:text-gray-200 mb-2">语言表达</div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    输出的语言是否清晰、易于理解，是否有歧义？
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md">
+                        <h4 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-gray-200">
+                            <span class="bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 w-8 h-8 flex items-center justify-center rounded-full mr-3">4</span>
+                            调整和修改Prompt
+                        </h4>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            根据评估结果，调整Prompt。你需要补充背景信息、明确输出要求、简化语言表达或引导AI更多聚焦于某些细节。每次修改后，你的Prompt会更加精确，AI生成的输出也会越来越贴合需求。
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md">
+                        <h4 class="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-gray-200">
+                            <span class="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 w-8 h-8 flex items-center justify-center rounded-full mr-3">5</span>
+                            重新输入并重复
+                        </h4>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            修改过后的Prompt再次输入，AI会基于新的指令生成输出。继续评估并优化，直到输出符合预期。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 常见优化方法 -->
+                <div class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-200">
+                        常见的优化方法
+                    </h3>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md">
+                            <h4 class="text-xl font-semibold mb-4 text-blue-600 dark:text-blue-400">
+                                1. 增加上下文信息
+                            </h4>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                对于任何复杂问题，背景信息和上下文的提供至关重要。没有足够的背景，AI的输出会缺乏针对性，过于宽泛或片面。
+                            </p>
+                            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                                <p class="text-sm text-red-500 mb-2">优化前：</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">请分析企业的网络安全威胁</p>
+                                <p class="text-sm text-green-500 mb-2">优化后：</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    请分析2024年某金融企业的网络安全威胁，重点关注以下方面：<br>
+                                    1. 企业目前使用的技术栈：Windows Server、Linux服务器...<br>
+                                    2. 历史上出现的主要安全事件：如2019年勒索病毒攻击...<br>
+                                    3. 当前面临的主要网络攻击类型，包括DDoS攻击、APT攻击等...
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md">
+                            <h4 class="text-xl font-semibold mb-4 text-purple-600 dark:text-purple-400">
+                                2. 精细化输出要求
+                            </h4>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                通过对输出要求的精细化控制，确保AI输出内容能够完全符合需求，包括输出格式、字数要求和风格要求等。
+                            </p>
+                            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                                <p class="text-sm text-red-500 mb-2">优化前：</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">分析企业的网络安全状况</p>
+                                <p class="text-sm text-green-500 mb-2">优化后：</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    请分析2024年某大型金融企业的网络安全状况，要求：<br>
+                                    1. 报告字数：1500-2000字<br>
+                                    2. 重点分析外部攻击、内部威胁和云平台安全，提出防护措施<br>
+                                    3. 输出以专业且数据驱动的风格呈现，包含网络拓扑图、表格...
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md">
+                            <h4 class="text-xl font-semibold mb-4 text-green-600 dark:text-green-400">
+                                3. 调整语言表达
+                            </h4>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                清晰、简洁的语言可以减少歧义，确保AI正确理解任务要求，避免复杂句式和含糊不清的表述。
+                            </p>
+                            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                                <p class="text-sm text-red-500 mb-2">优化前：</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                                    请对企业的网络安全进行深入分析，包括各种类型的攻击、员工行为、法规合规等因素
+                                </p>
+                                <p class="text-sm text-green-500 mb-2">优化后：</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    请对2024年某金融企业的网络安全进行详细分析，重点分析以下领域：<br>
+                                    1. 外部攻击：如DDoS攻击、勒索病毒等<br>
+                                    2. 内部威胁：如员工误操作、社交工程攻击等<br>
+                                    3. 法规合规：如GDPR、CIPA等法律要求的遵守情况
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 优化技巧 -->
+                <div>
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-200">
+                        Prompt优化技巧
+                    </h3>
+                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6 rounded-xl">
+                        <div class="text-center mb-8">
+                            <p class="text-lg text-gray-700 dark:text-gray-300">
+                                <strong>Prompt优化是一个不断实践、学习、调整的过程</strong>
+                            </p>
+                            <p class="text-gray-600 dark:text-gray-400">
+                                每次优化都会让你更接近理想的输出结果。通过不断总结经验、调整表达，你将逐渐掌握如何与AI进行高效、精确的交互。
+                            </p>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-white dark:bg-gray-900 p-5 rounded-lg shadow-md">
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-3">清晰表达</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    高效Prompt的基础在于清晰明确的任务目标，避免模糊词汇，确保背景信息、输出要求和任务细节精确直截了当。
+                                </p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-900 p-5 rounded-lg shadow-md">
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-3">框架辅助</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    使用结构化框架（如5W2H或SMART原则）整理任务维度，全面描述问题要求，帮助AI准确理解并生成输出。
+                                </p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-900 p-5 rounded-lg shadow-md">
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-3">持续优化</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    Prompt优化是一个循环过程，通过多次交互修改精炼Prompt，使任务要求更精准，输出结果更符合预期。
+                                </p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-900 p-5 rounded-lg shadow-md">
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-3">深度反馈</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    根据AI输出结果进行深度反馈，分析优缺点，并调整Prompt，以实现更好的输出效果。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 延伸阅读 -->
+        <section class="content-section py-12">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 md:p-8 mb-12">
+                <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white flex items-center">
+                    <i class="fas fa-book text-green-500 mr-3"></i>
+                    进一步阅读
+                </h2>
+                
+                <p class="text-gray-600 dark:text-gray-400 mb-8">
+                    想要深入了解Prompt工程和AI交互技巧？以下是一些值得推荐的书籍和资源：
+                </p>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover-card">
+                        <div class="bg-green-100 dark:bg-green-900/30 p-4">
+                            <h3 class="font-semibold text-lg text-gray-800 dark:text-gray-200">《Prompt Engineering Guide》</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">作者：Dair.ai</p>
+                        </div>
+                        <div class="p-5">
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                                全面的Prompt工程指南，涵盖从基础到高级的各种Prompt设计技巧，特别适合初学者和中级用户。
+                            </p>
+                            <div class="flex justify-end">
+                                <a href="https://www.promptingguide.ai/" target="_blank" class="text-green-500 hover:text-green-600 dark:hover:text-green-400 text-sm flex items-center">
+                                    <span>查看资源</span>
+                                    <i class="fas fa-external-link-alt ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover-card">
+                        <div class="bg-purple-100 dark:bg-purple-900/30 p-4">
+                            <h3 class="font-semibold text-lg text-gray-800 dark:text-gray-200">《ChatGPT Prompt Engineering》</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">作者：Andrew Ng & OpenAI</p>
+                        </div>
+                        <div class="p-5">
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                                吴恩达与OpenAI合作的Prompt工程课程，专注于如何为ChatGPT编写有效的提示，包含大量实践示例。
+                            </p>
+                            <div class="flex justify-end">
+                                <a href="https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/" target="_blank" class="text-purple-500 hover:text-purple-600 dark:hover:text-purple-400 text-sm flex items-center">
+                                    <span>查看资源</span>
+                                    <i class="fas fa-external-link-alt ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <script>
+        // 主题切换
+        function setupThemeToggle() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
+            
+            function toggleTheme() {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.theme = 'light';
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.theme = 'dark';
+                }
+            }
+            
+            themeToggle.addEventListener('click', toggleTheme);
+            mobileThemeToggle.addEventListener('click', toggleTheme);
+            
+            // 初始化主题
+            //if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            //    document.documentElement.classList.add('dark');
+            //} else {
+            //    document.documentElement.classList.remove('dark');
+            //}
+        }
+
+        // 移动端菜单
+        function setupMobileMenu() {
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuToggle.addEventListener('click', () => {
+                if (mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.remove('hidden');
+                    mobileMenu.classList.add('block');
+                } else {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.classList.remove('block');
+                }
+            });
+            
+            // 点击菜单项后关闭菜单
+            const mobileMenuItems = mobileMenu.querySelectorAll('a');
+            mobileMenuItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.classList.remove('block');
+                });
+            });
+        }
+
+        // 内容区域动画
+        function setupContentAnimations() {
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            function checkVisibility() {
+                contentSections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+                    
+                    if (rect.top <= windowHeight * 0.75) {
+                        section.classList.add('visible');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', checkVisibility);
+            window.addEventListener('resize', checkVisibility);
+            checkVisibility();
+        }
+
+        // 导航链接高亮
+        function setupNavHighlight() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section[id]');
+            
+            function highlightNav() {
+                let scrollY = window.pageYOffset;
+                
+                sections.forEach(current => {
+                    const sectionHeight = current.offsetHeight;
+                    const sectionTop = current.offsetTop - 100;
+                    const sectionId = current.getAttribute('id');
+                    
+                    if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === '#' + sectionId) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', highlightNav);
+            highlightNav();
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            setupThemeToggle();
+            setupMobileMenu();
+            setupContentAnimations();
+            setupNavHighlight();
+        });
+    </script>
+</body>
+</html>
