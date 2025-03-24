@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek大模型：人才发展的新动能</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3361FF;
+            --primary-dark: #1E47CC;
+            --secondary: #6E56CF;
+            --accent: #FF7A5C;
+            --text-primary: #1A1A1A;
+            --text-secondary: #555555;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F5F7FA;
+            --card-bg: #FFFFFF;
+            --border-color: #E5E7EB;
+        }
+
+        .dark {
+            --primary: #4B7BFF;
+            --primary-dark: #3361FF;
+            --secondary: #9277FF;
+            --accent: #FF9580;
+            --text-primary: #F3F4F6;
+            --text-secondary: #D1D5DB;
+            --bg-primary: #111827;
+            --bg-secondary: #1F2937;
+            --card-bg: #1F2937;
+            --border-color: #374151;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            transition: background-color 0.3s ease;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-primary);
+        }
+
+        p {
+            color: var(--text-secondary);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary);
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .feature-icon {
+            transform: scale(1.1);
+        }
+        
+        .pill {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: var(--primary);
+            color: white;
+            margin-right: 0.5rem;
+        }
+        
+        .quote {
+            font-style: italic;
+            border-left: 4px solid var(--primary);
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+            color: var(--text-primary);
+        }
+        
+        .roadmap-item {
+            position: relative;
+            padding-left: 2rem;
+            padding-bottom: 2rem;
+        }
+        
+        .roadmap-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background-color: var(--primary);
+            z-index: 1;
+        }
+        
+        .roadmap-item::after {
+            content: '';
+            position: absolute;
+            left: 0.44rem;
+            top: 1.5rem;
+            width: 2px;
+            height: calc(100% - 1.5rem);
+            background-color: var(--border-color);
+        }
+        
+        .roadmap-item:last-child::after {
+            display: none;
+        }
+        
+        .process-step {
+            display: flex;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+        
+        .process-step.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .process-step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .footer {
+            background-color: var(--bg-secondary);
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.8s ease-in forwards;
+            opacity: 0;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+        
+        /* Timeline style */
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+        
+        .timeline-container {
+            padding: 1.5rem 1.5rem 1.5rem 3rem;
+            position: relative;
+            background: var(--card-bg);
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            left: -12px;
+            top: 1.5rem;
+            z-index: 1;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            background-color: var(--border-color);
+            top: 0;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- 顶部导航栏 -->
+    <nav class="sticky top-0 z-50 bg-opacity-95 backdrop-filter backdrop-blur-lg" style="background-color: var(--bg-primary);">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold" style="color: var(--primary);">DeepSeek</span>
+                    <span class="ml-2 text-xl font-medium" style="color: var(--text-primary);">大模型</span>
+                </div>
+                <div class="flex items-center">
+                    <button id="theme-toggle" class="p-2 rounded-full focus:outline-none" aria-label="切换深色/浅色模式">
+                        <i id="theme-icon" class="fas fa-moon text-lg" style="color: var(--text-primary);"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <header class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 fade-in">
+            DeepSeek 大模型
+            <span class="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
+                人才发展的新动能
+            </span>
+        </h1>
+        <p class="text-xl sm:text-2xl mb-10 max-w-3xl mx-auto fade-in delay-1" style="color: var(--text-secondary);">
+            以智能技术为引擎，赋能人才引进与培养，共创未来
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4 fade-in delay-2">
+            <a href="#section1" class="btn-primary">
+                了解大模型技术
+            </a>
+            <a href="#section2" class="btn-primary">
+                探索 DeepSeek 能力
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- 第一部分: 大模型技术 -->
+        <section id="section1" class="py-16">
+            <h2 class="section-title fade-in">大模型技术：智能时代的"基础设施"</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                <div class="card p-6 fade-in delay-1">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">超级大脑</h3>
+                    <p>海量知识存储、高速信息处理、复杂问题求解，为各行各业提供强大的认知支持。</p>
+                </div>
+                <div class="card p-6 fade-in delay-2">
+                    <div class="feature-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">智能工匠</h3>
+                    <p>高效内容创作、智能工具生成、自动化流程优化，大幅提升工作效率与创新能力。</p>
+                </div>
+                <div class="card p-6 fade-in delay-3">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">创新加速器</h3>
+                    <p>激发创新灵感、加速科研进程、催生新兴产业，推动经济社会高质量发展。</p>
+                </div>
+            </div>
+            <div class="quote text-xl mt-12 fade-in delay-4">
+                "大模型，不是简单的工具升级，而是智能时代的'新基建'，是驱动人才发展的新引擎。"
+            </div>
+        </section>
+
+        <!-- 第二部分: DeepSeek 简介 -->
+        <section id="section2" class="py-16">
+            <h2 class="section-title fade-in">DeepSeek：为人才而生的智能引擎</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-12">
+                <div class="fade-in delay-1">
+                    <div class="rounded-lg overflow-hidden mb-6" style="background-color: var(--bg-secondary);">
+                        <div class="p-12 flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-robot text-6xl mb-4" style="color: var(--primary);"></i>
+                                <div class="text-2xl font-bold" style="color: var(--text-primary);">DeepSeek 大模型</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-lg mb-4">DeepSeek 是一家专注于大模型技术研发与应用的领先企业，致力于将先进的人工智能技术应用于人才发展领域，为个人成长和组织发展提供智能化解决方案。</p>
+                    <p class="text-lg">从诞生之初，DeepSeek 就深耕人才领域，对人才需求和痛点有深刻理解，不断创新技术和应用模式，成为人才发展战略的智能伙伴。</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="card p-6 fade-in delay-1">
+                        <div class="text-xl font-semibold mb-2" style="color: var(--primary);">人才基因</div>
+                        <p>从诞生之初就深耕人才领域，对人才需求和痛点有深刻理解。</p>
+                    </div>
+                    <div class="card p-6 fade-in delay-2">
+                        <div class="text-xl font-semibold mb-2" style="color: var(--primary);">精益求精</div>
+                        <p>持续迭代优化模型性能，追求极致的用户体验和应用效果。</p>
+                    </div>
+                    <div class="card p-6 fade-in delay-3">
+                        <div class="text-xl font-semibold mb-2" style="color: var(--primary);">开放共赢</div>
+                        <p>积极拥抱开源生态，与合作伙伴共建人才发展智能生态圈。</p>
+                    </div>
+                    <div class="card p-6 fade-in delay-4">
+                        <div class="text-xl font-semibold mb-2" style="color: var(--primary);">安全可信</div>
+                        <p>将数据安全和伦理道德放在首位，打造安全可靠的大模型服务。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="quote text-xl mt-12 fade-in delay-4">
+                "DeepSeek，不止于技术领先，更在于对人才的深刻理解和对人才发展的坚定 commitment。"
+            </div>
+        </section>
+
+        <!-- 第三部分: 核心能力解构 -->
+        <section class="py-16">
+            <h2 class="section-title fade-in">DeepSeek 大模型三大核心能力解构</h2>
+            <div class="grid grid-cols-1 gap-16 mt-12">
+                <!-- 能力模块一 -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                    <div class="col-span-1 text-center lg:text-left fade-in">
+                        <div class="inline-block p-4 rounded-full bg-opacity-20 mb-4" style="background-color: var(--primary);">
+                            <i class="fas fa-search text-4xl" style="color: var(--primary);"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">火眼金睛</h3>
+                        <p class="text-lg mb-4">智能人才洞察与精准匹配</p>
+                        <div class="flex flex-wrap gap-2 justify-center lg:justify-start">
+                            <span class="pill">人才搜索</span>
+                            <span class="pill">人才盘点</span>
+                            <span class="pill">继任者计划</span>
+                        </div>
+                    </div>
+                    <div class="col-span-2 card p-6 fade-in delay-1">
+                        <p class="mb-4">DeepSeek 大模型能在信息洪流中练就"火眼金睛"，精准锁定合适人才，大幅提升招聘效率。</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+                            <div class="text-center p-4 rounded-lg" style="background-color: var(--bg-secondary);">
+                                <div class="text-2xl font-bold mb-1" style="color: var(--primary);">40%</div>
+                                <p class="text-sm">缩短招聘周期</p>
+                            </div>
+                            <div class="text-center p-4 rounded-lg" style="background-color: var(--bg-secondary);">
+                                <div class="text-2xl font-bold mb-1" style="color: var(--primary);">35%</div>
+                                <p class="text-sm">降低招聘成本</p>
+                            </div>
+                            <div class="text-center p-4 rounded-lg" style="background-color: var(--bg-secondary);">
+                                <div class="text-2xl font-bold mb-1" style="color: var(--primary);">60%</div>
+                                <p class="text-sm">提升匹配准确度</p>
+                            </div>
+                        </div>
+                        <div class="quote text-lg mt-6">
+                            "信息洪流中，DeepSeek 助您练就'火眼金睛'，精准锁定千里马，让人才寻觅不再盲目。"
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 能力模块二 -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                    <div class="col-span-1 text-center lg:text-left fade-in order-1 lg:order-2">
+                        <div class="inline-block p-4 rounded-full bg-opacity-20 mb-4" style="background-color: var(--secondary);">
+                            <i class="fas fa-feather-alt text-4xl" style="color: var(--secondary);"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">妙笔生花</h3>
+                        <p class="text-lg mb-4">智能内容创作与个性化互动</p>
+                        <div class="flex flex-wrap gap-2 justify-center lg:justify-start">
+                            <span class="pill" style="background-color: var(--secondary);">招聘文案</span>
+                            <span class="pill" style="background-color: var(--secondary);">雇主品牌</span>
+                            <span class="pill" style="background-color: var(--secondary);">人才关怀</span>
+                        </div>
+                    </div>
+                    <div class="col-span-2 card p-6 fade-in delay-1 order-2 lg:order-1">
+                        <p class="mb-4">DeepSeek 让每一次人才互动都如"妙笔生花"，通过智能内容创作和个性化互动，吸引并留住优秀人才。</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                            <div class="p-4 rounded-lg" style="background-color: var(--bg-secondary);">
+                                <h4 class="font-semibold mb-2" style="color: var(--secondary);">多语言招聘文案</h4>
+                                <p class="text-sm">自动生成针对不同国家和文化背景的招聘广告，大幅提升海外招聘效率</p>
+                            </div>
+                            <div class="p-4 rounded-lg" style="background-color: var(--bg-secondary);">
+                                <h4 class="font-semibold mb-2" style="color: var(--secondary);">个性化邀请函</h4>
+                                <p class="text-sm">根据候选人背景、兴趣和职业规划，生成个性化邀请函，提高回复率</p>
+                            </div>
+                        </div>
+                        <div class="quote text-lg mt-6">
+                            "DeepSeek，让每一次人才互动都如'妙笔生花'，个性化沟通，触达人心，构筑人才引力场。"
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 能力模块三 -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                    <div class="col-span-1 text-center lg:text-left fade-in">
+                        <div class="inline-block p-4 rounded-full bg-opacity-20 mb-4" style="background-color: var(--accent);">
+                            <i class="fas fa-chart-line text-4xl" style="color: var(--accent);"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">运筹帷幄</h3>
+                        <p class="text-lg mb-4">智能分析与战略决策支持</p>
+                        <div class="flex flex-wrap gap-2 justify-center lg:justify-start">
+                            <span class="pill" style="background-color: var(--accent);">人才战略</span>
+                            <span class="pill" style="background-color: var(--accent);">趋势分析</span>
+                            <span class="pill" style="background-color: var(--accent);">ROI评估</span>
+                        </div>
+                    </div>
+                    <div class="col-span-2 card p-6 fade-in delay-1">
+                        <p class="mb-4">DeepSeek 是您人才战略的"智能参谋"，通过数据驱动的分析和预测，为人才决策提供科学支撑。</p>
+                        <div class="p-4 rounded-lg mt-4" style="background-color: var(--bg-secondary);">
+                            <h4 class="font-semibold mb-2" style="color: var(--accent);">智能决策支持系统</h4>
+                            <ul class="space-y-2 text-sm">
+                                <li><i class="fas fa-check mr-2" style="color: var(--accent);"></i> 预测未来人才需求趋势</li>
+                                <li><i class="fas fa-check mr-2" style="color: var(--accent);"></i> 评估不同人才引进渠道的投资回报率</li>
+                                <li><i class="fas fa-check mr-2" style="color: var(--accent);"></i> 分析人才流失风险与成因</li>
+                                <li><i class="fas fa-check mr-2" style="color: var(--accent);"></i> 为人才战略决策提供数据支撑</li>
+                            </ul>
+                        </div>
+                        <div class="quote text-lg mt-6">
+                            "DeepSeek，是您人才战略的'智能参谋'，'运筹帷幄'之中，决胜千里之外，让人才决策更科学，更前瞻。"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第四部分: 传统人才引进的困局 -->
+        <section class="py-16">
+            <h2 class="section-title fade-in">痛点共鸣：传统人才引进的"困局"</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+                <div class="card p-6 fade-in delay-1">
+                    <div class="flex items-center mb-4">
+                        <div class="rounded-full p-3 mr-4" style="background-color: var(--bg-secondary);">
+                            <i class="fas fa-database text-xl" style="color: var(--primary);"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">信息孤岛</h3>
+                    </div>
+                    <p>海外人才信息分散，获取渠道有限，信息不对称严重，难以全面了解人才状况。</p>
+                </div>
+                <div class="card p-6 fade-in delay-2">
+                    <div class="flex items-center mb-4">
+                        <div class="rounded-full p-3 mr-4" style="background-color: var(--bg-secondary);">
+                            <i class="fas fa-hourglass-half text-xl" style="color: var(--primary);"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">效率瓶颈</h3>
+                    </div>
+                    <p>人工筛选简历效率低下，耗时耗力，大量重复性工作占据宝贵时间，难以应对海量信息。</p>
+                </div>
+                <div class="card p-6 fade-in delay-3">
+                    <div class="flex items-center mb-4">
+                        <div class="rounded-full p-3 mr-4" style="background-color: var(--bg-secondary);">
+                            <i class="fas fa-puzzle-piece text-xl" style="color: var(--primary);"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">匹配难题</h3>
+                    </div>
+                    <p>人才画像模糊，岗位需求理解偏差，导致人岗错配，影响引才质量和人才稳定性。</p>
+                </div>
+                <div class="card p-6 fade-in delay-4">
+                    <div class="flex items-center mb-4">
+                        <div class="rounded-full p-3 mr-4" style="background-color: var(--bg-secondary);">
+                            <i class="fas fa-heart-broken text-xl" style="color: var(--primary);"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">体验痛点</h3>
+                    </div>
+                    <p>候选人体验缺乏个性化和智能化，流程复杂繁琐，沟通效率低，影响引才效果和品牌形象。</p>
+                </div>
+            </div>
+            <div class="quote text-xl mt-12 fade-in delay-4">
+                "传统引才模式，如同大海捞针，效率低，成本高，效果难保障。亟需智能化破局！"
+            </div>
+        </section>
+
+        <!-- 第五部分: DeepSeek 重塑人才引进流程 -->
+        <section class="py-16">
+            <h2 class="section-title fade-in">DeepSeek 重塑人才引进全流程</h2>
+            
+            <div class="timeline mt-16">
+                <!-- 阶段一 -->
+                <div class="timeline-container fade-in delay-1">
+                    <h3 class="text-xl font-bold mb-4" style="color: var(--primary);">人才吸引阶段</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="font-semibold mb-2">全球智网，精准邀约</div>
+                            <p class="text-sm mb-4">DeepSeek 像一位"智能星探"，在全球人才星空中精准定位目标人才，发出个性化的"邀请函"，瞬间点燃人才的兴趣。</p>
+                        </div>
+                        <div>
+                            <div class="font-semibold mb-2">千人千面，个性化引力波</div>
+                            <p class="text-sm mb-4">根据不同人才特点和需求，定制个性化的吸引策略和沟通方式，提升吸引力和回应率。</p>
+                        </div>
+                    </div>
+                    <div class="quote text-lg">
+                        "DeepSeek，让引才从'大海捞针'变为'精准制导'，全球人才，尽在掌握！"
+                    </div>
+                </div>
+                
+                <!-- 阶段二 -->
+                <div class="timeline-container fade-in delay-2">
+                    <h3 class="text-xl font-bold mb-4" style="color: var(--secondary);">人才筛选阶段</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="font-semibold mb-2">智能滤镜，沙里淘金</div>
+                            <p class="text-sm mb-4">DeepSeek 就像一个"智能滤镜"，快速过滤无效信息，从海量简历中"沙里淘金"，精准锁定高潜人才。</p>
+                        </div>
+                        <div>
+                            <div class="font-semibold mb-2">人岗天合，一键速配</div>
+                            <p class="text-sm mb-4">智能分析人才能力、经验与岗位要求的匹配度，实现人岗精准匹配，提高招聘成功率。</p>
+                        </div>
+                    </div>
+                    <div class="quote text-lg">
+                        "DeepSeek，让筛选从'人工低效'变为'智能高效'，解放HR双手，聚焦核心人才战略！"
+                    </div>
+                </div>
+                
+                <!-- 阶段三 -->
+                <div class="timeline-container fade-in delay-3">
+                    <h3 class="text-xl font-bold mb-4" style="color: var(--accent);">人才评估与面试阶段</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="font-semibold mb-2">智能面试官，洞悉真才</div>
+                            <p class="text-sm mb-4">DeepSeek 不仅仅是辅助面试，更可以成为"智能面试官"，通过多维度分析和深层次提问，"洞悉真才"。</p>
+                        </div>
+                        <div>
+                            <div class="font-semibold mb-2">全景画像，慧眼识珠</div>
+                            <p class="text-sm mb-4">构建人才全景画像，深入分析能力、潜力、文化契合度等多维特征，助力精准识别真正的优秀人才。</p>
+                        </div>
+                    </div>
+                    <div class="quote text-lg">
+                        "DeepSeek，让面试从'经验主义'走向'数据驱动'，科学评估人才，提升选才精准度！"
+                    </div>
+                </div>
+                
+                <!-- 阶段四 -->
+                <div class="timeline-container fade-in delay-4">
+                    <h3 class="text-xl font-bold mb-4" style="color: var(--primary);">人才引进后续阶段</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="font-semibold mb-2">暖心关怀，如沐春风</div>
+                            <p class="text-sm mb-4">DeepSeek 不仅关注人才引进效率，更关注人才的入职体验和归属感，通过智能化手段提供"暖心关怀"。</p>
+                        </div>
+                        <div>
+                            <div class="font-semibold mb-2">情景交融，心之所向</div>
+                            <p class="text-sm mb-4">创造温馨愉悦的工作环境和文化氛围，让人才感受到尊重和归属，增强忠诚度和稳定性。</p>
+                        </div>
+                    </div>
+                    <div class="quote text-lg">
+                        "DeepSeek，让引才不止于'招进来'，更要'留得住'，用智能化手段提升人才幸福感和归属感！"
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card p-8 mt-16 fade-in delay-4">
+                <h3 class="text-2xl font-bold mb-6 text-center">DeepSeek 赋能北京海外学人中心人才引进价值</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <div class="text-center">
+                        <div class="rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4" style="background-color: var(--primary);">
+                            <i class="fas fa-tachometer-alt text-xl text-white"></i>
+                        </div>
+                        <div class="font-semibold mb-2">效率革命</div>
+                        <p class="text-sm">大幅提升中心人才引进效率，加速全球人才汇聚北京</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4" style="background-color: var(--primary);">
+                            <i class="fas fa-coins text-xl text-white"></i>
+                        </div>
+                        <div class="font-semibold mb-2">成本优化</div>
+                        <p class="text-sm">有效降低中心运营成本，将更多资源投入到人才服务本身</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4" style="background-color: var(--primary);">
+                            <i class="fas fa-award text-xl text-white"></i>
+                        </div>
+                        <div class="font-semibold mb-2">质量跃升</div>
+                        <p class="text-sm">显著提升人才引进质量和精准度，为北京发展输送更优质人才</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4" style="background-color: var(--primary);">
+                            <i class="fas fa-smile-beam text-xl text-white"></i>
+                        </div>
+                        <div class="font-semibold mb-2">体验升级</div>
+                        <p class="text-sm">全面提升候选人和中心工作人员的用户体验，打造更具吸引力的人才服务品牌</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4" style="background-color: var(--primary);">
+                            <i class="fas fa-chart-pie text-xl text-white"></i>
+                        </div>
+                        <div class="font-semibold mb-2">数据驱动</div>
+                        <p class="text-sm">构建数据驱动的人才引进体系，为中心人才战略决策提供有力支撑</p>
+                    </div>
+                </div>
+                <div class="quote text-xl mt-8 text-center">
+                    "DeepSeek，为北京海外学人中心插上智能的翅膀，让人才引进进入'快车道'，助力北京打造全球人才高地！"
+                </div>
+            </div>
+        </section>
+
+        <!-- 第六部分: 人才培养新范式 -->
+        <section class="py-16">
+            <h2 class="section-title fade-in">人才培养新范式：从"工业化"到"个性化"</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-12">
+                <div class="card p-6 fade-in delay-1">
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-industry mr-3" style="color: var(--text-secondary);"></i>
+                        传统人才培养模式
+                    </h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle mt-1 mr-3" style="color: #EF4444;"></i>
+                            <span>"一刀切"的标准化培训，忽视个体差异</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle mt-1 mr-3" style="color: #EF4444;"></i>
+                            <span>内容更新滞后，难以跟上行业发展速度</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle mt-1 mr-3" style="color: #EF4444;"></i>
+                            <span>反馈机制缓慢，难以及时调整培养方向</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle mt-1 mr-3" style="color: #EF4444;"></i>
+                            <span>资源分配不均，优质培训机会有限</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle mt-1 mr-3" style="color: #EF4444;"></i>
+                            <span>效果评估单一，难以全面衡量培养成效</span>
+                        </li>
+                    </ul>
+                    <div class="mt-4 p-3 rounded-lg" style="background-color: var(--bg-secondary);">
+                        <p class="italic">如同"大水漫灌"，效率低下，效果平平</p>
+                    </div>
+                </div>
+                
+                <div class="card p-6 fade-in delay-2">
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-robot mr-3" style="color: var(--primary);"></i>
+                        智能化人才培养模式
+                    </h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-3" style="color: #10B981;"></i>
+                            <span>"千人千面"的个性化培养方案，关注个体特点</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-3" style="color: #10B981;"></i>
+                            <span>实时更新的知识库，紧跟行业前沿动态</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-3" style="color: #10B981;"></i>
+                            <span>即时反馈机制，动态调整培养策略</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-3" style="color: #10B981;"></i>
+                            <span>资源智能调配，优化培训投入产出比</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-3" style="color: #10B981;"></i>
+                            <span>多维度评估系统，全面衡量发展成效</span>
+                        </li>
+                    </ul>
+                    <div class="mt-4 p-3 rounded-lg" style="background-color: var(--bg-secondary);">
+                        <p class="italic">如同"精准滴灌"，直达人才需求，激发成长潜能</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quote text-xl mt-12 text-center fade-in delay-3">
+                "传统人才培养如同'大水漫灌'，效率低下，效果平平。智能化培养，才是'精准滴灌'，直达人才需求，激发成长潜能！"
+            </div>
+        </section>
+
+        <!-- 第七部分: DeepSeek 赋能人才培养关键环节 -->
+        <section class="py-16">
+            <h2 class="section-title fade-in">DeepSeek 赋能人才培养关键环节</h2>
+            
+            <div class="grid grid-cols-1 gap-10 mt-12">
+                <!-- 环节一 -->
+                <div class="process-step">
+                    <div class="process-step-number">1</div>
+                    <div class="card p-6 w-full">
+                        <h3 class="text-xl font-bold mb-4" style="color: var(--primary);">千人千面，智学优选</h3>
+                        <p class="mb-6">DeepSeek 就像一位"智能导师"，了解每位人才的学习特点和兴趣，"因材施教"，"量身定制"学习内容。</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="p-4 rounded-lg" style="background-color: var(--bg-secondary);">
+                                <div class="text-center mb-3">
+                                    <i class="fas fa-user-graduate text-2xl" style="color: var(--primary);"></i>
+                                </div>
+                                <h4 class="text-center font-semibold mb-2">学习风格识别</h4>
+                                <p class="text-sm text-center">智能分析个人学习风格和偏好，推荐最适合的学习方式</p>
+                            </div>
+                            <div class="p-4 rounded-lg" style="background-color: var(--bg-secondary);">
+                                <div class="text-center mb-3">
+                                    <i class="fas fa-book-reader text-2xl" style="color: var(--primary);"></i>
+                                </div>
+                                <h4 class="text-center font-semibold mb-2">内容智能匹配</h4>
+                                <p class="text-sm text-center">根据学习目标和能力水平，精准推荐最适合的学习内容</p>
+                            </div>
+                            <div class="p-4 rounded-lg" style="background-color: var(--bg-secondary);">
+                                <div class="text-center mb-3">
+                                    <i class="fas fa-lightbulb text-2xl" style="color: var(--primary);"></i>
+                                </div>
+                                <h4 class="text-center font-semibold mb-2">兴趣激发系统</h4>
+                                <p class="text-sm text-center">发现潜在兴趣点，激发学习动力，提升学习体验和效果</p>
+                            </div>
+                        </div>
+                        <div class="quote text-lg mt-6">
+                            "DeepSeek，让学习不再是'填鸭式'的被动接受，而是'自主探索'的主动成长，每个人都能找到最适合自己的学习之路！"
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 环节二 -->
+                <div class="process-step">
+                    <div class="process-step-number">2</div>
+                    <div class="card p-6 w-full">
+                        <h3 class="text-xl font-bold mb-4" style="color: var(--secondary);">导航领航，步步为营</h3>
+                        <p class="mb-6">DeepSeek 就像一个"智能导航"，为人才规划清晰的学习路径，"步步为营"，"灯塔指引"，让学习更有目标感和成就感。</p>
+                        <div class="relative p-6 rounded-lg" style="background-color: var(--bg-secondary);">
+                            <div class="flex flex-col md:flex-row justify-between items-center">
+                                <div class="flex flex-col items-center mb-6 md:mb-0">
+                                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-2" style="background-color: var(--secondary);">
+                                        <i class="fas fa-flag text-white text-xl"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="font-semibold">起点评估</div>
+                                        <p class="text-xs">能力诊断</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="hidden md:block w-16 h-1" style="background-color: var(--secondary);"></div>
+                                
+                                <div class="flex flex-col items-center mb-6 md:mb-0">
+                                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-2" style="background-color: var(--secondary);">
+                                        <i class="fas fa-map-signs text-white text-xl"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="font-semibold">路径设计</div>
+                                        <p class="text-xs">目标分解</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="hidden md:block w-16 h-1" style="background-color: var(--secondary);"></div>
+                                
+                                <div class="flex flex-col items-center mb-6 md:mb-0">
+                                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-2" style="background-color: var(--secondary);">
+                                        <i class="fas fa-running text-white text-xl"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="font-semibold">进度跟踪</div>
+                                        <p class="text-xs">动态调整</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="hidden md:block w-16 h-1" style="background-color: var(--secondary);"></div>
+                                
+                                <div class="flex flex-col items-center">
+                                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-2" style="background-color: var(--secondary);">
+                                        <i class="fas fa-trophy text-white text-xl"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="font-semibold">目标达成</div>
+                                        <p class="text-xs">成果验证</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quote text-lg mt-6">
+                            "DeepSeek，为人才发展点亮'指路明灯'，规划清晰的学习路径，让每一次进步都看得见，摸得着！"
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 环节三 -->
+                <div class="process-step">
+                    <div class="process-step-number">3</div>
+                    <div class="card p-6 w-full">
+                        <h3 class="text-xl font-bold mb-4" style="color: var(--accent);">良师益友，随时相伴</h3>
+                        <p class="mb-6">DeepSeek 不仅仅是智能工具，更像是"良师益友"，"随时相伴"，"即时响应"，解决学习难题，提供情感支持。</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="p-4 rounded-lg" style="background-color: var(--bg-secondary);">
+                                <h4 class="font-semibold mb-3 flex items-center">
+                                    <i class="fas fa-question-circle mr-2" style="color: var(--accent);"></i>
+                                    智能答疑系统
+                                </h4>
+                                <ul class="space-y-2 text-sm">
+                                    <li>• 24/7全天候在线解答学习疑问</li>
+                                    <li>• 深入理解问题本质，提供针对性解答</li>
+                                    <li>• 提供多角度、多层次的详细解释</li>
+                                    <li>• 智能记忆用户问答历史，持续优化回答质量</li>
+                                </ul>
+                            </div>
+                            <div class="p-4 rounded-lg" style="background-color: var(--bg-secondary);">
+                                <h4 class="font-semibold mb-3 flex items-center">
+                                    <i class="fas fa-hands-helping mr-2" style="color: var(--accent);"></i>
+                                    个性化辅导系统
+                                </h4>
+                                <ul class="space-y-2 text-sm">
+                                    <li>• 识别学习困难点，主动提供帮助</li>
+                                    <li>• 根据学习行为分析，预判可能遇到的问题</li>
+                                    <li>• 提供情感支持和学习动力激励</li>
+                                    <li>• 建立虚拟学习社区，促进同伴交流与协作</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="quote text-lg mt-6">
+                            "DeepSeek，让学习不再孤单，智能导师随时在线，疑难问题即时解决，让学习更有温度，更有信心！"
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 环节四 -->
+                <div class="process-step">
+                    <div class="process-step-number">4</div>
+                    <div class="card p-6 w-full">
+                        <h3 class="text-xl font-bold mb-4" style="color: var(--primary);">智能体检，精准把脉</h3>
+                        <p class="mb-6">DeepSeek 就像一位"智能医生"，定期为人才学习进行"智能体检"，"精准把脉"，找出学习瓶颈，"迭代升级"培养方案。</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="p-4 rounded-lg" style="background-color: var(--bg-secondary);">
+                                <div class="font-semibold mb-2">多维度评估</div>
+                                <p class="text-sm">不仅关注知识掌握，还评估技能应用、思维发展和行为变化</p>
+                            </div>
+                            <div class="p-4 rounded-lg" style="background-color: var(--bg-secondary);">
+                                <div class="font-semibold mb-2">数据可视化</div>
+                                <p class="text-sm">直观展示学习进展和成效，清晰呈现优势与不足</p>
+                            </div>
+                            <div class="p-4 rounded-lg" style="background-color: var(--bg-secondary);">
+                                <div class="font-semibold mb-2">智能优化推荐</div>
+                                <p class="text-sm">基于评估结果，自动生成个性化提升建议和学习方案调整</p>
+                            </div>
+                        </div>
+                        <div class="p-4 rounded-lg mt-4" style="background-color: var(--bg-secondary);">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold mb-1" style="color: var(--primary);">收集</div>
+                                    <p class="text-xs">学习数据</p>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold mb-1" style="color: var(--primary);">分析</div>
+                                    <p class="text-xs">学习模式</p>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold mb-1" style="color: var(--primary);">诊断</div>
+                                    <p class="text-xs">学习瓶颈</p>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold mb-1" style="color: var(--primary);">优化</div>
+                                    <p class="text-xs">学习方案</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quote text-lg mt-6">
+                            "DeepSeek，让培养效果'看得见，摸得着'，数据驱动，持续优化，确保人才培养与时俱进，永葆活力！"
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card p-8 mt-16 fade-in">
+                <h3 class="text-2xl font-bold mb-6 text-center">DeepSeek 助力北京海外学人中心人才培养价值</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                    <div>
+                        <div class="font-semibold mb-2 flex items-center">
+                            <i class="fas fa-fingerprint mr-2" style="color: var(--primary);"></i>
+                            个性化育才
+                        </div>
+                        <p class="text-sm">满足不同层次、不同领域人才的差异化培养需求，打造人才培养的'百花园'</p>
+                    </div>
+                    <div>
+                        <div class="font-semibold mb-2 flex items-center">
+                            <i class="fas fa-bolt mr-2" style="color: var(--primary);"></i>
+                            智能化提效
+                        </div>
+                        <p class="text-sm">大幅提升人才培养效率和智能化水平，实现人才快速成长和价值跃升</p>
+                    </div>
+                    <div>
+                        <div class="font-semibold mb-2 flex items-center">
+                            <i class="fas fa-bullseye mr-2" style="color: var(--primary);"></i>
+                            精准化赋能
+                        </div>
+                        <p class="text-sm">精准提升人才关键能力和核心竞争力，为北京发展输送高素质、高技能人才</p>
+                    </div>
+                    <div>
+                        <div class="font-semibold mb-2 flex items-center">
+                            <i class="fas fa-sync-alt mr-2" style="color: var(--primary);"></i>
+                            终身化发展
+                        </div>
+                        <p class="text-sm">构建支持人才终身学习和持续发展的平台，打造北京人才发展的"蓄水池"和"加油站"</p>
+                    </div>
+                    <div>
+                        <div class="font-semibold mb-2 flex items-center">
+                            <i class="fas fa-chart-line mr-2" style="color: var(--primary);"></i>
+                            数据驱动优化
+                        </div>
+                        <p class="text-sm">基于数据分析持续优化人才培养体系，打造人才培养的'智能进化系统'</p>
+                    </div>
+                </div>
+                <div class="quote text-xl mt-8 text-center">
+                    "DeepSeek，为北京海外学人中心打造人才培养的'梦工厂'，让人才在这里加速成长，成就梦想，贡献北京，闪耀世界！"
+                </div>
+            </div>
+        </section>
+
+        <!-- 第八部分: 战略合作 -->
+        <section class="py-16">
+            <h2 class="section-title fade-in">DeepSeek 与北京海外学人中心：战略携手，共赢未来</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-12">
+                <div class="card p-6 fade-in delay-1">
+                    <div class="mb-6">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2YxZjVmOSIvPjxwYXRoIGQ9Im0xNzUgNzAgNTAgNjBtLTUwIDAgNTAtNjAiIHN0cm9rZT0iIzMzNjFmZiIgc3Ryb2tlLXdpZHRoPSI4IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIxMDAiIHI9IjcwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzYxZmYiIHN0cm9rZS13aWR0aD0iNCIvPjx0ZXh0IHg9IjIwMCIgeT0iMTUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjAiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjMzM2MWZmIj5EZWVwU2VlazwvdGV4dD48L3N2Zz4=" alt="DeepSeek Logo" class="w-full rounded-lg">
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">合作愿景</h3>
+                    <p class="mb-6">通过DeepSeek大模型技术与北京海外学人中心人才服务专长的深度融合，共同打造全球领先的智能化人才服务平台，加速北京高水平人才聚集，助力北京打造国际一流的人才高地。</p>
+                    <div class="quote">
+                        从技术到生态，从平台到服务，全方位战略合作，共创智能化人才发展新未来
+                    </div>
+                </div>
+                
+                <div class="space-y-4 fade-in delay-2">
+                    <div class="card p-6">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3" style="background-color: var(--primary);">
+                                <i class="fas fa-cloud text-white"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold">共建"全球智慧人才云平台"</h3>
+                        </div>
+                        <p>整合DeepSeek智能技术和中心平台优势，打造全球领先的人才服务平台，实现人才资源的智能化管理和精准配置。</p>
+                    </div>
+                    
+                    <div class="card p-6">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3" style="background-color: var(--secondary);">
+                                <i class="fas fa-flask text-white"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold">设立"智能人才发展联合实验室"</h3>
+                        </div>
+                        <p>共同探索大模型在人才引进、培养、评估等领域的创新应用，引领行业发展，培育前沿技术和方法。</p>
+                    </div>
+                    
+                    <div class="card p-6">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3" style="background-color: var(--accent);">
+                                <i class="fas fa-project-diagram text-white"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold">开展"智能化人才服务示范项目"</h3>
+                        </div>
+                        <p>在北京海外学人中心试点应用DeepSeek技术，打造智能化人才服务标杆案例，形成可复制、可推广的经验模式。</p>
+                    </div>
+                    
+                    <div class="card p-6">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3" style="background-color: var(--primary);">
+                                <i class="fas fa-comments text-white"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold">联合举办"大模型时代人才发展论坛"</h3>
+                        </div>
+                        <p>共同搭建高端交流平台，汇聚全球智慧，共话人才发展未来，增强北京在全球人才领域的话语权和影响力。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 p-6 rounded-lg text-center fade-in delay-3" style="background-color: var(--bg-secondary);">
+                <h3 class="text-2xl font-bold mb-4">合作口号</h3>
+                <p class="text-xl italic">
+                    "DeepSeek 携手北京海外学人中心，共绘人才发展新蓝图，智领全球人才新时代！"
+                </p>
+            </div>
+        </section>
+
+        <!-- 第九部分: DeepSeek 赋能北京"四个中心"建设 -->
+        <section class="py-16">
+            <h2 class="section-title fade-in">DeepSeek 赋能北京"四个中心"建设</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+                <div class="card p-6 fade-in delay-1">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center mr-4" style="background-color: var(--primary);">
+                            <i class="fas fa-atom text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">科技创新中心</h3>
+                    </div>
+                    <p class="mb-4">DeepSeek 加速科技人才聚集，助力北京成为全球科技创新策源地。</p>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--primary);"></i>
+                            <span>聚集全球顶尖科技人才，提升科技创新能力</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--primary);"></i>
+                            <span>促进产学研深度融合，加速科技成果转化</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--primary);"></i>
+                            <span>培育科技创新人才梯队，夯实创新发展基础</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="card p-6 fade-in delay-2">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center mr-4" style="background-color: var(--secondary);">
+                            <i class="fas fa-globe-asia text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">国际交往中心</h3>
+                    </div>
+                    <p class="mb-4">DeepSeek 提升北京国际人才吸引力，打造全球人才自由流动、高效配置的枢纽。</p>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--secondary);"></i>
+                            <span>打破语言文化壁垒，促进国际人才交流</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--secondary);"></i>
+                            <span>提升国际人才服务水平，增强国际化软环境吸引力</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--secondary);"></i>
+                            <span>构建国际化人才社区，营造宜居宜业环境</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="card p-6 fade-in delay-3">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center mr-4" style="background-color: var(--accent);">
+                            <i class="fas fa-landmark text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">文化中心</h3>
+                    </div>
+                    <p class="mb-4">DeepSeek 赋能文化创意人才培养，繁荣首都文化事业，提升文化软实力。</p>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--accent);"></i>
+                            <span>培养文化创意人才，促进文化产业发展</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--accent);"></i>
+                            <span>推动传统文化与现代技术融合，创新文化表达形式</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--accent);"></i>
+                            <span>促进文化交流与传播，扩大北京文化影响力</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="card p-6 fade-in delay-4">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center mr-4" style="background-color: var(--primary);">
+                            <i class="fas fa-balance-scale text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">政治中心</h3>
+                    </div>
+                    <p class="mb-4">DeepSeek 提升人才治理智能化水平，为首都人才政策制定和人才战略实施提供智力支持。</p>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--primary);"></i>
+                            <span>优化人才治理体系，提升人才服务水平</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--primary);"></i>
+                            <span>为人才政策制定提供智能决策支持，提升政策精准性</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2" style="color: var(--primary);"></i>
+                            <span>加强人才大数据监测与分析，实现精准人才管理</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="quote text-xl mt-12 text-center fade-in delay-4">
+                "人才强，则北京强；北京强，则国强。DeepSeek，以智能之力，赋能北京'四个中心'建设，成就国家人才战略，共筑中华民族伟大复兴中国梦！"
+            </div>
+        </section>
+
+        <!-- 第十部分: 行动号召 -->
+        <section class="py-16 text-center">
+            <h2 class="section-title mb-12 fade-in">拥抱大模型，共创人才新辉煌</h2>
+            
+            <div class="card p-8 max-w-4xl mx-auto fade-in delay-1">
+                <h3 class="text-2xl font-bold mb-8">未来展望</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                    <div class="text-center">
+                        <div class="w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-4" style="background-color: var(--primary);">
+                            <i class="fas fa-flag text-white text-xl"></i>
+                        </div>
+                        <h4 class="font-semibold mb-2">北京引领潮头</h4>
+                        <p class="text-sm">在全球人才竞争中勇立潮头，成为国际人才高地</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-4" style="background-color: var(--secondary);">
+                            <i class="fas fa-handshake text-white text-xl"></i>
+                        </div>
+                        <h4 class="font-semibold mb-2">深度战略合作</h4>
+                        <p class="text-sm">DeepSeek与北京海外学人中心携手共创智能化人才发展新生态</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-4" style="background-color: var(--accent);">
+                            <i class="fas fa-rocket text-white text-xl"></i>
+                        </div>
+                        <h4 class="font-semibold mb-2">无限发展可能</h4>
+                        <p class="text-sm">大模型技术与人才发展深度融合，开创发展新境界</p>
+                    </div>
+                </div>
+                
+                <div class="p-6 rounded-lg" style="background-color: var(--bg-secondary);">
+                    <h4 class="font-bold text-xl mb-4">行动号召</h4>
+                    <p class="mb-6">抢抓大模型时代战略机遇，勇立人才发展智能化潮头，与DeepSeek携手共创人才新辉煌。</p>
+                    <a href="#" class="btn-primary inline-block">立即行动</a>
+                </div>
+            </div>
+            
+            <div class="quote text-2xl mt-12 fade-in delay-2">
+                "大模型时代已来，人才竞争，分秒必争！让我们携手DeepSeek，拥抱变革，智领未来，共创北京人才发展新辉煌！"
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-center md:text-left mb-6 md:mb-0">
+                    <div class="text-lg font-semibold mb-2" style="color: var(--text-primary);">DeepSeek 大模型：人才发展的新动能</div>
+                    <div style="color: var(--text-secondary);">© 2025 版权所有</div>
+                </div>
+                <div class="text-center md:text-right">
+                    <div class="text-lg font-semibold mb-2" style="color: var(--text-primary);">作者信息</div>
+                    <div style="color: var(--text-secondary);">陈光</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 主题切换功能
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        // 检查系统偏好
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+        
+        // 主题切换事件
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        });
+        
+        // 滚动动画
+        function handleIntersection(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }
+        
+        const observer = new IntersectionObserver(handleIntersection, {
+            root: null,
+            threshold: 0.1
+        });
+        
+        document.querySelectorAll('.process-step').forEach(step => {
+            observer.observe(step);
+        });
+        
+        // 导航平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

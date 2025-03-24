@@ -1,0 +1,2288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拥抱大模型时代：用DeepSeek赋能人才工作</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.0/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/regular/index.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;500;600;700&display=swap');
+        
+        :root {
+            /* 主色调 */
+            --primary-50: #ecfeff;
+            --primary-100: #cffafe;
+            --primary-200: #a5f3fc;
+            --primary-300: #67e8f9;
+            --primary-400: #22d3ee;
+            --primary-500: #06b6d4;
+            --primary-600: #0891b2;
+            --primary-700: #0e7490;
+            --primary-800: #155e75;
+            --primary-900: #164e63;
+            
+            /* 辅助色调 */
+            --accent-50: #f5f3ff;
+            --accent-100: #ede9fe;
+            --accent-200: #ddd6fe;
+            --accent-300: #c4b5fd;
+            --accent-400: #a78bfa;
+            --accent-500: #8b5cf6;
+            --accent-600: #7c3aed;
+            --accent-700: #6d28d9;
+            --accent-800: #5b21b6;
+            --accent-900: #4c1d95;
+            
+            /* 中性色调 */
+            --neutral-50: #f9fafb;
+            --neutral-100: #f3f4f6;
+            --neutral-200: #e5e7eb;
+            --neutral-300: #d1d5db;
+            --neutral-400: #9ca3af;
+            --neutral-500: #6b7280;
+            --neutral-600: #4b5563;
+            --neutral-700: #374151;
+            --neutral-800: #1f2937;
+            --neutral-900: #111827;
+            
+            /* 字体设置 */
+            --font-sans: 'Noto Sans SC', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-serif: 'Noto Serif SC', serif;
+            
+            /* 过渡与动画 */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* 圆角 */
+            --radius-sm: 0.125rem;
+            --radius-md: 0.375rem;
+            --radius-lg: 0.5rem;
+            --radius-xl: 1rem;
+            
+            /* 阴影 */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            
+            /* 暗色模式 */
+            --dark-bg-primary: #0f172a;
+            --dark-bg-secondary: #1e293b;
+            --dark-text-primary: #f8fafc;
+            --dark-text-secondary: #cbd5e1;
+        }
+        
+        /* 基础样式 */
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            color: var(--neutral-800);
+            background-color: var(--neutral-50);
+            line-height: 1.6;
+            transition: background-color var(--transition-normal), color var(--transition-normal);
+            overflow-x: hidden;
+        }
+        
+        /* 暗色模式 */
+        body.dark {
+            color: var(--dark-text-primary);
+            background-color: var(--dark-bg-primary);
+        }
+        
+        /* 排版 */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+        
+        h2 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+            letter-spacing: -0.015em;
+        }
+        
+        h3 {
+            font-size: clamp(1.25rem, 3vw, 2rem);
+            font-weight: 600;
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+            font-size: clamp(1rem, 2vw, 1.125rem);
+        }
+        
+        /* 容器 */
+        .container-custom {
+            width: 100%;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        /* 卡片 */
+        .card {
+            background-color: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+            overflow: hidden;
+        }
+        
+        .dark .card {
+            background-color: var(--dark-bg-secondary);
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        /* 按钮 */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            transition: all var(--transition-normal);
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-600);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-700);
+        }
+        
+        .dark .btn-primary {
+            background-color: var(--primary-500);
+        }
+        
+        .dark .btn-primary:hover {
+            background-color: var(--primary-600);
+        }
+        
+        /* 导航 */
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: color var(--transition-fast);
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0.75rem;
+            right: 0.75rem;
+            height: 2px;
+            background-color: var(--primary-500);
+            transform: scaleX(0);
+            transition: transform var(--transition-normal);
+        }
+        
+        .nav-link:hover:after, .nav-link.active:after {
+            transform: scaleX(1);
+        }
+        
+        /* 动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .animate-scale-in {
+            animation: scaleIn 0.5s ease-out forwards;
+        }
+        
+        .animate-slide-in-right {
+            animation: slideInRight 0.5s ease-out forwards;
+        }
+        
+        /* 延迟动画 */
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
+        .delay-500 { animation-delay: 500ms; }
+        
+        /* 导航栏 */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .dark .navbar {
+            background-color: rgba(15, 23, 42, 0.8);
+        }
+        
+        /* 主题切换按钮 */
+        .theme-toggle {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color var(--transition-fast);
+        }
+        
+        .theme-toggle:hover {
+            background-color: var(--neutral-200);
+        }
+        
+        .dark .theme-toggle:hover {
+            background-color: var(--neutral-800);
+        }
+        
+        /* 渐变背景 */
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary-50) 0%, var(--accent-50) 100%);
+        }
+        
+        .dark .gradient-bg {
+            background: linear-gradient(135deg, rgba(22, 78, 99, 0.3) 0%, rgba(76, 29, 149, 0.3) 100%);
+        }
+        
+        /* 滑块样式 */
+        .swiper {
+            width: 100%;
+            padding-bottom: 3rem;
+        }
+        
+        .swiper-pagination-bullet {
+            width: 10px;
+            height: 10px;
+        }
+        
+        .swiper-pagination-bullet-active {
+            background: var(--primary-600);
+        }
+        
+        .dark .swiper-pagination-bullet-active {
+            background: var(--primary-400);
+        }
+        
+        /* 装饰元素 */
+        .decoration-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(50px);
+            z-index: -1;
+            opacity: 0.5;
+        }
+        
+        .decoration-circle-1 {
+            width: 300px;
+            height: 300px;
+            background-color: var(--primary-200);
+            top: -100px;
+            right: -100px;
+        }
+        
+        .decoration-circle-2 {
+            width: 400px;
+            height: 400px;
+            background-color: var(--accent-200);
+            bottom: 20%;
+            left: -200px;
+        }
+        
+        .dark .decoration-circle-1 {
+            background-color: var(--primary-900);
+        }
+        
+        .dark .decoration-circle-2 {
+            background-color: var(--accent-900);
+        }
+        
+        /* 定制滚动条 */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--neutral-100);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--neutral-300);
+            border-radius: 6px;
+            border: 3px solid var(--neutral-100);
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: var(--neutral-400);
+        }
+        
+        .dark ::-webkit-scrollbar-track {
+            background: var(--dark-bg-primary);
+        }
+        
+        .dark ::-webkit-scrollbar-thumb {
+            background-color: var(--neutral-700);
+            border: 3px solid var(--dark-bg-primary);
+        }
+        
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background-color: var(--neutral-600);
+        }
+        
+        /* 徽章 */
+        .badge {
+            display: inline-flex;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .badge-primary {
+            background-color: var(--primary-100);
+            color: var(--primary-700);
+        }
+        
+        .dark .badge-primary {
+            background-color: rgba(6, 182, 212, 0.2);
+            color: var(--primary-300);
+        }
+        
+        /* 卡片网格 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        /* 作者区域 */
+        .author-section {
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid var(--neutral-200);
+        }
+        
+        .dark .author-section {
+            border-top: 1px solid var(--neutral-800);
+        }
+        
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: var(--primary-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-700);
+        }
+        
+        .dark .author-avatar {
+            background-color: var(--primary-900);
+            color: var(--primary-300);
+        }
+        
+        /* 阅读进度条 */
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: transparent;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: var(--primary-500);
+            width: 0%;
+        }
+        
+        /* 引用样式 */
+        blockquote {
+            border-left: 4px solid var(--primary-400);
+            padding-left: 1rem;
+            font-style: italic;
+            color: var(--neutral-600);
+            margin: 1.5rem 0;
+        }
+        
+        .dark blockquote {
+            border-left-color: var(--primary-500);
+            color: var(--neutral-400);
+        }
+        
+        /* 目录导航 */
+        .toc-container {
+            position: sticky;
+            top: 6rem;
+            max-height: calc(100vh - 8rem);
+            overflow-y: auto;
+            padding-right: 1rem;
+        }
+        
+        .toc-link {
+            display: block;
+            padding: 0.5rem 0;
+            color: var(--neutral-600);
+            font-size: 0.875rem;
+            border-left: 2px solid var(--neutral-200);
+            padding-left: 0.75rem;
+            transition: all var(--transition-fast);
+        }
+        
+        .toc-link:hover, .toc-link.active {
+            color: var(--primary-600);
+            border-left-color: var(--primary-600);
+        }
+        
+        .dark .toc-link {
+            border-left-color: var(--neutral-700);
+            color: var(--neutral-400);
+        }
+        
+        .dark .toc-link:hover, .dark .toc-link.active {
+            color: var(--primary-400);
+            border-left-color: var(--primary-400);
+        }
+        
+        /* 加载骨架屏 */
+        .skeleton-loader {
+            background: linear-gradient(90deg, var(--neutral-100) 25%, var(--neutral-200) 50%, var(--neutral-100) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .dark .skeleton-loader {
+            background: linear-gradient(90deg, var(--neutral-800) 25%, var(--neutral-700) 50%, var(--neutral-800) 75%);
+            background-size: 200% 100%;
+        }
+    </style>
+</head>
+<body x-data="{ darkMode: false, activeSection: 'intro', menuOpen: false, progress: 0 }" :class="darkMode ? 'dark' : ''">
+    <!-- 进度条 -->
+    <div class="progress-container">
+        <div class="progress-bar" :style="`width: ${progress}%`"></div>
+    </div>
+    
+    <!-- 装饰元素 -->
+    <div class="decoration-circle decoration-circle-1"></div>
+    <div class="decoration-circle decoration-circle-2"></div>
+    
+    <!-- 导航栏 -->
+    <nav class="navbar py-4" @scroll.window="progress = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100">
+        <div class="container-custom">
+            <div class="flex items-center justify-between">
+                <a href="#" class="text-2xl font-bold text-primary-600 dark:text-primary-400">DeepSeek</a>
+                
+                <!-- 桌面导航 -->
+                <div class="hidden md:flex items-center space-x-2">
+                    <a href="#intro" class="nav-link" :class="activeSection === 'intro' ? 'active' : ''" @click="activeSection = 'intro'">引言</a>
+                    <a href="#part1" class="nav-link" :class="activeSection === 'part1' ? 'active' : ''" @click="activeSection = 'part1'">理解大模型</a>
+                    <a href="#part2" class="nav-link" :class="activeSection === 'part2' ? 'active' : ''" @click="activeSection = 'part2'">应用场景</a>
+                    <div class="ml-4">
+                        <button @click="darkMode = !darkMode" class="theme-toggle">
+                            <svg x-show="!darkMode" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                            </svg>
+                            <svg x-show="darkMode" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 移动导航按钮 -->
+                <button @click="menuOpen = !menuOpen" class="md:hidden theme-toggle">
+                    <svg x-show="!menuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg x-show="menuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- 移动导航菜单 -->
+            <div x-show="menuOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-4" class="md:hidden mt-4 pb-4 flex flex-col space-y-2">
+                <a href="#intro" class="nav-link" @click="activeSection = 'intro'; menuOpen = false">引言</a>
+                <a href="#part1" class="nav-link" @click="activeSection = 'part1'; menuOpen = false">理解大模型</a>
+                <a href="#part2" class="nav-link" @click="activeSection = 'part2'; menuOpen = false">应用场景</a>
+                <div class="mt-4 pt-2 border-t border-neutral-200 dark:border-neutral-800">
+                    <button @click="darkMode = !darkMode" class="flex items-center space-x-2">
+                        <span>切换主题</span>
+                        <svg x-show="!darkMode" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                        </svg>
+                        <svg x-show="darkMode" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 头部 -->
+    <header id="intro" class="pt-16 pb-20 gradient-bg">
+        <div class="container-custom">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="inline-block mb-6 animate-fade-in">
+                    <span class="badge badge-primary">前沿趋势</span>
+                </div>
+                <h1 class="mb-6 animate-fade-in">拥抱大模型时代：用DeepSeek赋能人才工作</h1>
+                <p class="text-lg text-neutral-600 dark:text-neutral-300 mb-10 animate-fade-in delay-100">探索如何利用DeepSeek等大模型工具，提升人才工作的效率、创新性和战略价值</p>
+                <div class="flex flex-wrap justify-center gap-4 animate-fade-in delay-200">
+                    <a href="#part1" class="btn btn-primary">了解大模型</a>
+                    <a href="#part2" class="btn bg-white dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700">探索应用场景</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <!-- 第一部分：理解大模型 -->
+        <section id="part1" class="py-20">
+            <div class="container-custom">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                    <!-- 左侧目录 (仅在桌面显示) -->
+                    <div class="hidden lg:block lg:col-span-3">
+                        <div class="toc-container">
+                            <h4 class="font-bold mb-4 text-primary-600 dark:text-primary-400">目录导航</h4>
+                            <div class="space-y-1">
+                                <a href="#intro" class="toc-link" :class="activeSection === 'intro' ? 'active' : ''" @click="activeSection = 'intro'">引言：时代变革的浪潮已至</a>
+                                <a href="#part1" class="toc-link" :class="activeSection === 'part1' ? 'active' : ''" @click="activeSection = 'part1'">理解大模型</a>
+                                <a href="#what-is-llm" class="toc-link pl-6" @click="activeSection = 'part1'">什么是大模型？</a>
+                                <a href="#deepseek-intro" class="toc-link pl-6" @click="activeSection = 'part1'">DeepSeek 亮相</a>
+                                <a href="#llm-vs-traditional" class="toc-link pl-6" @click="activeSection = 'part1'">大模型 vs. 传统工具</a>
+                                <a href="#llm-limitations" class="toc-link pl-6" @click="activeSection = 'part1'">大模型的局限性</a>
+                                <a href="#part2" class="toc-link" :class="activeSection === 'part2' ? 'active' : ''" @click="activeSection = 'part2'">应用场景深度解析</a>
+                                <a href="#overview" class="toc-link pl-6" @click="activeSection = 'part2'">总览：核心场景</a>
+                                <a href="#talent-acquisition" class="toc-link pl-6" @click="activeSection = 'part2'">场景一：人才引进</a>
+                                <a href="#talent-development" class="toc-link pl-6" @click="activeSection = 'part2'">场景二：人才培养</a>
+                                <a href="#talent-management" class="toc-link pl-6" @click="activeSection = 'part2'">场景三：人才管理</a>
+                                <a href="#talent-service" class="toc-link pl-6" @click="activeSection = 'part2'">场景四：人才服务</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 主要内容 -->
+                    <div class="lg:col-span-9">
+                        <div class="space-y-16">
+                            <div class="space-y-8" id="what-is-llm">
+                                <div class="inline-block mb-2">
+                                    <span class="badge badge-primary">核心概念</span>
+                                </div>
+                                <h2 class="text-primary-700 dark:text-primary-400">什么是大模型？</h2>
+                                <h3 class="text-neutral-700 dark:text-neutral-300">从概念到能力，揭秘AI的"大脑"</h3>
+                                
+                                <div class="card p-8 animate-fade-in" x-intersect="$el.classList.add('animate-fade-in')">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                                        <div>
+                                            <p>大模型（Large Language Model, LLM）是一种先进的人工智能系统，可以理解为AI的"大脑"。它通过学习海量的文本数据，掌握了人类语言的规律和知识，能够理解和生成自然语言文本，进行逻辑推理，回答问题，甚至创作内容。</p>
+                                            <p>就像人类大脑通过学习和经验积累知识一样，大模型也是在大量文本材料的"阅读"中成长起来的。不同的是，它可以在极短时间内"阅读"和"记忆"人类需要几辈子才能接触的信息量。</p>
+                                        </div>
+                                        <div class="bg-primary-50 dark:bg-primary-900/30 p-6 rounded-xl">
+                                            <h4 class="font-bold mb-3 text-primary-700 dark:text-primary-300">大模型核心能力</h4>
+                                            <ul class="space-y-3">
+                                                <li class="flex items-start">
+                                                    <svg class="w-5 h-5 mt-0.5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    </svg>
+                                                    <span>自然语言理解与生成</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-5 h-5 mt-0.5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    </svg>
+                                                    <span>逻辑推理与问题解决</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-5 h-5 mt-0.5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    </svg>
+                                                    <span>知识检索与智能问答</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-5 h-5 mt-0.5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    </svg>
+                                                    <span>创意内容生成</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-5 h-5 mt-0.5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    </svg>
+                                                    <span>跨领域知识整合</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div class="card p-6 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors" x-intersect="$el.classList.add('animate-fade-in', 'delay-100')">
+                                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mb-4">
+                                            <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                            </svg>
+                                        </div>
+                                        <h4 class="text-xl font-semibold mb-3">文本生成</h4>
+                                        <p class="text-neutral-600 dark:text-neutral-400">从创意写作到专业文档，大模型能生成各种类型、风格的文本内容，提高创作效率。</p>
+                                    </div>
+                                    
+                                    <div class="card p-6 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors" x-intersect="$el.classList.add('animate-fade-in', 'delay-200')">
+                                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mb-4">
+                                            <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                        </div>
+                                        <h4 class="text-xl font-semibold mb-3">代码编写</h4>
+                                        <p class="text-neutral-600 dark:text-neutral-400">辅助程序员编写代码，提供编程建议，甚至可以自动生成完整功能的代码片段。</p>
+                                    </div>
+                                    
+                                    <div class="card p-6 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors" x-intersect="$el.classList.add('animate-fade-in', 'delay-300')">
+                                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mb-4">
+                                            <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </div>
+                                        <h4 class="text-xl font-semibold mb-3">智能分析</h4>
+                                        <p class="text-neutral-600 dark:text-neutral-400">分析大量数据，提取关键信息，发现潜在模式，为决策提供数据支持。</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-8" id="deepseek-intro">
+                                <div class="inline-block mb-2">
+                                    <span class="badge badge-primary">技术亮点</span>
+                                </div>
+                                <h2 class="text-primary-700 dark:text-primary-400">DeepSeek 亮相</h2>
+                                <h3 class="text-neutral-700 dark:text-neutral-300">专为中文语境优化的大模型利器</h3>
+                                
+                                <div class="card p-8" x-intersect="$el.classList.add('animate-fade-in')">
+                                    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                                        <div class="md:col-span-7">
+                                            <h4 class="text-xl font-semibold mb-4">DeepSeek：中文场景下的AI助手</h4>
+                                            <p>DeepSeek 是一款专为中文语境优化的大型语言模型，由顶尖AI科学家团队打造。它不仅继承了大模型的通用能力，更针对中文语言和文化进行了深度优化，使其在处理中文内容时表现出色。</p>
+                                            <p>在人才工作领域，DeepSeek 凭借其对中文语境的深刻理解，能够更准确地把握人才需求、评估人才能力、分析行业趋势，为人才工作者提供强大支持。</p>
+                                        </div>
+                                        <div class="md:col-span-5 bg-gradient-to-br from-primary-50 to-accent-50 dark:from-primary-900/30 dark:to-accent-900/30 rounded-xl p-6">
+                                            <h4 class="font-bold mb-4 text-primary-700 dark:text-primary-300">DeepSeek 核心优势</h4>
+                                            <ul class="space-y-4">
+                                                <li class="flex items-start">
+                                                    <div class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                                                        <span class="text-primary-700 dark:text-primary-300 font-bold">01</span>
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="font-semibold">出色的中文理解能力</h5>
+                                                        <p class="text-sm text-neutral-600 dark:text-neutral-400">深度理解中文语境、文化背景和行业术语</p>
+                                                    </div>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <div class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                                                        <span class="text-primary-700 dark:text-primary-300 font-bold">02</span>
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="font-semibold">行业知识丰富</h5>
+                                                        <p class="text-sm text-neutral-600 dark:text-neutral-400">具备广泛的行业知识，包括人才管理领域的专业知识</p>
+                                                    </div>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <div class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                                                        <span class="text-primary-700 dark:text-primary-300 font-bold">03</span>
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="font-semibold">高效易用</h5>
+                                                        <p class="text-sm text-neutral-600 dark:text-neutral-400">简洁直观的交互方式，无需复杂技术背景即可上手</p>
+                                                    </div>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <div class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                                                        <span class="text-primary-700 dark:text-primary-300 font-bold">04</span>
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="font-semibold">持续迭代优化</h5>
+                                                        <p class="text-sm text-neutral-600 dark:text-neutral-400">定期更新，不断提升性能和扩展功能</p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-8" id="llm-vs-traditional">
+                                <div class="inline-block mb-2">
+                                    <span class="badge badge-primary">比较分析</span>
+                                </div>
+                                <h2 class="text-primary-700 dark:text-primary-400">大模型 vs. 传统工具</h2>
+                                <h3 class="text-neutral-700 dark:text-neutral-300">颠覆性的效率提升</h3>
+                                
+                                <div class="overflow-hidden rounded-xl shadow-lg" x-intersect="$el.classList.add('animate-fade-in')">
+                                    <div class="bg-white dark:bg-neutral-800 p-6">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div class="p-6 bg-neutral-50 dark:bg-neutral-900 rounded-lg">
+                                                <h4 class="text-xl font-semibold mb-4 text-neutral-700 dark:text-neutral-300">传统工具的局限</h4>
+                                                <ul class="space-y-4">
+                                                    <li class="flex items-start">
+                                                        <svg class="w-5 h-5 mt-0.5 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                        </svg>
+                                                        <div>
+                                                            <h5 class="font-medium">信息分散</h5>
+                                                            <p class="text-sm text-neutral-600 dark:text-neutral-400">需要在多个平台和系统间切换，信息孤岛严重</p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="flex items-start">
+                                                        <svg class="w-5 h-5 mt-0.5 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                        </svg>
+                                                        <div>
+                                                            <h5 class="font-medium">效率低下</h5>
+                                                            <p class="text-sm text-neutral-600 dark:text-neutral-400">大量重复性工作，耗费人力时间</p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="flex items-start">
+                                                        <svg class="w-5 h-5 mt-0.5 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                        </svg>
+                                                        <div>
+                                                            <h5 class="font-medium">缺乏个性化</h5>
+                                                            <p class="text-sm text-neutral-600 dark:text-neutral-400">标准化流程难以满足个性化需求</p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="flex items-start">
+                                                        <svg class="w-5 h-5 mt-0.5 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                        </svg>
+                                                        <div>
+                                                            <h5 class="font-medium">分析能力有限</h5>
+                                                            <p class="text-sm text-neutral-600 dark:text-neutral-400">难以从海量数据中提取深层洞察</p>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            
+                                            <div class="p-6 bg-primary-50 dark:bg-primary-900/30 rounded-lg">
+                                                <h4 class="text-xl font-semibold mb-4 text-primary-700 dark:text-primary-300">大模型的优势</h4>
+                                                <ul class="space-y-4">
+                                                    <li class="flex items-start">
+                                                        <svg class="w-5 h-5 mt-0.5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                        </svg>
+                                                        <div>
+                                                            <h5 class="font-medium">信息整合与快速检索</h5>
+                                                            <p class="text-sm text-neutral-600 dark:text-neutral-400">一站式获取海量信息，智能关联相关内容</p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="flex items-start">
+                                                        <svg class="w-5 h-5 mt-0.5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                        </svg>
+                                                        <div>
+                                                            <h5 class="font-medium">自动化处理与分析</h5>
+                                                            <p class="text-sm text-neutral-600 dark:text-neutral-400">自动化处理日常任务，释放人力资源</p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="flex items-start">
+                                                        <svg class="w-5 h-5 mt-0.5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                        </svg>
+                                                        <div>
+                                                            <h5 class="font-medium">个性化服务</h5>
+                                                            <p class="text-sm text-neutral-600 dark:text-neutral-400">根据具体需求提供定制化解决方案</p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="flex items-start">
+                                                        <svg class="w-5 h-5 mt-0.5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                        </svg>
+                                                        <div>
+                                                            <h5 class="font-medium">深度洞察与智能决策</h5>
+                                                            <p class="text-sm text-neutral-600 dark:text-neutral-400">挖掘数据价值，提供决策依据</p>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-primary-600 dark:bg-primary-800 p-6 text-white">
+                                        <h4 class="text-xl font-semibold mb-3">效率对比：传统方法 vs. 大模型</h4>
+                                        <div class="grid grid-cols-2 gap-6">
+                                            <div>
+                                                <h5 class="font-medium mb-2">简历筛选</h5>
+                                                <div class="flex items-center">
+                                                    <div class="w-full bg-white/20 rounded-full h-4">
+                                                        <div class="bg-white h-4 rounded-full" style="width: 25%"></div>
+                                                    </div>
+                                                    <span class="ml-2 text-sm">传统: 8小时</span>
+                                                </div>
+                                                <div class="flex items-center mt-2">
+                                                    <div class="w-full bg-white/20 rounded-full h-4">
+                                                        <div class="bg-accent-400 h-4 rounded-full" style="width: 87.5%"></div>
+                                                    </div>
+                                                    <span class="ml-2 text-sm">大模型: 1小时</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h5 class="font-medium mb-2">人才画像分析</h5>
+                                                <div class="flex items-center">
+                                                    <div class="w-full bg-white/20 rounded-full h-4">
+                                                        <div class="bg-white h-4 rounded-full" style="width: 33.3%"></div>
+                                                    </div>
+                                                    <span class="ml-2 text-sm">传统: 3天</span>
+                                                </div>
+                                                <div class="flex items-center mt-2">
+                                                    <div class="w-full bg-white/20 rounded-full h-4">
+                                                        <div class="bg-accent-400 h-4 rounded-full" style="width: 90%"></div>
+                                                    </div>
+                                                    <span class="ml-2 text-sm">大模型: 10分钟</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-8" id="llm-limitations">
+                                <div class="inline-block mb-2">
+                                    <span class="badge badge-primary">理性认知</span>
+                                </div>
+                                <h2 class="text-primary-700 dark:text-primary-400">大模型不是万能的</h2>
+                                <h3 class="text-neutral-700 dark:text-neutral-300">但赋能人才工作大有可为</h3>
+                                
+                                <div class="card p-8" x-intersect="$el.classList.add('animate-fade-in')">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <div>
+                                            <h4 class="text-xl font-semibold mb-4">大模型的局限性</h4>
+                                            <ul class="space-y-4">
+                                                <li class="flex items-start">
+                                                    <div class="w-8 h-8 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                                                        <svg class="w-4 h-4 text-neutral-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                                        </svg>
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="font-medium">数据依赖性</h5>
+                                                        <p class="text-sm text-neutral-600 dark:text-neutral-400">大模型的表现受限于其训练数据，可能存在知识盲区</p>
+                                                    </div>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <div class="w-8 h-8 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                                                        <svg class="w-4 h-4 text-neutral-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                                        </svg>
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="font-medium">可能存在偏见</h5>
+                                                        <p class="text-sm text-neutral-600 dark:text-neutral-400">模型可能继承训练数据中的偏见，需要人为监督和纠正</p>
+                                                    </div>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <div class="w-8 h-8 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                                                        <svg class="w-4 h-4 text-neutral-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                                        </svg>
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="font-medium">缺乏专业判断</h5>
+                                                        <p class="text-sm text-neutral-600 dark:text-neutral-400">在特定领域的专业判断上，无法完全替代人类专家的经验</p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div>
+                                            <h4 class="text-xl font-semibold mb-4">人机协同的理想方式</h4>
+                                            <div class="p-5 bg-gradient-to-r from-primary-50 to-accent-50 dark:from-primary-900/30 dark:to-accent-900/30 rounded-lg">
+                                                <p class="italic">
+                                                    "大模型不是取代人才工作者，而是赋能人才工作者。人类的专业判断、情感理解和创造力，结合AI的效率和分析能力，才能创造最大价值。"
+                                                </p>
+                                            </div>
+                                            
+                                            <div class="mt-6">
+                                                <h5 class="font-medium mb-3">理想的协作模式</h5>
+                                                <div class="flex items-center">
+                                                    <div class="w-1/2 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-l-lg flex items-center justify-center font-medium text-primary-700 dark:text-primary-300">
+                                                        AI负责
+                                                    </div>
+                                                    <div class="w-1/2 h-12 bg-accent-100 dark:bg-accent-900/30 rounded-r-lg flex items-center justify-center font-medium text-accent-700 dark:text-accent-300">
+                                                        人类负责
+                                                    </div>
+                                                </div>
+                                                <div class="grid grid-cols-2 gap-4 mt-4">
+                                                    <div class="text-sm text-neutral-600 dark:text-neutral-400">
+                                                        <ul class="space-y-2">
+                                                            <li>• 数据处理与分析</li>
+                                                            <li>• 信息检索与整合</li>
+                                                            <li>• 初步筛选与匹配</li>
+                                                            <li>• 文档自动生成</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="text-sm text-neutral-600 dark:text-neutral-400">
+                                                        <ul class="space-y-2">
+                                                            <li>• 战略决策与规划</li>
+                                                            <li>• 人际关系与沟通</li>
+                                                            <li>• 创意思考与创新</li>
+                                                            <li>• 价值判断与伦理</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 第二部分：应用场景深度解析 -->
+        <section id="part2" class="py-20 bg-gradient-to-b from-white to-primary-50 dark:from-neutral-900 dark:to-primary-900/20">
+            <div class="container-custom">
+                <div class="text-center mb-16">
+                    <div class="inline-block mb-3">
+                        <span class="badge badge-primary">核心应用</span>
+                    </div>
+                    <h2 class="text-primary-700 dark:text-primary-400 mb-4">DeepSeek赋能人才工作：应用场景深度解析</h2>
+                    <p class="max-w-3xl mx-auto text-neutral-600 dark:text-neutral-300">
+                        探索DeepSeek如何在实际工作中发挥作用，从引才、育才到管理、服务，全方位提升人才工作效能
+                    </p>
+                </div>
+                
+                <div class="space-y-24">
+                    <!-- 总览：核心场景 -->
+                    <div id="overview" x-intersect="$el.classList.add('animate-fade-in')">
+                        <div class="card p-8 overflow-hidden">
+                            <h3 class="text-xl font-bold mb-8 text-primary-700 dark:text-primary-400">总览：DeepSeek 赋能人才工作的核心场景</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                <div class="card p-6 border border-primary-100 dark:border-primary-900/50 hover:border-primary-300 dark:hover:border-primary-700 transition-colors">
+                                    <div class="w-12 h-12 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mb-4">
+                                        <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-lg font-semibold mb-2">人才引进</h4>
+                                    <p class="text-sm text-neutral-600 dark:text-neutral-400">智能人才画像、精准搜索匹配、简历筛选评估、个性化招聘</p>
+                                    <a href="#talent-acquisition" class="mt-4 inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm font-medium">
+                                        了解更多
+                                        <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                                
+                                <div class="card p-6 border border-primary-100 dark:border-primary-900/50 hover:border-primary-300 dark:hover:border-primary-700 transition-colors">
+                                    <div class="w-12 h-12 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mb-4">
+                                        <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-lg font-semibold mb-2">人才培养</h4>
+                                    <p class="text-sm text-neutral-600 dark:text-neutral-400">个性化学习路径、智能内容推荐、学习伙伴与答疑、效果评估</p>
+                                    <a href="#talent-development" class="mt-4 inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm font-medium">
+                                        了解更多
+                                        <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                                
+                                <div class="card p-6 border border-primary-100 dark:border-primary-900/50 hover:border-primary-300 dark:hover:border-primary-700 transition-colors">
+                                    <div class="w-12 h-12 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mb-4">
+                                        <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-lg font-semibold mb-2">人才管理</h4>
+                                    <p class="text-sm text-neutral-600 dark:text-neutral-400">数据整合分析、员工情绪分析、人才风险预警、政策制定优化</p>
+                                    <a href="#talent-management" class="mt-4 inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm font-medium">
+                                        了解更多
+                                        <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                                
+                                <div class="card p-6 border border-primary-100 dark:border-primary-900/50 hover:border-primary-300 dark:hover:border-primary-700 transition-colors">
+                                    <div class="w-12 h-12 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mb-4">
+                                        <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-lg font-semibold mb-2">人才服务</h4>
+                                    <p class="text-sm text-neutral-600 dark:text-neutral-400">智能咨询问答、自动化办事流程、个性化信息推送</p>
+                                    <a href="#talent-service" class="mt-4 inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm font-medium">
+                                        了解更多
+                                        <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 p-6 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                <h4 class="font-semibold mb-4">应用场景核心价值</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div class="flex items-start">
+                                        <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                                            <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-medium">效率提升</h5>
+                                            <p class="text-sm text-neutral-600 dark:text-neutral-400">自动化处理重复性工作，显著节省时间成本</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                                            <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-medium">质量提升</h5>
+                                            <p class="text-sm text-neutral-600 dark:text-neutral-400">减少人为错误，提供更全面、一致的决策依据</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                                            <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-medium">创新驱动</h5>
+                                            <p class="text-sm text-neutral-600 dark:text-neutral-400">激发新的工作模式和解决方案，创造更多可能性</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 场景一：人才引进 -->
+                    <div id="talent-acquisition" x-intersect="$el.classList.add('animate-fade-in')">
+                        <div class="inline-block mb-2">
+                            <span class="badge badge-primary">场景一</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-6 text-primary-700 dark:text-primary-400">人才引进：精准高效地寻觅千里马</h3>
+                        
+                        <div class="card p-6 mb-8">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="col-span-1 md:col-span-3">
+                                    <h4 class="font-semibold mb-3">传统人才引进的挑战</h4>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                                        <div class="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                            <h5 class="font-medium text-sm mb-2">信息不对称</h5>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">企业与求职者之间信息壁垒明显，难以找到真正匹配的人才</p>
+                                        </div>
+                                        <div class="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                            <h5 class="font-medium text-sm mb-2">渠道单一</h5>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">招聘渠道有限，优质人才覆盖面窄，高端人才触达困难</p>
+                                        </div>
+                                        <div class="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                            <h5 class="font-medium text-sm mb-2">筛选耗时</h5>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">简历筛选费时费力，大量重复性工作占用招聘团队精力</p>
+                                        </div>
+                                        <div class="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                            <h5 class="font-medium text-sm mb-2">匹配度低</h5>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">缺乏精准评估工具，岗位匹配度低，导致招聘低效和人才流失</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <h4 class="font-semibold">DeepSeek 解决方案及应用示例</h4>
+                            
+                            <!-- 智能人才画像构建 -->
+                            <div class="card p-6 hover:shadow-lg transition-shadow" x-intersect="$el.classList.add('animate-fade-in')">
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                                    <div class="md:col-span-7">
+                                        <div class="flex items-center mb-4">
+                                            <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 flex-shrink-0">
+                                                <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                            </div>
+                                            <h5 class="font-semibold text-lg">智能人才画像构建</h5>
+                                        </div>
+                                        <p class="mb-4">利用DeepSeek分析海量人才数据（简历、论文、专利、社交媒体等），快速构建目标人才画像，明确招聘需求和目标特征。</p>
+                                        <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+                                            <h6 class="font-medium mb-2">关键价值</h6>
+                                            <ul class="text-sm space-y-1 text-neutral-700 dark:text-neutral-300">
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    多维度人才画像，全面准确把握人才特征
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    快速分析行业人才分布和流动趋势
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    精准定位目标人才群体，提高招聘效率
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-5 bg-white dark:bg-neutral-800 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700">
+                                        <h6 class="font-medium mb-3 text-sm">应用示例：JD自动生成目标人才画像</h6>
+                                        <div class="bg-neutral-50 dark:bg-neutral-900 p-3 rounded border border-neutral-200 dark:border-neutral-700 text-sm">
+                                            <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">输入：岗位需求描述</div>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400 mb-3">
+                                                招聘资深数据科学家，负责公司AI产品的算法研发和优化，要求有机器学习和深度学习经验...
+                                            </p>
+                                            <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">DeepSeek 输出：人才画像</div>
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between text-xs">
+                                                    <span>学历背景</span>
+                                                    <span>计算机/AI相关博士或硕士</span>
+                                                </div>
+                                                <div class="flex justify-between text-xs">
+                                                    <span>技能要求</span>
+                                                    <span>Python, TensorFlow, PyTorch, 数据挖掘</span>
+                                                </div>
+                                                <div class="flex justify-between text-xs">
+                                                    <span>经验要求</span>
+                                                    <span>5年+机器学习项目经验</span>
+                                                </div>
+                                                <div class="flex justify-between text-xs">
+                                                    <span>行业分布</span>
+                                                    <span>科技公司, 研究机构, 互联网企业</span>
+                                                </div>
+                                                <div class="flex justify-between text-xs">
+                                                    <span>潜在来源</span>
+                                                    <span>AI会议, GitHub, 学术机构, 竞争对手</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 精准人才信息检索与挖掘 -->
+                            <div class="card p-6 hover:shadow-lg transition-shadow" x-intersect="$el.classList.add('animate-fade-in')">
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                                    <div class="md:col-span-7">
+                                        <div class="flex items-center mb-4">
+                                            <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 flex-shrink-0">
+                                                <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                                </svg>
+                                            </div>
+                                            <h5 class="font-semibold text-lg">精准人才信息检索与挖掘</h5>
+                                        </div>
+                                        <p class="mb-4">利用DeepSeek强大的信息检索能力，在全网范围内精准搜索符合条件的人才信息，发现潜在的优质候选人。</p>
+                                        <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+                                            <h6 class="font-medium mb-2">关键价值</h6>
+                                            <ul class="text-sm space-y-1 text-neutral-700 dark:text-neutral-300">
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    突破传统招聘渠道限制，拓宽人才搜索范围
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    主动发现被动求职者，挖掘高潜力人才
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    智能关联分散信息，构建完整人才档案
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-5 bg-white dark:bg-neutral-800 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700">
+                                        <h6 class="font-medium mb-3 text-sm">应用示例：跨平台人才信息整合</h6>
+                                        <div class="bg-neutral-50 dark:bg-neutral-900 p-3 rounded border border-neutral-200 dark:border-neutral-700 text-sm">
+                                            <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">输入：搜索条件</div>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400 mb-3">
+                                                寻找有量子计算背景的人工智能研究员，有发表过相关论文
+                                            </p>
+                                            <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">DeepSeek 输出：人才信息汇总</div>
+                                            <div class="space-y-3">
+                                                <div class="p-2 border border-neutral-200 dark:border-neutral-700 rounded text-xs">
+                                                    <div class="font-medium">张强 / 量子AI研究员</div>
+                                                    <div class="grid grid-cols-2 gap-1 mt-1">
+                                                        <span>学术: 3篇量子AI论文</span>
+                                                        <span>专利: 2项量子算法专利</span>
+                                                        <span>社交: GitHub活跃贡献者</span>
+                                                        <span>现职: 某研究院副研究员</span>
+                                                    </div>
+                                                </div>
+                                                <div class="text-center text-xs text-neutral-500">
+                                                    <span>···</span>
+                                                    <span class="mx-1">找到15位匹配人才</span>
+                                                    <span>···</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 智能简历筛选与评估 -->
+                            <div class="card p-6 hover:shadow-lg transition-shadow" x-intersect="$el.classList.add('animate-fade-in')">
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                                    <div class="md:col-span-7">
+                                        <div class="flex items-center mb-4">
+                                            <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 flex-shrink-0">
+                                                <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                            </div>
+                                            <h5 class="font-semibold text-lg">智能简历筛选与评估</h5>
+                                        </div>
+                                        <p class="mb-4">利用DeepSeek自动化分析简历，快速筛选出符合岗位要求的候选人，进行初步评估，大幅提高筛选效率和准确性。</p>
+                                        <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+                                            <h6 class="font-medium mb-2">关键价值</h6>
+                                            <ul class="text-sm space-y-1 text-neutral-700 dark:text-neutral-300">
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    批量处理简历，节省80%筛选时间
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    标准化评估流程，减少主观偏见
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    深度挖掘候选人潜力，发现隐藏人才
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-5 bg-white dark:bg-neutral-800 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700">
+                                        <h6 class="font-medium mb-3 text-sm">应用示例：批量简历智能评估</h6>
+                                        <div class="bg-neutral-50 dark:bg-neutral-900 p-3 rounded border border-neutral-200 dark:border-neutral-700 text-sm">
+                                            <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">输入：200份产品经理简历 + 岗位JD</div>
+                                            <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">DeepSeek 输出：评估报告</div>
+                                            <div class="space-y-3">
+                                                <div class="flex items-center justify-between text-xs">
+                                                    <span>高匹配度(>85%)</span>
+                                                    <div class="w-24 bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
+                                                        <div class="bg-green-500 h-2 rounded-full" style="width: 15%"></div>
+                                                    </div>
+                                                    <span>12%</span>
+                                                </div>
+                                                <div class="flex items-center justify-between text-xs">
+                                                    <span>中匹配度(60-85%)</span>
+                                                    <div class="w-24 bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
+                                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 30%"></div>
+                                                    </div>
+                                                    <span>28%</span>
+                                                </div>
+                                                <div class="flex items-center justify-between text-xs">
+                                                    <span>低匹配度(<60%)</span>
+                                                    <div class="w-24 bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
+                                                        <div class="bg-red-500 h-2 rounded-full" style="width: 60%"></div>
+                                                    </div>
+                                                    <span>60%</span>
+                                                </div>
+                                                <div class="mt-2 p-2 border border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-900/20 rounded text-xs">
+                                                    <div class="font-medium text-green-700 dark:text-green-400">推荐面试候选人(前5名)</div>
+                                                    <div class="mt-1 space-y-1">
+                                                        <div class="flex justify-between">
+                                                            <span>李明(92%)</span>
+                                                            <span>亮点: B2B经验丰富</span>
+                                                        </div>
+                                                        <div class="flex justify-between">
+                                                            <span>王华(89%)</span>
+                                                            <span>亮点: 用户研究专长</span>
+                                                        </div>
+                                                        <div class="text-center">...</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 场景二：人才培养 -->
+                    <div id="talent-development" x-intersect="$el.classList.add('animate-fade-in')">
+                        <div class="inline-block mb-2">
+                            <span class="badge badge-primary">场景二</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-6 text-primary-700 dark:text-primary-400">人才培养：个性化、智能化地赋能人才成长</h3>
+                        
+                        <div class="card p-6 mb-8">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="col-span-1 md:col-span-3">
+                                    <h4 class="font-semibold mb-3">传统人才培养的挑战</h4>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                                        <div class="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                            <h5 class="font-medium text-sm mb-2">同质化培训</h5>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">"一刀切"的培训方式，忽视个体差异，培训针对性不足</p>
+                                        </div>
+                                        <div class="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                            <h5 class="font-medium text-sm mb-2">效果评估难</h5>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">培训效果难以量化，投入产出比不明确，价值难以体现</p>
+                                        </div>
+                                        <div class="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                            <h5 class="font-medium text-sm mb-2">个性化不足</h5>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">难以适应每个人的学习节奏和风格，学习体验欠佳</p>
+                                        </div>
+                                        <div class="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                            <h5 class="font-medium text-sm mb-2">学习资源分散</h5>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">优质学习资源分散，学习者获取困难，学习效率低下</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <h4 class="font-semibold">DeepSeek 解决方案及应用示例</h4>
+                            
+                            <!-- 个性化学习路径规划 -->
+                            <div class="card p-6 hover:shadow-lg transition-shadow" x-intersect="$el.classList.add('animate-fade-in')">
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                                    <div class="md:col-span-7">
+                                        <div class="flex items-center mb-4">
+                                            <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 flex-shrink-0">
+                                                <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                                                </svg>
+                                            </div>
+                                            <h5 class="font-semibold text-lg">个性化学习路径规划</h5>
+                                        </div>
+                                        <p class="mb-4">利用DeepSeek分析人才技能现状和发展目标，智能推荐个性化的学习路径和资源，实现精准培养和发展。</p>
+                                        <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+                                            <h6 class="font-medium mb-2">关键价值</h6>
+                                            <ul class="text-sm space-y-1 text-neutral-700 dark:text-neutral-300">
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    根据个人能力差异定制学习路径，提高学习效率
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    将组织需求与个人发展有机结合，实现双赢
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    动态调整学习计划，适应能力成长和需求变化
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-5 bg-white dark:bg-neutral-800 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700">
+                                        <h6 class="font-medium mb-3 text-sm">应用示例：技能提升路径规划</h6>
+                                        <div class="bg-neutral-50 dark:bg-neutral-900 p-3 rounded border border-neutral-200 dark:border-neutral-700 text-sm">
+                                            <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">输入：员工能力评估 + 目标职位</div>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400 mb-3">
+                                                初级数据分析师希望晋升为数据科学家，当前擅长SQL和数据可视化
+                                            </p>
+                                            <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">DeepSeek 输出：学习路径规划</div>
+                                            <div class="relative pb-8">
+                                                <!-- 时间线 -->
+                                                <div class="absolute top-0 left-3 h-full w-0.5 bg-primary-200 dark:bg-primary-800"></div>
+                                                
+                                                <!-- 阶段1 -->
+                                                <div class="relative pl-8 pb-4">
+                                                    <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                                                        <span class="text-primary-700 dark:text-primary-300 text-xs font-bold">1</span>
+                                                    </div>
+                                                    <h6 class="text-xs font-semibold">基础阶段 (1-2个月)</h6>
+                                                    <p class="text-xs text-neutral-600 dark:text-neutral-400">Python编程基础、统计学基础、机器学习入门</p>
+                                                </div>
+                                                
+                                                <!-- 阶段2 -->
+                                                <div class="relative pl-8 pb-4">
+                                                    <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                                                        <span class="text-primary-700 dark:text-primary-300 text-xs font-bold">2</span>
+                                                    </div>
+                                                    <h6 class="text-xs font-semibold">进阶阶段 (3-4个月)</h6>
+                                                    <p class="text-xs text-neutral-600 dark:text-neutral-400">数据挖掘技术、机器学习算法、项目实践</p>
+                                                </div>
+                                                
+                                                <!-- 阶段3 -->
+                                                <div class="relative pl-8">
+                                                    <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                                                        <span class="text-primary-700 dark:text-primary-300 text-xs font-bold">3</span>
+                                                    </div>
+                                                    <h6 class="text-xs font-semibold">专家阶段 (5-6个月)</h6>
+                                                    <p class="text-xs text-neutral-600 dark:text-neutral-400">深度学习基础、行业应用案例研究、论文阅读</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 智能学习内容推荐与生成 -->
+                            <div class="card p-6 hover:shadow-lg transition-shadow" x-intersect="$el.classList.add('animate-fade-in')">
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                                    <div class="md:col-span-7">
+                                        <div class="flex items-center mb-4">
+                                            <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 flex-shrink-0">
+                                                <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                                </svg>
+                                            </div>
+                                            <h5 class="font-semibold text-lg">智能学习内容推荐与生成</h5>
+                                        </div>
+                                        <p class="mb-4">利用DeepSeek推荐高质量的学习内容（课程、文章、视频等），并根据需求生成定制化学习材料，提升学习体验。</p>
+                                        <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+                                            <h6 class="font-medium mb-2">关键价值</h6>
+                                            <ul class="text-sm space-y-1 text-neutral-700 dark:text-neutral-300">
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    从海量资源中筛选最适合的内容，节省探索时间
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    生成针对性学习辅助材料，提高知识吸收效率
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    打造个性化学习体验，提高学习积极性和满意度
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-5 bg-white dark:bg-neutral-800 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700">
+                                        <h6 class="font-medium mb-3 text-sm">应用示例：学习资源推荐与总结</h6>
+                                        <div class="bg-neutral-50 dark:bg-neutral-900 p-3 rounded border border-neutral-200 dark:border-neutral-700 text-sm">
+                                            <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">输入：学习需求</div>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400 mb-3">
+                                                需要学习项目管理方法论，特别是敏捷开发
+                                            </p>
+                                            <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">DeepSeek 输出：资源推荐</div>
+                                            <div class="space-y-3">
+                                                <div class="p-2 border border-primary-100 dark:border-primary-900 rounded-lg text-xs">
+                                                    <div class="flex justify-between">
+                                                        <span class="font-medium">推荐课程</span>
+                                                        <span class="text-primary-600 dark:text-primary-400">匹配度</span>
+                                                    </div>
+                                                    <div class="mt-1 space-y-1">
+                                                        <div class="flex justify-between">
+                                                            <span>Scrum实战指南</span>
+                                                            <span>98%</span>
+                                                        </div>
+                                                        <div class="flex justify-between">
+                                                            <span>敏捷项目管理认证</span>
+                                                            <span>92%</span>
+                                                        </div>
+                                                        <div class="flex justify-between">
+                                                            <span>项目经理敏捷转型</span>
+                                                            <span>85%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="p-2 border border-primary-100 dark:border-primary-900 rounded-lg text-xs">
+                                                    <div class="font-medium">生成学习资料:敏捷开发思维导图</div>
+                                                    <div class="mt-1 p-1 bg-white dark:bg-neutral-800 rounded border text-center">
+                                                        [思维导图展示区域]
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 智能学习伙伴与答疑 -->
+                            <div class="card p-6 hover:shadow-lg transition-shadow" x-intersect="$el.classList.add('animate-fade-in')">
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                                    <div class="md:col-span-7">
+                                        <div class="flex items-center mb-4">
+                                            <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 flex-shrink-0">
+                                                <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                                                </svg>
+                                            </div>
+                                            <h5 class="font-semibold text-lg">智能学习伙伴与答疑</h5>
+                                        </div>
+                                        <p class="mb-4">利用DeepSeek构建智能学习伙伴，为学习者提供实时答疑和互动支持，解决学习过程中的疑难问题。</p>
+                                        <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+                                            <h6 class="font-medium mb-2">关键价值</h6>
+                                            <ul class="text-sm space-y-1 text-neutral-700 dark:text-neutral-300">
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    24/7全天候学习支持，随时解答问题
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    降低学习挫折感，提高学习坚持度
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    提供个性化解释和示例，加深理解
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-5 bg-white dark:bg-neutral-800 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700">
+                                        <h6 class="font-medium mb-3 text-sm">应用示例：AI学习助手对话</h6>
+                                        <div class="bg-neutral-50 dark:bg-neutral-900 p-3 rounded border border-neutral-200 dark:border-neutral-700 text-sm">
+                                            <div class="space-y-3">
+                                                <div class="flex items-start">
+                                                    <div class="w-6 h-6 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center mr-2 flex-shrink-0 text-xs">学</div>
+                                                    <div class="p-2 bg-neutral-200 dark:bg-neutral-700 rounded-lg text-xs max-w-[80%]">
+                                                        <p class="text-xs">我不理解卷积神经网络中的步长(stride)概念，能解释一下吗？</p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="flex items-start justify-end">
+                                                    <div class="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg text-xs max-w-[80%]">
+                                                        <p class="text-xs">步长(stride)是卷积操作中滑动窗口每次移动的距离。想象一下，你在用一个小窗口(卷积核)在图像上从左到右、从上到下"滑动"来提取特征：</p>
+                                                        <p class="mt-1 text-xs">- 步长=1：窗口每次移动1个像素</p>
+                                                        <p class="text-xs">- 步长=2：窗口每次移动2个像素</p>
+                                                        <p class="mt-1 text-xs">步长越大，输出特征图越小，因为进行的卷积运算次数减少了。这有助于减少计算量和参数数量。</p>
+                                                    </div>
+                                                    <div class="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center ml-2 flex-shrink-0 text-xs">AI</div>
+                                                </div>
+                                                
+                                                <div class="flex items-start">
+                                                    <div class="w-6 h-6 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center mr-2 flex-shrink-0 text-xs">学</div>
+                                                    <div class="p-2 bg-neutral-200 dark:bg-neutral-700 rounded-lg text-xs max-w-[80%]">
+                                                        <p class="text-xs">能给我一个视觉化的例子吗？</p>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 场景三：人才管理 -->
+                    <div id="talent-management" x-intersect="$el.classList.add('animate-fade-in')">
+                        <div class="inline-block mb-2">
+                            <span class="badge badge-primary">场景三</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-6 text-primary-700 dark:text-primary-400">人才管理：数据驱动的人才洞察与决策</h3>
+                        
+                        <div class="card p-6 mb-8">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="col-span-1 md:col-span-3">
+                                    <h4 class="font-semibold mb-3">传统人才管理的挑战</h4>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                                        <div class="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                            <h5 class="font-medium text-sm mb-2">数据分散</h5>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">人才数据分散在不同系统，难以整合和全面分析</p>
+                                        </div>
+                                        <div class="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                            <h5 class="font-medium text-sm mb-2">分析滞后</h5>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">人才数据分析周期长，难以及时响应变化和风险</p>
+                                        </div>
+                                        <div class="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                            <h5 class="font-medium text-sm mb-2">决策主观</h5>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">人才决策过度依赖经验和直觉，缺乏数据支持</p>
+                                        </div>
+                                        <div class="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                            <h5 class="font-medium text-sm mb-2">缺乏全局视野</h5>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">难以形成组织全局的人才视图，影响战略决策</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <h4 class="font-semibold">DeepSeek 解决方案及应用示例</h4>
+                            
+                            <!-- 人才数据整合与分析 -->
+                            <div class="card p-6 hover:shadow-lg transition-shadow" x-intersect="$el.classList.add('animate-fade-in')">
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                                    <div class="md:col-span-7">
+                                        <div class="flex items-center mb-4">
+                                            <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 flex-shrink-0">
+                                                <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                                </svg>
+                                            </div>
+                                            <h5 class="font-semibold text-lg">人才数据整合与分析</h5>
+                                        </div>
+                                        <p class="mb-4">利用DeepSeek整合分散的人才数据（HR系统、绩效数据、调研数据等），进行多维度分析，挖掘深层洞察。</p>
+                                        <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+                                            <h6 class="font-medium mb-2">关键价值</h6>
+                                            <ul class="text-sm space-y-1 text-neutral-700 dark:text-neutral-300">
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    打破数据孤岛，构建统一的人才数据视图
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    发现数据间隐藏关联，提供深度洞察
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    用数据驱动决策，减少主观判断偏差
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-5 bg-white dark:bg-neutral-800 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700">
+                                        <h6 class="font-medium mb-3 text-sm">应用示例：多维人才数据分析</h6>
+                                        <div class="bg-neutral-50 dark:bg-neutral-900 p-3 rounded border border-neutral-200 dark:border-neutral-700 text-sm">
+                                            <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">输入：整合多源人才数据</div>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400 mb-3">
+                                                整合HR系统人才信息、绩效评估数据、培训记录、员工调查等
+                                            </p>
+                                            <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">DeepSeek 输出：人才洞察报告</div>
+                                            <div class="space-y-3">
+                                                <div class="p-2 border border-neutral-200 dark:border-neutral-700 rounded-lg text-xs">
+                                                    <div class="font-medium">人才结构分析</div>
+                                                    <div class="mt-1 h-20 bg-white dark:bg-neutral-800 rounded border text-center flex items-center justify-center">
+                                                        [技能分布图表]
+                                                    </div>
+                                                    <p class="mt-1 text-neutral-600 dark:text-neutral-400">技术团队AI领域人才占比低(8%)，与战略目标(20%)存在差距</p>
+                                                </div>
+                                                
+                                                <div class="p-2 border border-neutral-200 dark:border-neutral-700 rounded-lg text-xs">
+                                                    <div class="font-medium">流失风险分析</div>
+                                                    <div class="mt-1 h-20 bg-white dark:bg-neutral-800 rounded border text-center flex items-center justify-center">
+                                                        [风险预警图表]
+                                                    </div>
+                                                    <p class="mt-1 text-neutral-600 dark:text-neutral-400">数据科学团队流失风险上升30%，薪酬竞争力下降是主因</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 员工情绪与意愿分析 -->
+                            <div class="card p-6 hover:shadow-lg transition-shadow" x-intersect="$el.classList.add('animate-fade-in')">
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                                    <div class="md:col-span-7">
+                                        <div class="flex items-center mb-4">
+                                            <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 flex-shrink-0">
+                                                <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                            </div>
+                                            <h5 class="font-semibold text-lg">员工情绪与意愿分析</h5>
+                                        </div>
+                                        <p class="mb-4">利用DeepSeek分析员工反馈文本（调查问卷、访谈记录、邮件等），洞察员工情绪、意愿和潜在问题。</p>
+                                        <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+                                            <h6 class="font-medium mb-2">关键价值</h6>
+                                            <ul class="text-sm space-y-1 text-neutral-700 dark:text-neutral-300">
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    快速识别员工关注点和情绪变化趋势
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    及时发现潜在问题，主动干预避免危机
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    理解员工真实需求，改善员工体验
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-5 bg-white dark:bg-neutral-800 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700">
+                                        <h6 class="font-medium mb-3 text-sm">应用示例：员工满意度调查分析</h6>
+                                        <div class="bg-neutral-50 dark:bg-neutral-900 p-3 rounded border border-neutral-200 dark:border-neutral-700 text-sm">
+                                            <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">输入：200份员工满意度开放问题回答</div>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400 mb-3">
+                                                "你认为公司需要改进的地方是什么？""对工作环境的满意度如何？"等
+                                            </p>
+                                            <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">DeepSeek 输出：情感分析报告</div>
+                                            <div class="space-y-3">
+                                                <div class="p-2 border border-neutral-200 dark:border-neutral-700 rounded-lg text-xs">
+                                                    <div class="font-medium">情感与话题分布</div>
+                                                    <div class="mt-2 grid grid-cols-2 gap-2">
+                                                        <div class="h-16 bg-white dark:bg-neutral-800 rounded border text-center flex items-center justify-center">
+                                                            [情感分布图]
+                                                        </div>
+                                                        <div class="h-16 bg-white dark:bg-neutral-800 rounded border text-center flex items-center justify-center">
+                                                            [话题分布图]
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="p-2 border border-neutral-200 dark:border-neutral-700 rounded-lg text-xs">
+                                                    <div class="font-medium">关键洞察</div>
+                                                    <ul class="mt-1 space-y-1 text-neutral-600 dark:text-neutral-400">
+                                                        <li>• 远程工作政策获得最多积极评价(85%正面)</li>
+                                                        <li>• 职业发展路径不明确是主要不满因素(62%提及)</li>
+                                                        <li>• 技术团队对培训资源不足表达强烈不满(75%)</li>
+                                                        <li>• 工作-生活平衡是普遍关注话题(90%提及)</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 智能人才风险预警 -->
+                            <div class="card p-6 hover:shadow-lg transition-shadow" x-intersect="$el.classList.add('animate-fade-in')">
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                                    <div class="md:col-span-7">
+                                        <div class="flex items-center mb-4">
+                                            <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 flex-shrink-0">
+                                                <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                                </svg>
+                                            </div>
+                                            <h5 class="font-semibold text-lg">智能人才风险预警</h5>
+                                        </div>
+                                        <p class="mb-4">利用DeepSeek监测人才数据变化，识别潜在的人才流失、绩效下滑等风险，并及时预警，支持主动干预。</p>
+                                        <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+                                            <h6 class="font-medium mb-2">关键价值</h6>
+                                            <ul class="text-sm space-y-1 text-neutral-700 dark:text-neutral-300">
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    预测并防范关键人才流失，降低人才流失成本
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    早期识别绩效异常，及时干预提供支持
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    从被动响应转为主动管理，提升人才保留率
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-5 bg-white dark:bg-neutral-800 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700">
+                                        <h6 class="font-medium mb-3 text-sm">应用示例：人才流失风险预警</h6>
+                                        <div class="bg-neutral-50 dark:bg-neutral-900 p-3 rounded border border-neutral-200 dark:border-neutral-700 text-sm">
+                                            <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">输入：员工行为数据</div>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400 mb-3">
+                                                考勤记录、内部系统活跃度、绩效变化、团队互动等多维数据
+                                            </p>
+                                            <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">DeepSeek 输出：风险预警</div>
+                                            <div class="space-y-3">
+                                                <div class="p-2 border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-900/10 rounded-lg text-xs">
+                                                    <div class="font-medium text-red-600 dark:text-red-400">高风险警报：5位关键人才</div>
+                                                    <div class="mt-1 space-y-1 text-neutral-600 dark:text-neutral-400">
+                                                        <div class="flex justify-between">
+                                                            <span>张工(研发主管)</span>
+                                                            <span class="text-red-500">风险分:92%</span>
+                                                        </div>
+                                                        <div class="text-xs text-neutral-500">异常指标: 加班减少40%，系统登录频率下降60%，团队互动减少</div>
+                                                        <div class="text-xs font-medium mt-1">建议干预: 1对1沟通，探讨职业发展，考虑加薪或晋升</div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="p-2 border border-yellow-200 dark:border-yellow-900 bg-yellow-50 dark:bg-yellow-900/10 rounded-lg text-xs">
+                                                    <div class="font-medium text-yellow-600 dark:text-yellow-400">中等风险警报：12位人才</div>
+                                                    <div class="mt-1 text-neutral-600 dark:text-neutral-400">
+                                                        <div class="text-center text-xs">
+                                                            [详细列表略]
+                                                        </div>
+                                                        <div class="text-xs font-medium mt-1">共性问题: 工作满意度下降，主要与项目挑战性和团队氛围相关</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 场景四：人才服务 -->
+                    <div id="talent-service" x-intersect="$el.classList.add('animate-fade-in')">
+                        <div class="inline-block mb-2">
+                            <span class="badge badge-primary">场景四</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-6 text-primary-700 dark:text-primary-400">人才服务：更便捷、更智能的人才体验</h3>
+                        
+                        <div class="card p-6 mb-8">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="col-span-1 md:col-span-3">
+                                    <h4 class="font-semibold mb-3">传统人才服务的挑战</h4>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                                        <div class="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                            <h5 class="font-medium text-sm mb-2">流程繁琐</h5>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">服务办理程序复杂，表单众多，人才办事体验差</p>
+                                        </div>
+                                        <div class="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                            <h5 class="font-medium text-sm mb-2">响应滞后</h5>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">服务响应时间长，难以满足人才及时性需求</p>
+                                        </div>
+                                        <div class="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                            <h5 class="font-medium text-sm mb-2">信息获取难</h5>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">政策信息分散，人才难以快速找到所需资源</p>
+                                        </div>
+                                        <div class="p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
+                                            <h5 class="font-medium text-sm mb-2">服务体验差</h5>
+                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">标准化服务难以满足个性化需求，缺乏人性化关怀</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <h4 class="font-semibold">DeepSeek 解决方案及应用示例</h4>
+                            
+                            <!-- 智能人才咨询与问答 -->
+                            <div class="card p-6 hover:shadow-lg transition-shadow" x-intersect="$el.classList.add('animate-fade-in')">
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                                    <div class="md:col-span-7">
+                                        <div class="flex items-center mb-4">
+                                            <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 flex-shrink-0">
+                                                <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                                </svg>
+                                            </div>
+                                            <h5 class="font-semibold text-lg">智能人才咨询与问答</h5>
+                                        </div>
+                                        <p class="mb-4">利用DeepSeek构建智能客服系统，为人才提供7x24小时在线咨询和问答服务，解答常见问题，提供政策指引。</p>
+                                        <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+                                            <h6 class="font-medium mb-2">关键价值</h6>
+                                            <ul class="text-sm space-y-1 text-neutral-700 dark:text-neutral-300">
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    全天候服务，及时响应人才需求
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    准确解答各类问题，提高服务满意度
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    释放人力资源，提高服务效率
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-5 bg-white dark:bg-neutral-800 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700">
+                                        <h6 class="font-medium mb-3 text-sm">应用示例：人才政策智能咨询</h6>
+                                        <div class="bg-neutral-50 dark:bg-neutral-900 p-3 rounded border border-neutral-200 dark:border-neutral-700 text-sm">
+                                            <div class="space-y-3">
+                                                <div class="flex items-start">
+                                                    <div class="w-6 h-6 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center mr-2 flex-shrink-0 text-xs">人</div>
+                                                    <div class="p-2 bg-neutral-200 dark:bg-neutral-700 rounded-lg text-xs max-w-[80%]">
+                                                        <p class="text-xs">我是一名AI领域的博士，想了解贵公司对海外高层次人才的补贴政策</p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="flex items-start justify-end">
+                                                    <div class="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg text-xs max-w-[80%]">
+                                                        <p class="text-xs">您好！作为AI领域博士，您符合我们的"全球英才计划"。该计划为海外高层次人才提供以下支持：</p>
+                                                        <ol class="mt-1 pl-4 list-decimal text-xs">
+                                                            <li>安家补贴：50-100万元（视具体资质评定）</li>
+                                                            <li>科研启动金：最高300万元</li>
+                                                            <li>住房支持：人才公寓或购房补贴</li>
+                                                            <li>配偶就业及子女教育支持</li>
+                                                        </ol>
+                                                        <p class="mt-1 text-xs">申请流程：提交个人简历和研究计划→资格审核→专家评估→面试→签约</p>
+                                                    </div>
+                                                    <div class="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center ml-2 flex-shrink-0 text-xs">AI</div>
+                                                </div>
+                                                
+                                                <div class="flex items-start">
+                                                    <div class="w-6 h-6 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center mr-2 flex-shrink-0 text-xs">人</div>
+                                                    <div class="p-2 bg-neutral-200 dark:bg-neutral-700 rounded-lg text-xs max-w-[80%]">
+                                                        <p class="text-xs">申请材料需要中文版吗？我的发表论文都是英文的</p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="flex items-start justify-end">
+                                                    <div class="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg text-xs max-w-[80%]">
+                                                        <p class="text-xs">申请表需要中英文双语填写，但您的研究成果（论文、专利等）可以提交英文原件，无需翻译。如您需要，我们可以提供免费的材料翻译服务。您可以通过global_talent@company.com邮箱提交初步申请或咨询更多细节。</p>
+                                                    </div>
+                                                    <div class="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center ml-2 flex-shrink-0 text-xs">AI</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 自动化办事流程 -->
+                            <div class="card p-6 hover:shadow-lg transition-shadow" x-intersect="$el.classList.add('animate-fade-in')">
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                                    <div class="md:col-span-7">
+                                        <div class="flex items-center mb-4">
+                                            <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 flex-shrink-0">
+                                                <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                                </svg>
+                                            </div>
+                                            <h5 class="font-semibold text-lg">自动化办事流程</h5>
+                                        </div>
+                                        <p class="mb-4">利用DeepSeek自动化处理部分人才服务流程，例如：在线申请、信息变更、材料审核等，提升办事效率。</p>
+                                        <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+                                            <h6 class="font-medium mb-2">关键价值</h6>
+                                            <ul class="text-sm space-y-1 text-neutral-700 dark:text-neutral-300">
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    简化办事流程，提升人才服务体验
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    加快审批速度，提高服务效率
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    减少人为错误，提升服务质量
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-5 bg-white dark:bg-neutral-800 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700">
+                                        <h6 class="font-medium mb-3 text-sm">应用示例：人才项目申请自动审核</h6>
+                                        <div class="bg-neutral-50 dark:bg-neutral-900 p-3 rounded border border-neutral-200 dark:border-neutral-700 text-sm">
+                                            <div class="space-y-3">
+                                                <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">DeepSeek 自动化流程</div>
+                                                
+                                                <div class="relative">
+                                                    <!-- 时间线 -->
+                                                    <div class="absolute top-0 left-3 h-full w-0.5 bg-primary-200 dark:bg-primary-800"></div>
+                                                    
+                                                    <!-- 步骤1 -->
+                                                    <div class="relative pl-8 pb-3">
+                                                        <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                                                            <span class="text-primary-700 dark:text-primary-300 text-xs font-bold">1</span>
+                                                        </div>
+                                                        <h6 class="text-xs font-semibold">材料智能预检</h6>
+                                                        <p class="text-xs text-neutral-600 dark:text-neutral-400">自动检查申请资料完整性，提醒缺失项</p>
+                                                    </div>
+                                                    
+                                                    <!-- 步骤2 -->
+                                                    <div class="relative pl-8 pb-3">
+                                                        <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                                                            <span class="text-primary-700 dark:text-primary-300 text-xs font-bold">2</span>
+                                                        </div>
+                                                        <h6 class="text-xs font-semibold">资质自动评估</h6>
+                                                        <p class="text-xs text-neutral-600 dark:text-neutral-400">分析申请人成果、背景，给出初步评估结果</p>
+                                                    </div>
+                                                    
+                                                    <!-- 步骤3 -->
+                                                    <div class="relative pl-8 pb-3">
+                                                        <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                                                            <span class="text-primary-700 dark:text-primary-300 text-xs font-bold">3</span>
+                                                        </div>
+                                                        <h6 class="text-xs font-semibold">智能分类分发</h6>
+                                                        <p class="text-xs text-neutral-600 dark:text-neutral-400">根据专业领域，自动分发到相关专家评审</p>
+                                                    </div>
+                                                    
+                                                    <!-- 步骤4 -->
+                                                    <div class="relative pl-8">
+                                                        <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                                                            <span class="text-primary-700 dark:text-primary-300 text-xs font-bold">4</span>
+                                                        </div>
+                                                        <h6 class="text-xs font-semibold">进度自动更新</h6>
+                                                        <p class="text-xs text-neutral-600 dark:text-neutral-400">实时追踪申请进度，主动推送状态更新</p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="p-2 border border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-900/20 rounded text-xs">
+                                                    <div class="font-medium text-green-700 dark:text-green-400">效率提升数据</div>
+                                                    <div class="mt-1 grid grid-cols-2 gap-1">
+                                                        <div class="flex justify-between">
+                                                            <span>材料预检时间</span>
+                                                            <span>从2天→5分钟</span>
+                                                        </div>
+                                                        <div class="flex justify-between">
+                                                            <span>初审响应时间</span>
+                                                            <span>从5天→1天</span>
+                                                        </div>
+                                                        <div class="flex justify-between">
+                                                            <span>全流程时长</span>
+                                                            <span>缩短60%</span>
+                                                        </div>
+                                                        <div class="flex justify-between">
+                                                            <span>人力投入</span>
+                                                            <span>减少70%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 个性化信息推送与服务推荐 -->
+                            <div class="card p-6 hover:shadow-lg transition-shadow" x-intersect="$el.classList.add('animate-fade-in')">
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                                    <div class="md:col-span-7">
+                                        <div class="flex items-center mb-4">
+                                            <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mr-3 flex-shrink-0">
+                                                <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                                                </svg>
+                                            </div>
+                                            <h5 class="font-semibold text-lg">个性化信息推送与服务推荐</h5>
+                                        </div>
+                                        <p class="mb-4">利用DeepSeek分析人才画像和需求，个性化推送相关政策信息、活动通知、服务推荐等，提升服务精准度。</p>
+                                        <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+                                            <h6 class="font-medium mb-2">关键价值</h6>
+                                            <ul class="text-sm space-y-1 text-neutral-700 dark:text-neutral-300">
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    减少信息过载，提供高相关性内容
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    提前预判需求，主动提供服务
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <svg class="w-4 h-4 mt-0.5 mr-1 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    增强人才归属感和被重视感
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-5 bg-white dark:bg-neutral-800 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700">
+                                        <h6 class="font-medium mb-3 text-sm">应用示例：科研人才个性化服务</h6>
+                                        <div class="bg-neutral-50 dark:bg-neutral-900 p-3 rounded border border-neutral-200 dark:border-neutral-700 text-sm">
+                                            <div class="space-y-3">
+                                                <div class="font-medium text-primary-600 dark:text-primary-400 mb-2">用户画像：量子计算领域研究员</div>
+                                                <div class="p-2 border border-primary-100 dark:border-primary-900 rounded-lg text-xs">
+                                                    <div class="font-medium">智能政策推送</div>
+                                                    <div class="mt-1 space-y-2">
+                                                        <div class="p-1.5 bg-primary-50 dark:bg-primary-900/20 rounded">
+                                                            <div class="font-medium">前沿科技专项资金申请开放</div>
+                                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">量子计算项目最高可获500万元支持，申请截止日期：2025年5月15日</p>
+                                                            <div class="text-right text-primary-600 dark:text-primary-400 text-xs mt-1">相关度：98%</div>
+                                                        </div>
+                                                        
+                                                        <div class="p-1.5 bg-primary-50 dark:bg-primary-900/20 rounded">
+                                                            <div class="font-medium">国际青年科学家交流计划</div>
+                                                            <p class="text-xs text-neutral-600 dark:text-neutral-400">为期3个月的麻省理工学院量子实验室交流机会</p>
+                                                            <div class="text-right text-primary-600 dark:text-primary-400 text-xs mt-1">相关度：95%</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="p-2 border border-primary-100 dark:border-primary-900 rounded-lg text-xs">
+                                                    <div class="font-medium">活动与资源推荐</div>
+                                                    <div class="mt-1 space-y-2">
+                                                        <div class="flex justify-between">
+                                                            <span>量子计算高峰论坛</span>
+                                                            <span>4月20日</span>
+                                                        </div>
+                                                        <div class="flex justify-between">
+                                                            <span>实验设备预约提醒</span>
+                                                            <span>超导量子处理器</span>
+                                                        </div>
+                                                        <div class="flex justify-between">
+                                                            <span>合作机会</span>
+                                                            <span>3家企业寻求技术顾问</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- 页面底部作者区域 -->
+    <footer class="author-section pt-16 pb-12 bg-white dark:bg-neutral-900">
+        <div class="container-custom">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex flex-col items-center">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="author-avatar">陈</div>
+                        <div>
+                            <h3 class="text-lg font-bold">陈光</h3>
+                            <p class="text-sm text-neutral-600 dark:text-neutral-400">北京邮电大学人工智能学院</p>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="text-center">
+                        <p class="text-sm text-neutral-500 dark:text-neutral-500">© 2025 版权所有</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 返回顶部按钮 -->
+    <button x-data="{ showButton: false }" @scroll.window="showButton = window.scrollY > 500" x-show="showButton" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-primary-600 dark:bg-primary-500 text-white flex items-center justify-center shadow-lg hover:bg-primary-700 dark:hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900 transition-all">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+        </svg>
+    </button>
+    
+    <script>
+        // 监听滚动位置，更新当前激活的导航项
+        document.addEventListener('DOMContentLoaded', function() {
+            function updateActiveSection() {
+                // 获取所有主要section元素
+                const sections = [
+                    document.getElementById('intro'),
+                    document.getElementById('part1'),
+                    document.getElementById('part2')
+                ];
+                
+                // 找出当前在视口中的section
+                const scrollPosition = window.scrollY + window.innerHeight / 3;
+                
+                for (let i = sections.length - 1; i >= 0; i--) {
+                    const section = sections[i];
+                    if (section && section.offsetTop <= scrollPosition) {
+                        const sectionId = section.getAttribute('id');
+                        Alpine.store('app') && Alpine.store('app').activeSection || (window.Alpine && Alpine.evaluate(document.body, 'activeSection = "' + sectionId + '"'));
+                        break;
+                    }
+                }
+            }
+            
+            // 页面加载时初始化
+            updateActiveSection();
+            
+            // 滚动时更新
+            window.addEventListener('scroll', updateActiveSection);
+            
+            // 初始化交叉观察器，用于触发元素进入视口时的动画
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            // 观察所有有animate-on-scroll类的元素
+            document.querySelectorAll('.card, .section-title, .feature-item').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

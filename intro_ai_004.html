@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大型语言模型 | 陈光</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/css/icons.css">
+    <script defer src="https://unpkg.com/alpinejs@3.10.3/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100;300;400;500;700;900&display=swap');
+        
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #4f46e5;
+            --accent: #f97316;
+            --light-bg: #f8fafc;
+            --dark-bg: #0f172a;
+            --light-text: #f8fafc;
+            --dark-text: #1e293b;
+            --light-card: #ffffff;
+            --dark-card: #1e293b;
+            --light-border: #e2e8f0;
+            --dark-border: #334155;
+        }
+
+        .theme-blue {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #4f46e5;
+            --accent: #f97316;
+        }
+
+        .theme-orange {
+            --primary: #f97316;
+            --primary-dark: #ea580c;
+            --secondary: #f59e0b;
+            --accent: #3b82f6;
+        }
+
+        .theme-green {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #34d399;
+            --accent: #8b5cf6;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            scroll-behavior: smooth;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .light {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+        }
+
+        .dark {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+        }
+
+        .card {
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+
+        .light .card {
+            background-color: var(--light-card);
+            border: 1px solid var(--light-border);
+        }
+
+        .dark .card {
+            background-color: var(--dark-card);
+            border: 1px solid var(--dark-border);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .gradient-heading {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        .section-divider {
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            border-radius: 3px;
+            margin: 2rem auto;
+            width: 150px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            height: 1rem;
+            width: 1rem;
+            border-radius: 50%;
+            background-color: var(--primary);
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 1.5rem;
+            bottom: -2rem;
+            width: 2px;
+            background-color: var(--primary);
+            opacity: 0.5;
+        }
+
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            z-index: 9999;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+        
+        .feature-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(var(--primary-rgb), 0.1) 0%, rgba(var(--primary-rgb), 0) 70%);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .feature-card:hover::before {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .glow {
+            position: relative;
+        }
+        
+        .dark .glow::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150%;
+            height: 150%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(
+                circle,
+                rgba(79, 70, 229, 0.15) 0%,
+                rgba(79, 70, 229, 0) 70%
+            );
+            z-index: -1;
+            opacity: 0.7;
+            border-radius: 50%;
+        }
+        
+        /* Fluid typography */
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+        }
+        
+        h2 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+        }
+        
+        h3 {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+        }
+        
+        p, li {
+            font-size: clamp(1rem, 2vw, 1.125rem);
+        }
+        
+        .fadeIn {
+            animation: fadeIn 1s ease forwards;
+            opacity: 0;
+        }
+        
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Skeleton screen */
+        .skeleton {
+            background: linear-gradient(90deg, 
+                rgba(255, 255, 255, 0.1) 25%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(255, 255, 255, 0.1) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 0.5rem;
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        .nav-dot {
+            display: block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--light-border);
+            transition: all 0.3s ease;
+            margin: 10px 0;
+        }
+
+        .nav-dot.active {
+            background-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+            width: 12px;
+            height: 12px;
+            margin: 8px 0;
+        }
+
+        .dark .nav-dot {
+            background-color: var(--dark-border);
+        }
+        
+        .dark .nav-dot.active {
+            background-color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .slide-content {
+                padding: 1.5rem;
+            }
+            
+            .timeline-item {
+                padding-left: 1.5rem;
+            }
+            
+            .section-divider {
+                width: 100px;
+            }
+        }
+    </style>
+</head>
+<body class="light" x-data="{ 
+    darkMode: false, 
+    theme: 'blue',
+    activeSection: 'slide-2',
+    slideLoaded: false,
+    applyTheme(themeName) {
+        this.theme = themeName;
+        document.body.className = this.darkMode ? 'dark theme-' + themeName : 'light theme-' + themeName;
+    },
+    toggleDarkMode() {
+        this.darkMode = !this.darkMode;
+        this.applyTheme(this.theme);
+    },
+    updateProgress() {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('progressBar').style.width = scrolled + '%';
+    },
+    checkVisibility() {
+        const sections = document.querySelectorAll('.slide');
+        for (const section of sections) {
+            const rect = section.getBoundingClientRect();
+            const isVisible = (
+                rect.top <= window.innerHeight / 2 &&
+                rect.bottom >= window.innerHeight / 2
+            );
+            if (isVisible) {
+                this.activeSection = section.id;
+                break;
+            }
+        }
+    },
+    init() {
+        window.addEventListener('scroll', () => {
+            this.updateProgress();
+            this.checkVisibility();
+        });
+        this.slideLoaded = true;
+        this.updateProgress();
+        this.checkVisibility();
+    }
+}" x-init="init()">
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Side Navigation -->
+    <div class="fixed right-5 top-1/2 transform -translate-y-1/2 z-50 hidden md:block">
+        <div class="flex flex-col items-center space-y-4">
+            <template x-for="i in 9">
+                <a :href="'#slide-' + i" 
+                   @click.prevent="document.querySelector('#slide-' + i).scrollIntoView({behavior: 'smooth'})"
+                   :class="{'active': activeSection === 'slide-' + i}"
+                   class="nav-dot"></a>
+            </template>
+        </div>
+    </div>
+
+    <!-- Theme Switcher and Controls -->
+    <div class="fixed top-5 right-5 z-50 flex space-x-2">
+        <button @click="toggleDarkMode()" class="btn p-2 rounded-full" :class="darkMode ? 'bg-yellow-400 text-gray-900' : 'bg-gray-800 text-white'">
+            <svg x-show="!darkMode" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+            </svg>
+            <svg x-show="darkMode" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
+            </svg>
+        </button>
+        <div class="flex space-x-1">
+            <button @click="applyTheme('blue')" class="w-5 h-5 rounded-full bg-blue-600 border-2" :class="theme === 'blue' ? 'border-white' : 'border-transparent'"></button>
+            <button @click="applyTheme('orange')" class="w-5 h-5 rounded-full bg-orange-500 border-2" :class="theme === 'orange' ? 'border-white' : 'border-transparent'"></button>
+            <button @click="applyTheme('green')" class="w-5 h-5 rounded-full bg-emerald-500 border-2" :class="theme === 'green' ? 'border-white' : 'border-transparent'"></button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Title Slide -->
+        <section id="slide-1" class="min-h-screen flex items-center justify-center slide">
+            <div class="text-center">
+                <h1 class="text-5xl font-bold mb-6 gradient-heading" x-show="slideLoaded" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 transform translate-y-10" x-transition:enter-end="opacity-100 transform translate-y-0">大型语言模型</h1>
+                <div class="w-32 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mb-8"></div>
+                <p class="text-xl max-w-3xl mx-auto" x-show="slideLoaded" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:enter-delay="200">探索人工智能的语言革命</p>
+                <div class="mt-12" x-show="slideLoaded" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 transform translate-y-10" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:enter-delay="400">
+                    <a href="#slide-2" class="btn btn-primary inline-flex items-center" @click.prevent="document.querySelector('#slide-2').scrollIntoView({behavior: 'smooth'})">
+                        开始探索 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: 课程概述与目标 -->
+        <section id="slide-2" class="min-h-screen py-16 slide">
+            <div class="card max-w-6xl mx-auto p-8 slide-content">
+                <h2 class="text-3xl font-bold mb-6 gradient-heading">课程概述与目标</h2>
+                <div class="section-divider"></div>
+                
+                <div class="grid md:grid-cols-2 gap-8 mt-10">
+                    <div class="glow">
+                        <div class="card h-full p-6 feature-card">
+                            <h3 class="text-xl font-semibold mb-4">回顾与展望</h3>
+                            <p class="mb-4">简要回顾之前课程内容（深度学习基础），建立知识连贯性，为本次LLM课程奠定基础。</p>
+                            <div class="mt-4">
+                                <div class="h-1 w-16 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glow">
+                        <div class="card h-full p-6 feature-card">
+                            <h3 class="text-xl font-semibold mb-4">课程目标</h3>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>导认识：建立对LLM的基本认知框架</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>导兴趣：激发对语言模型学习的热情</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>导原理：介绍LLM的核心工作机制</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>导重点：聚焦关键技术与发展方向</span>
+                                </li>
+                            </ul>
+                            <div class="mt-4">
+                                <div class="h-1 w-16 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-10">
+                    <div class="card p-6 bg-opacity-50">
+                        <p class="text-lg italic">本次课程以高屋建瓴的方式介绍LLM，注重全局视角和概念框架，不会过度深入技术细节，适合各层次学习者。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: 什么是大型语言模型 -->
+        <section id="slide-3" class="min-h-screen py-16 slide">
+            <div class="card max-w-6xl mx-auto p-8 slide-content">
+                <h2 class="text-3xl font-bold mb-6 gradient-heading">什么是大型语言模型 (LLM)？</h2>
+                <div class="section-divider"></div>
+                
+                <div class="mt-10">
+                    <div class="card p-6 mb-8">
+                        <h3 class="text-xl font-semibold mb-4">定义</h3>
+                        <p class="text-lg">LLM 是一种基于深度学习的自然语言处理 (NLP) 模型，通过在海量文本数据上进行训练，能够理解和生成人类语言。</p>
+                    </div>
+                    
+                    <h3 class="text-2xl font-semibold mb-6">关键特征</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="glow">
+                            <div class="card p-6 h-full feature-card">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold mr-3">L</div>
+                                    <h4 class="text-xl font-semibold">大规模 (Large)</h4>
+                                </div>
+                                <p>参数数量巨大（数十亿、数千亿甚至更多），使模型具有强大的表达能力和知识容量。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="glow">
+                            <div class="card p-6 h-full feature-card">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold mr-3">P</div>
+                                    <h4 class="text-xl font-semibold">预训练 (Pre-trained)</h4>
+                                </div>
+                                <p>在通用语料库上进行预训练，然后在特定任务上进行微调，实现知识迁移和任务适应。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="glow">
+                            <div class="card p-6 h-full feature-card">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold mr-3">G</div>
+                                    <h4 class="text-xl font-semibold">生成能力 (Generative)</h4>
+                                </div>
+                                <p>能够生成连贯、有意义的文本，不仅可以理解输入，还能创造性地产生新内容。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="glow">
+                            <div class="card p-6 h-full feature-card">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold mr-3">I</div>
+                                    <h4 class="text-xl font-semibold">上下文学习 (In-context Learning)</h4>
+                                </div>
+                                <p>能够在少量示例或提示下完成新任务，展现出强大的适应性和泛化能力。</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-10">
+                        <div class="card p-6 bg-opacity-70">
+                            <h3 class="text-xl font-semibold mb-4">与传统NLP模型的区别</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-left py-3 px-4 border-b">特性</th>
+                                            <th class="text-left py-3 px-4 border-b">传统NLP模型</th>
+                                            <th class="text-left py-3 px-4 border-b">大型语言模型</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="py-3 px-4 border-b">模型规模</td>
+                                            <td class="py-3 px-4 border-b">通常较小（百万级参数）</td>
+                                            <td class="py-3 px-4 border-b">极大（数十亿至数千亿参数）</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-3 px-4 border-b">训练方式</td>
+                                            <td class="py-3 px-4 border-b">通常针对特定任务训练</td>
+                                            <td class="py-3 px-4 border-b">通用预训练+特定任务微调</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-3 px-4 border-b">任务适应能力</td>
+                                            <td class="py-3 px-4 border-b">专注于特定任务</td>
+                                            <td class="py-3 px-4 border-b">通过提示即可适应多种任务</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-3 px-4 border-b">生成能力</td>
+                                            <td class="py-3 px-4 border-b">有限，通常是分类/预测</td>
+                                            <td class="py-3 px-4 border-b">强大，可生成多样化内容</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: LLM 的发展历程 -->
+        <section id="slide-4" class="min-h-screen py-16 slide">
+            <div class="card max-w-6xl mx-auto p-8 slide-content">
+                <h2 class="text-3xl font-bold mb-6 gradient-heading">LLM 的发展历程</h2>
+                <div class="section-divider"></div>
+                
+                <div class="mt-10">
+                    <div class="relative">
+                        <div class="timeline-item">
+                            <div class="card p-6">
+                                <h3 class="text-xl font-semibold mb-3">早期阶段 (2018年之前)</h3>
+                                <p class="mb-4">NLP领域主要依赖循环神经网络（RNN/LSTM）架构处理序列数据。</p>
+                                <ul class="list-disc pl-6 space-y-2">
+                                    <li>RNN/LSTM 等循环神经网络在 NLP 任务中的广泛应用</li>
+                                    <li>词嵌入技术（Word2Vec, GloVe）的兴起，为单词创建语义丰富的向量表示</li>
+                                    <li>模型规模较小，通常针对特定任务如情感分析、机器翻译等进行训练</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="card p-6">
+                                <h3 class="text-xl font-semibold mb-3">Transformer 时代 (2018年)</h3>
+                                <p class="mb-4">2018年，Google提出革命性的Transformer架构，彻底改变了NLP领域。</p>
+                                <ul class="list-disc pl-6 space-y-2">
+                                    <li>Google 论文《Attention Is All You Need》提出 Transformer 架构，引入自注意力机制</li>
+                                    <li>解决了RNN难以并行计算和长序列依赖问题</li>
+                                    <li>BERT (Bidirectional Encoder Representations from Transformers) 的发布，通过双向上下文学习极大提升了NLP任务表现</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="card p-6">
+                                <h3 class="text-xl font-semibold mb-3">GPT 系列的发展 (2018年至今)</h3>
+                                <p class="mb-4">OpenAI的GPT系列模型引领了生成式AI的飞速发展。</p>
+                                <ul class="list-disc pl-6 space-y-2">
+                                    <li>GPT-1 (2018): 1.17亿参数，首次展示大规模语言模型潜力</li>
+                                    <li>GPT-2 (2019): 15亿参数，展现出强大的文本生成能力</li>
+                                    <li>GPT-3 (2020): 1750亿参数，few-shot learning能力引起轰动，开始应用于各种实际场景</li>
+                                    <li>GPT-4 (2023): 多模态能力，解决更复杂任务的能力大幅提升</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="card p-6">
+                                <h3 class="text-xl font-semibold mb-3">百花齐放 (2020年至今)</h3>
+                                <p class="mb-4">随着技术成熟，全球科技巨头和研究机构纷纷推出各具特色的大型语言模型。</p>
+                                <ul class="list-disc pl-6 space-y-2">
+                                    <li>Google: LaMDA、PaLM等模型，专注对话能力和推理能力</li>
+                                    <li>Meta: LLaMA系列开源模型，降低研究和应用门槛</li>
+                                    <li>国内进展: 鹏程·盘古、文心一言、通义千问等模型的出现</li>
+                                    <li>开源社区: Falcon、Bloom等多语言开放模型蓬勃发展</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: LLM 的有趣应用 -->
+        <section id="slide-5" class="min-h-screen py-16 slide">
+            <div class="card max-w-6xl mx-auto p-8 slide-content">
+                <h2 class="text-3xl font-bold mb-6 gradient-heading">LLM 的有趣应用</h2>
+                <div class="section-divider"></div>
+                
+                <div class="mt-10">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="glow">
+                            <div class="card p-6 h-full feature-card">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                    内容生成
+                                </h3>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>文本创作：写文章、诗歌、剧本、小说等</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>新闻摘要：自动提取新闻关键信息</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>个性化营销文案：针对不同用户群体</span>
+                                    </li>
+                                </ul>
+                                <div class="mt-4 p-3 bg-opacity-20 rounded-lg" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'">
+                                    <p class="text-sm italic">示例：一键生成不同风格的产品介绍、根据关键词创作诗歌或短篇故事</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glow">
+                            <div class="card p-6 h-full feature-card">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                    </svg>
+                                    对话系统
+                                </h3>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>智能客服：24/7全天候客户支持</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>虚拟助手：个人生活与工作助理</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>多轮对话：记忆上下文的连贯交流</span>
+                                    </li>
+                                </ul>
+                                <div class="mt-4 p-3 bg-opacity-20 rounded-lg" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'">
+                                    <p class="text-sm italic">示例：ChatGPT等对话系统能够理解上下文，维持连贯对话，模拟人类交流方式</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glow">
+                            <div class="card p-6 h-full feature-card">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                                    </svg>
+                                    机器翻译
+                                </h3>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>高质量翻译：保持语义与风格一致</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>多语言翻译：支持上百种语言互译</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>特定领域翻译：医学、法律、技术文档</span>
+                                    </li>
+                                </ul>
+                                <div class="mt-4 p-3 bg-opacity-20 rounded-lg" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'">
+                                    <p class="text-sm italic">示例：LLM翻译不仅准确传达原文含义，还能保持文化习惯与表达风格</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glow">
+                            <div class="card p-6 h-full feature-card">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                    </svg>
+                                    代码生成
+                                </h3>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>自然语言转代码：描述功能自动实现</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>代码补全与优化：提高编程效率</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>代码解释与教学：帮助理解复杂算法</span>
+                                    </li>
+                                </ul>
+                                <div class="mt-4 p-3 bg-opacity-20 rounded-lg" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'">
+                                    <p class="text-sm italic">示例：GitHub Copilot等工具可根据注释生成代码片段，甚至完成复杂功能实现</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-10">
+                        <h3 class="text-2xl font-semibold mb-6">其他创新应用</h3>
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div class="glow">
+                                <div class="card p-5 h-full feature-card">
+                                    <div class="flex flex-col items-center text-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-primary mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <h4 class="text-lg font-semibold mb-2">智能问答系统</h4>
+                                        <p class="text-sm">构建知识库问答系统，回答特定领域专业问题，为医疗、法律、教育等行业提供支持</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glow">
+                                <div class="card p-5 h-full feature-card">
+                                    <div class="flex flex-col items-center text-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-primary mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                        <h4 class="text-lg font-semibold mb-2">信息检索</h4>
+                                        <p class="text-sm">理解用户查询意图，提供更精准的搜索结果，整合多源信息形成完整答案</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glow">
+                                <div class="card p-5 h-full feature-card">
+                                    <div class="flex flex-col items-center text-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-primary mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                        </svg>
+                                        <h4 class="text-lg font-semibold mb-2">文本分类与标签</h4>
+                                        <p class="text-sm">自动分类文档、提取关键信息、识别文本情感倾向，用于内容审核和数据分析</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: LLM 的基本工作原理 -->
+        <section id="slide-6" class="min-h-screen py-16 slide">
+            <div class="card max-w-6xl mx-auto p-8 slide-content">
+                <h2 class="text-3xl font-bold mb-6 gradient-heading">LLM 的基本工作原理</h2>
+                <div class="section-divider"></div>
+                
+                <div class="mt-10">
+                    <div class="card p-6 mb-10">
+                        <h3 class="text-2xl font-semibold mb-6">Transformer 架构</h3>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <div class="card p-5 bg-opacity-50 mb-6">
+                                    <h4 class="text-lg font-semibold mb-3">自注意力机制 (Self-Attention)</h4>
+                                    <p class="mb-4">自注意力机制是Transformer的核心，它能够捕捉序列中不同位置的词之间的关系。</p>
+                                    <p>工作原理：</p>
+                                    <ul class="list-disc pl-6 space-y-2 mt-2">
+                                        <li>计算序列中每个词与其他所有词的关联程度</li>
+                                        <li>为每个位置生成加权上下文表示</li>
+                                        <li>允许模型关注序列中任意位置的信息</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="card p-5 bg-opacity-50">
+                                    <h4 class="text-lg font-semibold mb-3">多头注意力 (Multi-Head Attention)</h4>
+                                    <p>多头注意力允许模型同时从不同的表示子空间关注不同的信息：</p>
+                                    <ul class="list-disc pl-6 space-y-2 mt-2">
+                                        <li>并行执行多个注意力计算（"多头"）</li>
+                                        <li>每个头关注不同的特征模式</li>
+                                        <li>例如：一个头可能关注语法关系，另一个关注语义相似性</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="card p-5 bg-opacity-50 mb-6">
+                                    <h4 class="text-lg font-semibold mb-3">编码器-解码器结构</h4>
+                                    <p class="mb-3">Transformer 架构基于编码器-解码器结构：</p>
+                                    <ul class="list-disc pl-6 space-y-2">
+                                        <li><strong>编码器</strong>：处理输入序列，捕捉其中的信息</li>
+                                        <li><strong>解码器</strong>：生成输出序列，利用编码器提供的信息</li>
+                                    </ul>
+                                    <p class="mt-3">不同LLM可能只使用其中一部分：</p>
+                                    <ul class="list-disc pl-6 space-y-2 mt-2">
+                                        <li>BERT：仅使用编码器，适合理解任务</li>
+                                        <li>GPT：仅使用解码器，适合生成任务</li>
+                                        <li>T5：使用完整编码器-解码器，适合转换任务</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="card p-5 bg-opacity-50">
+                                    <h4 class="text-lg font-semibold mb-3">残差连接与层归一化</h4>
+                                    <p>这些组件对训练深层网络至关重要：</p>
+                                    <ul class="list-disc pl-6 space-y-2 mt-2">
+                                        <li><strong>残差连接</strong>：帮助梯度流动，避免梯度消失</li>
+                                        <li><strong>层归一化</strong>：稳定每一层的激活分布，加速训练</li>
+                                        <li>这些技术使得训练数百层的巨型模型成为可能</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-10">
+                        <div class="glow">
+                            <div class="card p-6 h-full feature-card">
+                                <h3 class="text-xl font-semibold mb-4">预训练与微调流程</h3>
+                                <div class="relative p-4 bg-opacity-20 rounded-lg mb-4" :class="darkMode ? 'bg-blue-900' : 'bg-blue-100'">
+                                    <h4 class="font-semibold mb-2">预训练阶段</h4>
+                                    <ul class="list-disc pl-6 space-y-2">
+                                        <li>在海量通用文本数据上训练（数TB文本）</li>
+                                        <li>学习语言的统计规律和世界知识</li>
+                                        <li>通常使用自监督学习（如下一词预测）</li>
+                                        <li>计算资源消耗巨大（数百GPU/TPU，数周时间）</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="relative p-4 bg-opacity-20 rounded-lg" :class="darkMode ? 'bg-green-900' : 'bg-green-100'">
+                                    <h4 class="font-semibold mb-2">微调阶段</h4>
+                                    <ul class="list-disc pl-6 space-y-2">
+                                        <li>在特定任务数据上进一步训练预训练模型</li>
+                                        <li>调整模型以适应特定领域或应用</li>
+                                        <li>资源需求相对较少（单GPU即可完成）</li>
+                                        <li>常见微调方法：全参数微调、参数高效微调(PEFT)、指令微调等</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glow">
+                            <div class="card p-6 h-full feature-card">
+                                <h3 class="text-xl font-semibold mb-4">生成过程</h3>
+                                <div class="p-4 bg-opacity-20 rounded-lg mb-6" :class="darkMode ? 'bg-purple-900' : 'bg-purple-100'">
+                                    <h4 class="font-semibold mb-2">自回归生成 (Autoregressive Generation)</h4>
+                                    <p class="mb-3">LLM生成文本的基本方式：</p>
+                                    <ul class="list-disc pl-6 space-y-2">
+                                        <li>从左到右，逐词生成文本</li>
+                                        <li>每一步都基于之前生成的所有内容</li>
+                                        <li>可以理解为"给定前面的词，下一个词最可能是什么？"</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="p-4 bg-opacity-20 rounded-lg" :class="darkMode ? 'bg-amber-900' : 'bg-amber-100'">
+                                    <h4 class="font-semibold mb-2">解码策略 (Decoding Strategies)</h4>
+                                    <p class="mb-3">控制文本生成的方法：</p>
+                                    <ul class="list-disc pl-6 space-y-2">
+                                        <li><strong>贪心搜索</strong>：每步选择概率最高的词</li>
+                                        <li><strong>束搜索</strong>：维护多个可能序列，选择整体概率最高的</li>
+                                        <li><strong>采样</strong>：随机性采样，控制创造性与多样性</li>
+                                        <li><strong>温度参数</strong>：控制分布的平滑程度，影响文本多样性</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-6">
+                        <h3 class="text-xl font-semibold mb-4">Transformer架构示意图</h3>
+                        <div class="flex justify-center py-4">
+                            <!-- Simplified Transformer Architecture SVG -->
+                            <svg width="500" height="400" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg" class="transformer-diagram">
+                                <!-- Input Embeddings -->
+                                <rect x="100" y="350" width="300" height="30" rx="5" fill="#90cdf4" stroke="#2c5282" />
+                                <text x="250" y="370" text-anchor="middle" fill="#2a4365" font-size="14">输入嵌入 (Input Embeddings)</text>
+                                
+                                <!-- Multi-Head Attention -->
+                                <rect x="130" y="270" width="240" height="40" rx="5" fill="#9ae6b4" stroke="#276749" />
+                                <text x="250" y="295" text-anchor="middle" fill="#22543d" font-size="14">多头注意力 (Multi-Head Attention)</text>
+                                
+                                <!-- Add & Norm -->
+                                <rect x="160" y="220" width="180" height="30" rx="5" fill="#fbd38d" stroke="#975a16" />
+                                <text x="250" y="240" text-anchor="middle" fill="#744210" font-size="12">残差连接与层归一化</text>
+                                
+                                <!-- Feed Forward -->
+                                <rect x="130" y="160" width="240" height="40" rx="5" fill="#9ae6b4" stroke="#276749" />
+                                <text x="250" y="185" text-anchor="middle" fill="#22543d" font-size="14">前馈神经网络 (Feed Forward)</text>
+                                
+                                <!-- Add & Norm -->
+                                <rect x="160" y="110" width="180" height="30" rx="5" fill="#fbd38d" stroke="#975a16" />
+                                <text x="250" y="130" text-anchor="middle" fill="#744210" font-size="12">残差连接与层归一化</text>
+                                
+                                <!-- Output -->
+                                <rect x="130" y="50" width="240" height="40" rx="5" fill="#fc8181" stroke="#9b2c2c" />
+                                <text x="250" y="75" text-anchor="middle" fill="white" font-size="14">输出层 (Output Layer)</text>
+                                
+                                <!-- Arrows -->
+                                <line x1="250" y1="350" x2="250" y2="310" stroke="#4a5568" stroke-width="2" />
+                                <line x1="250" y1="270" x2="250" y2="250" stroke="#4a5568" stroke-width="2" />
+                                <line x1="250" y1="220" x2="250" y2="200" stroke="#4a5568" stroke-width="2" />
+                                <line x1="250" y1="160" x2="250" y2="140" stroke="#4a5568" stroke-width="2" />
+                                <line x1="250" y1="110" x2="250" y2="90" stroke="#4a5568" stroke-width="2" />
+                                
+                                <!-- Self-attention arrows -->
+                                <path d="M130 290 Q 80 290 80 320 Q 80 350 100 350" fill="none" stroke="#7b341e" stroke-width="2" stroke-dasharray="5,5" />
+                                <path d="M370 290 Q 420 290 420 320 Q 420 350 400 350" fill="none" stroke="#7b341e" stroke-width="2" stroke-dasharray="5,5" />
+                                
+                                <!-- Residual connections -->
+                                <path d="M400 330 Q 450 330 450 230 Q 450 130 340 130" fill="none" stroke="#6b46c1" stroke-width="2" stroke-dasharray="5,5" />
+                                <path d="M340 185 Q 420 185 420 240 Q 420 295 340 295" fill="none" stroke="#6b46c1" stroke-width="2" stroke-dasharray="5,5" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: LLM 的关键技术 -->
+        <section id="slide-7" class="min-h-screen py-16 slide">
+            <div class="card max-w-6xl mx-auto p-8 slide-content">
+                <h2 class="text-3xl font-bold mb-6 gradient-heading">LLM 的关键技术</h2>
+                <div class="section-divider"></div>
+                
+                <div class="mt-10 grid md:grid-cols-3 gap-6">
+                    <div class="glow">
+                        <div class="card p-6 feature-card">
+                            <h3 class="text-xl font-semibold mb-4">大规模计算并行化</h3>
+                            <div class="space-y-4">
+                                <div class="p-3 rounded-lg bg-opacity-20" :class="darkMode ? 'bg-blue-900' : 'bg-blue-100'">
+                                    <h4 class="font-semibold mb-1">模型并行 (Model Parallelism)</h4>
+                                    <p class="text-sm">将模型拆分到多个设备上训练，每个设备处理模型的不同部分，解决单设备内存不足问题</p>
+                                </div>
+                                
+                                <div class="p-3 rounded-lg bg-opacity-20" :class="darkMode ? 'bg-green-900' : 'bg-green-100'">
+                                    <h4 class="font-semibold mb-1">数据并行 (Data Parallelism)</h4>
+                                    <p class="text-sm">多设备同时处理不同批次数据，梯度同步更新，提高吞吐量和训练速度</p>
+                                </div>
+                                
+                                <div class="p-3 rounded-lg bg-opacity-20" :class="darkMode ? 'bg-purple-900' : 'bg-purple-100'">
+                                    <h4 class="font-semibold mb-1">张量并行 (Tensor Parallelism)</h4>
+                                    <p class="text-sm">将单个操作(如矩阵乘法)拆分到多设备，处理超大尺寸参数矩阵</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glow">
+                        <div class="card p-6 feature-card">
+                            <h3 class="text-xl font-semibold mb-4">训练优化技术</h3>
+                            <div class="space-y-4">
+                                <div class="p-3 rounded-lg bg-opacity-20" :class="darkMode ? 'bg-blue-900' : 'bg-blue-100'">
+                                    <h4 class="font-semibold mb-1">混合精度训练</h4>
+                                    <p class="text-sm">使用FP16和FP32混合精度，减少内存占用、提高训练速度，同时保持数值稳定性</p>
+                                </div>
+                                
+                                <div class="p-3 rounded-lg bg-opacity-20" :class="darkMode ? 'bg-green-900' : 'bg-green-100'">
+                                    <h4 class="font-semibold mb-1">梯度累积</h4>
+                                    <p class="text-sm">累积多个小批量的梯度再更新，模拟更大批量训练效果，克服内存限制</p>
+                                </div>
+                                
+                                <div class="p-3 rounded-lg bg-opacity-20" :class="darkMode ? 'bg-purple-900' : 'bg-purple-100'">
+                                    <h4 class="font-semibold mb-1">优化器技术</h4>
+                                    <p class="text-sm">AdamW等优化器添加权重衰减，改善泛化能力；学习率预热和衰减调度提高训练稳定性</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glow">
+                        <div class="card p-6 feature-card">
+                            <h3 class="text-xl font-semibold mb-4">提示工程与部署</h3>
+                            <div class="space-y-4">
+                                <div class="p-3 rounded-lg bg-opacity-20" :class="darkMode ? 'bg-blue-900' : 'bg-blue-100'">
+                                    <h4 class="font-semibold mb-1">提示工程 (Prompt Engineering)</h4>
+                                    <p class="text-sm">设计有效提示引导LLM生成期望输出，包括指令设计、示例选择、上下文构建等技术</p>
+                                </div>
+                                
+                                <div class="p-3 rounded-lg bg-opacity-20" :class="darkMode ? 'bg-green-900' : 'bg-green-100'">
+                                    <h4 class="font-semibold mb-1">模型压缩</h4>
+                                    <p class="text-sm">量化、蒸馏、剪枝等技术减小模型体积，降低推理成本，适应资源受限场景</p>
+                                </div>
+                                
+                                <div class="p-3 rounded-lg bg-opacity-20" :class="darkMode ? 'bg-purple-900' : 'bg-purple-100'">
+                                    <h4 class="font-semibold mb-1">低秩适应 (LoRA)</h4>
+                                    <p class="text-sm">使用低秩矩阵来高效微调大模型，显著减少可训练参数数量，降低资源需求</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-10">
+                    <div class="card p-6">
+                        <h3 class="text-xl font-semibold mb-6">计算资源与模型规模增长</h3>
+                        <div class="h-64">
+                            <canvas id="modelSizeChart"></canvas>
+                        </div>
+                        <div class="mt-4 text-sm text-center opacity-70">
+                            注：图表展示了近年来LLM参数规模的指数级增长趋势，表明计算技术的进步是LLM发展的关键推动力
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-10">
+                    <div class="card p-6">
+                        <h3 class="text-xl font-semibold mb-4">提示工程示例</h3>
+                        <div class="grid md:grid-cols-2 gap-4 mt-6">
+                            <div class="p-4 rounded-lg bg-opacity-20" :class="darkMode ? 'bg-gray-800' : 'bg-gray-100'">
+                                <h4 class="font-semibold mb-2">基础提示</h4>
+                                <p class="text-sm py-2 px-3 rounded bg-opacity-30" :class="darkMode ? 'bg-gray-700' : 'bg-gray-200'">
+                                    "总结这篇文章的主要内容。"
+                                </p>
+                            </div>
+                            
+                            <div class="p-4 rounded-lg bg-opacity-20" :class="darkMode ? 'bg-gray-800' : 'bg-gray-100'">
+                                <h4 class="font-semibold mb-2">优化提示</h4>
+                                <p class="text-sm py-2 px-3 rounded bg-opacity-30" :class="darkMode ? 'bg-gray-700' : 'bg-gray-200'">
+                                    "你是一位专业的科技记者。请用300字左右总结这篇关于人工智能的文章，突出最重要的科学发现和潜在影响，使用简明易懂的语言面向大众读者。"
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: LLM 的研究热点 -->
+        <section id="slide-8" class="min-h-screen py-16 slide">
+            <div class="card max-w-6xl mx-auto p-8 slide-content">
+                <h2 class="text-3xl font-bold mb-6 gradient-heading">LLM 的研究热点</h2>
+                <div class="section-divider"></div>
+                
+                <div class="mt-10 grid md:grid-cols-2 gap-8">
+                    <div class="glow">
+                        <div class="card p-6 h-full feature-card">
+                            <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                                更强大的模型架构
+                            </h3>
+                            <p class="mb-4">研究者不断探索更高效、更强大的模型架构，重点关注：</p>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>提高参数利用效率，减少冗余</li>
+                                <li>探索Transformer替代架构，如State Space Models、Mamba等</li>
+                                <li>模块化设计，提高模型可组合性和可解释性</li>
+                                <li>稀疏激活和混合专家模型（MoE），提高计算效率</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="glow">
+                        <div class="card p-6 h-full feature-card">
+                            <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                                </svg>
+                                更长的上下文窗口
+                            </h3>
+                            <p class="mb-4">扩展模型处理长文本的能力，重点研究：</p>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>优化注意力机制，降低计算复杂度（如线性注意力、滑动窗口注意力）</li>
+                                <li>长文本压缩与召回技术，提取关键信息</li>
+                                <li>递归处理机制，处理超长文档</li>
+                                <li>记忆增强技术，保留跨会话信息</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="glow">
+                        <div class="card p-6 h-full feature-card">
+                            <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                多模态学习
+                            </h3>
+                            <p class="mb-4">整合文本、图像、音频等多种模态信息：</p>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>文本-图像模型：理解和生成与文本相关的图像</li>
+                                <li>多模态对齐技术：建立不同模态间的语义联系</li>
+                                <li>多模态推理：跨模态知识迁移和综合推理</li>
+                                <li>多模态生成：根据一种模态生成另一种模态的内容</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="glow">
+                        <div class="card p-6 h-full feature-card">
+                            <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                                </svg>
+                                可控生成
+                            </h3>
+                            <p class="mb-4">提高对LLM输出的控制能力：</p>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>属性控制：控制生成文本的风格、情感、格式等</li>
+                                <li>引导生成：通过增强学习等方法引导模型生成符合特定标准的内容</li>
+                                <li>可编辑生成：修改已生成内容的特定方面</li>
+                                <li>约束解码：在生成过程中强制满足特定规则或限制</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-10 grid md:grid-cols-2 gap-8">
+                    <div class="glow">
+                        <div class="card p-6 h-full feature-card">
+                            <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                </svg>
+                                可解释性研究
+                            </h3>
+                            <p class="mb-4">增强对LLM决策过程的理解：</p>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>注意力可视化：理解模型关注的内容</li>
+                                <li>概念解析：识别激活特定神经元的语言概念</li>
+                                <li>因果追踪：确定输入如何影响输出</li>
+                                <li>机制解释：理解模型内部的信息处理机制</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="glow">
+                        <div class="card p-6 h-full feature-card">
+                            <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                                安全性与伦理
+                            </h3>
+                            <p class="mb-4">解决LLM应用中的安全和伦理挑战：</p>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>对抗性攻击防御：增强模型对恶意输入的鲁棒性</li>
+                                <li>偏见检测与缓解：识别和减少模型输出中的社会偏见</li>
+                                <li>有害内容过滤：防止生成有害或不适当内容</li>
+                                <li>隐私保护：防止模型泄露训练数据中的隐私信息</li>
+                                <li>对齐人类价值观：使模型行为与人类意图和价值观一致</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-10">
+                    <div class="card p-6">
+                        <h3 class="text-xl font-semibold mb-4">跨学科研究方向</h3>
+                        <div class="grid md:grid-cols-3 gap-4 mt-4">
+                            <div class="p-4 rounded-lg bg-opacity-20" :class="darkMode ? 'bg-blue-900' : 'bg-blue-100'">
+                                <h4 class="font-semibold mb-2 text-center">认知科学</h4>
+                                <p class="text-sm">探索LLM与人类语言认知的联系，研究LLM是否以与人类相似的方式处理语言信息</p>
+                            </div>
+                            
+                            <div class="p-4 rounded-lg bg-opacity-20" :class="darkMode ? 'bg-green-900' : 'bg-green-100'">
+                                <h4 class="font-semibold mb-2 text-center">神经科学</h4>
+                                <p class="text-sm">比较LLM与人脑语言处理区域的相似性与差异，探索构建更类脑的语言模型</p>
+                            </div>
+                            
+                            <div class="p-4 rounded-lg bg-opacity-20" :class="darkMode ? 'bg-purple-900' : 'bg-purple-100'">
+                                <h4 class="font-semibold mb-2 text-center">社会学</h4>
+                                <p class="text-sm">研究LLM对社会、文化和人类交流方式的影响，以及如何设计负责任的AI系统</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: LLM 面临的挑战 -->
+        <section id="slide-9" class="min-h-screen py-16 slide">
+            <div class="card max-w-6xl mx-auto p-8 slide-content">
+                <h2 class="text-3xl font-bold mb-6 gradient-heading">LLM 面临的挑战</h2>
+                <div class="section-divider"></div>
+                
+                <div class="mt-10 grid md:grid-cols-3 gap-6">
+                    <div class="glow">
+                        <div class="card p-6 h-full feature-card">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center text-white mr-4" style="background: linear-gradient(135deg, #ff6b6b, #ff8c8c);">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold">计算资源消耗</h3>
+                            </div>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>训练大型模型需要数百GPUs/TPUs，费用高昂</li>
+                                <li>推理部署需要专业硬件，限制普及应用</li>
+                                <li>实时应用中的延迟问题</li>
+                                <li>硬件和软件优化的需求</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="glow">
+                        <div class="card p-6 h-full feature-card">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center text-white mr-4" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold">数据偏见</h3>
+                            </div>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>模型会继承训练数据中的社会偏见</li>
+                                <li>代表性不足的群体或观点被边缘化</li>
+                                <li>西方和英语内容在互联网上占主导地位</li>
+                                <li>干预措施可能引入新的偏见</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="glow">
+                        <div class="card p-6 h-full feature-card">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center text-white mr-4" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold">虚假信息</h3>
+                            </div>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>生成看似真实但实际虚构的内容</li>
+                                <li>"幻觉"问题：生成无事实依据的陈述</li>
+                                <li>缺乏可靠的信息来源引用</li>
+                                <li>可能被用于大规模生成误导性内容</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 grid md:grid-cols-3 gap-6">
+                    <div class="glow">
+                        <div class="card p-6 h-full feature-card">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center text-white mr-4" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold">可解释性差</h3>
+                            </div>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>难以解释模型为什么生成特定回答</li>
+                                <li>难以追踪信息来源</li>
+                                <li>缺乏透明的推理过程</li>
+                                <li>高风险应用中的可解释性需求</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="glow">
+                        <div class="card p-6 h-full feature-card">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center text-white mr-4" style="background: linear-gradient(135deg, #fa709a, #fee140);">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold">伦理问题</h3>
+                            </div>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>自动化产生的社会和就业影响</li>
+                                <li>内容生成的版权和归属问题</li>
+                                <li>对创意行业的潜在影响</li>
+                                <li>知识产权和许可的复杂性</li>
+                                <li>开源vs闭源模型的辩论</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="glow">
+                        <div class="card p-6 h-full feature-card">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center text-white mr-4" style="background: linear-gradient(135deg, #0ba360, #3cba92);">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold">环境影响</h3>
+                            </div>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>训练大模型的巨大能源消耗</li>
+                                <li>数据中心的碳足迹</li>
+                                <li>硬件生产和废弃的环境成本</li>
+                                <li>可持续AI发展的必要性</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-10">
+                    <div class="card p-6">
+                        <h3 class="text-xl font-semibold mb-4">平衡发展与责任</h3>
+                        <p class="mb-4">随着LLM技术的快速发展，我们需要在创新与负责任使用之间取得平衡：</p>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="p-4 rounded-lg bg-opacity-20" :class="darkMode ? 'bg-blue-900' : 'bg-blue-100'">
+                                <h4 class="font-semibold mb-2">技术挑战</h4>
+                                <ul class="list-disc pl-6 space-y-1 text-sm">
+                                    <li>提高效率，降低资源需求</li>
+                                    <li>增强准确性和可靠性</li>
+                                    <li>改进长期规划和推理能力</li>
+                                    <li>增强多语言和跨文化能力</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="p-4 rounded-lg bg-opacity-20" :class="darkMode ? 'bg-green-900' : 'bg-green-100'">
+                                <h4 class="font-semibold mb-2">社会责任</h4>
+                                <ul class="list-disc pl-6 space-y-1 text-sm">
+                                    <li>建立强大的监管框架</li>
+                                    <li>促进技术的公平获取</li>
+                                    <li>增强用户教育和媒体素养</li>
+                                    <li>开发负责任的AI设计准则</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p class="mt-6 text-center italic">
+                            "随着LLM能力的不断提升，我们不仅需要问'我们能做什么'，还需要问'我们应该做什么'"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Author Section -->
+        <section class="py-16">
+            <div class="max-w-4xl mx-auto px-6">
+                <div class="flex flex-col items-center">
+                    <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-4" :class="darkMode ? 'border-gray-700' : 'border-gray-200'">
+                        <!-- Author's avatar - using initials since actual image not provided -->
+                        <div class="w-full h-full flex items-center justify-center text-white text-2xl font-bold bg-gradient-to-br from-primary to-secondary">
+                            陈光
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold mb-2">陈光</h3>
+                    <div class="w-16 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mb-4"></div>
+                    
+                    <div class="flex space-x-4 mb-6">
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    
+                    <div class="text-center text-sm opacity-70">
+                        <p>© 2025 陈光. 保留所有权利。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script>
+        // Initialize the chart when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up the model size growth chart
+            const ctx = document.getElementById('modelSizeChart').getContext('2d');
+            const modelSizeChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+                    datasets: [{
+                        label: '模型参数规模 (十亿)',
+                        data: [0.117, 1.5, 175, 530, 1000, 1760, 3000],
+                        borderColor: '#4f46e5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#4f46e5',
+                        pointRadius: 5,
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '模型参数 (十亿)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString();
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '年份'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `参数数量: ${context.raw.toLocaleString()} 十亿`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Update chart colors when theme changes
+            document.addEventListener('alpine:initializing', () => {
+                window.Alpine.effect(() => {
+                    const darkMode = window.Alpine.store('darkMode');
+                    if (modelSizeChart) {
+                        modelSizeChart.options.scales.x.grid.color = darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+                        modelSizeChart.options.scales.y.grid.color = darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+                        modelSizeChart.options.scales.x.ticks.color = darkMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+                        modelSizeChart.options.scales.y.ticks.color = darkMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+                        modelSizeChart.update();
+                    }
+                });
+            });
+        });
+        
+        // Intersection Observer for fade-in animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fadeIn');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                root: null,
+                threshold: 0.1
+            });
+            
+            document.querySelectorAll('.card, .glow, h2, h3').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

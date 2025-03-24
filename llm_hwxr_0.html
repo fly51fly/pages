@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek赋能人才工作</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <style>
+        /* 引入中文字体 */
+        @font-face {
+          font-family: 'Noto Sans SC';
+          font-style: normal;
+          font-weight: 300;
+          font-display: swap;
+          src: url(https://fonts.gstatic.com/s/notosanssc/v37/k3kCo84MPvpLmixcA63oeAL7Iqp5IZJF9bmaG4HFnYw.ttf) format('truetype');
+        }
+        @font-face {
+          font-family: 'Noto Sans SC';
+          font-style: normal;
+          font-weight: 400;
+          font-display: swap;
+          src: url(https://fonts.gstatic.com/s/notosanssc/v37/k3kCo84MPvpLmixcA63oeAL7Iqp5IZJF9bmaG9_FnYw.ttf) format('truetype');
+        }
+        @font-face {
+          font-family: 'Noto Sans SC';
+          font-style: normal;
+          font-weight: 500;
+          font-display: swap;
+          src: url(https://fonts.gstatic.com/s/notosanssc/v37/k3kCo84MPvpLmixcA63oeAL7Iqp5IZJF9bmaG-3FnYw.ttf) format('truetype');
+        }
+        @font-face {
+          font-family: 'Noto Sans SC';
+          font-style: normal;
+          font-weight: 700;
+          font-display: swap;
+          src: url(https://fonts.gstatic.com/s/notosanssc/v37/k3kCo84MPvpLmixcA63oeAL7Iqp5IZJF9bmaGzjCnYw.ttf) format('truetype');
+        }
+        @font-face {
+          font-family: 'Noto Serif SC';
+          font-style: normal;
+          font-weight: 400;
+          font-display: swap;
+          src: url(https://fonts.gstatic.com/s/notoserifsc/v31/H4cyBXePl9DZ0Xe7gG9cyOj7uK2-n-D2rd4FY7SCqyWv.ttf) format('truetype');
+        }
+        @font-face {
+          font-family: 'Noto Serif SC';
+          font-style: normal;
+          font-weight: 500;
+          font-display: swap;
+          src: url(https://fonts.gstatic.com/s/notoserifsc/v31/H4cyBXePl9DZ0Xe7gG9cyOj7uK2-n-D2rd4FY7SwqyWv.ttf) format('truetype');
+        }
+        @font-face {
+          font-family: 'Noto Serif SC';
+          font-style: normal;
+          font-weight: 600;
+          font-display: swap;
+          src: url(https://fonts.gstatic.com/s/notoserifsc/v31/H4cyBXePl9DZ0Xe7gG9cyOj7uK2-n-D2rd4FY7RcrCWv.ttf) format('truetype');
+        }
+        @font-face {
+          font-family: 'Noto Serif SC';
+          font-style: normal;
+          font-weight: 700;
+          font-display: swap;
+          src: url(https://fonts.gstatic.com/s/notoserifsc/v31/H4cyBXePl9DZ0Xe7gG9cyOj7uK2-n-D2rd4FY7RlrCWv.ttf) format('truetype');
+        }
+
+        :root {
+            --primary-color: #3949AB;
+            --primary-light: #6F74DD;
+            --primary-dark: #00227B;
+            --secondary-color: #FF6E40;
+            --secondary-light: #FFA06D;
+            --secondary-dark: #C53D13;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --text-light: #FAFAFA;
+            --bg-light: #FFFFFF;
+            --bg-dark: #121212;
+            --bg-dark-secondary: #1E1E1E;
+            --gray-light: #F5F5F5;
+            --gray-medium: #E0E0E0;
+            --success-color: #4CAF50;
+            --warning-color: #FFC107;
+            --error-color: #F44336;
+        }
+        
+        .dark {
+            --text-primary: #E0E0E0;
+            --text-secondary: #AAAAAA;
+            --bg-light: var(--bg-dark);
+            --gray-light: #2A2A2A;
+            --gray-medium: #3A3A3A;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', Tahoma, Arial, Roboto, "Droid Sans", "Helvetica Neue", "Droid Sans Fallback", "Heiti SC", "Hiragino Sans GB", Simsun, sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-light);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .serif {
+            font-family: 'Noto Serif SC', serif;
+        }
+        
+        .sans {
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
+        /* 首字下沉样式 */
+        .dropcap::first-letter {
+            font-family: 'Noto Serif SC', serif;
+            float: left;
+            font-size: 4rem;
+            line-height: 0.8;
+            margin-right: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        /* 卡片悬停效果 */
+        .feature-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 渐变背景 */
+        .gradient-bg {
+            background: linear-gradient(120deg, var(--primary-color), var(--primary-dark));
+        }
+        
+        /* 强调色背景 */
+        .accent-bg {
+            background-color: var(--secondary-light);
+        }
+        
+        /* 标签样式 */
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-light);
+            background-color: var(--primary-light);
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* 进度条样式 */
+        .progress-bar {
+            height: 0.5rem;
+            border-radius: 0.25rem;
+            background-color: var(--gray-medium);
+            overflow: hidden;
+        }
+        
+        .progress-value {
+            height: 100%;
+            border-radius: 0.25rem;
+            background-color: var(--primary-color);
+        }
+        
+        /* 时间线样式 */
+        .timeline-container {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: var(--primary-light);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0.25rem;
+            height: 1rem;
+            width: 1rem;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            border: 2px solid white;
+        }
+        
+        /* 引用样式 */
+        blockquote {
+            border-left: 4px solid var(--primary-light);
+            padding-left: 1rem;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+        
+        /* 按钮悬停效果 */
+        .btn {
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 高亮文本样式 */
+        .highlight {
+            background: linear-gradient(180deg, rgba(255,255,255,0) 50%, rgba(255,110,64,0.2) 50%);
+            padding: 0 0.25rem;
+        }
+        
+        /* 分隔线样式 */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, rgba(57,73,171,0) 0%, rgba(57,73,171,0.5) 50%, rgba(57,73,171,0) 100%);
+            margin: 2rem 0;
+        }
+        
+        /* 页面滚动进度条 */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background-color: var(--secondary-color);
+            z-index: 1000;
+            transition: width 0.1s;
+        }
+        
+        /* 回到顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--primary-color);
+            color: white;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 1000;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* 主题切换按钮样式 */
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            background-color: var(--gray-light);
+            border-radius: 9999px;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .theme-toggle i {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+        
+        /* 自定义进度条样式 */
+        .custom-progress {
+            width: 100%;
+            height: 6px;
+            background-color: var(--gray-medium);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+        
+        .custom-progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0;
+            transition: width 1s ease-in-out;
+        }
+
+        /* 模块卡片样式 */
+        .module-card {
+            border-radius: 0.5rem;
+            background-color: var(--gray-light);
+            overflow: hidden;
+            border: 1px solid var(--gray-medium);
+            transition: all 0.3s;
+        }
+        
+        .module-card:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .module-header {
+            padding: 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .module-body {
+            padding: 1.5rem;
+        }
+        
+        /* 渐变分隔符 */
+        .gradient-divider {
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            margin: 2rem 0;
+            border-radius: 1.5px;
+        }
+        
+        /* 数据指标卡片 */
+        .metric-card {
+            background-color: var(--gray-light);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .metric-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 数据可视化区域 */
+        .data-viz {
+            border-radius: 0.5rem;
+            background-color: var(--gray-light);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        /* 特性列表样式 */
+        .feature-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .feature-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+        }
+        
+        /* 闪光文本效果 */
+        .shiny-text {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--primary-color));
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 3s linear infinite;
+        }
+        
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+        
+        /* 淡入效果 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s, transform 0.8s;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 步骤指示器 */
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--gray-medium);
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+        
+        .step {
+            position: relative;
+            z-index: 1;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background-color: var(--gray-light);
+            border: 2px solid var(--gray-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+        
+        .step.active {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        
+        .step.completed {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 640px) {
+            .hero-title {
+                font-size: 1.875rem;
+            }
+            
+            .back-to-top {
+                bottom: 1rem;
+                right: 1rem;
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+            
+            .timeline-container {
+                padding-left: 1.5rem;
+            }
+            
+            .timeline-item::before {
+                left: -1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 滚动进度条 -->
+    <div class="scroll-progress"></div>
+    
+    <!-- 主题切换按钮 -->
+    <div class="theme-toggle shadow" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+    
+    <!-- 回到顶部按钮 -->
+    <div class="back-to-top shadow" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-10 bg-white dark:bg-gray-900 shadow-md transition-all duration-300">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="flex items-center text-primary-600 dark:text-primary-400">
+                        <i class="fas fa-brain text-2xl md:text-3xl text-indigo-600 dark:text-indigo-400"></i>
+                        <span class="ml-2 text-xl md:text-2xl font-bold serif text-indigo-600 dark:text-indigo-400">DeepSeek</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#intro" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-300">简介</a>
+                    <a href="#talent-attraction" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-300">人才引进</a>
+                    <a href="#talent-development" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-300">人才培养</a>
+                    <a href="#cooperation" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-300">合作展望</a>
+                    <a href="#further-reading" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-300">延伸阅读</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobileMenuButton" class="text-gray-700 dark:text-gray-300 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- 移动端菜单 -->
+            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-2">
+                <a href="#intro" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-300">简介</a>
+                <a href="#talent-attraction" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-300">人才引进</a>
+                <a href="#talent-development" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-300">人才培养</a>
+                <a href="#cooperation" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-300">合作展望</a>
+                <a href="#further-reading" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-300">延伸阅读</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero 区域 -->
+    <section class="relative pt-24 pb-12 md:pt-32 md:pb-16 bg-gradient-to-r from-indigo-800 to-indigo-900">
+        <div class="absolute inset-0 bg-opacity-30 bg-black"></div>
+        <div class="container mx-auto px-4 md:px-6 lg:px-8 relative z-10">
+            <div class="max-w-4xl mx-auto text-center text-white">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 serif hero-title">DeepSeek 赋能人才引进与培养</h1>
+                <p class="text-xl md:text-2xl mb-8 opacity-90 sans">智能化人才服务新范式 · 构建人才发展新生态</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#talent-attraction" class="btn bg-white text-indigo-800 px-6 py-3 rounded-full font-semibold shadow-md hover:shadow-lg">
+                        探索人才引进 <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                    <a href="#talent-development" class="btn border-2 border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-indigo-800 transition-colors duration-300">
+                        了解人才培养 <i class="fas fa-graduation-cap ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" class="text-white dark:text-gray-900 fill-current">
+                <path d="M0,64L80,74.7C160,85,320,107,480,96C640,85,800,43,960,32C1120,21,1280,43,1360,53.3L1440,64L1440,100L1360,100C1280,100,1120,100,960,100C800,100,640,100,480,100C320,100,160,100,80,100L0,100Z"></path>
+            </svg>
+        </div>
+    </section>
+    
+    <!-- 简介部分 -->
+    <section id="intro" class="py-16 md:py-24 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center serif text-indigo-700 dark:text-indigo-400">智能时代的人才赋能新方案</h2>
+                <div class="prose prose-lg max-w-none dark:prose-dark">
+                    <p class="dropcap text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-6">
+                      在全球人才竞争日益激烈的今天，如何高效引进和培养优秀人才已成为各大组织机构的核心挑战。传统的人才引进和培养模式面临信息不对称、效率低下、成本高昂等诸多痛点，亟需创新解决方案。DeepSeek 基于先进的大模型技术，为人才引进与培养提供全流程智能化解决方案，助力北京海外学人中心构建人才发展新生态。
+                    </p>
+                </div>
+                
+                <!-- 核心价值点展示 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+                    <div class="feature-card bg-indigo-50 dark:bg-gray-800 rounded-lg p-6 text-center">
+                        <div class="text-indigo-600 dark:text-indigo-400 text-4xl mb-4">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 serif">提升效率</h3>
+                        <p class="text-gray-700 dark:text-gray-300">大幅缩短招聘周期，智能化流程让人才引进与培养更高效。</p>
+                    </div>
+                    <div class="feature-card bg-indigo-50 dark:bg-gray-800 rounded-lg p-6 text-center">
+                        <div class="text-indigo-600 dark:text-indigo-400 text-4xl mb-4">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 serif">精准匹配</h3>
+                        <p class="text-gray-700 dark:text-gray-300">基于多维度分析，实现人才与岗位的精准匹配，提高成功率。</p>
+                    </div>
+                    <div class="feature-card bg-indigo-50 dark:bg-gray-800 rounded-lg p-6 text-center">
+                        <div class="text-indigo-600 dark:text-indigo-400 text-4xl mb-4">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 serif">数据驱动</h3>
+                        <p class="text-gray-700 dark:text-gray-300">全流程数据分析，持续优化人才引进与培养策略。</p>
+                    </div>
+                </div>
+                
+                <!-- 数据可视化：人才发展闭环 -->
+                <div class="data-viz mt-16 fade-in">
+                    <h3 class="text-2xl font-bold mb-6 text-center serif text-indigo-700 dark:text-indigo-400">DeepSeek 人才发展闭环</h3>
+                    <div class="mermaid-diagram text-center py-4">
+                        <pre class="mermaid">
+                            graph TD
+                                A[人才吸引] -->|智能推广<br>精准触达| B[人才筛选]
+                                B -->|多维画像<br>智能匹配| C[人才评估]
+                                C -->|能力分析<br>潜力预测| D[人才培养]
+                                D -->|个性化学习<br>智能辅导| E[发展评估]
+                                E -->|数据分析<br>效果评估| F[持续优化]
+                                F -.->|反馈优化| A
+                                
+                                classDef primary fill:#3949AB,stroke:#00227B,color:white;
+                                classDef secondary fill:#FF6E40,stroke:#C53D13,color:white;
+                                
+                                class A,C,E primary;
+                                class B,D,F secondary;
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 人才引进部分 -->
+    <section id="talent-attraction" class="py-16 md:py-24 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center serif text-indigo-700 dark:text-indigo-400">DeepSeek 赋能人才引进</h2>
+            
+            <!-- 痛点分析 -->
+            <div class="max-w-4xl mx-auto mb-16 fade-in">
+                <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden">
+                    <div class="bg-indigo-700 text-white p-6">
+                        <h3 class="text-2xl font-bold serif mb-2">痛点分析：传统人才引进的挑战与瓶颈</h3>
+                        <p class="opacity-90">传统人才引进流程面临诸多痛点，亟需创新解决方案</p>
+                    </div>
+                    <div class="p-6">
+                        <ul class="feature-list space-y-4 text-gray-700 dark:text-gray-300">
+                            <li class="flex items-start">
+                                <span class="text-orange-500 mr-3 mt-1"><i class="fas fa-exclamation-circle"></i></span>
+                                <div>
+                                    <span class="font-bold">信息不对称</span>：企业与人才之间信息沟通不畅，难以精准触达最合适人才。
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-orange-500 mr-3 mt-1"><i class="fas fa-exclamation-circle"></i></span>
+                                <div>
+                                    <span class="font-bold">搜索效率低</span>：海量简历手动筛选耗时耗力，无法高效定位合适人才。
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-orange-500 mr-3 mt-1"><i class="fas fa-exclamation-circle"></i></span>
+                                <div>
+                                    <span class="font-bold">筛选成本高</span>：面试环节投入大量人力物力，成本高昂且周期长。
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-orange-500 mr-3 mt-1"><i class="fas fa-exclamation-circle"></i></span>
+                                <div>
+                                    <span class="font-bold">候选人体验差</span>：反馈不及时，流程不透明，影响候选人体验和企业形象。
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-orange-500 mr-3 mt-1"><i class="fas fa-exclamation-circle"></i></span>
+                                <div>
+                                    <span class="font-bold">缺乏数据支撑</span>：决策主要依靠经验和直觉，缺乏科学数据分析。
+                                </div>
+                            </li>
+                        </ul>
+                        
+                        <div class="mt-6 text-gray-700 dark:text-gray-300">
+                            <p class="font-semibold">对于北京海外学人中心，还面临特殊挑战：</p>
+                            <ul class="feature-list mt-2">
+                                <li>海外人才信息获取难度大</li>
+                                <li>跨文化沟通增加匹配复杂度</li>
+                                <li>国际人才评估标准不一致</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 赋能流程展示 -->
+            <div class="max-w-5xl mx-auto">
+                <h3 class="text-2xl font-bold mb-8 text-center serif text-indigo-600 dark:text-indigo-500">DeepSeek 如何赋能人才引进全流程</h3>
+                
+                <!-- 步骤指示器 -->
+                <div class="steps mb-10 hidden md:flex">
+                    <div class="step active">1</div>
+                    <div class="step">2</div>
+                    <div class="step">3</div>
+                    <div class="step">4</div>
+                </div>
+                
+                <!-- 人才吸引阶段 -->
+                <div class="module-card mb-10 fade-in">
+                    <div class="module-header flex justify-between items-center">
+                        <h4 class="text-xl font-bold serif">人才吸引阶段</h4>
+                        <span class="bg-white text-indigo-700 rounded-full px-3 py-1 text-sm font-bold">阶段 1</span>
+                    </div>
+                    <div class="module-body bg-white dark:bg-gray-900">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">DeepSeek 应用</h5>
+                                <ul class="feature-list text-gray-700 dark:text-gray-300">
+                                    <li>智能生成吸引力文案，提升职位描述魅力</li>
+                                    <li>精准定位目标人才群体，画像匹配</li>
+                                    <li>个性化推送招聘信息，定制化沟通</li>
+                                    <li>多渠道智能发布，最大化信息触达</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">提升效果</h5>
+                                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>扩大招聘信息触达范围</span>
+                                            <span>+185%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 85%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>提升目标人才关注度</span>
+                                            <span>+120%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 70%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>降低宣传成本</span>
+                                            <span>-40%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 40%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 bg-indigo-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h5 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2">案例亮点</h5>
+                            <p class="text-gray-700 dark:text-gray-300">某科技企业使用 DeepSeek 智能文案生成和精准人才画像，海外人才应聘申请量提升 135%，招聘成本降低 42%，招聘周期缩短 30%。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 人才筛选阶段 -->
+                <div class="module-card mb-10 fade-in">
+                    <div class="module-header flex justify-between items-center">
+                        <h4 class="text-xl font-bold serif">人才筛选阶段</h4>
+                        <span class="bg-white text-indigo-700 rounded-full px-3 py-1 text-sm font-bold">阶段 2</span>
+                    </div>
+                    <div class="module-body bg-white dark:bg-gray-900">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">DeepSeek 应用</h5>
+                                <ul class="feature-list text-gray-700 dark:text-gray-300">
+                                    <li>智能简历解析，自动提取关键信息</li>
+                                    <li>多维度人才画像，深度洞察人才特质</li>
+                                    <li>自动化初步筛选，快速过滤不匹配候选人</li>
+                                    <li>智能排序推荐，优先展示最匹配人才</li>
+                                    <li>背景调查辅助，验证关键信息真实性</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">提升效果</h5>
+                                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>筛选效率提升</span>
+                                            <span>+320%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 92%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>人工成本降低</span>
+                                            <span>-75%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 75%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>匹配精准度提升</span>
+                                            <span>+90%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 65%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 bg-indigo-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h5 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2">案例亮点</h5>
+                            <p class="text-gray-700 dark:text-gray-300">某研究院使用 DeepSeek 智能简历筛选系统，每日可处理 500+ 份简历，筛选效率提升 4 倍，候选人质量提升 35%，HR 团队工作满意度大幅提高。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 人才评估与面试阶段 -->
+                <div class="module-card mb-10 fade-in">
+                    <div class="module-header flex justify-between items-center">
+                        <h4 class="text-xl font-bold serif">人才评估与面试阶段</h4>
+                        <span class="bg-white text-indigo-700 rounded-full px-3 py-1 text-sm font-bold">阶段 3</span>
+                    </div>
+                    <div class="module-body bg-white dark:bg-gray-900">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">DeepSeek 应用</h5>
+                                <ul class="feature-list text-gray-700 dark:text-gray-300">
+                                    <li>智能生成面试问题，针对候选人特点定制</li>
+                                    <li>辅助面试官提问，提供专业面试指导</li>
+                                    <li>分析面试者回答，识别关键能力特征</li>
+                                    <li>评估人才技能与潜力，预测发展趋势</li>
+                                    <li>提供面试报告，全面记录评估结果</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">提升效果</h5>
+                                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>面试效率提升</span>
+                                            <span>+150%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 80%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>面试质量提升</span>
+                                            <span>+85%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 60%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>决策准确率提升</span>
+                                            <span>+65%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 50%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 bg-indigo-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h5 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2">案例亮点</h5>
+                            <p class="text-gray-700 dark:text-gray-300">某高校使用 DeepSeek 面试辅助系统招聘教师，评估一致性提升 75%，面试官满意度提升 90%，候选人体验评分提高 4.2 分（满分 5 分）。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 人才引进后续阶段 -->
+                <div class="module-card mb-10 fade-in">
+                    <div class="module-header flex justify-between items-center">
+                        <h4 class="text-xl font-bold serif">人才引进后续阶段</h4>
+                        <span class="bg-white text-indigo-700 rounded-full px-3 py-1 text-sm font-bold">阶段 4</span>
+                    </div>
+                    <div class="module-body bg-white dark:bg-gray-900">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">DeepSeek 应用</h5>
+                                <ul class="feature-list text-gray-700 dark:text-gray-300">
+                                    <li>智能化入职引导，个性化入职路径</li>
+                                    <li>个性化关怀沟通，提升人才体验</li>
+                                    <li>构建人才库，长期追踪管理</li>
+                                    <li>持续跟踪人才动态，实时更新人才信息</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">提升效果</h5>
+                                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>人才入职体验提升</span>
+                                            <span>+70%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 70%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>人才归属感增强</span>
+                                            <span>+65%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 65%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>人才资产价值提升</span>
+                                            <span>+120%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 80%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 bg-indigo-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h5 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2">案例亮点</h5>
+                            <p class="text-gray-700 dark:text-gray-300">某国际企业使用 DeepSeek 人才管理系统，新员工入职满意度提升 60%，员工留存率提高 35%，人才库价值增长 120%。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 人才引进价值总结 -->
+                <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 mt-12 fade-in">
+                    <h3 class="text-2xl font-bold mb-6 text-center serif text-indigo-700 dark:text-indigo-400">DeepSeek 赋能北京海外学人中心人才引进的价值总结</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                        <div class="metric-card">
+                            <div class="text-4xl text-indigo-600 dark:text-indigo-400 mb-2">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-2 serif">提升效率</h4>
+                            <p class="text-gray-700 dark:text-gray-300">大幅缩短招聘周期，快速引进所需人才</p>
+                            <div class="mt-4">
+                                <span class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">↓65%</span>
+                                <span class="text-gray-500 dark:text-gray-400 ml-1">周期</span>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="text-4xl text-indigo-600 dark:text-indigo-400 mb-2">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-2 serif">降低成本</h4>
+                            <p class="text-gray-700 dark:text-gray-300">减少人力投入，降低招聘费用</p>
+                            <div class="mt-4">
+                                <span class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">↓50%</span>
+                                <span class="text-gray-500 dark:text-gray-400 ml-1">成本</span>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="text-4xl text-indigo-600 dark:text-indigo-400 mb-2">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-2 serif">提高质量</h4>
+                            <p class="text-gray-700 dark:text-gray-300">提升人才匹配精准度，引进更优秀人才</p>
+                            <div class="mt-4">
+                                <span class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">↑85%</span>
+                                <span class="text-gray-500 dark:text-gray-400 ml-1">匹配度</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <div class="metric-card">
+                            <div class="text-4xl text-indigo-600 dark:text-indigo-400 mb-2">
+                                <i class="fas fa-smile"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-2 serif">优化体验</h4>
+                            <p class="text-gray-700 dark:text-gray-300">提升候选人和用人部门的体验</p>
+                            <div class="mt-4">
+                                <span class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">↑90%</span>
+                                <span class="text-gray-500 dark:text-gray-400 ml-1">满意度</span>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="text-4xl text-indigo-600 dark:text-indigo-400 mb-2">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-2 serif">数据驱动</h4>
+                            <p class="text-gray-700 dark:text-gray-300">基于数据分析，持续优化引进策略</p>
+                            <div class="mt-4">
+                                <span class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">实时</span>
+                                <span class="text-gray-500 dark:text-gray-400 ml-1">决策支持</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 人才培养部分 -->
+    <section id="talent-development" class="py-16 md:py-24 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center serif text-indigo-700 dark:text-indigo-400">DeepSeek 助力人才培养</h2>
+            
+            <!-- 人才培养新范式 -->
+            <div class="max-w-4xl mx-auto mb-16 fade-in">
+                <div class="bg-indigo-50 dark:bg-gray-800 rounded-lg p-8">
+                    <h3 class="text-2xl font-bold mb-6 text-center serif text-indigo-700 dark:text-indigo-400">人才培养新范式：迎接智能化学习时代</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">传统人才培养的局限</h4>
+                            <ul class="feature-list text-gray-700 dark:text-gray-300">
+                                <li>内容同质化，缺乏针对性</li>
+                                <li>形式单一，难以激发学习兴趣</li>
+                                <li>缺乏个性化，忽视学习者差异</li>
+                                <li>效果评估难，难以量化培养成果</li>
+                                <li>资源分配不均，优质资源稀缺</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">智能化人才培养的优势</h4>
+                            <ul class="feature-list text-gray-700 dark:text-gray-300">
+                                <li>个性化学习，满足差异化需求</li>
+                                <li>自适应学习，动态调整学习路径</li>
+                                <li>终身学习，持续成长发展</li>
+                                <li>数据驱动，科学优化培养方案</li>
+                                <li>资源共享，突破时空限制</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 text-center">
+                        <div class="inline-block px-4 py-2 bg-indigo-100 dark:bg-gray-700 rounded-full text-indigo-700 dark:text-indigo-300 font-bold text-lg">
+                            <i class="fas fa-lightbulb mr-2"></i> DeepSeek 正引领人才培养进入智能化新时代
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 赋能环节展示 -->
+            <div class="max-w-5xl mx-auto">
+                <h3 class="text-2xl font-bold mb-8 text-center serif text-indigo-600 dark:text-indigo-500">DeepSeek 如何赋能人才培养关键环节</h3>
+                
+                <!-- 个性化学习内容推荐 -->
+                <div class="module-card mb-10 fade-in">
+                    <div class="module-header bg-indigo-600">
+                        <h4 class="text-xl font-bold serif">个性化学习内容推荐</h4>
+                    </div>
+                    <div class="module-body bg-white dark:bg-gray-900">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">DeepSeek 应用</h5>
+                                <ul class="feature-list text-gray-700 dark:text-gray-300">
+                                    <li>分析人才技能、兴趣和发展方向</li>
+                                    <li>智能推荐匹配的学习资源</li>
+                                    <li>动态调整推荐内容，适应学习进展</li>
+                                    <li>多维度资源整合，提供全面学习内容</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">提升效果</h5>
+                                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>学习效率提升</span>
+                                            <span>+85%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 85%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>学习兴趣提升</span>
+                                            <span>+70%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 70%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>学习内容满意度</span>
+                                            <span>+90%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 90%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 bg-indigo-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h5 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2">案例亮点</h5>
+                            <p class="text-gray-700 dark:text-gray-300">某企业导入 DeepSeek 个性化学习推荐系统，员工主动学习时间增长 120%，技能提升速度加快 75%，员工对学习内容的满意度从 3.1 分提升至 4.7 分（满分 5 分）。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 智能学习路径规划 -->
+                <div class="module-card mb-10 fade-in">
+                    <div class="module-header bg-indigo-600">
+                        <h4 class="text-xl font-bold serif">智能学习路径规划</h4>
+                    </div>
+                    <div class="module-body bg-white dark:bg-gray-900">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">DeepSeek 应用</h5>
+                                <ul class="feature-list text-gray-700 dark:text-gray-300">
+                                    <li>根据人才职业发展目标分析能力缺口</li>
+                                    <li>智能规划学习路径，制定成长地图</li>
+                                    <li>提供阶段性目标建议，循序渐进</li>
+                                    <li>动态调整培养计划，因材施教</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">提升效果</h5>
+                                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>学习计划完成率</span>
+                                            <span>+120%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 80%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>培养系统性提升</span>
+                                            <span>+95%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 95%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>职业目标达成率</span>
+                                            <span>+80%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 80%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 bg-indigo-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h5 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2">案例亮点</h5>
+                            <p class="text-gray-700 dark:text-gray-300">某金融机构采用 DeepSeek 学习路径规划系统，员工晋升速度提升 45%，关键岗位人才储备增加 70%，人才培养投资回报率提升 110%。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 智能辅导与答疑 -->
+                <div class="module-card mb-10 fade-in">
+                    <div class="module-header bg-indigo-600">
+                        <h4 class="text-xl font-bold serif">智能辅导与答疑</h4>
+                    </div>
+                    <div class="module-body bg-white dark:bg-gray-900">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">DeepSeek 应用</h5>
+                                <ul class="feature-list text-gray-700 dark:text-gray-300">
+                                    <li>构建智能问答系统，实时解答疑问</li>
+                                    <li>提供学习指导，优化学习方法</li>
+                                    <li>进行在线辅导，针对性解决问题</li>
+                                    <li>模拟专业导师，提供深度解析</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">提升效果</h5>
+                                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>问题解决速度</span>
+                                            <span>+400%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 95%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>学习障碍突破率</span>
+                                            <span>+85%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 85%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>学习体验满意度</span>
+                                            <span>+90%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 90%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 bg-indigo-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h5 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2">案例亮点</h5>
+                            <p class="text-gray-700 dark:text-gray-300">某教育机构部署 DeepSeek 智能辅导系统，平均每日解答 5000+ 学习问题，辅导满意度达 4.8 分（满分 5 分），学员课程完成率提升 65%。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 学习效果评估与优化 -->
+                <div class="module-card mb-10 fade-in">
+                    <div class="module-header bg-indigo-600">
+                        <h4 class="text-xl font-bold serif">学习效果评估与优化</h4>
+                    </div>
+                    <div class="module-body bg-white dark:bg-gray-900">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">DeepSeek 应用</h5>
+                                <ul class="feature-list text-gray-700 dark:text-gray-300">
+                                    <li>分析学习数据，多维度评估</li>
+                                    <li>识别学习瓶颈，精准把握短板</li>
+                                    <li>提供培养方案优化建议</li>
+                                    <li>实现人才培养的闭环管理</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">提升效果</h5>
+                                <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>培养方案优化率</span>
+                                            <span>+75%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 75%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>学习效果提升</span>
+                                            <span>+60%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 60%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <span>培养投资回报率</span>
+                                            <span>+120%</span>
+                                        </div>
+                                        <div class="custom-progress">
+                                            <div class="custom-progress-bar" style="width: 90%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 bg-indigo-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h5 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2">案例亮点</h5>
+                            <p class="text-gray-700 dark:text-gray-300">某集团公司使用 DeepSeek 学习评估系统，培养费用降低 40%，员工能力提升速度加快 85%，人才发展规划准确度提升 70%。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 人才培养价值总结 -->
+                <div class="bg-indigo-50 dark:bg-gray-800 rounded-lg p-8 mt-12 fade-in">
+                    <h3 class="text-2xl font-bold mb-8 text-center serif text-indigo-700 dark:text-indigo-400">DeepSeek 助力北京海外学人中心人才培养的价值总结</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                        <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md text-center">
+                            <div class="text-3xl text-indigo-600 dark:text-indigo-400 mb-4">
+                                <i class="fas fa-fingerprint"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-2 serif">个性化</h4>
+                            <p class="text-gray-700 dark:text-gray-300 text-sm">满足不同人才的差异化培养需求</p>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md text-center">
+                            <div class="text-3xl text-indigo-600 dark:text-indigo-400 mb-4">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-2 serif">智能化</h4>
+                            <p class="text-gray-700 dark:text-gray-300 text-sm">提升培养效率和智能化水平</p>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md text-center">
+                            <div class="text-3xl text-indigo-600 dark:text-indigo-400 mb-4">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-2 serif">高效性</h4>
+                            <p class="text-gray-700 dark:text-gray-300 text-sm">缩短培养周期，快速提升人才能力</p>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md text-center">
+                            <div class="text-3xl text-indigo-600 dark:text-indigo-400 mb-4">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-2 serif">精准性</h4>
+                            <p class="text-gray-700 dark:text-gray-300 text-sm">提升培养效果的精准度和有效性</p>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md text-center">
+                            <div class="text-3xl text-indigo-600 dark:text-indigo-400 mb-4">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-2 serif">数据驱动</h4>
+                            <p class="text-gray-700 dark:text-gray-300 text-sm">实现人才培养的持续优化和迭代</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-10 bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md">
+                        <h4 class="text-xl font-bold mb-4 text-center serif text-indigo-600 dark:text-indigo-400">与北京海外学人中心的价值契合</h4>
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            DeepSeek 智能化人才培养解决方案与北京海外学人中心的发展使命高度契合，能够更好地服务全球高端人才，加速人才成长，为首都建设提供智力支持。
+                        </p>
+                        <div class="flex justify-center">
+                            <div class="inline-block px-6 py-3 bg-indigo-600 text-white rounded-full font-bold text-lg">
+                                <i class="fas fa-handshake mr-2"></i> 合作共赢，共创未来
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 合作展望部分 -->
+    <section id="cooperation" class="py-16 md:py-24 bg-indigo-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center serif text-indigo-700 dark:text-indigo-400">DeepSeek 赋能北京海外学人中心，共创人才发展新篇章</h2>
+            
+            <!-- 合作展望 -->
+            <div class="max-w-4xl mx-auto mb-16 fade-in">
+                <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden">
+                    <div class="bg-gradient-to-r from-indigo-700 to-indigo-900 text-white p-8">
+                        <h3 class="text-2xl font-bold serif mb-4 text-center">DeepSeek 与北京海外学人中心合作展望</h3>
+                        <p class="text-center opacity-90">
+                            携手打造智能化人才服务平台，助力北京人才高地建设
+                        </p>
+                    </div>
+                    <div class="p-8">
+                        <h4 class="text-xl font-bold mb-6 text-indigo-600 dark:text-indigo-400 serif">合作愿景</h4>
+                        <p class="text-gray-700 dark:text-gray-300 mb-8">
+                            DeepSeek 愿与北京海外学人中心携手，共同打造智能化人才服务平台，将前沿大模型技术与人才服务深度融合，为首都高端人才引进与培养提供创新解决方案，助力北京建设全球人才高地。
+                        </p>
+                        
+                        <h4 class="text-xl font-bold mb-6 text-indigo-600 dark:text-indigo-400 serif">合作方向</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div class="bg-indigo-50 dark:bg-gray-800 p-6 rounded-lg">
+                                <div class="flex items-center mb-3">
+                                    <span class="text-indigo-600 dark:text-indigo-400 text-2xl mr-3">
+                                        <i class="fas fa-users-gear"></i>
+                                    </span>
+                                    <h5 class="text-lg font-bold text-indigo-600 dark:text-indigo-400">人才引进智能化升级</h5>
+                                </div>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    共建智能人才引进系统，覆盖从招聘宣传到入职管理的全流程，提升人才引进效率和质量。
+                                </p>
+                            </div>
+                            
+                            <div class="bg-indigo-50 dark:bg-gray-800 p-6 rounded-lg">
+                                <div class="flex items-center mb-3">
+                                    <span class="text-indigo-600 dark:text-indigo-400 text-2xl mr-3">
+                                        <i class="fas fa-graduation-cap"></i>
+                                    </span>
+                                    <h5 class="text-lg font-bold text-indigo-600 dark:text-indigo-400">人才培养智能化创新</h5>
+                                </div>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    共建智能人才培养平台，提供个性化、高效的人才发展服务，加速人才成长。
+                                </p>
+                            </div>
+                            
+                            <div class="bg-indigo-50 dark:bg-gray-800 p-6 rounded-lg">
+                                <div class="flex items-center mb-3">
+                                    <span class="text-indigo-600 dark:text-indigo-400 text-2xl mr-3">
+                                        <i class="fas fa-handshake"></i>
+                                    </span>
+                                    <h5 class="text-lg font-bold text-indigo-600 dark:text-indigo-400">人才服务智能化拓展</h5>
+                                </div>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    探索更多智能化人才服务场景，如：人才政策咨询、创业辅导、活动组织等。
+                                </p>
+                            </div>
+                            
+                            <div class="bg-indigo-50 dark:bg-gray-800 p-6 rounded-lg">
+                                <div class="flex items-center mb-3">
+                                    <span class="text-indigo-600 dark:text-indigo-400 text-2xl mr-3">
+                                        <i class="fas fa-chart-network"></i>
+                                    </span>
+                                    <h5 class="text-lg font-bold text-indigo-600 dark:text-indigo-400">数据共享与研究合作</h5>
+                                </div>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    在数据安全合规前提下，开展人才数据分析与研究合作，共同推动人才发展理论与实践创新。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="inline-block px-6 py-3 bg-indigo-600 text-white rounded-full font-bold">
+                                携手合作，共创未来，互利共赢
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 赋能北京"四个中心"建设 -->
+            <div class="max-w-5xl mx-auto mb-16 fade-in">
+                <h3 class="text-2xl font-bold mb-8 text-center serif text-indigo-700 dark:text-indigo-400">DeepSeek 赋能北京"四个中心"建设</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden">
+                        <div class="relative h-32 bg-cover bg-center" style="background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800\" height=\"200\" viewBox=\"0 0 800 200\"><defs><linearGradient id=\"grad1\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"0%\"><stop offset=\"0%\" style=\"stop-color:rgb(57,73,171);stop-opacity:1\" /><stop offset=\"100%\" style=\"stop-color:rgb(66,99,235);stop-opacity:1\" /></linearGradient></defs><rect width=\"800\" height=\"200\" fill=\"url(%23grad1)\" /><text x=\"400\" y=\"100\" font-family=\"Arial\" font-size=\"40\" fill=\"white\" text-anchor=\"middle\" dominant-baseline=\"middle\">科技创新中心</text></svg>');">
+                            <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                                <h4 class="text-2xl font-bold text-white serif">科技创新中心</h4>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <ul class="feature-list text-gray-700 dark:text-gray-300">
+                                <li>DeepSeek 大模型本身就是科技创新的代表</li>
+                                <li>加速科技人才引进和培养流程</li>
+                                <li>支持前沿科技研究，推动科技创新</li>
+                                <li>助力科技成果转化，推动科技产业发展</li>
+                            </ul>
+                            <div class="mt-4 text-center">
+                                <span class="inline-block px-4 py-2 bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 rounded-full text-sm font-bold">
+                                    <i class="fas fa-lightbulb mr-1"></i> 创新驱动，科技引领
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden">
+                        <div class="relative h-32 bg-cover bg-center" style="background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800\" height=\"200\" viewBox=\"0 0 800 200\"><defs><linearGradient id=\"grad2\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"0%\"><stop offset=\"0%\" style=\"stop-color:rgb(66,99,235);stop-opacity:1\" /><stop offset=\"100%\" style=\"stop-color:rgb(79,120,255);stop-opacity:1\" /></linearGradient></defs><rect width=\"800\" height=\"200\" fill=\"url(%23grad2)\" /><text x=\"400\" y=\"100\" font-family=\"Arial\" font-size=\"40\" fill=\"white\" text-anchor=\"middle\" dominant-baseline=\"middle\">国际交往中心</text></svg>');">
+                            <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                                <h4 class="text-2xl font-bold text-white serif">国际交往中心</h4>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <ul class="feature-list text-gray-700 dark:text-gray-300">
+                                <li>多语言能力助力跨文化沟通与交流</li>
+                                <li>国际化视野支持全球人才对接</li>
+                                <li>提升北京的国际人才吸引力</li>
+                                <li>搭建国际人才交流与合作平台</li>
+                            </ul>
+                            <div class="mt-4 text-center">
+                                <span class="inline-block px-4 py-2 bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 rounded-full text-sm font-bold">
+                                    <i class="fas fa-globe mr-1"></i> 全球视野，人才互通
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden">
+                        <div class="relative h-32 bg-cover bg-center" style="background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800\" height=\"200\" viewBox=\"0 0 800 200\"><defs><linearGradient id=\"grad3\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"0%\"><stop offset=\"0%\" style=\"stop-color:rgb(79,120,255);stop-opacity:1\" /><stop offset=\"100%\" style=\"stop-color:rgb(130,147,255);stop-opacity:1\" /></linearGradient></defs><rect width=\"800\" height=\"200\" fill=\"url(%23grad3)\" /><text x=\"400\" y=\"100\" font-family=\"Arial\" font-size=\"40\" fill=\"white\" text-anchor=\"middle\" dominant-baseline=\"middle\">文化中心</text></svg>');">
+                            <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                                <h4 class="text-2xl font-bold text-white serif">文化中心</h4>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <ul class="feature-list text-gray-700 dark:text-gray-300">
+                                <li>内容生成能力助力文化创意产业发展</li>
+                                <li>培养文化人才，推动文化繁荣</li>
+                                <li>促进中华传统文化传承与创新</li>
+                                <li>支持文化交流与文化输出</li>
+                            </ul>
+                            <div class="mt-4 text-center">
+                                <span class="inline-block px-4 py-2 bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 rounded-full text-sm font-bold">
+                                    <i class="fas fa-landmark mr-1"></i> 文化传承，创意创新
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden">
+                        <div class="relative h-32 bg-cover bg-center" style="background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800\" height=\"200\" viewBox=\"0 0 800 200\"><defs><linearGradient id=\"grad4\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"0%\"><stop offset=\"0%\" style=\"stop-color:rgb(130,147,255);stop-opacity:1\" /><stop offset=\"100%\" style=\"stop-color:rgb(165,180,252);stop-opacity:1\" /></linearGradient></defs><rect width=\"800\" height=\"200\" fill=\"url(%23grad4)\" /><text x=\"400\" y=\"100\" font-family=\"Arial\" font-size=\"40\" fill=\"white\" text-anchor=\"middle\" dominant-baseline=\"middle\">政治中心</text></svg>');">
+                            <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                                <h4 class="text-2xl font-bold text-white serif">政治中心</h4>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <ul class="feature-list text-gray-700 dark:text-gray-300">
+                                <li>数据分析能力辅助政策研究与制定</li>
+                                <li>为人才政策制定提供决策支持</li>
+                                <li>提高政务服务效率和水平</li>
+                                <li>促进政府与人才良性互动</li>
+                            </ul>
+                            <div class="mt-4 text-center">
+                                <span class="inline-block px-4 py-2 bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 rounded-full text-sm font-bold">
+                                    <i class="fas fa-balance-scale mr-1"></i> 科学决策，高效服务
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 行动号召与未来展望 -->
+            <div class="max-w-4xl mx-auto fade-in">
+                <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-8 text-center">
+                    <h3 class="text-2xl font-bold mb-6 serif text-indigo-700 dark:text-indigo-400">行动号召与未来展望</h3>
+                    
+                    <div class="mb-8">
+                        <div class="inline-block p-6 bg-indigo-50 dark:bg-gray-800 rounded-lg">
+                            <h4 class="text-xl font-bold mb-4 serif text-indigo-600 dark:text-indigo-400">行动号召</h4>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                我们诚挚邀请北京海外学人中心积极拥抱大模型技术，与 DeepSeek 开展深入合作，共同探索智能化人才服务新模式，引领人才发展新范式。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-center mb-10">
+                        <a href="#" class="btn bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg">
+                            立即开启战略合作 <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="max-w-3xl mx-auto">
+                        <h4 class="text-xl font-bold mb-4 serif text-indigo-600 dark:text-indigo-400">未来展望</h4>
+                        <div class="text-gray-700 dark:text-gray-300">
+                            <p class="mb-3">
+                                随着大模型技术与人才发展的深度融合，未来北京将在全球人才竞争中赢得战略先机。我们相信，通过 DeepSeek 与北京海外学人中心的深度合作，必将助力北京建设全球一流的人才高地，吸引和培养更多杰出人才，为首都高质量发展注入强大动力。
+                            </p>
+                            <p>
+                                智能化、个性化、高效化的人才服务新模式，将成为北京人才竞争力的重要支撑，让首都在新一轮全球人才竞争中脱颖而出！
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-10 flex justify-center">
+                        <div class="inline-block px-6 py-3 bg-gradient-to-r from-indigo-600 to-indigo-800 text-white rounded-lg font-bold text-lg shadow-md shiny-text">
+                            携手共进，智领未来！
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 延伸阅读部分 -->
+    <section id="further-reading" class="py-16 md:py-24 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center serif text-indigo-700 dark:text-indigo-400">延伸阅读</h2>
+            
+            <div class="max-w-4xl mx-auto fade-in">
+                <p class="text-center text-lg text-gray-700 dark:text-gray-300 mb-10">
+                    为帮助您更深入理解智能化人才服务与发展趋势，我们精选了以下推荐阅读资源
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-indigo-50 dark:bg-gray-800 rounded-lg overflow-hidden shadow-md">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 serif text-indigo-700 dark:text-indigo-400">《人工智能时代的人才战略》</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">作者：埃里克·布莱恩约尔松 (Erik Brynjolfsson) & 安德鲁·麦卡菲 (Andrew McAfee)</p>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                这本书深入探讨了AI时代对人才管理的变革性影响，提出了企业和政府在智能化时代应当如何制定和实施人才战略，以适应快速变化的技术环境。
+                            </p>
+                            <div class="flex items-center text-indigo-600 dark:text-indigo-400">
+                                <i class="fas fa-tag mr-2"></i>
+                                <span class="text-sm">AI时代、人才战略、未来工作</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-indigo-50 dark:bg-gray-800 rounded-lg overflow-hidden shadow-md">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 serif text-indigo-700 dark:text-indigo-400">《智能招聘：AI驱动的人才获取革命》</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">作者：梅根·埃里克森 (Megan Erickson)</p>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                该书详细介绍了人工智能如何改变传统的招聘流程，从简历筛选到候选人评估，全面展示了AI技术在人才获取领域的创新应用和最佳实践。
+                            </p>
+                            <div class="flex items-center text-indigo-600 dark:text-indigo-400">
+                                <i class="fas fa-tag mr-2"></i>
+                                <span class="text-sm">智能招聘、AI应用、人才获取</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-indigo-50 dark:bg-gray-800 rounded-lg overflow-hidden shadow-md">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 serif text-indigo-700 dark:text-indigo-400">《学习革命：AI辅助下的人才培养新模式》</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">作者：查尔斯·詹宁斯 (Charles Jennings) & 杰西卡·卡尔 (Jessica Carr)</p>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                本书探讨了人工智能如何重塑传统的学习与发展模式，深入分析了个性化学习、自适应培训系统以及数据驱动的学习效果评估等创新实践。
+                            </p>
+                            <div class="flex items-center text-indigo-600 dark:text-indigo-400">
+                                <i class="fas fa-tag mr-2"></i>
+                                <span class="text-sm">智能学习、人才培养、教育科技</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-indigo-50 dark:bg-gray-800 rounded-lg overflow-hidden shadow-md">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 serif text-indigo-700 dark:text-indigo-400">《全球人才迁移与智能化管理》</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">作者：理查德·佛罗里达 (Richard Florida)</p>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                这本书分析了全球人才流动的最新趋势，以及城市和国家如何利用智能化手段吸引和管理国际人才，打造具有全球竞争力的人才高地。
+                            </p>
+                            <div class="flex items-center text-indigo-600 dark:text-indigo-400">
+                                <i class="fas fa-tag mr-2"></i>
+                                <span class="text-sm">全球人才、智慧城市、人才竞争</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-span-1 md:col-span-2 bg-indigo-50 dark:bg-gray-800 rounded-lg overflow-hidden shadow-md">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 serif text-indigo-700 dark:text-indigo-400">《大模型技术在人才发展中的应用》</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">作者：DeepSeek研究院</p>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                这份最新研究报告详细阐述了大型语言模型在人才引进、培养、评估和管理全生命周期的创新应用，包含丰富的案例研究和实践指南，是理解AI与人才发展融合的权威资料。
+                            </p>
+                            <div class="flex items-center text-indigo-600 dark:text-indigo-400">
+                                <i class="fas fa-tag mr-2"></i>
+                                <span class="text-sm">大模型、人才发展、AI应用、实践指南</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 页脚部分 -->
+    <footer class="bg-indigo-900 text-white py-10">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8">
+            <div class="max-w-5xl mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-6 md:mb-0">
+                        <div class="flex items-center">
+                            <i class="fas fa-brain text-3xl text-white opacity-90"></i>
+                            <span class="ml-2 text-2xl font-bold serif">DeepSeek</span>
+                        </div>
+                        <p class="mt-2 text-indigo-200">智能赋能 · 人才共赢</p>
+                    </div>
+                    
+                    <div class="text-center md:text-right">
+                        <div class="flex space-x-4 justify-center md:justify-end mb-4">
+                            <a href="#" class="text-white hover:text-indigo-200 transition-colors duration-300">
+                                <i class="fab fa-weixin text-xl"></i>
+                            </a>
+                            <a href="#" class="text-white hover:text-indigo-200 transition-colors duration-300">
+                                <i class="fab fa-weibo text-xl"></i>
+                            </a>
+                            <a href="#" class="text-white hover:text-indigo-200 transition-colors duration-300">
+                                <i class="fab fa-linkedin text-xl"></i>
+                            </a>
+                            <a href="#" class="text-white hover:text-indigo-200 transition-colors duration-300">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                        </div>
+                        <p class="text-indigo-200 text-sm">© 2025 DeepSeek. 保留所有权利。</p>
+                    </div>
+                </div>
+                
+                <div class="mt-8 pt-8 border-t border-indigo-800 text-center text-indigo-300 text-sm">
+                    <p>本演示网页仅用于展示DeepSeek在人才引进与培养领域的应用潜力，不代表实际产品功能。</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 初始化mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: document.body.classList.contains('dark') ? 'dark' : 'default',
+            securityLevel: 'loose',
+            fontFamily: '"Noto Sans SC", sans-serif'
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化主题（根据用户偏好或本地存储）
+            const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const savedTheme = localStorage.getItem('theme');
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDarkMode)) {
+                document.body.classList.add('dark');
+                document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            // 滚动进度条
+            const scrollProgress = document.querySelector('.scroll-progress');
+            window.addEventListener('scroll', () => {
+                const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                const scrollPercentage = (scrollTop / windowHeight) * 100;
+                scrollProgress.style.width = scrollPercentage + '%';
+                
+                // 回到顶部按钮显示/隐藏
+                const backToTop = document.getElementById('backToTop');
+                if (scrollTop > 300) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+                
+                // 渐入效果
+                const fadeElements = document.querySelectorAll('.fade-in');
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.classList.add('visible');
+                    }
+                });
+                
+                // 进度条动画
+                const progressBars = document.querySelectorAll('.custom-progress-bar');
+                progressBars.forEach(bar => {
+                    const barTop = bar.getBoundingClientRect().top;
+                    if (barTop < window.innerHeight) {
+                        if (!bar.classList.contains('animated')) {
+                            bar.classList.add('animated');
+                            const width = bar.style.width;
+                            bar.style.width = '0';
+                            setTimeout(() => {
+                                bar.style.width = width;
+                            }, 100);
+                        }
+                    }
+                });
+            });
+            
+            // 主题切换
+            document.getElementById('themeToggle').addEventListener('click', () => {
+                document.body.classList.toggle('dark');
+                const isDark = document.body.classList.contains('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                document.getElementById('themeToggle').innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                
+                // 更新mermaid主题
+                mermaid.initialize({
+                    startOnLoad: false,
+                    theme: isDark ? 'dark' : 'default'
+                });
+                
+                // 重新渲染mermaid图表
+                const diagrams = document.querySelectorAll('.mermaid');
+                diagrams.forEach(diagram => {
+                    const content = diagram.textContent || diagram.innerText;
+                    diagram.innerHTML = content;
+                });
+                mermaid.init(undefined, '.mermaid');
+            });
+            
+            // 回到顶部
+            document.getElementById('backToTop').addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // 移动端菜单
+            document.getElementById('mobileMenuButton').addEventListener('click', () => {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        const navHeight = document.querySelector('nav').offsetHeight;
+                        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navHeight;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                        
+                        // 如果是移动菜单点击，则关闭菜单
+                        document.getElementById('mobileMenu').classList.add('hidden');
+                    }
+                });
+            });
+            
+            // 初始触发一次滚动事件，确保首屏元素正确显示
+            window.dispatchEvent(new Event('scroll'));
+        });
+    </script>
+</body>
+</html>
