@@ -2207,6 +2207,482 @@
                 </div>
             </div>
         </section>
+        
+        <!-- 常见问答区域 -->
+        <section class="faq-section py-16 bg-neutral-50 dark:bg-neutral-900/50">
+            <div class="container-custom">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-2xl font-bold mb-8 text-center">DeepSeek 常见问答</h2>
+                    
+                    <div class="space-y-4">
+                        <!-- 问题1 -->
+                        <div x-data="{ open: false }" class="card">
+                            <div @click="open = !open" class="p-4 flex justify-between items-center cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800/50 rounded-lg">
+                                <h3 class="font-semibold">1. 如何使用DeepSeek制作可视化图表（甘特图、流程图等）</h3>
+                                <svg :class="{'rotate-180': open}" class="w-5 h-5 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                            <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="p-4 pt-0 text-sm">
+                                <div class="p-3 bg-white dark:bg-neutral-800 rounded-lg">
+                                    <p class="mb-2 font-medium">示例提示词：</p>
+                                    <ul class="space-y-2 text-neutral-700 dark:text-neutral-300">
+                                        <li class="p-2 bg-neutral-50 dark:bg-neutral-900/50 rounded">"帮我绘制一个项目流程的甘特图，以Mermaid语法输出"</li>
+                                        <li class="p-2 bg-neutral-50 dark:bg-neutral-900/50 rounded">"请用Mermaid语法绘制'项目执行流程'流程图，包含开始、决策节点、操作步骤和结束标志"</li>
+                                        <li class="p-2 bg-neutral-50 dark:bg-neutral-900/50 rounded">"将《非暴力沟通》的内容用Mermaid树状图输出"</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 问题2 -->
+                        <div x-data="{ open: false }" class="card">
+                            <div @click="open = !open" class="p-4 flex justify-between items-center cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800/50 rounded-lg">
+                                <h3 class="font-semibold">2. 如何使用DeepSeek进行各种调研（需求调研、满意度调研等）</h3>
+                                <svg :class="{'rotate-180': open}" class="w-5 h-5 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                            <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="p-4 pt-0 text-sm">
+                                <div class="p-3 bg-white dark:bg-neutral-800 rounded-lg">
+                                    <p class="mb-2 font-medium">示例提示词：</p>
+                                    <ul class="space-y-2 text-neutral-700 dark:text-neutral-300">
+                                        <li class="p-2 bg-neutral-50 dark:bg-neutral-900/50 rounded">竞品用户评价分析："请提取这些用户反馈的核心痛点，并归类分析"</li>
+                                        <li class="p-2 bg-neutral-50 dark:bg-neutral-900/50 rounded">未来需求预测："根据以下用户反馈，预测未来6个月内他们可能的新需求"</li>
+                                        <li class="p-2 bg-neutral-50 dark:bg-neutral-900/50 rounded">问卷问题优化："请帮我优化这道问卷题目，使其更容易得到深入回答"</li>
+                                        <li class="p-2 bg-neutral-50 dark:bg-neutral-900/50 rounded">问卷开放题归类："请对这些回答进行高频关键词统计与分类"</li>
+                                        <li class="p-2 bg-neutral-50 dark:bg-neutral-900/50 rounded">竞品战略分析："请分析{公司A}、{公司B}和{公司C}在{细分市场}的竞争策略差异，包括产品定位、目标用户、营销方式和创新点。并预测未来6个月可能的战略调整。"</li>
+                                        <li class="p-2 bg-neutral-50 dark:bg-neutral-900/50 rounded">用户画像生成："请基于以下用户评论，归纳典型用户画像，包括年龄、职业、使用场景、核心诉求等。"</li>
+                                        <li class="p-2 bg-neutral-50 dark:bg-neutral-900/50 rounded">消费者洞察挖掘："请基于近期市场数据，分析{产品类别}的核心用户群体在购买决策过程中最看重哪些因素？这些因素的重要性排序如何？"</li>
+                                        <li class="p-2 bg-neutral-50 dark:bg-neutral-900/50 rounded">问卷内容构思："帮我生成关于医院病房护理服务满意度调查的问题，从护理及时性、专业度、态度等方面考虑。"</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 问题3 -->
+                        <div x-data="{ open: false }" class="card">
+                            <div @click="open = !open" class="p-4 flex justify-between items-center cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800/50 rounded-lg">
+                                <h3 class="font-semibold">3. 行政办公人员如何利用DeepSeek实现人机高效协作，提质增效</h3>
+                                <svg :class="{'rotate-180': open}" class="w-5 h-5 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                            <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="p-4 pt-0 text-sm">
+                                <div class="p-3 bg-white dark:bg-neutral-800 rounded-lg space-y-3">
+                                    <div>
+                                        <p class="font-medium mb-1">(1) 智能文档处理</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>公文核校与起草：用DeepSeek自动检测公文中的格式错误、内容偏差和逻辑漏洞，并提供修改建议。</li>
+                                            <li>会议纪要生成：用DeepSeek将会议录音自动转化为结构化纪要，提取关键决议和待办事项。</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(2) 数据分析与可视化</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>智能数据分析：用DeepSeek快速处理大量数据，识别异常波动，并生成趋势图表和分析报告。</li>
+                                            <li>数据可视化：结合Excel或VBA脚本，DeepSeek可以自动生成动态可视化报告。</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(3) 会议与日程管理</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>智能会议助手：用DeepSeek自动生成会议纪要，并根据讨论结果生成任务清单和行动计划。</li>
+                                            <li>日程管理：用DeepSeek智能安排会议时间，优化资源配置，提升日程管理效率。</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(4) 政策解读与知识管理</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>政策解读：用DeepSeek对复杂政策进行多维度解读，生成定制化的办事指南。</li>
+                                            <li>知识管理：通过构建知识图谱，用DeepSeek将分散的知识点关联起来，形成结构化知识网络。</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(5) 自动化办公流程</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>流程自动化：用飞书、扣子等工作流工具，基于DeepSeek驱动自动化任务。</li>
+                                            <li>智能任务分配：根据任务类型和紧急程度，用DeepSeek智能调度和分配任务。</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(6) PPT与报告生成</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>智能PPT制作：用DeepSeek快速生成PPT大纲，结合专业工具完成初稿。</li>
+                                            <li>报告摘要生成：根据数据或文档内容，用DeepSeek自动生成简洁的报告摘要。</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 问题4 -->
+                        <div x-data="{ open: false }" class="card">
+                            <div @click="open = !open" class="p-4 flex justify-between items-center cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800/50 rounded-lg">
+                                <h3 class="font-semibold">4. 请举出利用AI进行数据分析的案例</h3>
+                                <svg :class="{'rotate-180': open}" class="w-5 h-5 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                            <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="p-4 pt-0 text-sm">
+                                <div class="p-3 bg-white dark:bg-neutral-800 rounded-lg">
+                                    <p class="mb-2">AI数据分析应用领域：</p>
+                                    <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                        <li>数据预处理：自动清洗数据、处理缺失值、标准化数据</li>
+                                        <li>特征提取与选择：识别关键特征、降维处理、特征工程</li>
+                                        <li>数据分析与预测：趋势分析、异常检测、预测建模</li>
+                                        <li>数据可视化：自动生成图表、交互式仪表盘、数据故事化呈现</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 问题5 -->
+                        <div x-data="{ open: false }" class="card">
+                            <div @click="open = !open" class="p-4 flex justify-between items-center cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800/50 rounded-lg">
+                                <h3 class="font-semibold">5. 如何利用AI撰写学术论文</h3>
+                                <svg :class="{'rotate-180': open}" class="w-5 h-5 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                            <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="p-4 pt-0 text-sm">
+                                <div class="p-3 bg-white dark:bg-neutral-800 rounded-lg space-y-3">
+                                    <div>
+                                        <p class="font-medium mb-1">(1) 思路启迪与选题确定</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"我是[XX专业]学生，想研究[XX领域]，请推荐5个创新且可行的论文选题，要求结合近3年研究热点，并附上每个选题的研究意义和可能的创新点。"</li>
+                                            <li>"请基于[某学科领域]的最新研究进展，结合近五年在[顶级期刊/重要学术会议]发表的论文，帮助我确定一个具有创新性和学术价值的研究选题。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(2) 大纲罗列与框架构建</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请生成一篇关于'XXX主题'的论文大纲，包含以下部分：【研究背景与意义、文献综述、研究方法（定量/定性）、数据分析与结果、讨论与建议】要求每个部分详细列出子标题，并附上每个子标题的核心内容概述。"</li>
+                                            <li>"请根据我的研究选题[论文题目]，为我设计一份详细的论文大纲，要求包含以下内容：各章节标题，并附简要说明；每章的主要研究内容和关键论点。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(3) 内容填充与初稿撰写</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请根据以下大纲扩写'研究背景与意义'部分，要求结合最新研究趋势，阐述研究的重要性和创新点：【粘贴大纲内容】"</li>
+                                            <li>"请根据以下大纲扩写'研究方法'部分，要求详细说明研究设计、样本选择、数据收集方法和数据分析步骤：【粘贴大纲内容】"</li>
+                                            <li>"请根据以下大纲扩写'数据分析与结果'部分，要求结合假设和实际数据，详细描述分析过程和结果：【粘贴大纲内容】"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(4) 语言润色与优化</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请将以下段落改为学术化表达，要求语言严谨、逻辑清晰，并引用3篇相关领域的核心文献：[粘贴AI生成内容]"</li>
+                                            <li>"请将以下段落改为适合发表在[XX期刊]的风格，要求语言简洁、逻辑严密，并引用该期刊近3年的相关文献：[粘贴AI生成内容]"</li>
+                                            <li>"请用同义词替换、句式重组、增减过渡句的方式改写以下段落，保持原意不变并确保语言流畅：[粘贴高重复率内容]"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(5) 参考文献管理</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请按照APA/MLA/Chicago格式指南，检查并修正我的参考文献列表。"</li>
+                                            <li>"请根据[某学科]的学术论文写作规范，调整参考文献的格式，确保所有引用符合标准。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(6) 最终校对与导出</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请检查以下论文的格式是否符合[某期刊]的要求，包括字体、字号、行距、页边距等。"</li>
+                                            <li>"请为我的论文生成一份摘要，要求简明扼要，涵盖研究背景、方法、主要发现及其意义。"</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 问题6 -->
+                        <div x-data="{ open: false }" class="card">
+                            <div @click="open = !open" class="p-4 flex justify-between items-center cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800/50 rounded-lg">
+                                <h3 class="font-semibold">6. 在PPT、公文报告撰写、论文撰写方面的应用</h3>
+                                <svg :class="{'rotate-180': open}" class="w-5 h-5 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                            <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="p-4 pt-0 text-sm">
+                                <div class="p-3 bg-white dark:bg-neutral-800 rounded-lg space-y-4">
+                                    <h4 class="font-medium text-primary-600 dark:text-primary-400">PPT:</h4>
+                                    <div>
+                                        <p class="font-medium mb-1">(1) 明确需求与目标</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"我需要制作一份关于[XX主题]的PPT，目标受众是[上级领导/客户/同事]，核心内容包括[背景、现状、问题、解决方案]，字数控制在15页左右，语言风格正式且简洁。"</li>
+                                            <li>"生成一份关于[XX项目]的总结PPT，重点突出[已完成任务、待完成任务、遇到的问题及解决方案]，并引用相关数据支撑，格式符合商务规范。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(2) 框架设计与内容填充</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请为[XX主题]的PPT设计一个结构清晰的框架，包含引言、主体（现状、问题、建议）和结论，并为每个部分提供简要内容概述。"</li>
+                                            <li>"生成一份关于[XX工作]的总结PPT，结构包括[现状分析、突出问题、对策建议]，并引用2024年相关数据，字数控制在1500字以内。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(3) 数据引用与案例分析</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请将以下数据转化为生动、激励性的口语化表述，并用于PPT的主体部分：[粘贴数据]。"</li>
+                                            <li>"在PPT中引用[XX案例]，突出其在[XX领域]的创新性和行业影响力，并分析其对政策落实的启示。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(4) 语言优化与风格调整</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请将以下段落改为正式商务语言，确保简洁明了，符合PPT的规范：[粘贴段落]。"</li>
+                                            <li>"调整PPT的语言风格，使其更适合[严谨型/亲和型/权威型]领导的口吻，并增加互动语句和鼓励性词汇。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(5) 格式检查与最终润色</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请检查以下PPT是否符合《党政机关公文格式》要求，包括字体、字号、行距、页边距等，并进行必要的修改。"</li>
+                                            <li>"对PPT进行最终润色，确保语法、标点和逻辑通顺，并补充具体案例和数据以增强说服力。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(6) 具体PPT类型示例</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">通知类：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"假设我是[XX单位]的[XX职务]，请你帮我起草一份关于[XX会议]的通知，需包含[时间、地点、人物]，语言简洁凝练，符合PPT格式。"</li>
+                                        </ul>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1 mt-2">述职报告类：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请为[XX职务]撰写一份[年度/季度]述职报告PPT，内容包括[履职情况、工作成效、存在问题及反思、下一步工作计划]，字数控制在2000字左右。"</li>
+                                        </ul>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1 mt-2">调研报告类：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"生成一份关于[XX问题]的调研报告PPT，结构包含[现状分析、突出问题、对策建议]，并引用相关数据和典型案例，字数控制在1500字以内。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <h4 class="font-medium text-primary-600 dark:text-primary-400 mt-6">公文报告：</h4>
+                                    <div>
+                                        <p class="font-medium mb-1">(1) 明确需求与目标</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请帮我生成一份关于[XX主题]的政府工作报告，目标受众是[上级领导/基层干部/公众]，核心内容包括[背景、成效、问题、下一步计划]，字数控制在2000字左右，语言风格正式且简洁。"</li>
+                                            <li>"我需要一份关于[XX项目]的总结报告，重点突出[已完成任务、待完成任务、遇到的问题及解决方案]，并引用相关数据支撑，格式符合公文规范。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(2) 框架设计与内容填充</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请为[XX主题]的政府工作报告设计一个结构清晰的框架，包含引言、主体（成效、问题、建议）和结论，并为每个部分提供简要内容概述。"</li>
+                                            <li>"生成一份关于[XX工作]的总结报告，结构包括[现状分析、突出问题、对策建议]，并引用2023年相关数据，字数控制在1500字以内。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(3) 数据引用与案例分析</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请将以下数据转化为生动、激励性的口语化表述，并用于报告的主体部分：[粘贴数据]。"</li>
+                                            <li>"在报告中引用[XX案例]，突出其在[XX领域]的创新性和行业影响力，并分析其对政策落实的启示。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(4) 语言优化与风格调整</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请将以下段落改为正式公文语言，确保简洁明了，符合政府公文的规范：[粘贴段落]。"</li>
+                                            <li>"调整报告的语言风格，使其更适合[严谨型/亲和型/权威型]领导的口吻，并增加互动语句和鼓励性词汇。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(5) 格式检查与最终润色</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请检查以下报告是否符合《党政机关公文格式》要求，包括字体、字号、行距、页边距等，并进行必要的修改。"</li>
+                                            <li>"对报告进行最终润色，确保语法、标点和逻辑通顺，并补充具体案例和数据以增强说服力。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(6) 具体公文类型示例</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">通知类：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"假设我是[XX单位]的[XX职务]，请你帮我起草一份关于[XX会议]的通知，需包含[时间、地点、人物]，语言简洁凝练，符合公文格式。"</li>
+                                        </ul>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1 mt-2">述职报告类：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请为[XX职务]撰写一份[年度/季度]述职报告，内容包括[履职情况、工作成效、存在问题及反思、下一步工作计划]，字数控制在2000字左右。"</li>
+                                        </ul>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1 mt-2">调研报告类：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"生成一份关于[XX问题]的调研报告，结构包含[现状分析、突出问题、对策建议]，并引用相关数据和典型案例，字数控制在1500字以内。"</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 问题7 -->
+                        <div x-data="{ open: false }" class="card">
+                            <div @click="open = !open" class="p-4 flex justify-between items-center cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800/50 rounded-lg">
+                                <h3 class="font-semibold">7. 如何利用其多模态数据处理功能，结合历史招聘数据优化筛选模型，减少人工筛选时间</h3>
+                                <svg :class="{'rotate-180': open}" class="w-5 h-5 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                            <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="p-4 pt-0 text-sm">
+                                <div class="p-3 bg-white dark:bg-neutral-800 rounded-lg space-y-3">
+                                    <div>
+                                        <p class="font-medium mb-1">(1) 数据预处理</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"请对以下历史招聘数据进行清洗，去除重复、错误或不完整的数据，并生成一份清洗后的数据集：[粘贴数据]。"</li>
+                                            <li>"将历史招聘数据中的'工作经验'字段统一为'年'，并标准化'薪资范围'字段，生成标准化后的数据集。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(2) 特征提取与选择</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"从历史招聘数据中提取关键特征，包括'教育背景'、'技能标签'、'项目经验'等，并生成特征重要性排序。"</li>
+                                            <li>"请根据历史招聘数据，构建人才画像，提取与岗位需求高度相关的特征，如'技术栈'、'管理经验'等。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(3) 模型训练与优化</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"基于历史招聘数据，训练一个简历筛选模型，要求使用随机森林算法，并输出模型准确率和特征重要性。"</li>
+                                            <li>"请优化现有的简历筛选模型，调整超参数以提高准确率，并生成优化后的模型性能报告。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(4) 简历筛选自动化</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"使用训练好的模型，对以下新收到的简历进行自动化筛选，输出匹配度评分及筛选结果：[粘贴简历数据]。"</li>
+                                            <li>"请根据岗位需求，自动筛选出匹配度高于80%的候选人，并生成筛选结果报告。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(5) 面试问题生成</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"基于候选人的简历信息，生成10个高区分度的面试问题，涵盖技术能力、项目经验和行为面试：[粘贴简历信息]。"</li>
+                                            <li>"请为以下候选人设计面试问题，重点考察其'数据分析能力'和'团队协作能力'：[粘贴简历信息]。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(6) 数据分析与决策支持</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"分析历史招聘数据中的'招聘渠道转化率'和'面试通过率'，诊断流程瓶颈，并提出改进建议。"</li>
+                                            <li>"请根据历史数据，生成招聘流程各环节的流失率分析报告，并给出优化建议。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(7) 模型持续优化</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"根据最新的招聘反馈数据，重新训练简历筛选模型，并输出更新后的模型性能指标。"</li>
+                                            <li>"请分析模型在最新数据上的表现，识别误筛或漏筛的案例，并调整模型参数以提高准确性。"</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium mb-1">(8) 报告生成与可视化</p>
+                                        <p class="text-neutral-700 dark:text-neutral-300 mb-1">提示词示例：</p>
+                                        <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-1">
+                                            <li>"生成一份招聘流程优化报告，包含筛选效率提升、候选人匹配度分析等内容，并附上可视化图表。"</li>
+                                            <li>"请将招聘数据分析结果以图表形式展示，包括'招聘渠道效果对比图'和'候选人匹配度热力图'。"</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 问题8 -->
+                        <div x-data="{ open: false }" class="card">
+                            <div @click="open = !open" class="p-4 flex justify-between items-center cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800/50 rounded-lg">
+                                <h3 class="font-semibold">8. Deepseek接入如WPS/Office等常用办公软件的使用方法，及安全保密性</h3>
+                                <svg :class="{'rotate-180': open}" class="w-5 h-5 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                            <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="p-4 pt-0 text-sm">
+                                <div class="p-3 bg-white dark:bg-neutral-800 rounded-lg">
+                                    <p class="mb-3">DeepSeek 可以通过 VBA 脚本或 OfficeAI 插件接入 WPS/Office，实现高效办公功能。其安全保密性通过数据加密、权限管理、云端安全和定期更新等多重措施得到保障，确保用户数据的安全性。</p>
+                                    
+                                    <div class="mt-4 space-y-4">
+                                        <div class="bg-neutral-50 dark:bg-neutral-900/50 p-3 rounded-lg">
+                                            <h4 class="font-medium text-primary-600 dark:text-primary-400 mb-2">接入方法</h4>
+                                            <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-2">
+                                                <li><span class="font-medium">插件安装</span>：通过Office/WPS应用商店搜索并安装DeepSeek插件</li>
+                                                <li><span class="font-medium">API集成</span>：使用DeepSeek提供的API接口，通过VBA或宏进行自定义集成</li>
+                                                <li><span class="font-medium">网页版协同</span>：通过浏览器扩展实现DeepSeek与Office Online/WPS云文档的协同工作</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div class="bg-neutral-50 dark:bg-neutral-900/50 p-3 rounded-lg">
+                                            <h4 class="font-medium text-primary-600 dark:text-primary-400 mb-2">安全保密措施</h4>
+                                            <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-2">
+                                                <li><span class="font-medium">数据加密</span>：全程采用端到端加密技术，确保数据传输和存储安全</li>
+                                                <li><span class="font-medium">权限管理</span>：细粒度的访问控制，可设置文档级别的权限</li>
+                                                <li><span class="font-medium">本地处理</span>：支持敏感数据本地处理，不上传云端</li>
+                                                <li><span class="font-medium">合规认证</span>：符合国际数据安全标准和隐私保护法规</li>
+                                                <li><span class="font-medium">安全审计</span>：定期进行安全审计和漏洞扫描，确保系统安全</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div class="bg-neutral-50 dark:bg-neutral-900/50 p-3 rounded-lg">
+                                            <h4 class="font-medium text-primary-600 dark:text-primary-400 mb-2">常见应用场景</h4>
+                                            <ul class="list-disc pl-5 text-neutral-700 dark:text-neutral-300 space-y-2">
+                                                <li><span class="font-medium">Word/文字</span>：智能写作、文档摘要、格式优化、语法检查</li>
+                                                <li><span class="font-medium">Excel/表格</span>：数据分析、公式生成、图表建议、异常检测</li>
+                                                <li><span class="font-medium">PowerPoint/演示</span>：内容生成、设计优化、演讲稿准备</li>
+                                                <li><span class="font-medium">Outlook/邮件</span>：邮件草拟、回复建议、日程管理</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
     
     <!-- 页面底部作者区域 -->
