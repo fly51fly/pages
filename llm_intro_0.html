@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek使用基础与技巧</title>
+    <!-- 引入TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入AlpineJS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- 引入Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- 引入字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* 颜色变量 - 浅色模式 */
+            --primary-color: #3366FF;
+            --primary-variant: #1840B0;
+            --secondary-color: #6B4EFF;
+            --accent-color: #FF4B8B;
+            --background-color: #FFFFFF;
+            --surface-color: #F5F7FA;
+            --card-color: #FCFCFD;
+            --text-primary: #1A2036;
+            --text-secondary: #4E5269;
+            --text-tertiary: #8C8FA3;
+            --border-color: #E2E5EC;
+            --shadow-color: rgba(13, 18, 30, 0.1);
+
+            /* 交互元素尺寸 */
+            --header-height: 72px;
+            --sidebar-width: 280px;
+            --content-max-width: 1200px;
+        }
+
+        [data-theme="dark"] {
+            /* 颜色变量 - 深色模式 */
+            --primary-color: #4D7DFF;
+            --primary-variant: #7596FF;
+            --secondary-color: #9E8CFF;
+            --accent-color: #FF6BA2;
+            --background-color: #121620;
+            --surface-color: #1A202C;
+            --card-color: #222836;
+            --text-primary: #F1F3F9;
+            --text-secondary: #D1D5DB;
+            --text-tertiary: #9BA1AE; 
+            --border-color: #323949;
+            --shadow-color: rgba(0, 0, 0, 0.25);
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 600;
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--surface-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--text-tertiary);
+            border-radius: 6px;
+            border: 3px solid var(--surface-color);
+        }
+
+        /* 美化界面元素 */
+        .glass-card {
+            background: rgba(var(--card-color-rgb), 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px var(--shadow-color);
+        }
+
+        .section-card {
+            background-color: var(--card-color);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--shadow-color);
+        }
+
+        /* 渐变背景 */
+        .gradient-bg {
+            background: radial-gradient(circle at top right, var(--primary-variant) 0%, transparent 60%),
+                        radial-gradient(circle at bottom left, var(--secondary-color) 0%, transparent 60%);
+            opacity: 0.1;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* 交互动画 */
+        .btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: -100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.4s ease;
+        }
+
+        .btn:hover:after {
+            left: 100%;
+        }
+
+        /* 加载动画 */
+        .skeleton {
+            background: linear-gradient(90deg, var(--surface-color), var(--card-color), var(--surface-color));
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* 动态进入动画 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 进度指示器 */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        /* 目录高亮 */
+        .toc-item {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .toc-item:before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .toc-item.active {
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .toc-item.active:before {
+            width: 6px;
+            height: 6px;
+        }
+
+        /* 主题切换动画 */
+        .theme-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            border-radius: 15px;
+            background-color: var(--surface-color);
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-switch::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .theme-switch::after {
+            transform: translateX(30px);
+        }
+
+        /* 流体排版 */
+        .fluid-text {
+            font-size: clamp(1rem, 0.8rem + 0.5vw, 1.25rem);
+            line-height: 1.6;
+        }
+
+        .fluid-title {
+            font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2.5rem);
+        }
+
+        .fluid-subtitle {
+            font-size: clamp(1.2rem, 1rem + 1vw, 1.8rem);
+        }
+
+        /* 3D卡片效果 */
+        .card-3d {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .card-3d-inner {
+            transition: transform 0.6s;
+            transform: rotateY(0deg);
+        }
+
+        .card-3d:hover .card-3d-inner {
+            transform: rotateY(5deg);
+        }
+
+        /* 微妙的装饰元素 */
+        .decoration-dot {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--primary-color);
+            opacity: 0.1;
+        }
+
+        /* 打印样式 */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            .print-only {
+                display: block !important;
+            }
+            
+            body {
+                background: white;
+                font-size: 12pt;
+                color: black;
+            }
+            
+            .section-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body x-data="{ 
+    theme: localStorage.getItem('theme') || 'light',
+    activeSection: null,
+    isMenuOpen: false,
+    sections: [
+        '理解DeepSeek的核心功能与模式',
+        '启用深度思考（DeepThink）的技巧',
+        '联网搜索（Internet Search）的使用选择',
+        '文件上传与多模态输入的进阶使用',
+        '代码生成与优化的进阶技巧',
+        '隐私与效率的进阶管理',
+        '常见问题与解决方法'
+    ]
+}" x-init="
+    $watch('theme', value => {
+        localStorage.setItem('theme', value);
+        document.documentElement.setAttribute('data-theme', value);
+    });
+    document.documentElement.setAttribute('data-theme', theme);
+    
+    // 监听滚动，更新当前章节
+    window.addEventListener('scroll', () => {
+        const sections = document.querySelectorAll('section[id]');
+        const scrollPosition = window.scrollY + 100;
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            
+            if(scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                activeSection = section.id;
+            }
+        });
+    });
+    
+    // 初始化渐入动画
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+    
+    document.querySelectorAll('.fade-in').forEach(el => {
+        observer.observe(el);
+    });
+">
+
+    <!-- 背景渐变 -->
+    <div class="gradient-bg"></div>
+    
+    <!-- 阅读进度指示器 -->
+    <div class="progress-bar" x-data="{ width: '0%' }" x-init="
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            width = scrolled + '%';
+        })
+    " :style="{ width: width }"></div>
+    
+    <!-- 顶部导航栏 -->
+    <header class="fixed top-0 left-0 w-full z-50 glass-card no-print" x-data="{ scrolled: false }" 
+        x-init="window.addEventListener('scroll', () => { scrolled = window.scrollY > 20 })"
+        :class="{'shadow-md': scrolled}">
+        <div class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-primary-600 flex items-center">
+                <i class="ph-duotone ph-brain text-2xl md:text-3xl mr-2" style="color: var(--primary-color)"></i>
+                <span>DeepSeek使用基础与技巧</span>
+            </h1>
+            
+            <div class="flex items-center space-x-6">
+                <!-- 主题切换 -->
+                <div class="theme-switch" @click="theme = theme === 'light' ? 'dark' : 'light'" 
+                    :aria-label="theme === 'light' ? '切换到深色模式' : '切换到浅色模式'">
+                </div>
+                
+                <!-- 移动菜单按钮 -->
+                <button class="md:hidden text-2xl" @click="isMenuOpen = !isMenuOpen">
+                    <i class="ph-duotone" :class="isMenuOpen ? 'ph-x' : 'ph-list'"></i>
+                </button>
+                
+                <!-- 桌面导航链接 -->
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="#intro" class="hover:text-primary-500 transition">首页</a>
+                    <a href="#summary" class="hover:text-primary-500 transition">概述</a>
+                    <a href="#content" class="hover:text-primary-500 transition">主要内容</a>
+                    <a href="#author" class="hover:text-primary-500 transition">关于作者</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 移动侧边菜单 -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden no-print" 
+        x-show="isMenuOpen" 
+        x-transition:enter="transition ease-out duration-300" 
+        x-transition:enter-start="opacity-0" 
+        x-transition:enter-end="opacity-100" 
+        x-transition:leave="transition ease-in duration-300" 
+        x-transition:leave-start="opacity-100" 
+        x-transition:leave-end="opacity-0"
+        @click="isMenuOpen = false">
+        
+        <div class="absolute right-0 top-0 h-full w-64 bg-white dark:bg-gray-900 shadow-xl p-6"
+            x-show="isMenuOpen"
+            x-transition:enter="transition ease-out duration-300" 
+            x-transition:enter-start="transform translate-x-full" 
+            x-transition:enter-end="transform translate-x-0" 
+            x-transition:leave="transition ease-in duration-300" 
+            x-transition:leave-start="transform translate-x-0" 
+            x-transition:leave-end="transform translate-x-full"
+            @click.stop>
+            
+            <div class="flex flex-col space-y-6">
+                <a href="#intro" class="text-lg hover:text-primary-500 transition" @click="isMenuOpen = false">首页</a>
+                <a href="#summary" class="text-lg hover:text-primary-500 transition" @click="isMenuOpen = false">概述</a>
+                <a href="#content" class="text-lg hover:text-primary-500 transition" @click="isMenuOpen = false">主要内容</a>
+                <a href="#author" class="text-lg hover:text-primary-500 transition" @click="isMenuOpen = false">关于作者</a>
+                
+                <div class="pt-6 border-t border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-medium mb-4">章节导航</h3>
+                    <template x-for="(section, index) in sections" :key="index">
+                        <a :href="'#section-' + (index + 1)" 
+                           class="block py-2 hover:text-primary-500 transition"
+                           :class="{'font-semibold': activeSection === 'section-' + (index + 1)}"
+                           @click="isMenuOpen = false"
+                           x-text="section"></a>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 主要内容区域 -->
+    <main class="container mx-auto px-4 pt-24 pb-16">
+        <!-- 介绍部分 -->
+        <section id="intro" class="flex flex-col md:flex-row items-center justify-between py-10 mb-16">
+            <div class="md:w-1/2 mb-10 md:mb-0 fade-in">
+                <h1 class="fluid-title mb-6 text-center md:text-left" style="color: var(--primary-color);">
+                    DeepSeek使用基础与技巧
+                </h1>
+                <p class="fluid-text mb-8 text-center md:text-left" style="color: var(--text-secondary);">
+                    掌握DeepSeek先进功能的全方位指南，从基础操作到高级技巧，助您更高效地利用AI解决复杂问题。
+                </p>
+                <div class="flex flex-wrap justify-center md:justify-start gap-4">
+                    <a href="#content" class="btn px-6 py-3 rounded-lg text-white font-medium transition" 
+                       style="background-color: var(--primary-color);">
+                        开始学习
+                        <i class="ph ph-arrow-right ml-2"></i>
+                    </a>
+                    <a href="#summary" class="btn px-6 py-3 rounded-lg font-medium transition border" 
+                       style="color: var(--text-primary); border-color: var(--border-color);">
+                        内容概览
+                        <i class="ph ph-book-open ml-2"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center fade-in" style="animation-delay: 0.2s;">
+                <div class="section-card p-6 card-3d" style="max-width: 400px;">
+                    <div class="card-3d-inner">
+                        <div class="flex items-center justify-center mb-4">
+                            <i class="ph-duotone ph-brain text-5xl" style="color: var(--primary-color);"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-center">DeepSeek AI</h3>
+                        <p class="text-center" style="color: var(--text-secondary);">
+                            结合通用对话与深度推理，打造智能体验新标准
+                        </p>
+                        <div class="mt-6 flex flex-wrap justify-center gap-3">
+                            <span class="px-3 py-1 rounded-full text-sm" 
+                                  style="background-color: var(--surface-color); color: var(--primary-color);">
+                                V3通用模型
+                            </span>
+                            <span class="px-3 py-1 rounded-full text-sm" 
+                                  style="background-color: var(--surface-color); color: var(--secondary-color);">
+                                R1推理模型
+                            </span>
+                            <span class="px-3 py-1 rounded-full text-sm" 
+                                  style="background-color: var(--surface-color); color: var(--accent-color);">
+                                联网搜索
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 内容概览 -->
+        <section id="summary" class="mb-16 fade-in">
+            <div class="section-card p-8">
+                <h2 class="fluid-subtitle mb-6 pb-4 border-b" style="border-color: var(--border-color);">
+                    <i class="ph-duotone ph-article text-xl mr-2" style="color: var(--secondary-color);"></i>
+                    内容概览
+                </h2>
+                <p class="fluid-text mb-6" style="color: var(--text-primary);">
+                    这份指南基于DeepSeek的最新功能、用户反馈以及相关文档和文章的总结，旨在帮助用户更高效、精准地利用DeepSeek解决复杂问题。
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                    <div class="p-5 rounded-lg" style="background-color: var(--surface-color);">
+                        <div class="flex items-center mb-3">
+                            <i class="ph-duotone ph-gear text-xl mr-2" style="color: var(--primary-color);"></i>
+                            <h3 class="font-semibold">核心功能介绍</h3>
+                        </div>
+                        <p style="color: var(--text-secondary);">
+                            了解DeepSeek的主要模型特点，掌握V3与R1各自的优势与适用场景。
+                        </p>
+                    </div>
+                    <div class="p-5 rounded-lg" style="background-color: var(--surface-color);">
+                        <div class="flex items-center mb-3">
+                            <i class="ph-duotone ph-lightbulb text-xl mr-2" style="color: var(--primary-color);"></i>
+                            <h3 class="font-semibold">专业使用技巧</h3>
+                        </div>
+                        <p style="color: var(--text-secondary);">
+                            探索深度思考模式、联网搜索与文件处理等高级功能的优化使用方法。
+                        </p>
+                    </div>
+                    <div class="p-5 rounded-lg" style="background-color: var(--surface-color);">
+                        <div class="flex items-center mb-3">
+                            <i class="ph-duotone ph-code text-xl mr-2" style="color: var(--primary-color);"></i>
+                            <h3 class="font-semibold">应用场景实战</h3>
+                        </div>
+                        <p style="color: var(--text-secondary);">
+                            从数学推理到代码生成，从文件分析到决策支持，各类场景的实战应用。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 主要内容区域 -->
+        <div id="content" class="flex flex-col lg:flex-row gap-8">
+            <!-- 侧边目录 - 仅在大屏幕显示 -->
+            <aside class="lg:w-1/4 xl:w-1/5 hidden lg:block sticky top-24 self-start h-screen overflow-y-auto no-print" style="max-height: calc(100vh - 100px);">
+                <div class="section-card p-6">
+                    <h3 class="text-lg font-semibold mb-6 pb-2 border-b" style="border-color: var(--border-color);">
+                        目录导航
+                    </h3>
+                    <nav class="space-y-4">
+                        <template x-for="(section, index) in sections" :key="index">
+                            <a :href="'#section-' + (index + 1)" 
+                               class="block py-2 px-3 rounded-lg transition toc-item"
+                               :class="{'active': activeSection === 'section-' + (index + 1)}"
+                               x-text="section"></a>
+                        </template>
+                    </nav>
+                </div>
+            </aside>
+            
+            <!-- 核心内容 -->
+            <div class="lg:w-3/4 xl:w-4/5 space-y-12">
+                <!-- 第一节 -->
+                <section id="section-1" class="fade-in">
+                    <div class="section-card p-8">
+                        <h2 class="fluid-subtitle mb-6" style="color: var(--primary-color);">
+                            1. 理解DeepSeek的核心功能与模式
+                        </h2>
+                        <p class="fluid-text mb-6">
+                            DeepSeek提供多种模型和功能，主要包括DeepSeek-V3（通用对话模型）和DeepSeek-R1（深度推理模型）。进阶使用需要明确每种模式的适用场景：
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div class="p-6 rounded-lg" style="background-color: var(--surface-color);">
+                                <div class="flex items-center mb-4">
+                                    <i class="ph-duotone ph-chat-circle-text text-2xl mr-3" style="color: var(--primary-color);"></i>
+                                    <h3 class="text-lg font-semibold">DeepSeek-V3</h3>
+                                </div>
+                                <p class="mb-4" style="color: var(--text-secondary);">
+                                    适合快速对话、内容生成、代码补全和日常任务。它是默认模式，响应速度快，但对复杂推理任务能力有限。
+                                </p>
+                                <div class="flex flex-wrap gap-2 mt-4">
+                                    <span class="px-2 py-1 rounded text-xs" style="background-color: rgba(var(--primary-color-rgb), 0.1); color: var(--primary-color);">
+                                        快速响应
+                                    </span>
+                                    <span class="px-2 py-1 rounded text-xs" style="background-color: rgba(var(--primary-color-rgb), 0.1); color: var(--primary-color);">
+                                        内容创作
+                                    </span>
+                                    <span class="px-2 py-1 rounded text-xs" style="background-color: rgba(var(--primary-color-rgb), 0.1); color: var(--primary-color);">
+                                        日常对话
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="p-6 rounded-lg" style="background-color: var(--surface-color);">
+                                <div class="flex items-center mb-4">
+                                    <i class="ph-duotone ph-brain text-2xl mr-3" style="color: var(--secondary-color);"></i>
+                                    <h3 class="text-lg font-semibold">DeepSeek-R1</h3>
+                                </div>
+                                <p class="mb-4" style="color: var(--text-secondary);">
+                                    通过"DeepThink"按钮启用，专注于深度推理、数学、逻辑和编程问题。它会展示推理过程（Chain of Thought, CoT），更适合需要逐步分析的问题。
+                                </p>
+                                <div class="flex flex-wrap gap-2 mt-4">
+                                    <span class="px-2 py-1 rounded text-xs" style="background-color: rgba(var(--secondary-color-rgb), 0.1); color: var(--secondary-color);">
+                                        深度推理
+                                    </span>
+                                    <span class="px-2 py-1 rounded text-xs" style="background-color: rgba(var(--secondary-color-rgb), 0.1); color: var(--secondary-color);">
+                                        数学问题
+                                    </span>
+                                    <span class="px-2 py-1 rounded text-xs" style="background-color: rgba(var(--secondary-color-rgb), 0.1); color: var(--secondary-color);">
+                                        逻辑分析
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="fluid-text">
+                            进阶用户应根据任务复杂度和目标选择适当模式。例如，日常写作或简单查询用V3，复杂问题如算法设计或科学推理用R1。
+                        </p>
+                    </div>
+                </section>
+                
+                <!-- 第二节 -->
+                <section id="section-2" class="fade-in">
+                    <div class="section-card p-8">
+                        <h2 class="fluid-subtitle mb-6" style="color: var(--primary-color);">
+                            2. 启用深度思考（DeepThink）的技巧
+                        </h2>
+                        <p class="fluid-text mb-6">
+                            深度思考是DeepSeek-R1的核心功能，能够展示模型的推理步骤，从而提高答案的准确性和可解释性。以下是使用DeepThink的进阶技巧：
+                        </p>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-lg font-semibold mb-4">2.1 如何触发DeepThink</h3>
+                            <div class="p-6 rounded-lg mb-4" style="background-color: var(--surface-color);">
+                                <p class="mb-4" style="color: var(--text-secondary);">
+                                    在输入提示前，点击或轻触提示栏中的"DeepThink (R1)"按钮（通常位于搜索按钮旁边）。激活后，模型会以链式思维方式处理问题。
+                                </p>
+                                <div class="p-4 rounded-lg border border-dashed" style="border-color: var(--border-color);">
+                                    <strong>示例提示：</strong> "帮我解决这个数学问题：如果a + b = 10，且a - b = 4，求a和b的值。"
+                                    <p class="mt-2">激活DeepThink后，DeepSeek会逐步展示代数推导过程。</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-lg font-semibold mb-4">2.2 优化提示以充分利用DeepThink</h3>
+                            <ul class="space-y-3 ml-6 list-disc" style="color: var(--text-secondary);">
+                                <li>
+                                    <strong style="color: var(--text-primary);">明确要求推理过程：</strong> 在提示中加入"请逐步解释你的推理过程"或"用链式思维解决这个问题"，确保模型生成详细的CoT。
+                                </li>
+                                <li>
+                                    <strong style="color: var(--text-primary);">分解复杂问题：</strong> 将大问题拆分为小步骤，例如"首先分析问题背景，然后提出解决方案，最后验证结果"。这可以引导DeepSeek更系统地思考。
+                                </li>
+                                <li>
+                                    <strong style="color: var(--text-primary);">设置目标格式：</strong> 如果需要特定输出格式（如代码、公式或图表），在提示中说明，例如"以伪代码形式展示你的推理过程"。
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-lg font-semibold mb-4">2.3 监控和调整推理</h3>
+                            <p class="fluid-text mb-4" style="color: var(--text-secondary);">
+                                DeepThink会显示模型的"内部对话"，如"&lt;think&gt;…&lt;/think&gt;"标签中的内容。用户可以检查其中是否存在逻辑错误或遗漏。
+                            </p>
+                            <p class="fluid-text" style="color: var(--text-secondary);">
+                                如果结果不满意，可以通过后续提示调整，例如"你的推理第2步似乎有误，请重新检查"或"增加更多验证步骤"。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4">2.4 适用场景</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                <div class="p-4 rounded-lg flex flex-col items-center text-center" style="background-color: var(--surface-color);">
+                                    <i class="ph-duotone ph-function text-2xl mb-3" style="color: var(--primary-color);"></i>
+                                    <h4 class="font-medium mb-2">数学和逻辑问题</h4>
+                                    <p class="text-sm" style="color: var(--text-tertiary);">如求解方程、证明定理或逻辑谜题。</p>
+                                </div>
+                                <div class="p-4 rounded-lg flex flex-col items-center text-center" style="background-color: var(--surface-color);">
+                                    <i class="ph-duotone ph-code text-2xl mb-3" style="color: var(--primary-color);"></i>
+                                    <h4 class="font-medium mb-2">编程任务</h4>
+                                    <p class="text-sm" style="color: var(--text-tertiary);">如算法设计、代码优化或调试，DeepThink能展示代码逻辑的逐步构建。</p>
+                                </div>
+                                <div class="p-4 rounded-lg flex flex-col items-center text-center" style="background-color: var(--surface-color);">
+                                    <i class="ph-duotone ph-chart-pie text-2xl mb-3" style="color: var(--primary-color);"></i>
+                                    <h4 class="font-medium mb-2">决策支持</h4>
+                                    <p class="text-sm" style="color: var(--text-tertiary);">如商业策略分析或科学假设验证，模型可以提供结构化推理。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+<!-- 第三节 -->
+                <section id="section-3" class="fade-in">
+                    <div class="section-card p-8">
+                        <h2 class="fluid-subtitle mb-6" style="color: var(--primary-color);">
+                            3. 联网搜索（Internet Search）的使用选择
+                        </h2>
+                        <p class="fluid-text mb-6">
+                            DeepSeek支持联网搜索功能，允许实时获取网络数据，这对需要最新信息或外部验证的任务非常有用。以下是进阶使用技巧：
+                        </p>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-lg font-semibold mb-4">3.1 如何触发联网搜索</h3>
+                            <div class="p-6 rounded-lg mb-4" style="background-color: var(--surface-color);">
+                                <p class="mb-4" style="color: var(--text-secondary);">
+                                    在提示栏中选择"Internet Search"按钮（通常与DeepThink按钮并列）。激活后，DeepSeek会搜索网页和X平台上的实时内容。
+                                </p>
+                                <div class="p-4 rounded-lg border border-dashed" style="border-color: var(--border-color);">
+                                    <strong>示例提示：</strong> "2025年最新AI发展趋势是什么？"启用联网搜索后，模型会整合最新报道和分析。
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-lg font-semibold mb-4">3.2 优化搜索提示</h3>
+                            <ul class="space-y-3 ml-6 list-disc" style="color: var(--text-secondary);">
+                                <li>
+                                    <strong style="color: var(--text-primary);">具体化查询：</strong> 避免模糊词语，使用精确关键词。例如，改为"2025年全球AI行业投资趋势分析"而非"AI未来"。
+                                </li>
+                                <li>
+                                    <strong style="color: var(--text-primary);">限定来源：</strong> 如果需要特定类型信息，可以指定，例如"仅从科技新闻网站搜索"或"优先参考学术论文"。
+                                </li>
+                                <li>
+                                    <strong style="color: var(--text-primary);">结合DeepThink：</strong> 在复杂问题上，先用DeepThink分析问题框架，再用联网搜索补充数据。例如，"分析电动车市场趋势（用DeepThink），并搜索2025年相关政策更新。"
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-lg font-semibold mb-4">3.3 评估搜索结果</h3>
+                            <p class="fluid-text mb-4" style="color: var(--text-secondary);">
+                                联网搜索结果可能包含实时但不准确的信息。用户应检查来源可靠性，例如优先信任知名科技媒体或学术平台。
+                            </p>
+                            <p class="fluid-text" style="color: var(--text-secondary);">
+                                如果搜索结果不足，可以进一步提示"扩展搜索范围"或"查找更多权威来源"。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4">3.4 适用场景</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div class="p-4 rounded-lg flex flex-col items-center text-center" style="background-color: var(--surface-color);">
+                                    <i class="ph-duotone ph-chart-line-up text-2xl mb-3" style="color: var(--secondary-color);"></i>
+                                    <h4 class="font-medium mb-2">实时数据需求</h4>
+                                    <p class="text-sm" style="color: var(--text-tertiary);">如股票市场动态、新闻事件或产品发布。</p>
+                                </div>
+                                <div class="p-4 rounded-lg flex flex-col items-center text-center" style="background-color: var(--surface-color);">
+                                    <i class="ph-duotone ph-check-square text-2xl mb-3" style="color: var(--secondary-color);"></i>
+                                    <h4 class="font-medium mb-2">事实验证</h4>
+                                    <p class="text-sm" style="color: var(--text-tertiary);">如历史事件细节或科学数据，需要外部确认。</p>
+                                </div>
+                                <div class="p-4 rounded-lg flex flex-col items-center text-center" style="background-color: var(--surface-color);">
+                                    <i class="ph-duotone ph-chart-bar text-2xl mb-3" style="color: var(--secondary-color);"></i>
+                                    <h4 class="font-medium mb-2">竞争分析</h4>
+                                    <p class="text-sm" style="color: var(--text-tertiary);">如比较不同AI模型的功能，联网搜索可以提供最新对比数据。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 第四节 -->
+                <section id="section-4" class="fade-in">
+                    <div class="section-card p-8">
+                        <h2 class="fluid-subtitle mb-6" style="color: var(--primary-color);">
+                            4. 文件上传与多模态输入的进阶使用
+                        </h2>
+                        <p class="fluid-text mb-6">
+                            DeepSeek支持上传文件（如PDF、图像、文本），并结合深度分析模式处理。这些功能适合处理复杂数据集或视觉任务。
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                            <div>
+                                <h3 class="text-lg font-semibold mb-4">4.1 文件上传技巧</h3>
+                                <ul class="space-y-3 ml-6 list-disc" style="color: var(--text-secondary);">
+                                    <li>
+                                        <strong style="color: var(--text-primary);">准备清晰文件：</strong> 确保上传的文件内容结构化，文本清晰，图像分辨率高。最大文件大小限制为100MB。
+                                    </li>
+                                    <li>
+                                        <strong style="color: var(--text-primary);">搭配提示：</strong> 上传后，输入具体指令，如"从这份PDF中提取关键数据"或"分析这张图表并总结趋势"。
+                                    </li>
+                                    <li>
+                                        <strong style="color: var(--text-primary);">结合R1模式：</strong> 对于需要推理的文件内容，启用DeepThink以获取更深入的分析。
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-lg font-semibold mb-4">4.2 图像分析</h3>
+                                <div class="p-5 rounded-lg" style="background-color: var(--surface-color);">
+                                    <p class="mb-4" style="color: var(--text-secondary);">
+                                        如果上传图像，提示应明确目标，例如"识别这张照片中的物体并描述用途"或"从图表中提取数值"。
+                                    </p>
+                                    <p style="color: var(--text-secondary);">
+                                        当前DeepSeek不支持生成图像，但能分析现有图像内容。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4">4.3 适用场景</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div class="p-4 rounded-lg" style="background-color: var(--surface-color);">
+                                    <div class="flex items-center mb-3">
+                                        <i class="ph-duotone ph-book-open text-xl mr-2" style="color: var(--accent-color);"></i>
+                                        <h4 class="font-medium">学术研究</h4>
+                                    </div>
+                                    <p class="text-sm" style="color: var(--text-tertiary);">从论文或报告中提取数据。</p>
+                                </div>
+                                <div class="p-4 rounded-lg" style="background-color: var(--surface-color);">
+                                    <div class="flex items-center mb-3">
+                                        <i class="ph-duotone ph-presentation-chart text-xl mr-2" style="color: var(--accent-color);"></i>
+                                        <h4 class="font-medium">业务分析</h4>
+                                    </div>
+                                    <p class="text-sm" style="color: var(--text-tertiary);">分析财务报表或市场调研报告。</p>
+                                </div>
+                                <div class="p-4 rounded-lg" style="background-color: var(--surface-color);">
+                                    <div class="flex items-center mb-3">
+                                        <i class="ph-duotone ph-student text-xl mr-2" style="color: var(--accent-color);"></i>
+                                        <h4 class="font-medium">教育辅助</h4>
+                                    </div>
+                                    <p class="text-sm" style="color: var(--text-tertiary);">帮助学生理解复杂图表或文档。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 第五节 -->
+                <section id="section-5" class="fade-in">
+                    <div class="section-card p-8">
+                        <h2 class="fluid-subtitle mb-6" style="color: var(--primary-color);">
+                            5. 代码生成与优化的进阶技巧
+                        </h2>
+                        <p class="fluid-text mb-6">
+                            DeepSeek在编程任务上表现优异，尤其是在启用R1模式后。以下是进阶使用建议：
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div class="md:col-span-1">
+                                <h3 class="text-lg font-semibold mb-4">5.1 编写高效代码提示</h3>
+                                <ul class="space-y-3 ml-6 list-disc" style="color: var(--text-secondary);">
+                                    <li>
+                                        <strong style="color: var(--text-primary);">详细描述需求：</strong> 包括编程语言、功能需求和预期输出。
+                                    </li>
+                                    <li>
+                                        <strong style="color: var(--text-primary);">要求逐步推理：</strong> 提示"展示代码设计的推理过程"，确保理解算法逻辑。
+                                    </li>
+                                    <li>
+                                        <strong style="color: var(--text-primary);">指定风格：</strong> 如"遵循PEP 8风格"或"优化为低内存使用"。
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="md:col-span-2">
+                                <h3 class="text-lg font-semibold mb-4">5.2 代码示例</h3>
+                                <div class="p-5 rounded-lg" style="background-color: var(--surface-color);">
+                                    <p class="mb-3" style="color: var(--text-secondary);">提示示例：</p>
+                                    <div class="p-4 rounded bg-opacity-80 font-mono text-sm overflow-x-auto" style="background-color: var(--card-color);">
+                                        "用Python编写一个快速排序算法，包含注释和测试用例。代码应遵循PEP 8规范，并优化为尾递归形式。请用DeepThink模式展示你的思考过程。"
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-lg font-semibold mb-4">5.2 调试与优化</h3>
+                            <div class="p-6 rounded-lg" style="background-color: var(--surface-color);">
+                                <p class="mb-4" style="color: var(--text-secondary);">
+                                    如果生成代码有错误，上传代码并提示"检查这段代码的错误并优化"或"增加错误处理"。
+                                </p>
+                                <p style="color: var(--text-secondary);">
+                                    结合联网搜索，验证最佳实践或最新库使用。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4">5.3 适用场景</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="p-5 rounded-lg" style="background-color: var(--surface-color);">
+                                    <div class="flex items-center mb-3">
+                                        <i class="ph-duotone ph-code text-xl mr-2" style="color: var(--primary-color);"></i>
+                                        <h4 class="font-medium">软件开发</h4>
+                                    </div>
+                                    <p class="text-sm" style="color: var(--text-tertiary);">快速原型设计或复杂算法实现。</p>
+                                </div>
+                                <div class="p-5 rounded-lg" style="background-color: var(--surface-color);">
+                                    <div class="flex items-center mb-3">
+                                        <i class="ph-duotone ph-robot text-xl mr-2" style="color: var(--primary-color);"></i>
+                                        <h4 class="font-medium">自动化任务</h4>
+                                    </div>
+                                    <p class="text-sm" style="color: var(--text-tertiary);">脚本编写或API集成。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 第六节 -->
+                <section id="section-6" class="fade-in">
+                    <div class="section-card p-8">
+                        <h2 class="fluid-subtitle mb-6" style="color: var(--primary-color);">
+                            6. 隐私与效率的进阶管理
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="p-5 rounded-lg" style="background-color: var(--surface-color);">
+                                <div class="flex items-center mb-3">
+                                    <i class="ph-duotone ph-shield-lock text-xl mr-2" style="color: var(--primary-color);"></i>
+                                    <h4 class="font-medium">避免敏感信息</h4>
+                                </div>
+                                <p class="text-sm" style="color: var(--text-tertiary);">
+                                    根据用户反馈和文档建议，不要上传个人隐私数据，尤其是在联网模式下。
+                                </p>
+                            </div>
+                            <div class="p-5 rounded-lg" style="background-color: var(--surface-color);">
+                                <div class="flex items-center mb-3">
+                                    <i class="ph-duotone ph-cloud-slash text-xl mr-2" style="color: var(--primary-color);"></i>
+                                    <h4 class="font-medium">离线使用</h4>
+                                </div>
+                                <p class="text-sm" style="color: var(--text-tertiary);">
+                                    通过本地安装（如Ollama）运行DeepSeek-R1，保护数据隐私并减少延迟。
+                                </p>
+                            </div>
+                            <div class="p-5 rounded-lg" style="background-color: var(--surface-color);">
+                                <div class="flex items-center mb-3">
+                                    <i class="ph-duotone ph-lightning text-xl mr-2" style="color: var(--primary-color);"></i>
+                                    <h4 class="font-medium">批量处理</h4>
+                                </div>
+                                <p class="text-sm" style="color: var(--text-tertiary);">
+                                    对于多个类似任务，批量输入提示，减少重复操作。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 第七节 -->
+                <section id="section-7" class="fade-in">
+                    <div class="section-card p-8">
+                        <h2 class="fluid-subtitle mb-6" style="color: var(--primary-color);">
+                            7. 常见问题与解决方法
+                        </h2>
+                        <div class="space-y-6">
+                            <div class="p-5 rounded-lg" style="background-color: var(--surface-color);">
+                                <div class="flex items-start">
+                                    <i class="ph-duotone ph-hourglass text-xl mt-1 mr-3" style="color: var(--accent-color);"></i>
+                                    <div>
+                                        <h4 class="font-medium mb-2">响应缓慢</h4>
+                                        <p class="text-sm" style="color: var(--text-tertiary);">
+                                            如果DeepThink或联网搜索响应慢，检查网络连接或切换到离线模式。某些地区可能因服务限制而受影响。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-5 rounded-lg" style="background-color: var(--surface-color);">
+                                <div class="flex items-start">
+                                    <i class="ph-duotone ph-warning-circle text-xl mt-1 mr-3" style="color: var(--accent-color);"></i>
+                                    <div>
+                                        <h4 class="font-medium mb-2">结果不准确</h4>
+                                        <p class="text-sm" style="color: var(--text-tertiary);">
+                                            调整提示具体性，或要求模型"重新评估"或"提供更多来源"。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-5 rounded-lg" style="background-color: var(--surface-color);">
+                                <div class="flex items-start">
+                                    <i class="ph-duotone ph-translate text-xl mt-1 mr-3" style="color: var(--accent-color);"></i>
+                                    <div>
+                                        <h4 class="font-medium mb-2">语言混杂</h4>
+                                        <p class="text-sm" style="color: var(--text-tertiary);">
+                                            R1模式可能输出多语言内容，可提示"仅用英语/中文回答"。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 总结部分 -->
+                <section class="fade-in">
+                    <div class="section-card p-8">
+                        <h2 class="fluid-subtitle mb-6" style="color: var(--primary-color);">
+                            总结
+                        </h2>
+                        <p class="fluid-text mb-6">
+                            DeepSeek的进阶使用依赖于用户对DeepThink和联网搜索的熟练掌握，以及对提示优化的深入理解。通过明确任务需求、选择合适模式、优化输入提示，并结合文件上传和代码生成功能，用户可以最大化DeepSeek的潜力。
+                        </p>
+                        <p class="fluid-text">
+                            无论是学术研究、商业分析还是编程开发，DeepSeek都提供了一种高效、智能的解决方案。
+                        </p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 底部作者区域 -->
+    <footer id="author" class="container mx-auto px-4 py-12 mt-10 fade-in no-print">
+        <div class="section-card p-8">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="md:w-1/2 mb-8 md:mb-0 flex flex-col items-center md:items-start">
+                    <div class="flex items-center mb-4">
+                        <!-- 艺术化签名/头像位置 -->
+                        <div class="w-16 h-16 rounded-full flex items-center justify-center mr-4" style="background-color: var(--primary-color);">
+                            <span class="text-white text-2xl font-bold">陈光</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold" style="color: var(--text-primary);">陈光</h3>
+                            <p style="color: var(--text-secondary);">AI技术专家 & 内容创作者</p>
+                        </div>
+                    </div>
+                    <p class="text-center md:text-left mb-6" style="color: var(--text-secondary);">
+                        致力于探索人工智能的前沿应用，专注于提升AI工具的可用性和效能，帮助用户从技术中获得最大价值。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-2xl" style="color: var(--text-tertiary);" aria-label="Twitter">
+                            <i class="ph ph-twitter-logo"></i>
+                        </a>
+                        <a href="#" class="text-2xl" style="color: var(--text-tertiary);" aria-label="GitHub">
+                            <i class="ph ph-github-logo"></i>
+                        </a>
+                        <a href="#" class="text-2xl" style="color: var(--text-tertiary);" aria-label="LinkedIn">
+                            <i class="ph ph-linkedin-logo"></i>
+                        </a>
+                        <a href="#" class="text-2xl" style="color: var(--text-tertiary);" aria-label="Email">
+                            <i class="ph ph-envelope-simple"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2 flex flex-col items-center md:items-end">
+                    <div class="mb-6 text-center md:text-right">
+                        <h4 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">订阅更新</h4>
+                        <p style="color: var(--text-secondary);">获取最新AI技术指南和应用实践分享</p>
+                    </div>
+                    <div class="flex w-full max-w-md">
+                        <input type="email" placeholder="您的邮箱地址" class="flex-1 px-4 py-2 rounded-l-lg focus:outline-none" 
+                               style="background-color: var(--surface-color); color: var(--text-primary); border: 1px solid var(--border-color);">
+                        <button class="px-4 py-2 rounded-r-lg text-white font-medium" 
+                                style="background-color: var(--primary-color);">
+                            订阅
+                        </button>
+                    </div>
+                    <p class="mt-6 text-center md:text-right" style="color: var(--text-tertiary);">
+                        © 2025 陈光 版权所有
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 返回顶部按钮 -->
+    <button class="fixed bottom-8 right-8 p-3 rounded-full shadow-lg z-50 opacity-0 transition-opacity duration-300 no-print" 
+            id="backToTop"
+            style="background-color: var(--primary-color); color: white;"
+            aria-label="返回顶部">
+        <i class="ph ph-arrow-up text-xl"></i>
+    </button>
+    
+    <script>
+        // 返回顶部按钮
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopButton.classList.add('opacity-100');
+            } else {
+                backToTopButton.classList.remove('opacity-100');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // 实现平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // 为所有section设置交错动画延迟
+        document.querySelectorAll('section.fade-in').forEach((section, index) => {
+            section.style.transitionDelay = `${index * 0.1}s`;
+        });
+        
+        // 将CSS变量RGB转换，用于透明度控制
+        function hexToRgb(hex) {
+            // 移除#符号（如果存在）
+            hex = hex.replace('#', '');
+            
+            // 解析RGB值
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const b = parseInt(hex.substring(4, 6), 16);
+            
+            return `${r}, ${g}, ${b}`;
+        }
+        
+        // 设置CSS变量的RGB版本
+        function setupRgbVariables() {
+            const style = getComputedStyle(document.documentElement);
+            const primaryColor = style.getPropertyValue('--primary-color').trim();
+            const secondaryColor = style.getPropertyValue('--secondary-color').trim();
+            const accentColor = style.getPropertyValue('--accent-color').trim();
+            
+            document.documentElement.style.setProperty('--primary-color-rgb', hexToRgb(primaryColor));
+            document.documentElement.style.setProperty('--secondary-color-rgb', hexToRgb(secondaryColor));
+            document.documentElement.style.setProperty('--accent-color-rgb', hexToRgb(accentColor));
+        }
+        
+        // 主题变化时重新计算RGB值
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'data-theme') {
+                    setupRgbVariables();
+                }
+            });
+        });
+        
+        observer.observe(document.documentElement, {
+            attributes: true
+        });
+        
+        // 初始设置
+        setupRgbVariables();
+        
+        // 添加装饰性元素
+        function createDecorationDots() {
+            const container = document.querySelector('main');
+            const dotsCount = 15;
+            
+            for (let i = 0; i < dotsCount; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('decoration-dot');
+                
+                // 随机大小
+                const size = Math.random() * 30 + 10;
+                dot.style.width = `${size}px`;
+                dot.style.height = `${size}px`;
+                
+                // 随机位置
+                const top = Math.random() * 100;
+                const left = Math.random() * 100;
+                dot.style.top = `${top}%`;
+                dot.style.left = `${left}%`;
+                
+                // 随机透明度
+                dot.style.opacity = (Math.random() * 0.1 + 0.05).toString();
+                
+                container.appendChild(dot);
+            }
+        }
+        
+        createDecorationDots();
+    </script>
+</body>
+</html>

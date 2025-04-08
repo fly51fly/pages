@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拥抱大模型时代：用DeepSeek赋能人才工作</title>
+    
+    <script src="https://cdn.tailwindcss.com/3.4.3"></script>
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.0/dist/cdn.min.js"></script>
+    
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom CSS for advanced effects, scrollbar, print, etc. */
+        :root {
+            /* Light Theme Colors */
+            --color-primary-light: 217, 89%, 61%; /* Example: A professional blue */
+            --color-secondary-light: 210, 40%, 96%; /* Light gray */
+            --color-text-light: 210, 10%, 23%; /* Dark gray text */
+            --color-accent-light: 340, 82%, 52%; /* Example: Vibrant Pink/Magenta */
+            --color-bg-light: 0, 0%, 100%; /* White */
+            
+            /* Dark Theme Colors */
+            --color-primary-dark: 217, 89%, 70%; /* Lighter blue for dark */
+            --color-secondary-dark: 216, 20%, 15%; /* Darker gray */
+            --color-text-dark: 210, 40%, 98%; /* Light gray text */
+            --color-accent-dark: 340, 82%, 65%; /* Slightly lighter accent for dark */
+            --color-bg-dark: 220, 20%, 7%; /* Very dark blue/gray */
+
+            /* Font */
+            --font-sans: 'Noto Sans SC', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* Apply base font */
+        body {
+            font-family: var(--font-sans);
+            background-color: hsl(var(--color-bg-light));
+            color: hsl(var(--color-text-light));
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Dark Mode Styles */
+        html.dark body {
+            background-color: hsl(var(--color-bg-dark));
+            color: hsl(var(--color-text-dark));
+        }
+
+        /* Fluid Typography Example (adjust values as needed) */
+        h1 { font-size: clamp(2rem, 5vw + 1rem, 4rem); }
+        h2 { font-size: clamp(1.5rem, 4vw + 0.8rem, 3rem); }
+        h3 { font-size: clamp(1.25rem, 3vw + 0.6rem, 2.25rem); }
+        p, li { font-size: clamp(1rem, 2vw + 0.5rem, 1.125rem); line-height: 1.7; } /* Increased line-height */
+
+        /* Custom Scrollbar (optional, subtle) */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: hsl(var(--color-secondary-light) / 0.5); }
+        html.dark ::-webkit-scrollbar-track { background: hsl(var(--color-secondary-dark) / 0.5); }
+        ::-webkit-scrollbar-thumb { background: hsl(var(--color-primary-light) / 0.6); border-radius: 4px; }
+        html.dark ::-webkit-scrollbar-thumb { background: hsl(var(--color-primary-dark) / 0.6); }
+        ::-webkit-scrollbar-thumb:hover { background: hsl(var(--color-primary-light)); }
+        html.dark ::-webkit-scrollbar-thumb:hover { background: hsl(var(--color-primary-dark)); }
+
+        /* Subtle Gradient Background Example */
+        .gradient-bg {
+            background: linear-gradient(135deg, hsl(var(--color-bg-light)) 0%, hsl(var(--color-secondary-light)) 100%);
+        }
+        html.dark .gradient-bg {
+             background: linear-gradient(135deg, hsl(var(--color-bg-dark)) 0%, hsl(var(--color-secondary-dark)) 100%);
+        }
+
+        /* Entrance Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0; /* Start hidden */
+        }
+
+        /* Reading Progress Bar */
+        #progressBar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px; /* Thickness */
+            background: linear-gradient(to right, hsl(var(--color-accent-light)), hsl(var(--color-primary-light)));
+            width: 0%;
+            z-index: 9999;
+            transition: width 0.1s ease-out;
+        }
+        html.dark #progressBar {
+            background: linear-gradient(to right, hsl(var(--color-accent-dark)), hsl(var(--color-primary-dark)));
+        }
+
+        /* Table of Contents Styling */
+        #toc {
+            position: sticky;
+            top: 80px; /* Adjust based on header height */
+            max-height: calc(100vh - 100px); /* Prevent overlap with footer */
+            overflow-y: auto;
+        }
+        #toc a {
+            display: block;
+            padding: 8px 12px;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        #toc a:hover {
+            background-color: hsl(var(--color-secondary-light) / 0.7);
+            border-left-color: hsl(var(--color-primary-light) / 0.5);
+            transform: translateX(3px);
+        }
+        html.dark #toc a:hover {
+            background-color: hsl(var(--color-secondary-dark) / 0.7);
+            border-left-color: hsl(var(--color-primary-dark) / 0.5);
+        }
+        #toc a.active {
+             font-weight: 700; /* 500 is medium, 700 is bold */
+             color: hsl(var(--color-primary-light));
+             border-left-color: hsl(var(--color-primary-light));
+             background-color: hsl(var(--color-secondary-light));
+        }
+        html.dark #toc a.active {
+            color: hsl(var(--color-primary-dark));
+            border-left-color: hsl(var(--color-primary-dark));
+            background-color: hsl(var(--color-secondary-dark));
+        }
+        
+        /* Icon Styling */
+        .icon {
+            display: inline-block;
+            width: 1.2em;
+            height: 1.2em;
+            vertical-align: -0.2em; /* Adjust alignment */
+            margin-right: 0.3em;
+        }
+        
+        /* Card Styling Example */
+        .content-card {
+            background-color: hsl(var(--color-bg-light));
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 15px hsla(var(--color-text-light) / 0.05), 0 1px 3px hsla(var(--color-text-light) / 0.08);
+            border: 1px solid hsl(var(--color-secondary-light));
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        html.dark .content-card {
+            background-color: hsl(var(--color-secondary-dark));
+            border-color: hsl(var(--color-text-dark) / 0.1);
+            box-shadow: 0 8px 30px hsla(var(--color-bg-dark) / 0.2), 0 2px 6px hsla(var(--color-bg-dark) / 0.1);
+        }
+        .content-card:hover {
+             transform: translateY(-5px) scale(1.01);
+             box-shadow: 0 10px 25px hsla(var(--color-text-light) / 0.1), 0 3px 6px hsla(var(--color-text-light) / 0.1);
+        }
+        html.dark .content-card:hover {
+            box-shadow: 0 12px 40px hsla(var(--color-bg-dark) / 0.3), 0 4px 8px hsla(var(--color-bg-dark) / 0.15);
+        }
+
+        /* List styling with icons */
+        .list-item-icon {
+            display: flex;
+            align-items: flex-start; /* Align icon with first line of text */
+            margin-bottom: 0.8rem;
+        }
+        .list-item-icon i {
+            flex-shrink: 0;
+            margin-right: 0.8rem;
+            margin-top: 0.2rem; /* Fine-tune vertical alignment */
+            color: hsl(var(--color-primary-light));
+        }
+        html.dark .list-item-icon i {
+             color: hsl(var(--color-primary-dark));
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background-color: white;
+                color: black;
+                font-size: 12pt; /* Adjust print font size */
+            }
+            header, footer, #toc, #themeToggleBtn, #progressBar, .no-print {
+                display: none !important;
+            }
+            main {
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+            section, article {
+                page-break-inside: avoid;
+                margin-bottom: 20px;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                 color: black;
+                 page-break-after: avoid;
+            }
+            a { text-decoration: none; color: inherit; }
+            .content-card {
+                 box-shadow: none;
+                 border: 1px solid #ccc;
+                 padding: 15px;
+            }
+            .gradient-bg { background: none; }
+             /* Ensure links are visible */
+             a::after {
+                content: " [" attr(href) "]";
+                font-size: 9pt;
+                color: #555;
+             }
+             /* Hide internal links in print */
+             a[href^="#"]::after {
+                content: "";
+             }
+        }
+        
+        /* Tailwind Config (for JIT features like custom colors via CSS variables) */
+        tailwind.config = {
+             darkMode: 'class', // Enable class-based dark mode
+             theme: {
+                 extend: {
+                     colors: {
+                         primary: {
+                             light: 'hsl(var(--color-primary-light))',
+                             dark: 'hsl(var(--color-primary-dark))',
+                         },
+                         secondary: {
+                             light: 'hsl(var(--color-secondary-light))',
+                             dark: 'hsl(var(--color-secondary-dark))',
+                         },
+                         accent: {
+                             light: 'hsl(var(--color-accent-light))',
+                             dark: 'hsl(var(--color-accent-dark))',
+                         },
+                         txt: { // Renamed to avoid conflict with text- utilities
+                             light: 'hsl(var(--color-text-light))',
+                             dark: 'hsl(var(--color-text-dark))',
+                         },
+                         bg: {
+                             light: 'hsl(var(--color-bg-light))',
+                             dark: 'hsl(var(--color-bg-dark))',
+                         }
+                     },
+                     fontFamily: {
+                        sans: ['var(--font-sans)', 'sans-serif'],
+                     },
+                      animation: {
+                        'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+                      },
+                      keyframes: {
+                        fadeInUp: {
+                          '0%': { opacity: 0, transform: 'translateY(20px)' },
+                          '100%': { opacity: 1, transform: 'translateY(0)' },
+                        }
+                      }
+                 }
+             }
+         }
+    </style>
+</head>
+
+<body x-data="pageSetup()" x-init="initTheme(); observeSections(); observeAnimations();" class="bg-bg-light text-txt-light transition-colors duration-300 antialiased">
+
+    <div id="progressBar"></div>
+
+    <header class="sticky top-0 z-40 w-full backdrop-blur-sm bg-bg-light/80 dark:bg-bg-dark/80 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+        <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="ph-bold ph-brain text-primary-light dark:text-primary-dark text-2xl"></i>
+                 <span class="text-lg font-semibold text-txt-light dark:text-txt-dark">DeepSeek 赋能人才工作</span>
+            </div>
+            
+            <button id="themeToggleBtn" @click="toggleTheme" class="p-2 rounded-full hover:bg-secondary-light dark:hover:bg-secondary-dark transition-colors duration-200 no-print" aria-label="切换深色/浅色模式">
+                <i x-show="!darkMode" class="ph ph-moon text-xl text-txt-light"></i>
+                <i x-show="darkMode" class="ph ph-sun text-xl text-primary-dark"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-16">
+        <div class="lg:flex lg:space-x-12">
+            <aside class="w-full lg:w-1/4 mb-8 lg:mb-0 no-print">
+                <nav id="toc" class="text-sm" x-ref="toc">
+                    <h4 class="font-semibold text-txt-light dark:text-txt-dark mb-3 px-3 text-base">内容导航</h4>
+                    <a href="#introduction" @click.prevent="scrollToSection('#introduction')" class="toc-link">引言：时代变革</a>
+                    <a href="#part1" @click.prevent="scrollToSection('#part1')" class="toc-link">第一部分：理解大模型</a>
+                    <ul class="ml-4 my-1 space-y-1">
+                        <li><a href="#slide3" @click.prevent="scrollToSection('#slide3')" class="toc-link">什么是大模型？</a></li>
+                        <li><a href="#slide4" @click.prevent="scrollToSection('#slide4')" class="toc-link">DeepSeek 亮相</a></li>
+                        <li><a href="#slide5" @click.prevent="scrollToSection('#slide5')" class="toc-link">大模型 vs. 传统工具</a></li>
+                        <li><a href="#slide7" @click.prevent="scrollToSection('#slide7')" class="toc-link">理性看待大模型</a></li>
+                    </ul>
+                     <a href="#part2" @click.prevent="scrollToSection('#part2')" class="toc-link">第二部分：DeepSeek 赋能</a>
+                     <ul class="ml-4 my-1 space-y-1">
+                         <li><a href="#slide8" @click.prevent="scrollToSection('#slide8')" class="toc-link">核心赋能场景</a></li>
+                         <li><a href="#slide9" @click.prevent="scrollToSection('#slide9')" class="toc-link">场景一：人才引进</a></li>
+                         <li><a href="#slide12" @click.prevent="scrollToSection('#slide12')" class="toc-link">场景二：人才培养</a></li>
+                         <li><a href="#slide14" @click.prevent="scrollToSection('#slide14')" class="toc-link">场景三：人才管理</a></li>
+                         <li><a href="#slide16" @click.prevent="scrollToSection('#slide16')" class="toc-link">场景四：人才服务</a></li>
+                     </ul>
+                     <a href="#conclusion" @click.prevent="scrollToSection('#conclusion')" class="toc-link">结语</a>
+                </nav>
+            </aside>
+
+            <main class="w-full lg:w-3/4 space-y-16">
+
+                <section id="title-section" class="text-center mb-16 animate-fade-in-up animation-delay-100">
+                     <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-primary-light via-accent-light to-primary-light dark:from-primary-dark dark:via-accent-dark dark:to-primary-dark pb-2">
+                         拥抱大模型时代
+                     </h1>
+                     <h2 class="text-2xl md:text-3xl font-semibold text-txt-light dark:text-txt-dark mb-6">用 DeepSeek 赋能人才工作</h2>
+                     <p class="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">探索人工智能如何重塑人才战略，提升组织效能与核心竞争力。</p>
+                </section>
+
+
+                <section id="introduction" class="space-y-8 content-section">
+                     <h2 class="text-3xl font-bold border-l-4 border-primary-light dark:border-primary-dark pl-4 animate-fade-in-up animation-delay-200">引言：时代变革的浪潮已至</h2>
+                     <p class="text-lg text-gray-600 dark:text-gray-400 animate-fade-in-up animation-delay-300">人工智能，特别是大语言模型（LLMs）的飞速发展，正以前所未有的力量渗透并重塑着各行各业。在这场深刻的变革中，人才工作领域也迎来了前所未有的机遇与挑战。</p>
+                    
+                     <div class="grid md:grid-cols-2 gap-6">
+                        <div class="content-card animate-fade-in-up animation-delay-400">
+                            <h3 class="text-xl font-semibold mb-3 flex items-center">
+                                <i class="ph ph-trend-up text-accent-light dark:text-accent-dark text-2xl mr-2"></i> 机遇涌现
+                            </h3>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                                <li>AI驱动效率飞跃，解放人力于繁琐事务。</li>
+                                <li>数据洞察赋能精准决策，提升人才匹配度。</li>
+                                <li>个性化体验增强，优化人才吸引与发展。</li>
+                                <li>创新工作模式涌现，拓展人才工作价值边界。</li>
+                            </ul>
+                        </div>
+                        <div class="content-card animate-fade-in-up animation-delay-500">
+                            <h3 class="text-xl font-semibold mb-3 flex items-center">
+                                 <i class="ph ph-warning-circle text-orange-500 text-2xl mr-2"></i> 挑战并存
+                            </h3>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                                <li>传统模式效率瓶颈凸显，亟待转型。</li>
+                                <li>信息过载与噪音干扰，精准识别难度加大。</li>
+                                <li>人才工作者需快速学习，掌握新技能。</li>
+                                <li>确保AI应用的公平性、透明度与合规性。</li>
+                             </ul>
+                        </div>
+                     </div>
+
+                    <blockquote class="border-l-4 border-accent-light dark:border-accent-dark pl-6 py-4 bg-secondary-light dark:bg-secondary-dark rounded-r-lg animate-fade-in-up animation-delay-600">
+                        <p class="text-lg italic text-gray-700 dark:text-gray-300">“在这个大模型驱动的新时代，人才工作者必须主动拥抱变革，将AI视为强大的协作者，共同开创人才工作的新篇章。”</p>
+                    </blockquote>
+                     <p class="animate-fade-in-up animation-delay-700">本报告旨在探讨如何有效利用以 <strong class="text-primary-light dark:text-primary-dark font-semibold">DeepSeek</strong> 为代表的大模型工具，赋能人才工作的各个环节，实现效率、质量与战略价值的全面提升。</p>
+                </section>
+
+                <section id="part1" class="space-y-12 content-section">
+                    <h2 class="text-3xl font-bold border-l-4 border-primary-light dark:border-primary-dark pl-4 animate-fade-in-up">第一部分：理解大模型：人才工作者的全新生产力工具</h2>
+
+                    <article id="slide3" class="space-y-4 content-section">
+                         <h3 class="text-2xl font-semibold animate-fade-in-up flex items-center"><i class="ph ph-brain icon text-primary-light dark:text-primary-dark"></i> 什么是大模型？—— 揭秘AI的“大脑”</h3>
+                         <p class="animate-fade-in-up animation-delay-100">您可以将大语言模型（LLMs）想象成一个经过海量文本数据训练、极其聪明的“数字大脑”。它并非真正拥有意识，但能够：</p>
+                         <ul class="space-y-3 pl-5">
+                             <li class="list-item-icon animate-fade-in-up animation-delay-200">
+                                 <i class="ph-fill ph-text-aa"></i>
+                                 <span><strong class="text-txt-light dark:text-txt-dark font-medium">理解与生成文本：</strong> 阅读、理解人类语言，并能像人一样写作、总结、翻译、回答问题。</span>
+                             </li>
+                             <li class="list-item-icon animate-fade-in-up animation-delay-300">
+                                 <i class="ph-fill ph-lightbulb"></i>
+                                 <span><strong class="text-txt-light dark:text-txt-dark font-medium">逻辑推理与知识问答：</strong> 基于其庞大的知识库进行推理，解答各种领域的问题。</span>
+                             </li>
+                            <li class="list-item-icon animate-fade-in-up animation-delay-400">
+                                 <i class="ph-fill ph-code"></i>
+                                 <span><strong class="text-txt-light dark:text-txt-dark font-medium">模式识别与内容创作：</strong> 发现数据中的规律，并能创作诗歌、代码、邮件、报告等多种内容。</span>
+                             </li>
+                         </ul>
+                         <p class="animate-fade-in-up animation-delay-500">其核心价值在于 <strong class="text-accent-light dark:text-accent-dark">极大地提升信息处理效率和知识获取能力</strong>，成为各领域专业人士的强大助手。</p>
+                    </article>
+
+                    <article id="slide4" class="space-y-4 content-section">
+                         <h3 class="text-2xl font-semibold animate-fade-in-up flex items-center"><i class="ph ph-rocket-launch icon text-primary-light dark:text-primary-dark"></i> DeepSeek 亮相：专为中文语境优化的大模型利器</h3>
+                         <p class="animate-fade-in-up animation-delay-100">DeepSeek 作为领先的大模型技术公司，其模型具备显著优势，尤其适合中文环境下的复杂任务：</p>
+                         <div class="grid md:grid-cols-3 gap-4 text-center">
+                            <div class="content-card p-4 animate-fade-in-up animation-delay-200">
+                                <i class="ph-bold ph-translate text-4xl text-primary-light dark:text-primary-dark mx-auto mb-2"></i>
+                                <h4 class="font-semibold mb-1">卓越中文能力</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">深度优化，更懂中文表达与文化细微差别。</p>
+                            </div>
+                             <div class="content-card p-4 animate-fade-in-up animation-delay-300">
+                                <i class="ph-bold ph-gauge text-4xl text-primary-light dark:text-primary-dark mx-auto mb-2"></i>
+                                <h4 class="font-semibold mb-1">高效稳定易用</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">性能优越，接口友好，易于集成和实际应用。</p>
+                            </div>
+                             <div class="content-card p-4 animate-fade-in-up animation-delay-400">
+                                <i class="ph-bold ph-arrows-clockwise text-4xl text-primary-light dark:text-primary-dark mx-auto mb-2"></i>
+                                <h4 class="font-semibold mb-1">持续迭代优化</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">技术不断进步，能力持续增强，前景广阔。</p>
+                             </div>
+                         </div>
+                         <p class="animate-fade-in-up animation-delay-500">DeepSeek 将在人才工作的 <strong class="text-accent-light dark:text-accent-dark">引、育、留、管</strong> 等多个环节展现其独特价值。</p>
+                    </article>
+
+                    <article id="slide5" class="space-y-4 content-section">
+                         <h3 class="text-2xl font-semibold animate-fade-in-up flex items-center"><i class="ph ph-scales icon text-primary-light dark:text-primary-dark"></i> 大模型 vs. 传统工具：颠覆性的效率提升</h3>
+                         <p class="animate-fade-in-up animation-delay-100">相较于传统工具（如搜索引擎、手动分析），大模型带来了革命性的改变：</p>
+                         
+                         <div class="overflow-x-auto animate-fade-in-up animation-delay-200">
+                            <table class="w-full min-w-[600px] border-collapse border border-gray-300 dark:border-gray-600">
+                                <thead class="bg-secondary-light dark:bg-secondary-dark">
+                                    <tr>
+                                        <th class="border border-gray-300 dark:border-gray-600 p-3 text-left font-semibold">维度</th>
+                                        <th class="border border-gray-300 dark:border-gray-600 p-3 text-left font-semibold">传统工具 (搜索引擎, 手动分析等)</th>
+                                        <th class="border border-gray-300 dark:border-gray-600 p-3 text-left font-semibold">大模型工具 (如 DeepSeek)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 font-medium">信息获取</td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 text-gray-600 dark:text-gray-400">分散，需手动筛选整合，耗时费力</td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 text-green-600 dark:text-green-400 font-medium">快速整合，精准问答，直接获取核心信息</td>
+                                    </tr>
+                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                         <td class="border border-gray-300 dark:border-gray-600 p-3 font-medium">处理分析</td>
+                                         <td class="border border-gray-300 dark:border-gray-600 p-3 text-gray-600 dark:text-gray-400">依赖人工，效率低，易出错，深度有限</td>
+                                         <td class="border border-gray-300 dark:border-gray-600 p-3 text-green-600 dark:text-green-400 font-medium">自动化处理，快速分析大量数据，发现深层模式</td>
+                                    </tr>
+                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                         <td class="border border-gray-300 dark:border-gray-600 p-3 font-medium">内容生成</td>
+                                         <td class="border border-gray-300 dark:border-gray-600 p-3 text-gray-600 dark:text-gray-400">完全依赖人工撰写，耗时长，风格单一</td>
+                                         <td class="border border-gray-300 dark:border-gray-600 p-3 text-green-600 dark:text-green-400 font-medium">快速生成多样化、个性化内容（报告、邮件、文案）</td>
+                                    </tr>
+                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 font-medium">决策支持</td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 text-gray-600 dark:text-gray-400">基于有限信息和主观判断</td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 text-green-600 dark:text-green-400 font-medium">提供数据驱动的洞察和建议，辅助科学决策</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                         <p class="italic text-sm text-gray-500 dark:text-gray-400 animate-fade-in-up animation-delay-300">注：上表为简化对比，实际效果取决于具体应用场景和模型能力。</p>
+                    </article>
+
+                    <article id="slide7" class="space-y-4 content-section">
+                         <h3 class="text-2xl font-semibold animate-fade-in-up flex items-center"><i class="ph ph-users-three icon text-primary-light dark:text-primary-dark"></i> 大模型不是万能的，但赋能人才工作大有可为</h3>
+                         <p class="animate-fade-in-up animation-delay-100">我们需要理性看待大模型：</p>
+                         <ul class="space-y-3 pl-5">
+                            <li class="list-item-icon animate-fade-in-up animation-delay-200">
+                                 <i class="ph-fill ph-warning"></i>
+                                <span><strong class="text-txt-light dark:text-txt-dark font-medium">认识局限：</strong> 它们依赖训练数据，可能存在偏见或生成不准确信息（幻觉），需要人类的批判性思维和核实。</span>
+                             </li>
+                            <li class="list-item-icon animate-fade-in-up animation-delay-300">
+                                 <i class="ph-fill ph-handshake"></i>
+                                <span><strong class="text-txt-light dark:text-txt-dark font-medium">强调人机协同：</strong> AI是强大的工具，但无法取代人的经验、情感智能和战略判断。最佳实践是让AI增强人的能力，而非替代。</span>
+                             </li>
+                         </ul>
+                         <p class="animate-fade-in-up animation-delay-400">尽管存在局限，大模型为人才工作带来的 <strong class="text-accent-light dark:text-accent-dark">效率提升、洞察深化和体验优化</strong> 的潜力是巨大的。拥抱并善用这一工具，将是未来人才工作者的核心竞争力之一。</p>
+                    </article>
+                </section>
+
+                <section id="part2" class="space-y-12 content-section">
+                    <h2 class="text-3xl font-bold border-l-4 border-primary-light dark:border-primary-dark pl-4 animate-fade-in-up">第二部分：DeepSeek赋能人才工作：应用场景深度解析</h2>
+
+                    <article id="slide8" class="space-y-4 content-section">
+                         <h3 class="text-2xl font-semibold animate-fade-in-up flex items-center"><i class="ph ph-strategy icon text-primary-light dark:text-primary-dark"></i> 总览：DeepSeek 赋能人才工作的核心场景</h3>
+                         <p class="animate-fade-in-up animation-delay-100">DeepSeek 可深度融入人才工作的全生命周期，主要体现在以下几个核心场景，旨在实现 <strong class="text-accent-light dark:text-accent-dark">效率、质量与创新的三重提升</strong>：</p>
+                         
+                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-in-up animation-delay-200">
+                             <div class="content-card p-5 text-center hover:border-primary-light dark:hover:border-primary-dark">
+                                <i class="ph-bold ph-user-plus text-4xl text-primary-light dark:text-primary-dark mx-auto mb-3"></i>
+                                <h4 class="font-semibold text-lg mb-1">人才引进</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">精准画像，高效筛选，智能匹配</p>
+                            </div>
+                             <div class="content-card p-5 text-center hover:border-primary-light dark:hover:border-primary-dark">
+                                <i class="ph-bold ph-chalkboard-teacher text-4xl text-primary-light dark:text-primary-dark mx-auto mb-3"></i>
+                                <h4 class="font-semibold text-lg mb-1">人才培养</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">个性规划，智能推荐，效果评估</p>
+                             </div>
+                             <div class="content-card p-5 text-center hover:border-primary-light dark:hover:border-primary-dark">
+                                <i class="ph-bold ph-chart-line-up text-4xl text-primary-light dark:text-primary-dark mx-auto mb-3"></i>
+                                <h4 class="font-semibold text-lg mb-1">人才管理</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">数据洞察，风险预警，决策支持</p>
+                             </div>
+                             <div class="content-card p-5 text-center hover:border-primary-light dark:hover:border-primary-dark">
+                                <i class="ph-bold ph-chats-circle text-4xl text-primary-light dark:text-primary-dark mx-auto mb-3"></i>
+                                <h4 class="font-semibold text-lg mb-1">人才服务</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">智能问答，流程自动，体验优化</p>
+                            </div>
+                         </div>
+                    </article>
+
+                    <article id="slide9" class="space-y-6 content-section">
+                        <h3 class="text-2xl font-semibold animate-fade-in-up flex items-center"><i class="ph ph-binoculars icon text-primary-light dark:text-primary-dark"></i> 场景一：人才引进 – 精准高效地寻觅千里马</h3>
+                        <p class="animate-fade-in-up animation-delay-100">传统招聘面临信息不对称、筛选耗时、匹配度低等痛点。DeepSeek 可提供以下解决方案：</p>
+                        
+                        <div class="space-y-5">
+                            <div class="content-card animate-fade-in-up animation-delay-200">
+                                <h4 class="font-semibold text-lg mb-2 flex items-center"><i class="ph-fill ph-user-focus icon text-accent-light dark:text-accent-dark"></i> 智能人才画像构建</h4>
+                                <p class="text-gray-700 dark:text-gray-300">根据岗位JD，快速分析海量数据（简历库、社交媒体、论文专利等），自动生成目标人才的技能、经验、背景等多维度画像。</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><em>示例：输入“高级算法工程师JD”，输出关键技能标签、教育背景偏好、行业经验要求等。</em></p>
+                            </div>
+                            <div class="content-card animate-fade-in-up animation-delay-300">
+                                <h4 class="font-semibold text-lg mb-2 flex items-center"><i class="ph-fill ph-magnifying-glass icon text-accent-light dark:text-accent-dark"></i> 精准人才信息检索与挖掘</h4>
+                                <p class="text-gray-700 dark:text-gray-300">利用强大的语义理解能力，跨平台、跨渠道精准搜索符合画像的人才，发现潜在候选人。</p>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><em>示例：设定“精通Python、具备金融风控模型经验”，快速在领英、GitHub、学术库中查找匹配者。</em></p>
+                            </div>
+                            <div class="content-card animate-fade-in-up animation-delay-400">
+                                <h4 class="font-semibold text-lg mb-2 flex items-center"><i class="ph-fill ph-file-text icon text-accent-light dark:text-accent-dark"></i> 智能简历筛选与评估</h4>
+                                <p class="text-gray-700 dark:text-gray-300">自动化解析和评估海量简历，按匹配度排序，提取关键亮点和潜在风险点，极大缩短初筛时间。</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><em>示例：上传100份简历，几分钟内完成初步筛选，高亮前10名候选人的核心优势。</em></p>
+                            </div>
+                            <div class="content-card animate-fade-in-up animation-delay-500">
+                                <h4 class="font-semibold text-lg mb-2 flex items-center"><i class="ph-fill ph-pencil-line icon text-accent-light dark:text-accent-dark"></i> 个性化招聘文案生成</h4>
+                                <p class="text-gray-700 dark:text-gray-300">根据目标人才画像和岗位吸引点，生成多种风格、更具吸引力的招聘信息、职位描述和邀约邮件。</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><em>示例：针对技术专家生成强调技术挑战的文案，针对管理人才生成强调发展空间的文案。</em></p>
+                            </div>
+                            <div class="content-card animate-fade-in-up animation-delay-600">
+                                <h4 class="font-semibold text-lg mb-2 flex items-center"><i class="ph-fill ph-microphone icon text-accent-light dark:text-accent-dark"></i> 智能面试辅助</h4>
+                                 <p class="text-gray-700 dark:text-gray-300">实时或离线分析面试录音/文字记录，提取关键信息、评估回答质量、生成面试摘要，辅助面试官更客观决策。</p>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><em>示例：分析面试录音，自动识别候选人回答STAR原则的完整度。</em></p>
+                             </div>
+                        </div>
+                    </article>
+
+                    <article id="slide12" class="space-y-6 content-section">
+                         <h3 class="text-2xl font-semibold animate-fade-in-up flex items-center"><i class="ph ph-graduation-cap icon text-primary-light dark:text-primary-dark"></i> 场景二：人才培养 – 个性化、智能化地赋能人才成长</h3>
+                         <p class="animate-fade-in-up animation-delay-100">传统培训常面临同质化、效果难衡量等问题。DeepSeek 可助力构建更智能、更个性化的培养体系：</p>
+                        
+                         <div class="space-y-5">
+                             <div class="content-card animate-fade-in-up animation-delay-200">
+                                 <h4 class="font-semibold text-lg mb-2 flex items-center"><i class="ph-fill ph-path icon text-accent-light dark:text-accent-dark"></i> 个性化学习路径规划</h4>
+                                 <p class="text-gray-700 dark:text-gray-300">基于员工当前的技能画像、绩效表现和职业发展目标，智能推荐定制化的学习路径、课程、项目或导师。</p>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><em>示例：为初级产品经理规划从用户研究到数据分析再到产品设计的进阶学习地图。</em></p>
+                             </div>
+                             <div class="content-card animate-fade-in-up animation-delay-300">
+                                 <h4 class="font-semibold text-lg mb-2 flex items-center"><i class="ph-fill ph-books icon text-accent-light dark:text-accent-dark"></i> 智能学习内容推荐与生成</h4>
+                                 <p class="text-gray-700 dark:text-gray-300">聚合内外部优质学习资源，根据学习者需求精准推荐。更能按需生成学习摘要、知识图谱、练习题等辅助材料。</p>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><em>示例：学习“项目管理”，自动推荐相关文章、视频教程，并生成关键知识点思维导图。</em></p>
+                             </div>
+                             <div class="content-card animate-fade-in-up animation-delay-400">
+                                 <h4 class="font-semibold text-lg mb-2 flex items-center"><i class="ph-fill ph-robot icon text-accent-light dark:text-accent-dark"></i> 智能学习伙伴与答疑</h4>
+                                 <p class="text-gray-700 dark:text-gray-300">构建 7x24 小时的智能学习助手，随时解答学习疑问，提供知识点解释，甚至进行模拟对话练习。</p>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><em>示例：学习新编程语言时，随时向AI伙伴询问语法细节或代码示例。</em></p>
+                             </div>
+                             <div class="content-card animate-fade-in-up animation-delay-500">
+                                 <h4 class="font-semibold text-lg mb-2 flex items-center"><i class="ph-fill ph-chart-bar icon text-accent-light dark:text-accent-dark"></i> 培训效果评估与反馈</h4>
+                                 <p class="text-gray-700 dark:text-gray-300">分析学习过程数据（完成度、测试成绩、互动频率等）和训后反馈文本，量化评估培训效果，并提供个性化改进建议。</p>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><em>示例：分析销售技巧培训数据，识别掌握薄弱环节，为学员提供针对性练习建议。</em></p>
+                             </div>
+                         </div>
+                     </article>
+
+                    <article id="slide14" class="space-y-6 content-section">
+                         <h3 class="text-2xl font-semibold animate-fade-in-up flex items-center"><i class="ph ph-chart-pie-slice icon text-primary-light dark:text-primary-dark"></i> 场景三：人才管理 – 数据驱动的人才洞察与决策</h3>
+                         <p class="animate-fade-in-up animation-delay-100">人才管理需要更全局的视野和更及时的洞察。DeepSeek 通过强大的数据分析能力，赋能管理者做出更明智的决策：</p>
+                        
+                         <div class="space-y-5">
+                             <div class="content-card animate-fade-in-up animation-delay-200">
+                                 <h4 class="font-semibold text-lg mb-2 flex items-center"><i class="ph-fill ph-database icon text-accent-light dark:text-accent-dark"></i> 人才数据整合与分析</h4>
+                                 <p class="text-gray-700 dark:text-gray-300">打通 HR 系统、绩效、培训、调研等多源数据，进行深度关联分析，挖掘人才结构、绩效驱动因素、流失风险等关键洞察。</p>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><em>示例：整合分析发现，某部门高绩效员工流失与缺乏晋升机会高度相关。</em></p>
+                             </div>
+                             <div class="content-card animate-fade-in-up animation-delay-300">
+                                 <h4 class="font-semibold text-lg mb-2 flex items-center"><i class="ph-fill ph-smiley icon text-accent-light dark:text-accent-dark"></i> 员工情绪与意愿分析</h4>
+                                 <p class="text-gray-700 dark:text-gray-300">自动分析员工满意度调研、访谈记录、内部沟通等文本数据，快速识别员工关注焦点、普遍情绪、潜在抱怨和改进建议。</p>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><em>示例：分析匿名反馈，发现员工普遍对当前报销流程不满，并总结具体痛点。</em></p>
+                             </div>
+                              <div class="content-card animate-fade-in-up animation-delay-400">
+                                 <h4 class="font-semibold text-lg mb-2 flex items-center"><i class="ph-fill ph-siren icon text-accent-light dark:text-accent-dark"></i> 智能人才风险预警</h4>
+                                 <p class="text-gray-700 dark:text-gray-300">实时监测关键人才指标（绩效变化、行为异常、离职倾向预测等），提前识别潜在流失、敬业度下降等风险，并触发预警。</p>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><em>示例：系统监测到某核心员工近期活动锐减且绩效下滑，自动提醒主管关注。</em></p>
+                             </div>
+                             <div class="content-card animate-fade-in-up animation-delay-500">
+                                 <h4 class="font-semibold text-lg mb-2 flex items-center"><i class="ph-fill ph-scales icon text-accent-light dark:text-accent-dark"></i> 政策制定与优化建议</h4>
+                                 <p class="text-gray-700 dark:text-gray-300">结合内部人才数据、员工反馈和外部行业趋势、最佳实践，为人才政策（薪酬福利、绩效激励、职业发展等）的制定和优化提供数据支撑和智能建议。</p>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><em>示例：分析行业薪酬报告和内部员工反馈，建议调整特定岗位的薪酬结构以保持市场竞争力。</em></p>
+                             </div>
+                         </div>
+                     </article>
+
+                    <article id="slide16" class="space-y-6 content-section">
+                         <h3 class="text-2xl font-semibold animate-fade-in-up flex items-center"><i class="ph ph-handshake icon text-primary-light dark:text-primary-dark"></i> 场景四：人才服务 – 更便捷、更智能的人才体验</h3>
+                         <p class="animate-fade-in-up animation-delay-100">提升人才服务效率和体验，是增强人才吸引力和满意度的关键。DeepSeek 可提供更智能、更便捷的服务支持：</p>
+                        
+                         <div class="space-y-5">
+                             <div class="content-card animate-fade-in-up animation-delay-200">
+                                 <h4 class="font-semibold text-lg mb-2 flex items-center"><i class="ph-fill ph-question icon text-accent-light dark:text-accent-dark"></i> 智能人才咨询与问答</h4>
+                                 <p class="text-gray-700 dark:text-gray-300">构建基于公司知识库的智能客服/HR助手，提供 7x24 小时在线服务，快速解答员工关于政策、福利、流程等的常见问题。</p>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><em>示例：员工询问“年假如何申请？”，AI助手直接给出流程指引和系统链接。</em></p>
+                             </div>
+                             <div class="content-card animate-fade-in-up animation-delay-300">
+                                 <h4 class="font-semibold text-lg mb-2 flex items-center"><i class="ph-fill ph-gear-six icon text-accent-light dark:text-accent-dark"></i> 自动化办事流程</h4>
+                                 <p class="text-gray-700 dark:text-gray-300">将部分标准化的 HR 服务流程（如入职、请假、证明开具、信息变更等）实现自动化处理，减少人工干预，提升效率。</p>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><em>示例：员工在线提交入职材料，AI自动校验信息完整性，提醒补充缺失项，加速流程。</em></p>
+                             </div>
+                             <div class="content-card animate-fade-in-up animation-delay-400">
+                                 <h4 class="font-semibold text-lg mb-2 flex items-center"><i class="ph-fill ph-paper-plane-tilt icon text-accent-light dark:text-accent-dark"></i> 个性化信息推送与服务推荐</h4>
+                                 <p class="text-gray-700 dark:text-gray-300">根据人才的画像、偏好和当前需求，主动、精准地推送相关的政策更新、福利信息、培训机会、活动通知等。</p>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1"><em>示例：向新晋管理者推送领导力发展课程信息；向外籍员工推送最新的签证政策更新。</em></p>
+                             </div>
+                         </div>
+                     </article>
+                     
+                     <section id="conclusion" class="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700 content-section">
+                         <h2 class="text-3xl font-bold mb-6 text-center animate-fade-in-up">结语：迈向智能人才工作新纪元</h2>
+                         <p class="text-lg text-center text-gray-600 dark:text-gray-400 max-w-3xl mx-auto animate-fade-in-up animation-delay-100">
+                             大模型技术为人才工作带来了前所未有的变革机遇。通过拥抱像 DeepSeek 这样的先进工具，人才工作者可以从繁琐的事务中解放出来，聚焦于更具战略价值的工作，实现从执行者到战略伙伴的转型。
+                         </p>
+                         <p class="text-lg text-center text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mt-4 animate-fade-in-up animation-delay-200">
+                              这不仅是技术的升级，更是思维模式的革新。让我们积极探索、拥抱变化，共同迈向一个更智能、更高效、更具人文关怀的人才工作新纪元。
+                         </p>
+                        <div class="mt-8 text-center animate-fade-in-up animation-delay-300">
+                             <a href="#title-section" @click.prevent="scrollToSection('#title-section')" class="inline-block bg-gradient-to-r from-primary-light to-accent-light hover:from-primary-light hover:to-primary-light dark:from-primary-dark dark:to-accent-dark dark:hover:from-primary-dark dark:hover:to-primary-dark text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                                 返回顶部 <i class="ph ph-arrow-up ml-1"></i>
+                             </a>
+                         </div>
+                    </section>
+
+                </main>
+            </div>
+        </div>
+
+    <footer class="mt-20 py-8 border-t border-gray-200 dark:border-gray-700 bg-secondary-light dark:bg-secondary-dark no-print">
+         <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 dark:text-gray-400">
+            <div class="flex flex-col md:flex-row justify-center items-center md:space-x-6">
+                 <div class="flex items-center space-x-3 mb-4 md:mb-0">
+                    <span class="inline-block h-10 w-10 rounded-full overflow-hidden bg-gradient-to-br from-primary-light to-accent-light dark:from-primary-dark dark:to-accent-dark flex items-center justify-center text-white font-bold text-lg">
+                         陈
+                     </span>
+                     <span class="font-medium text-txt-light dark:text-txt-dark">陈光</span>
+                 </div>
+
+                <p class="text-sm mb-4 md:mb-0">&copy; <span x-text="new Date().getFullYear()"></span> DeepSeek Talent Empowerment Initiative. All Rights Reserved.</p>
+                 
+                 <div class="flex justify-center space-x-4">
+                     <a href="#" aria-label="LinkedIn Profile" class="text-gray-400 hover:text-primary-light dark:hover:text-primary-dark transition-colors">
+                        <i class="ph-bold ph-linkedin-logo text-2xl"></i>
+                     </a>
+                     <a href="#" aria-label="Twitter Profile" class="text-gray-400 hover:text-primary-light dark:hover:text-primary-dark transition-colors">
+                        <i class="ph-bold ph-twitter-logo text-2xl"></i>
+                    </a>
+                     <a href="#" aria-label="GitHub Profile" class="text-gray-400 hover:text-primary-light dark:hover:text-primary-dark transition-colors">
+                        <i class="ph-bold ph-github-logo text-2xl"></i>
+                    </a>
+                 </div>
+             </div>
+         </div>
+     </footer>
+
+
+    <script>
+        function pageSetup() {
+            return {
+                darkMode: false,
+                activeSection: '',
+
+                initTheme() {
+                    // Check local storage first
+                    if (localStorage.getItem('darkMode') === 'true') {
+                        this.darkMode = true;
+                        document.documentElement.classList.add('dark');
+                    } else if (localStorage.getItem('darkMode') === 'false') {
+                         this.darkMode = false;
+                         document.documentElement.classList.remove('dark');
+                    } else {
+                        // Fallback to system preference if no setting stored
+                        this.darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                        if (this.darkMode) {
+                             document.documentElement.classList.add('dark');
+                        }
+                    }
+                    // Listen for system changes
+                    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                        // Only update if no manual override exists
+                         if (localStorage.getItem('darkMode') === null) {
+                            this.darkMode = e.matches;
+                            document.documentElement.classList.toggle('dark', this.darkMode);
+                         }
+                     });
+                },
+
+                toggleTheme() {
+                    this.darkMode = !this.darkMode;
+                    document.documentElement.classList.toggle('dark', this.darkMode);
+                    localStorage.setItem('darkMode', this.darkMode); // Store user preference
+                },
+
+                // Smooth scrolling function
+                 scrollToSection(selector) {
+                    const element = document.querySelector(selector);
+                    if (element) {
+                         // Calculate offset based on sticky header height (adjust if needed)
+                         const headerOffset = 70; // Adjust this value based on your header's actual height
+                         const elementPosition = element.getBoundingClientRect().top;
+                         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        
+                         window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                         });
+                         
+                         // Manually update active section briefly after scroll starts
+                         // This provides immediate feedback, IntersectionObserver handles long term state
+                         this.setActiveSection(selector.substring(1)); 
+                    }
+                },
+
+                // Update reading progress bar
+                 updateProgressBar() {
+                    const progressBar = document.getElementById('progressBar');
+                    if (!progressBar) return;
+                    
+                    const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    const scrolled = window.scrollY;
+                    
+                    if (scrollableHeight > 0) {
+                         const progress = (scrolled / scrollableHeight) * 100;
+                         progressBar.style.width = `${progress}%`;
+                    } else {
+                        progressBar.style.width = '0%'; // Handle case where content fits viewport
+                    }
+                },
+
+                // Observe sections for Table of Contents highlighting
+                observeSections() {
+                     const observer = new IntersectionObserver((entries) => {
+                         entries.forEach(entry => {
+                             if (entry.isIntersecting && entry.intersectionRatio >= 0.5) { // Adjust threshold as needed
+                                 this.setActiveSection(entry.target.id);
+                             }
+                         });
+                     }, { rootMargin: "-50% 0px -50% 0px" }); // Activate when section is near vertical center
+
+                     document.querySelectorAll('.content-section').forEach(section => {
+                         observer.observe(section);
+                     });
+                     
+                     // Add scroll listener for progress bar
+                     window.addEventListener('scroll', this.updateProgressBar);
+                 },
+                 
+                // Set active link in TOC
+                 setActiveSection(id) {
+                     if (id === this.activeSection) return; // Avoid unnecessary updates
+                     this.activeSection = id;
+                     
+                     // Update TOC links
+                     this.$refs.toc.querySelectorAll('a').forEach(link => {
+                         link.classList.remove('active');
+                         if (link.getAttribute('href') === `#${id}`) {
+                             link.classList.add('active');
+                             // Optional: Scroll TOC to keep active link visible
+                             // link.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                         }
+                     });
+                 },
+
+                 // Observer for entrance animations
+                observeAnimations() {
+                     const animationObserver = new IntersectionObserver((entries, observer) => {
+                         entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                 const delayClass = Array.from(entry.target.classList).find(c => c.startsWith('animation-delay-'));
+                                 if (delayClass) {
+                                     const delay = parseInt(delayClass.split('-').pop()) || 0;
+                                     setTimeout(() => {
+                                         entry.target.style.opacity = '1'; // Trigger animation
+                                         entry.target.classList.add('fade-in-up');
+                                     }, delay);
+                                 } else {
+                                      entry.target.style.opacity = '1'; // Trigger animation immediately if no delay
+                                      entry.target.classList.add('fade-in-up');
+                                 }
+                                 observer.unobserve(entry.target); // Animate only once
+                             }
+                         });
+                     }, { threshold: 0.1 }); // Trigger when 10% visible
+
+                     document.querySelectorAll('[class*="animate-fade-in-up"]').forEach(el => {
+                        el.style.opacity = '0'; // Start elements as hidden
+                         animationObserver.observe(el);
+                     });
+                 }
+            }
+        }
+
+        // Simple utility for animation delays using Tailwind-like classes
+        // Add this if you want more structured delay handling in JS instead of pure CSS/Tailwind delays
+         const styleSheet = document.createElement("style");
+         let styles = "";
+         for (let i = 1; i <= 10; i++) { // Generate delays from 100ms to 1000ms
+            styles += `.animation-delay-${i * 100} { animation-delay: ${i * 0.1}s; }\n`;
+         }
+         styleSheet.innerText = styles;
+         document.head.appendChild(styleSheet);
+
+    </script>
+
+</body>
+</html>

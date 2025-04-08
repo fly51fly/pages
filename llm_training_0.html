@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM训练过程可视化</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4a6ee0;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --info-color: #17a2b8;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            padding: 20px;
+            overflow-x: hidden;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stage-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .parameter-controls {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #3a5bbf;
+        }
+
+        button.active {
+            background-color: #2a4aaf;
+            box-shadow: 0 0 0 2px rgba(74, 110, 224, 0.5);
+        }
+
+        label {
+            font-size: 14px;
+            color: var(--dark-color);
+        }
+
+        input[type="range"] {
+            width: 100%;
+        }
+
+        .animation-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background-color: var(--light-color);
+        }
+
+        .stage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .stage.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Data Collection Stage */
+        .data {
+            position: absolute;
+            width: 40px;
+            height: 20px;
+            background-color: var(--info-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+        }
+
+        .tokenizer {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--warning-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .token {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: var(--success-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+        }
+
+        /* Pretraining Stage */
+        .neural-network {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 300px;
+        }
+
+        .layer {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            height: 100%;
+        }
+
+        .node {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+        }
+
+        .connection {
+            position: absolute;
+            background-color: #aaa;
+            height: 2px;
+            transform-origin: left center;
+        }
+
+        /* Fine-tuning Stage */
+        .fine-tuning-container {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        .pretrained-model {
+            width: 150px;
+            height: 150px;
+            background-color: var(--primary-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .task-data {
+            display: flex;
+            gap: 10px;
+        }
+
+        .task-item {
+            width: 60px;
+            height: 40px;
+            background-color: var(--info-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+        }
+
+        .fine-tuned-model {
+            width: 150px;
+            height: 150px;
+            background-color: var(--success-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            opacity: 0;
+        }
+
+        /* Evaluation Stage */
+        .eval-container {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        .metrics {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+
+        .metric {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .metric-name {
+            font-weight: bold;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .chart-container {
+            width: 80%;
+            height: 200px;
+            position: relative;
+            border-bottom: 2px solid #ccc;
+            border-left: 2px solid #ccc;
+        }
+
+        .chart-point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: var(--danger-color);
+            border-radius: 50%;
+            transform: translate(-50%, 50%);
+        }
+
+        .loss-line {
+            position: absolute;
+            height: 2px;
+            background-color: var(--danger-color);
+            transform-origin: left center;
+        }
+
+        .status {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .legend {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .controls {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .stage-controls, .parameter-controls {
+                justify-content: center;
+            }
+
+            .animation-container {
+                height: 400px;
+            }
+
+            .neural-network {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>大语言模型(LLM)训练过程可视化</h1>
+            <p class="description">这个动画展示了LLM从数据收集到最终评估的完整训练过程</p>
+        </header>
+
+        <div class="controls">
+            <div class="stage-controls">
+                <button id="data-stage-btn" class="stage-btn active">1. 数据收集预处理</button>
+                <button id="pretrain-stage-btn" class="stage-btn">2. 预训练</button>
+                <button id="finetune-stage-btn" class="stage-btn">3. 微调</button>
+                <button id="eval-stage-btn" class="stage-btn">4. 评估迭代</button>
+            </div>
+            <div class="parameter-controls">
+                <div class="control-group">
+                    <label for="speed-control">速度调节:</label>
+                    <input type="range" id="speed-control" min="0.5" max="2" step="0.1" value="1">
+                </div>
+                <div class="control-group">
+                    <label for="complexity-control">模型复杂度:</label>
+                    <input type="range" id="complexity-control" min="1" max="5" step="1" value="3">
+                </div>
+            </div>
+        </div>
+
+        <div class="animation-container">
+            <div id="data-stage" class="stage active">
+                <div class="tokenizer">Tokenizer</div>
+            </div>
+            <div id="pretrain-stage" class="stage">
+                <div class="neural-network" id="network"></div>
+            </div>
+            <div id="finetune-stage" class="stage">
+                <div class="fine-tuning-container">
+                    <div class="pretrained-model">预训练模型</div>
+                    <div class="task-data">
+                        <div class="task-item">任务数据1</div>
+                        <div class="task-item">任务数据2</div>
+                        <div class="task-item">任务数据3</div>
+                    </div>
+                    <div class="fine-tuned-model">微调后模型</div>
+                </div>
+            </div>
+            <div id="eval-stage" class="stage">
+                <div class="eval-container">
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-name">准确率</div>
+                            <div class="metric-value" id="accuracy-value">0%</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-name">困惑度</div>
+                            <div class="metric-value" id="perplexity-value">∞</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-name">BLEU分数</div>
+                            <div class="metric-value" id="bleu-value">0.0</div>
+                        </div>
+                    </div>
+                    <div class="chart-container" id="loss-chart"></div>
+                    <div class="status" id="eval-status">训练迭代中...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--info-color);"></div>
+                <span>原始数据</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--warning-color);"></div>
+                <span>分词器</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--success-color);"></div>
+                <span>Token/微调模型</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--primary-color);"></div>
+                <span>神经网络/预训练模型</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--danger-color);"></div>
+                <span>损失函数</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let currentAnimation = null;
+        let speedFactor = 1;
+        let complexity = 3;
+        let currentStage = 'data-stage';
+
+        // 初始化函数
+        function init() {
+            setupEventListeners();
+            startDataStageAnimation();
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 阶段按钮点击事件
+            document.querySelectorAll('.stage-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const stageId = btn.id.replace('-btn', '');
+                    changeStage(stageId);
+                });
+            });
+
+            // 速度控制
+            document.getElementById('speed-control').addEventListener('input', function() {
+                speedFactor = parseFloat(this.value);
+                if (currentAnimation) {
+                    currentAnimation.pause();
+                }
+                if (currentStage === 'data-stage') {
+                    startDataStageAnimation();
+                } else if (currentStage === 'pretrain-stage') {
+                    startPretrainStageAnimation();
+                } else if (currentStage === 'finetune-stage') {
+                    startFineTuningStageAnimation();
+                } else if (currentStage === 'eval-stage') {
+                    startEvaluationStageAnimation();
+                }
+            });
+
+            // 复杂度控制
+            document.getElementById('complexity-control').addEventListener('input', function() {
+                complexity = parseInt(this.value);
+                if (currentAnimation) {
+                    currentAnimation.pause();
+                }
+                if (currentStage === 'pretrain-stage') {
+                    document.getElementById('network').innerHTML = '';
+                    startPretrainStageAnimation();
+                }
+            });
+        }
+
+        // 切换阶段
+        function changeStage(stageId) {
+            // 更新按钮状态
+            document.querySelectorAll('.stage-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`${stageId}-btn`).classList.add('active');
+
+            // 更新阶段显示
+            document.querySelectorAll('.stage').forEach(stage => {
+                stage.classList.remove('active');
+            });
+            document.getElementById(stageId).classList.add('active');
+
+            // 停止当前动画
+            if (currentAnimation) {
+                currentAnimation.pause();
+            }
+
+            // 开始新阶段的动画
+            currentStage = stageId;
+            if (stageId === 'data-stage') {
+                startDataStageAnimation();
+            } else if (stageId === 'pretrain-stage') {
+                startPretrainStageAnimation();
+            } else if (stageId === 'finetune-stage') {
+                startFineTuningStageAnimation();
+            } else if (stageId === 'eval-stage') {
+                startEvaluationStageAnimation();
+            }
+        }
+
+        // 数据收集与预处理阶段动画
+        function startDataStageAnimation() {
+            // 清除之前的数据元素
+            document.querySelectorAll('.data, .token').forEach(el => el.remove());
+            
+            const stage = document.getElementById('data-stage');
+            const tokenizer = document.querySelector('.tokenizer');
+            
+            // 创建数据点
+            const dataTexts = ['文本1', '文本2', '文本3', '文本4', '文本5', '文本6', '文本7', '文本8'];
+            const dataElements = [];
+            
+            for (let i = 0; i < dataTexts.length; i++) {
+                const data = document.createElement('div');
+                data.className = 'data';
+                data.textContent = dataTexts[i];
+                data.style.left = `${50 + Math.cos(i * Math.PI / 4) * 200}px`;
+                data.style.top = `${250 + Math.sin(i * Math.PI / 4) * 200}px`;
+                stage.appendChild(data);
+                dataElements.push(data);
+            }
+            
+            // 动画时间线
+            currentAnimation = anime.timeline({
+                easing: 'easeInOutSine',
+                loop: true,
+                duration: 1000 / speedFactor
+            });
+            
+            // 数据移动到分词器
+            dataElements.forEach((data, index) => {
+                currentAnimation.add({
+                    targets: data,
+                    left: '50%',
+                    top: '50%',
+                    translateX: '-50%',
+                    translateY: '-50%',
+                    delay: index * 200 / speedFactor
+                }, index === 0 ? 0 : '+=200');
+            });
+            
+            // 分词器处理数据
+            dataElements.forEach((data, index) => {
+                // 创建token
+                currentAnimation.add({
+                    begin: () => {
+                        tokenizer.style.backgroundColor = '#ff9800';
+                        tokenizer.style.transform = 'translate(-50%, -50%) scale(1.2)';
+                        
+                        setTimeout(() => {
+                            tokenizer.style.backgroundColor = '#ffc107';
+                            tokenizer.style.transform = 'translate(-50%, -50%) scale(1)';
+                            
+                            data.style.display = 'none';
+                            
+                            // 创建tokens
+                            const tokensCount = 3 + Math.floor(Math.random() * 3);
+                            for (let i = 0; i < tokensCount; i++) {
+                                const token = document.createElement('div');
+                                token.className = 'token';
+                                token.textContent = `T${index+1}-${i+1}`;
+                                token.style.left = '50%';
+                                token.style.top = '50%';
+                                token.style.transform = 'translate(-50%, -50%)';
+                                stage.appendChild(token);
+                                
+                                // 将token分散出去
+                                anime({
+                                    targets: token,
+                                    left: `${50 + Math.cos((index * tokensCount + i) * Math.PI / 12) * 150}px`,
+                                    top: `${250 + Math.sin((index * tokensCount + i) * Math.PI / 12) * 150}px`,
+                                    translateX: '0%',
+                                    translateY: '0%',
+                                    duration: 800 / speedFactor,
+                                    easing: 'easeOutElastic(1, .5)'
+                                });
+                            }
+                        }, 300 / speedFactor);
+                    },
+                    duration: 800 / speedFactor
+                });
+            });
+            
+            // 清除所有tokens，为下一轮循环做准备
+            currentAnimation.add({
+                complete: () => {
+                    document.querySelectorAll('.token').forEach(token => {
+                        token.remove();
+                    });
+                    dataElements.forEach(data => {
+                        data.style.display = 'flex';
+                        data.style.left = `${50 + Math.cos(dataElements.indexOf(data) * Math.PI / 4) * 200}px`;
+                        data.style.top = `${250 + Math.sin(dataElements.indexOf(data) * Math.PI / 4) * 200}px`;
+                        data.style.transform = 'none';
+                    });
+                },
+                duration: 500 / speedFactor
+            });
+        }
+
+        // 预训练阶段动画
+        function startPretrainStageAnimation() {
+            const networkContainer = document.getElementById('network');
+            networkContainer.innerHTML = '';
+            
+            // 根据复杂度设置网络结构
+            const layerCounts = [5, 8, 10, 12, 15][complexity - 1];
+            const layerSizes = [
+                [3, 4, 4, 3],                    // 复杂度1
+                [4, 6, 8, 6, 4],                 // 复杂度2
+                [4, 8, 12, 12, 8, 4],           // 复杂度3
+                [5, 10, 15, 20, 15, 10, 5],     // 复杂度4
+                [6, 12, 18, 24, 24, 18, 12, 6]  // 复杂度5
+            ][complexity - 1];
+            
+            // 创建神经网络层
+            const layers = [];
+            const layerWidth = networkContainer.clientWidth / (layerSizes.length + 1);
+            
+            for (let i = 0; i < layerSizes.length; i++) {
+                const layer = document.createElement('div');
+                layer.className = 'layer';
+                layer.style.left = `${(i + 1) * layerWidth}px`;
+                layer.style.width = `${layerWidth}px`;
+                
+                // 创建神经元节点
+                const nodes = [];
+                for (let j = 0; j < layerSizes[i]; j++) {
+                    const node = document.createElement('div');
+                    node.className = 'node';
+                    node.style.opacity = '0';
+                    layer.appendChild(node);
+                    nodes.push(node);
+                }
+                
+                networkContainer.appendChild(layer);
+                layers.push({ element: layer, nodes });
+            }
+            
+            // 创建连接
+            const connections = [];
+            for (let i = 0; i < layers.length - 1; i++) {
+                const fromLayer = layers[i];
+                const toLayer = layers[i + 1];
+                
+                for (let j = 0; j < fromLayer.nodes.length; j++) {
+                    for (let k = 0; k < toLayer.nodes.length; k++) {
+                        const connection = document.createElement('div');
+                        connection.className = 'connection';
+                        
+                        // 计算连接的位置和角度
+                        const x1 = parseFloat(fromLayer.element.style.left) + layerWidth / 2;
+                        const y1 = fromLayer.nodes[j].offsetTop + fromLayer.nodes[j].offsetHeight / 2;
+                        const x2 = parseFloat(toLayer.element.style.left) + layerWidth / 2;
+                        const y2 = toLayer.nodes[k].offsetTop + toLayer.nodes[k].offsetHeight / 2;
+                        
+                        const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                        const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                        
+                        connection.style.width = `${length}px`;
+                        connection.style.left = `${x1}px`;
+                        connection.style.top = `${y1}px`;
+                        connection.style.transform = `rotate(${angle}deg)`;
+                        connection.style.opacity = '0';
+                        
+                        networkContainer.appendChild(connection);
+                        connections.push(connection);
+                    }
+                }
+            }
+            
+            // 创建预训练动画
+            currentAnimation = anime.timeline({
+                easing: 'easeInOutSine',
+                loop: true
+            });
+            
+            // 显示连接
+            currentAnimation.add({
+                targets: connections,
+                opacity: 0.6,
+                duration: 1000 / speedFactor,
+                delay: anime.stagger(10 / speedFactor)
+            });
+            
+            // 显示节点
+            layers.forEach((layer, index) => {
+                currentAnimation.add({
+                    targets: layer.nodes,
+                    opacity: 1,
+                    scale: [0, 1],
+                    duration: 500 / speedFactor,
+                    delay: anime.stagger(100 / speedFactor)
+                }, '-=400');
+            });
+            
+            // 数据流动画 (沿着连接传递激活信号)
+            for (let pulse = 0; pulse < 3; pulse++) {
+                currentAnimation.add({
+                    targets: connections,
+                    backgroundColor: ['#aaa', '#4a6ee0', '#aaa'],
+                    duration: 1000 / speedFactor,
+                    delay: anime.stagger(50 / speedFactor, {grid: [layers[0].nodes.length, layers[1].nodes.length], from: 'center'})
+                });
+                
+                // 节点激活
+                layers.forEach((layer, index) => {
+                    if (index > 0) { // 跳过第一层
+                        currentAnimation.add({
+                            targets: layer.nodes,
+                            backgroundColor: ['#4a6ee0', '#ff9800', '#4a6ee0'],
+                            scale: [1, 1.2, 1],
+                            duration: 500 / speedFactor,
+                            delay: anime.stagger(100 / speedFactor, {from: 'center'})
+                        }, '-=600');
+                    }
+                });
+            }
+            
+            // 重置动画
+            currentAnimation.add({
+                targets: [...connections, ...layers.flatMap(layer => layer.nodes)],
+                backgroundColor: function(el) {
+                    return el.classList.contains('node') ? '#4a6ee0' : '#aaa';
+                },
+                opacity: function(el) {
+                    return el.classList.contains('node') ? 1 : 0.6;
+                },
+                scale: function(el) {
+                    return el.classList.contains('node') ? 1 : 1;
+                },
+                duration: 500 / speedFactor
+            });
+        }
+
+        // 微调阶段动画
+        function startFineTuningStageAnimation() {
+            const pretrainedModel = document.querySelector('.pretrained-model');
+            const taskItems = document.querySelectorAll('.task-item');
+            const fineTunedModel = document.querySelector('.fine-tuned-model');
+            
+            // 重置元素状态
+            anime.set(pretrainedModel, {
+                scale: 1,
+                backgroundColor: '#4a6ee0'
+            });
+            
+            anime.set(taskItems, {
+                scale: 1,
+                translateY: 0
+            });
+            
+            anime.set(fineTunedModel, {
+                scale: 0,
+                opacity: 0
+            });
+            
+            // 创建微调动画
+            currentAnimation = anime.timeline({
+                easing: 'easeInOutSine',
+                loop: true
+            });
+            
+            // 任务数据与预训练模型交互
+            currentAnimation.add({
+                targets: taskItems,
+                scale: [1, 1.2, 1],
+                translateY: -20,
+                delay: anime.stagger(200 / speedFactor),
+                duration: 800 / speedFactor
+            });
+            
+            // 预训练模型接收任务数据
+            currentAnimation.add({
+                targets: pretrainedModel,
+                scale: 1.1,
+                backgroundColor: '#3a5bbf',
+                duration: 1000 / speedFactor
+            }, '-=400');
+            
+            // 任务数据进入预训练模型
+            currentAnimation.add({
+                targets: taskItems,
+                translateY: 0,
+                translateX: function(el, i) {
+                    return [0, (i - 1) * 30];
+                },
+                top: pretrainedModel.offsetTop + pretrainedModel.offsetHeight / 2,
+                left: pretrainedModel.offsetLeft + pretrainedModel.offsetWidth / 2,
+                opacity: 0,
+                scale: 0.5,
+                duration: 800 / speedFactor,
+                delay: anime.stagger(200 / speedFactor)
+            });
+            
+            // 预训练模型处理
+            currentAnimation.add({
+                targets: pretrainedModel,
+                scale: [1.1, 1.2, 1],
+                backgroundColor: ['#3a5bbf', '#ff9800', '#3a5bbf'],
+                duration: 1500 / speedFactor,
+                update: function(anim) {
+                    if (anim.progress > 50 && fineTunedModel.style.opacity === '0') {
+                        // 生成微调后的模型
+                        anime({
+                            targets: fineTunedModel,
+                            scale: [0, 1],
+                            opacity: 1,
+                            duration: 1000 / speedFactor,
+                            easing: 'easeOutElastic(1, .5)'
+                        });
+                    }
+                }
+            });
+            
+            // 重置任务数据
+            currentAnimation.add({
+                targets: taskItems,
+                opacity: 1,
+                translateX: 0,
+                top: '',
+                left: '',
+                scale: 1,
+                duration: 500 / speedFactor
+            });
+            
+            // 完成微调
+            currentAnimation.add({
+                targets: [pretrainedModel, fineTunedModel],
+                scale: [1, 1.1, 1],
+                duration: 1000 / speedFactor
+            });
+            
+            // 重置
+            currentAnimation.add({
+                targets: fineTunedModel,
+                scale: 0,
+                opacity: 0,
+                duration: 800 / speedFactor
+            });
+        }
+
+        // 评估阶段动画
+        function startEvaluationStageAnimation() {
+            const chart = document.getElementById('loss-chart');
+            const accuracyValue = document.getElementById('accuracy-value');
+            const perplexityValue = document.getElementById('perplexity-value');
+            const bleuValue = document.getElementById('bleu-value');
+            const evalStatus = document.getElementById('eval-status');
+            
+            // 清除图表
+            chart.innerHTML = '';
+            
+            // 重置度量值
+            accuracyValue.textContent = '0%';
+            perplexityValue.textContent = '∞';
+            bleuValue.textContent = '0.0';
+            
+            // 创建损失函数图表的点
+            const points = [];
+            const lines = [];
+            const pointCount = 10;
+            
+            for (let i = 0; i < pointCount; i++) {
+                const point = document.createElement('div');
+                point.className = 'chart-point';
+                point.style.left = `${i * (100 / (pointCount - 1))}%`;
+                point.style.bottom = '0%';
+                chart.appendChild(point);
+                points.push(point);
+                
+                // 创建连接线
+                if (i > 0) {
+                    const line = document.createElement('div');
+                    line.className = 'loss-line';
+                    line.style.left = `${(i - 1) * (100 / (pointCount - 1))}%`;
+                    line.style.bottom = '0%';
+                    line.style.width = `${100 / (pointCount - 1)}%`;
+                    chart.appendChild(line);
+                    lines.push(line);
+                }
+            }
+            
+            // 创建评估动画
+            currentAnimation = anime.timeline({
+                easing: 'easeInOutSine',
+                loop: true
+            });
+            
+            // 更新损失函数曲线和度量值
+            currentAnimation.add({
+                duration: 5000 / speedFactor,
+                update: function(anim) {
+                    const progress = anim.progress / 100;
+                    
+                    // 更新度量值
+                    const accuracy = Math.min(95, Math.floor(progress * 100));
+                    const perplexity = Math.max(1.5, 100 - (progress * 98.5));
+                    const bleu = (progress * 0.45).toFixed(2);
+                    
+                    accuracyValue.textContent = `${accuracy}%`;
+                    perplexityValue.textContent = perplexity.toFixed(1);
+                    bleuValue.textContent = bleu;
+                    
+                    // 更新损失曲线
+                    for (let i = 0; i < points.length; i++) {
+                        const x = i / (points.length - 1);
+                        // 指数衰减曲线
+                        const y = Math.min(80, 80 * Math.exp(-4 * x * progress));
+                        points[i].style.bottom = `${y}%`;
+                    }
+                    
+                    // 更新连接线
+                    for (let i = 0; i < lines.length; i++) {
+                        const x1 = i / (points.length - 1);
+                        const x2 = (i + 1) / (points.length - 1);
+                        const y1 = Math.min(80, 80 * Math.exp(-4 * x1 * progress));
+                        const y2 = Math.min(80, 80 * Math.exp(-4 * x2 * progress));
+                        
+                        // 计算线段长度和角度
+                        const length = Math.sqrt(Math.pow((x2 - x1) * chart.clientWidth, 2) + Math.pow((y2 - y1) * chart.clientHeight / 100, 2));
+                        const angle = Math.atan2((y2 - y1) * chart.clientHeight / 100, (x2 - x1) * chart.clientWidth) * 180 / Math.PI;
+                        
+                        lines[i].style.width = `${length}px`;
+                        lines[i].style.bottom = `${y1}%`;
+                        lines[i].style.transform = `rotate(${angle}deg)`;
+                        lines[i].style.transformOrigin = 'left bottom';
+                    }
+                    
+                    // 更新状态消息
+                    if (progress < 0.3) {
+                        evalStatus.textContent = "训练迭代中...";
+                    } else if (progress < 0.6) {
+                        evalStatus.textContent = "性能提升中...";
+                    } else if (progress < 0.9) {
+                        evalStatus.textContent = "接近收敛...";
+                    } else {
+                        evalStatus.textContent = "模型训练完成！";
+                    }
+                }
+            });
+            
+            // 添加重置动画，重新开始迭代
+            currentAnimation.add({
+                targets: [accuracyValue, perplexityValue, bleuValue],
+                opacity: [1, 0.5, 1],
+                duration: 500 / speedFactor,
+                begin: function() {
+                    evalStatus.textContent = "准备下一轮迭代...";
+                }
+            });
+        }
+
+        // 页面加载时初始化
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>

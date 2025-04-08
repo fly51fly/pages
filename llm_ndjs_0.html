@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>农业大学教师能用DeepSeek做什么？</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/index.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+        
+        :root {
+            /* 浅色模式配色 */
+            --primary-color: #086972;
+            --secondary-color: #01a9b4;
+            --accent-color: #f37121;
+            --neutral-900: #0a192f;
+            --neutral-800: #172a45;
+            --neutral-700: #2d3748;
+            --neutral-600: #4a5568;
+            --neutral-500: #718096;
+            --neutral-400: #a0aec0;
+            --neutral-300: #cbd5e0;
+            --neutral-200: #e2e8f0;
+            --neutral-100: #f7fafc;
+            --background-color: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --text-primary: var(--neutral-900);
+            --text-secondary: var(--neutral-700);
+            --text-tertiary: var(--neutral-500);
+            --border-color: var(--neutral-200);
+            --surface-color: var(--neutral-100);
+        }
+        
+        [data-theme="dark"] {
+            /* 深色模式配色 */
+            --primary-color: #01a9b4;
+            --secondary-color: #0acbba;
+            --accent-color: #ff7e5f;
+            --neutral-900: #e2e8f0;
+            --neutral-800: #cbd5e0;
+            --neutral-700: #a0aec0;
+            --neutral-600: #718096;
+            --neutral-500: #4a5568;
+            --neutral-400: #2d3748;
+            --neutral-300: #1a202c;
+            --neutral-200: #171923;
+            --neutral-100: #0d1119;
+            --background-color: #0a0e14;
+            --card-bg: rgba(26, 32, 44, 0.8);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --text-primary: var(--neutral-900);
+            --text-secondary: var(--neutral-800);
+            --text-tertiary: var(--neutral-700);
+            --border-color: var(--neutral-300);
+            --surface-color: var(--neutral-200);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans SC', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* 精美的头部背景 */
+        .hero-pattern {
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(1, 169, 180, 0.08) 0%, transparent 30%),
+                radial-gradient(circle at 70% 65%, rgba(243, 113, 33, 0.08) 0%, transparent 30%),
+                radial-gradient(circle at 95% 10%, rgba(8, 105, 114, 0.08) 0%, transparent 30%),
+                radial-gradient(circle at 5% 80%, rgba(1, 169, 180, 0.08) 0%, transparent 30%);
+        }
+        
+        /* 华丽的渐变装饰 */
+        .gradient-heading {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        
+        .gradient-border {
+            position: relative;
+            z-index: 0;
+        }
+        
+        .gradient-border::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            padding: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: -1;
+        }
+        
+        /* 卡片和容器样式 */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px var(--shadow-color);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px var(--shadow-color);
+        }
+        
+        /* 标题和文本样式 */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+        }
+        
+        /* 自定义列表样式 */
+        .custom-list {
+            padding-left: 1.5rem;
+            list-style: none;
+        }
+        
+        .custom-list li {
+            position: relative;
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
+        }
+        
+        .custom-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-color);
+        }
+        
+        /* 动画类 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .fade-in.appear {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--surface-color);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--neutral-400);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neutral-500);
+        }
+        
+        /* 导航样式 */
+        .toc-nav {
+            transition: all 0.3s ease;
+        }
+        
+        .toc-link {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: var(--text-secondary);
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .toc-link:hover, .toc-link.active {
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+            background-color: rgba(1, 169, 180, 0.08);
+        }
+        
+        /* 进度指示器 */
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: var(--neutral-200);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            width: 0%;
+        }
+        
+        /* 主题切换开关 */
+        .theme-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            border-radius: 15px;
+            background-color: var(--neutral-300);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-switch::after {
+            content: "☀️";
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            transform: translateY(-50%);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background-color: var(--background-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        [data-theme="dark"] .theme-switch::after {
+            content: "🌙";
+            left: 33px;
+        }
+        
+        /* 自定义动画 */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .float-animation {
+            animation: float 5s ease-in-out infinite;
+        }
+        
+        /* 响应式字体大小 */
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+        }
+        
+        h2 {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+        }
+        
+        h3 {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+        }
+        
+        p, li {
+            font-size: clamp(1rem, 1.5vw, 1.125rem);
+        }
+        
+        /* 打印优化 */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .card {
+                box-shadow: none;
+                break-inside: avoid;
+            }
+            
+            a {
+                color: black;
+                text-decoration: none;
+            }
+            
+            @page {
+                margin: 2cm;
+            }
+        }
+        
+        /* 幻灯片控制 */
+        .slide-container {
+            overflow: hidden;
+            border-radius: 16px;
+        }
+        
+        .slide-wrapper {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .slide {
+            min-width: 100%;
+            padding: 2rem;
+        }
+        
+        /* 可访问性增强 */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+        
+        /* 骨架屏 */
+        .skeleton {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--background-color);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .skeleton-pulse {
+            width: 80%;
+            height: 24px;
+            background: linear-gradient(90deg, var(--neutral-200) 0%, var(--neutral-300) 50%, var(--neutral-200) 100%);
+            background-size: 200% 100%;
+            animation: pulse 1.5s infinite;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        @keyframes pulse {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: -200% 0%;
+            }
+        }
+        
+        /* 特殊图形装饰 */
+        .geometric-shape {
+            position: absolute;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .shape-1 {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            top: 10%;
+            right: 10%;
+        }
+        
+        .shape-2 {
+            width: 200px;
+            height: 200px;
+            background: var(--secondary-color);
+            bottom: 20%;
+            left: 5%;
+            transform: rotate(45deg);
+        }
+        
+        .shape-3 {
+            width: 100px;
+            height: 100px;
+            background: var(--accent-color);
+            bottom: 10%;
+            right: 20%;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+        
+        /* 阅读进度指示器 */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--neutral-200);
+            z-index: 100;
+        }
+        
+        .reading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            width: 0%;
+        }
+    </style>
+</head>
+<body x-data="{ 
+    theme: localStorage.getItem('theme') || 'light',
+    activeSection: 'intro',
+    isMobileMenuOpen: false,
+    toggleTheme() {
+        this.theme = this.theme === 'light' ? 'dark' : 'light';
+        localStorage.setItem('theme', this.theme);
+        document.documentElement.setAttribute('data-theme', this.theme);
+    },
+    init() {
+        document.documentElement.setAttribute('data-theme', this.theme);
+        this.setupIntersectionObserver();
+        this.setupScrollProgress();
+        setTimeout(() => {
+            document.querySelector('.skeleton').style.display = 'none';
+        }, 800);
+    },
+    setupIntersectionObserver() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('appear');
+                    if (entry.target.id) {
+                        this.activeSection = entry.target.id;
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+        
+        document.querySelectorAll('section[id]').forEach(el => {
+            observer.observe(el);
+        });
+    },
+    setupScrollProgress() {
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+            const clientHeight = document.documentElement.clientHeight || window.innerHeight;
+            const scrolled = (scrollTop / (scrollHeight - clientHeight)) * 100;
+            document.querySelector('.reading-progress-bar').style.width = scrolled + '%';
+        });
+    }
+}" x-init="init()">
+
+    <!-- 阅读进度指示器 -->
+    <div class="reading-progress no-print">
+        <div class="reading-progress-bar"></div>
+    </div>
+
+    <!-- 骨架屏 -->
+    <div class="skeleton">
+        <div class="skeleton-pulse" style="width: 60%;"></div>
+        <div class="skeleton-pulse" style="width: 80%;"></div>
+        <div class="skeleton-pulse" style="width: 70%;"></div>
+        <div class="skeleton-pulse" style="width: 50%;"></div>
+        <div class="skeleton-pulse" style="width: 65%;"></div>
+    </div>
+
+    <!-- 装饰图形 -->
+    <div class="geometric-shape shape-1"></div>
+    <div class="geometric-shape shape-2"></div>
+    <div class="geometric-shape shape-3"></div>
+
+    <!-- 头部导航栏 -->
+    <header class="sticky top-0 z-50 backdrop-filter backdrop-blur-lg bg-opacity-80" :class="{'bg-white': theme === 'light', 'bg-gray-900': theme === 'dark'}">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary-500" :class="{'text-primary-400': theme === 'dark'}" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                <span class="font-bold text-lg">DeepSeek 应用指南</span>
+            </div>
+            
+            <!-- 桌面导航 -->
+            <nav class="hidden md:flex items-center space-x-6">
+                <a href="#intro" class="nav-link py-2 px-1 font-medium hover:text-primary-500 transition-colors" :class="{'text-primary-500': activeSection === 'intro'}">核心理念</a>
+                <a href="#research" class="nav-link py-2 px-1 font-medium hover:text-primary-500 transition-colors" :class="{'text-primary-500': activeSection === 'research'}">科研领域</a>
+                <a href="#teaching" class="nav-link py-2 px-1 font-medium hover:text-primary-500 transition-colors" :class="{'text-primary-500': activeSection === 'teaching'}">教学领域</a>
+                <a href="#office" class="nav-link py-2 px-1 font-medium hover:text-primary-500 transition-colors" :class="{'text-primary-500': activeSection === 'office'}">办公领域</a>
+                <a href="#personal" class="nav-link py-2 px-1 font-medium hover:text-primary-500 transition-colors" :class="{'text-primary-500': activeSection === 'personal'}">个人发展</a>
+                <div class="theme-switch ml-4" @click="toggleTheme"></div>
+            </nav>
+            
+            <!-- 移动端菜单按钮 -->
+            <div class="md:hidden flex items-center space-x-4">
+                <div class="theme-switch" @click="toggleTheme"></div>
+                <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="p-2 rounded-lg hover:bg-gray-100" :class="{'bg-gray-800 hover:bg-gray-700': theme === 'dark'}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div x-show="isMobileMenuOpen" @click.away="isMobileMenuOpen = false" class="md:hidden absolute w-full bg-white dark:bg-gray-900 shadow-lg py-4 px-6 space-y-4 z-50 transition-all duration-300 ease-in-out" :class="{'bg-white': theme === 'light', 'bg-gray-900': theme === 'dark'}" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform -translate-y-10" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-10">
+            <a href="#intro" @click="isMobileMenuOpen = false" class="block py-2 px-1 font-medium hover:text-primary-500 transition-colors" :class="{'text-primary-500': activeSection === 'intro'}">核心理念</a>
+            <a href="#research" @click="isMobileMenuOpen = false" class="block py-2 px-1 font-medium hover:text-primary-500 transition-colors" :class="{'text-primary-500': activeSection === 'research'}">科研领域</a>
+            <a href="#teaching" @click="isMobileMenuOpen = false" class="block py-2 px-1 font-medium hover:text-primary-500 transition-colors" :class="{'text-primary-500': activeSection === 'teaching'}">教学领域</a>
+            <a href="#office" @click="isMobileMenuOpen = false" class="block py-2 px-1 font-medium hover:text-primary-500 transition-colors" :class="{'text-primary-500': activeSection === 'office'}">办公领域</a>
+            <a href="#personal" @click="isMobileMenuOpen = false" class="block py-2 px-1 font-medium hover:text-primary-500 transition-colors" :class="{'text-primary-500': activeSection === 'personal'}">个人发展</a>
+        </div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="container mx-auto px-4 py-8 md:py-16">
+        <!-- 头部横幅 -->
+        <section class="hero-pattern rounded-3xl p-8 md:p-16 mb-16 relative overflow-hidden fade-in" id="intro">
+            <div class="max-w-4xl">
+                <h1 class="gradient-heading text-4xl md:text-5xl font-bold mb-6">农业大学教师能用DeepSeek做什么？</h1>
+                <p class="text-lg md:text-xl mb-8 text-neutral-700 dark:text-neutral-300">大模型赋能农业教育，提升科研效率，创新教学方法，助力个人成长</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    <div class="card p-6 fade-in" style="transition-delay: 0.1s;">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-600">效率提升</h3>
+                        <p class="text-neutral-700 dark:text-neutral-300">DeepSeek能自动化处理信息，加速数据分析，提高科研教学效率</p>
+                    </div>
+                    <div class="card p-6 fade-in" style="transition-delay: 0.2s;">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-600">创新赋能</h3>
+                        <p class="text-neutral-700 dark:text-neutral-300">激发创新思维，提供全新教学方法，助力科研创新突破</p>
+                    </div>
+                    <div class="card p-6 fade-in" style="transition-delay: 0.3s;">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-600">个性化服务</h3>
+                        <p class="text-neutral-700 dark:text-neutral-300">针对教师需求提供定制化功能，满足不同场景的应用需求</p>
+                    </div>
+                    <div class="card p-6 fade-in" style="transition-delay: 0.4s;">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-600">全面应用</h3>
+                        <p class="text-neutral-700 dark:text-neutral-300">覆盖科研、教学、办公和个人发展的全面应用解决方案</p>
+                    </div>
+                </div>
+                <div class="fade-in" style="transition-delay: 0.5s;">
+                    <h2 class="text-2xl font-bold mb-4">大模型的本质</h2>
+                    <p class="text-lg mb-6">大模型，如DeepSeek，本质上是强大的信息处理和生成工具。对于农业大学教师而言，它们可以成为：</p>
+                    <ul class="custom-list grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <li class="fade-in" style="transition-delay: 0.6s;"><strong>科研加速器</strong>：更快地获取信息，更高效地分析数据，更便捷地撰写论文，从而加速科研进程，提升科研产出。</li>
+                        <li class="fade-in" style="transition-delay: 0.7s;"><strong>教学创新引擎</strong>：更生动地呈现教学内容，更有效地与学生互动，更精准地提供个性化辅导，从而提升教学质量，激发学生兴趣。</li>
+                        <li class="fade-in" style="transition-delay: 0.8s;"><strong>办公效率助手</strong>：更智能地处理文档，更高效地管理信息，更便捷地沟通协作，从而减轻事务性工作负担，提升办公效率。</li>
+                        <li class="fade-in" style="transition-delay: 0.9s;"><strong>个人发展伙伴</strong>：更快速地学习新知识，更便捷地拓展技能，更轻松地获取灵感，从而促进个人成长，提升专业素养。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 科研领域部分 -->
+        <section id="research" class="mb-16 fade-in">
+            <h2 class="section-title text-3xl font-bold text-neutral-900 dark:text-neutral-100">一、科研领域 (Research)</h2>
+            
+            <!-- 文献检索与管理 -->
+            <div class="card p-8 mb-10 fade-in">
+                <h3 class="text-2xl font-semibold mb-6">1. 文献检索与管理</h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="fade-in" style="transition-delay: 0.1s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">智能文献搜索</h4>
+                        <ul class="custom-list">
+                            <li>语义搜索：理解科研问题和需求，更精准地找到相关文献</li>
+                            <li>跨数据库检索：集成多个文献数据库，一次搜索覆盖更广范围</li>
+                            <li>个性化推荐：根据教师的研究兴趣和历史阅读记录，主动推荐相关文献</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.2s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">文献快速解读与摘要</h4>
+                        <ul class="custom-list">
+                            <li>文献摘要生成：快速生成文献摘要，节省阅读时间</li>
+                            <li>关键信息提取：自动提取文献中的关键信息</li>
+                            <li>文献综述辅助：快速生成文献综述的框架或初稿</li>
+                            <li>多语言文献理解：快速翻译外文文献，克服语言障碍</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.3s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">文献管理与组织</h4>
+                        <ul class="custom-list">
+                            <li>文献分类与标签：智能识别文献主题，自动分类并添加标签</li>
+                            <li>文献关系网络构建：分析文献之间的引用关系，构建文献关系网络图谱</li>
+                            <li>文献笔记与批注：在文献中进行智能笔记和批注，方便后续回顾</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 数据分析与实验设计 -->
+            <div class="card p-8 mb-10 fade-in">
+                <h3 class="text-2xl font-semibold mb-6">2. 数据分析与实验设计</h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="fade-in" style="transition-delay: 0.1s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">数据分析辅助</h4>
+                        <ul class="custom-list">
+                            <li>数据预处理建议：提供数据清洗、转换、标准化的建议</li>
+                            <li>统计分析方法推荐：推荐合适的统计分析方法和模型</li>
+                            <li>实验结果解读辅助：帮助理解统计分析结果，解读数据背后的意义</li>
+                            <li>数据可视化建议：推荐合适的可视化图表类型</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.2s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">实验设计优化</h4>
+                        <ul class="custom-list">
+                            <li>实验方案优化建议：为实验设计提供优化建议</li>
+                            <li>实验风险评估：分析实验方案的潜在风险和挑战</li>
+                            <li>实验材料选择建议：推荐合适的实验材料、试剂、设备等</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.3s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">生物信息学分析辅助</h4>
+                        <ul class="custom-list">
+                            <li>基因功能注释：辅助进行基因功能注释、GO富集分析等</li>
+                            <li>蛋白质结构预测与分析：辅助进行蛋白质结构预测与分析</li>
+                            <li>代谢组学数据分析：辅助进行代谢组学数据分析</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 论文写作与发表 -->
+            <div class="card p-8 mb-10 fade-in">
+                <h3 class="text-2xl font-semibold mb-6">3. 论文写作与发表</h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="fade-in" style="transition-delay: 0.1s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">论文框架构建</h4>
+                        <ul class="custom-list">
+                            <li>论文结构建议：根据研究主题和期刊要求，提供论文结构框架建议</li>
+                            <li>逻辑结构优化：检查论文逻辑结构，提出改进建议</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.2s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">论文内容生成与润色</h4>
+                        <ul class="custom-list">
+                            <li>段落/章节草稿生成：辅助生成论文的段落或章节草稿</li>
+                            <li>语言润色与修改：对论文进行语言润色、语法错误检查、表达优化</li>
+                            <li>专业术语校对：校对论文中的专业术语</li>
+                            <li>论文摘要优化：优化论文摘要，使其更简洁、更吸引读者</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.3s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">参考文献管理与格式化</h4>
+                        <ul class="custom-list">
+                            <li>参考文献自动生成：自动生成规范的参考文献列表</li>
+                            <li>参考文献格式转换：根据目标期刊的要求，快速转换参考文献格式</li>
+                            <li>参考文献查重：辅助检查参考文献的重复引用情况</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.4s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">投稿准备</h4>
+                        <ul class="custom-list">
+                            <li>期刊选择建议：根据论文主题和内容，推荐合适的投稿期刊</li>
+                            <li>投稿信/Cover Letter撰写辅助：辅助撰写投稿信/Cover Letter</li>
+                            <li>审稿意见回复辅助：辅助分析审稿意见，提供回复思路和修改建议</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 科研项目管理与申报 -->
+            <div class="card p-8 fade-in">
+                <h3 class="text-2xl font-semibold mb-6">4. 科研项目管理与申报</h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="fade-in" style="transition-delay: 0.1s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">项目申报书撰写辅助</h4>
+                        <ul class="custom-list">
+                            <li>项目背景分析与凝练：辅助分析项目背景，凝练科学问题</li>
+                            <li>项目目标与内容设计：辅助设计项目目标、研究内容、技术路线</li>
+                            <li>项目可行性论证：辅助论证项目的可行性</li>
+                            <li>项目创新点挖掘：辅助挖掘项目的创新点，突出项目的特色和优势</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.2s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">项目管理辅助</h4>
+                        <ul class="custom-list">
+                            <li>项目进度跟踪与提醒：辅助跟踪项目进度，提醒关键节点和任务</li>
+                            <li>项目文档管理：辅助管理项目文档</li>
+                            <li>项目会议纪要生成：辅助记录项目会议要点，生成会议纪要</li>
+                            <li>项目成果展示：辅助准备项目成果展示材料</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 教学领域部分 -->
+        <section id="teaching" class="mb-16 fade-in">
+            <h2 class="section-title text-3xl font-bold text-neutral-900 dark:text-neutral-100">二、教学领域 (Teaching)</h2>
+            
+            <!-- 课程内容设计与备课 -->
+            <div class="card p-8 mb-10 fade-in">
+                <h3 class="text-2xl font-semibold mb-6">1. 课程内容设计与备课</h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="fade-in" style="transition-delay: 0.1s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">课程大纲生成与优化</h4>
+                        <ul class="custom-list">
+                            <li>课程大纲草稿生成：根据课程主题和目标，快速生成课程大纲草稿</li>
+                            <li>教学内容组织优化：优化课程内容组织结构</li>
+                            <li>教学资源推荐：推荐相关的教学资源</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.2s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">教学课件制作辅助</h4>
+                        <ul class="custom-list">
+                            <li>PPT框架生成：快速生成PPT框架，节省PPT制作时间</li>
+                            <li>教学案例/素材推荐：推荐相关的教学案例、图片、视频等素材</li>
+                            <li>习题库/测试题生成：自动生成习题库或测试题</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.3s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">教学方法创新</h4>
+                        <ul class="custom-list">
+                            <li>互动教学活动设计：辅助设计课堂互动活动</li>
+                            <li>个性化教学方案建议：提供个性化教学方案建议</li>
+                            <li>虚拟实验/模拟场景设计：辅助设计虚拟实验或模拟场景</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 课堂教学与互动 -->
+            <div class="card p-8 mb-10 fade-in">
+                <h3 class="text-2xl font-semibold mb-6">2. 课堂教学与互动</h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="fade-in" style="transition-delay: 0.1s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">智能答疑与辅导</h4>
+                        <ul class="custom-list">
+                            <li>课堂即时答疑：辅助教师快速回答学生提出的问题</li>
+                            <li>课后在线答疑：作为在线答疑工具，回答学生在课后提出的问题</li>
+                            <li>常见问题FAQ生成：生成常见问题FAQ</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.2s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">课堂互动增强</h4>
+                        <ul class="custom-list">
+                            <li>课堂讨论话题生成：生成有启发性的课堂讨论话题</li>
+                            <li>课堂实时反馈收集：收集学生对教学内容的实时反馈</li>
+                            <li>学生参与度分析：分析学生在课堂互动中的参与度</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.3s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">教学内容呈现优化</h4>
+                        <ul class="custom-list">
+                            <li>多媒体教学资源整合：辅助整合多媒体教学资源</li>
+                            <li>可视化教学内容生成：将抽象概念或复杂原理可视化呈现</li>
+                            <li>增强现实/虚拟现实教学应用：辅助开发AR/VR教学内容</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 学生作业批改与评价 -->
+            <div class="card p-8 mb-10 fade-in">
+                <h3 class="text-2xl font-semibold mb-6">3. 学生作业批改与评价</h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="fade-in" style="transition-delay: 0.1s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">客观题自动批改</h4>
+                        <p class="mb-4">自动批改客观题（选择题、判断题等）作业和测试，快速反馈学生学习情况。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.2s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">主观题批改辅助</h4>
+                        <ul class="custom-list">
+                            <li>答案要点提取：辅助提取学生主观题答案的要点</li>
+                            <li>评分标准辅助制定：辅助制定更细致、更客观的评分标准</li>
+                            <li>优秀/典型答案示例生成：生成优秀或典型答案示例</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.3s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">学生学习情况分析</h4>
+                        <ul class="custom-list">
+                            <li>作业数据分析：分析学生作业数据，了解学生对知识点的掌握情况</li>
+                            <li>学习行为分析：分析学生学习行为数据</li>
+                            <li>学生学习报告生成：生成学生学习报告</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 教学管理与沟通 -->
+            <div class="card p-8 fade-in">
+                <h3 class="text-2xl font-semibold mb-6">4. 教学管理与沟通</h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="fade-in" style="transition-delay: 0.1s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">教学通知与公告撰写</h4>
+                        <p class="mb-4">辅助撰写教学通知、课程公告、作业布置等，提高信息传达效率。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.2s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">学生咨询与答疑管理</h4>
+                        <p class="mb-4">辅助管理学生咨询和答疑，例如：自动回复常见问题、分类整理学生问题等。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.3s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">教学反馈收集与分析</h4>
+                        <p class="mb-4">辅助收集学生对课程的反馈意见，分析反馈内容，为教学改进提供参考。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.4s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">教学团队协作</h4>
+                        <p class="mb-4">辅助教学团队进行课程内容共建、教学资源共享、教学经验交流等。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 办公领域部分 -->
+        <section id="office" class="mb-16 fade-in">
+            <h2 class="section-title text-3xl font-bold text-neutral-900 dark:text-neutral-100">三、办公领域 (Office/Administration)</h2>
+            
+            <!-- 文档处理与管理 -->
+            <div class="card p-8 mb-10 fade-in">
+                <h3 class="text-2xl font-semibold mb-6">1. 文档处理与管理</h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="fade-in" style="transition-delay: 0.1s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">文档快速摘要与提取</h4>
+                        <p class="mb-4">快速生成长文档（例如：报告、会议纪要、政策文件等）的摘要，提取关键信息，提高信息获取效率。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.2s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">文档内容润色与优化</h4>
+                        <p class="mb-4">对文档进行语言润色、语法错误检查、表达优化，提升文档质量和专业性。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.3s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">文档格式转换与编辑</h4>
+                        <p class="mb-4">快速进行文档格式转换（例如：Word to PDF, PDF to Text等），辅助进行文档内容编辑和排版。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.4s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">文档智能分类与归档</h4>
+                        <p class="mb-4">智能识别文档主题，自动分类并归档，方便文档管理和检索。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 信息管理与检索 -->
+            <div class="card p-8 mb-10 fade-in">
+                <h3 class="text-2xl font-semibold mb-6">2. 信息管理与检索</h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="fade-in" style="transition-delay: 0.1s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">信息快速查找与整理</h4>
+                        <p class="mb-4">快速查找所需信息（例如：会议通知、规章制度、联系方式等），并将信息进行分类整理，提高信息管理效率。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.2s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">会议纪要智能生成</h4>
+                        <p class="mb-4">辅助记录会议要点，生成会议纪要初稿，减轻会议记录整理负担。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.3s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">日程安排与提醒</h4>
+                        <p class="mb-4">辅助安排日程、设置提醒，提高时间管理效率，避免遗漏重要事项。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.4s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">信息个性化推荐</h4>
+                        <p class="mb-4">根据教师的办公需求和兴趣，主动推荐相关信息，例如：最新政策解读、行业动态、培训信息等。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 沟通与协作 -->
+            <div class="card p-8 mb-10 fade-in">
+                <h3 class="text-2xl font-semibold mb-6">3. 沟通与协作</h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="fade-in" style="transition-delay: 0.1s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">邮件快速撰写与回复</h4>
+                        <p class="mb-4">辅助撰写邮件、快速回复邮件，提高邮件沟通效率。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.2s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">多语言翻译</h4>
+                        <p class="mb-4">进行多语言翻译，方便国际交流与合作，例如：翻译邮件、会议材料、合作协议等。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.3s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">会议组织与协调</h4>
+                        <p class="mb-4">辅助组织会议，例如：生成会议议程、发送会议邀请、协调参会人员等。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.4s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">团队协作平台集成</h4>
+                        <p class="mb-4">与团队协作平台（例如：Teams, Slack等）集成，方便团队成员进行信息共享、任务分配、协同办公。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 其他办公场景 -->
+            <div class="card p-8 fade-in">
+                <h3 class="text-2xl font-semibold mb-6">4. 其他办公场景</h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="fade-in" style="transition-delay: 0.1s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">报销单据智能识别与录入</h4>
+                        <p class="mb-4">识别报销单据上的信息，自动录入报销系统，简化报销流程。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.2s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">科研经费管理辅助</h4>
+                        <p class="mb-4">辅助进行科研经费预算编制、报销管理、经费使用情况分析等。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.3s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">会议/活动宣传文案生成</h4>
+                        <p class="mb-4">辅助生成会议/活动宣传文案，提高宣传效果。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.4s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">新闻稿/简报撰写辅助</h4>
+                        <p class="mb-4">辅助撰写新闻稿、工作简报等，提高信息传播效率。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 个人发展领域部分 -->
+        <section id="personal" class="mb-16 fade-in">
+            <h2 class="section-title text-3xl font-bold text-neutral-900 dark:text-neutral-100">四、个人发展领域 (Personal Development)</h2>
+            
+            <div class="card p-8 fade-in">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="fade-in" style="transition-delay: 0.1s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">快速学习新知识</h4>
+                        <p class="mb-4">快速学习新的农业科技、教育理念、AI技术等，通过提问或主题输入，快速获取相关知识的结构化信息。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.2s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">提升写作与表达能力</h4>
+                        <p class="mb-4">通过与DeepSeek等大模型的对话和互动，学习更规范、更流畅的写作和表达方式。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.3s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">拓展思维与激发灵感</h4>
+                        <p class="mb-4">与大模型进行头脑风暴，探索新的科研方向、教学方法、办公流程，激发创新灵感。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.4s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">语言学习助手</h4>
+                        <p class="mb-4">作为语言学习工具，辅助学习外语，例如：进行对话练习、语法纠错、翻译等。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.5s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">个人知识库构建</h4>
+                        <p class="mb-4">将个人学习笔记、科研资料、教学心得等整理成知识库，利用大模型进行智能管理和检索。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.6s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">职业发展规划辅助</h4>
+                        <p class="mb-4">与大模型探讨职业发展规划，获取职业发展建议和资源信息。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 注意事项部分 -->
+        <section class="mb-16 fade-in">
+            <h2 class="section-title text-3xl font-bold text-neutral-900 dark:text-neutral-100">使用DeepSeek等大模型的注意事项</h2>
+            
+            <div class="card p-8 fade-in">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="fade-in" style="transition-delay: 0.1s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">数据安全与隐私保护</h4>
+                        <p class="mb-4">在使用过程中，要注意保护个人和学生的敏感数据，避免泄露。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.2s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">信息甄别与核实</h4>
+                        <p class="mb-4">大模型生成的内容并非完全准确，需要进行甄别和核实，不能完全依赖。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.3s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">伦理道德与学术规范</h4>
+                        <p class="mb-4">合理使用大模型，遵守学术规范，避免学术不端行为。</p>
+                    </div>
+                    
+                    <div class="fade-in" style="transition-delay: 0.4s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">持续学习与技能提升</h4>
+                        <p class="mb-4">大模型技术不断发展，需要持续学习和掌握新的应用技巧。</p>
+                    </div>
+                    
+                    <div class="fade-in col-span-1 lg:col-span-2" style="transition-delay: 0.5s;">
+                        <h4 class="text-xl font-medium mb-4 text-primary-600">人机协作，而非完全替代</h4>
+                        <p class="mb-4">大模型是辅助工具，最终决策和判断仍需由人类教师完成。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 总结部分 -->
+        <section class="mb-16 fade-in" id="summary">
+            <h2 class="section-title text-3xl font-bold text-neutral-900 dark:text-neutral-100">总结</h2>
+            
+            <div class="card p-8 fade-in">
+                <p class="text-lg mb-6">以DeepSeek为代表的大模型为农业大学教师提供了强大的工具，可以应用于科研、教学、办公和个人发展的各个方面，显著提升效率、促进创新、提供个性化服务。关键在于教师要积极拥抱新技术，探索和实践大模型的应用，并不断学习和提升自身技能，真正将AI技术融入到日常工作中，为农业教育科研事业做出更大贡献。</p>
+                
+                <div class="mt-8 flex justify-center">
+                    <a href="#intro" class="gradient-border px-6 py-3 rounded-full font-semibold hover:shadow-lg transition duration-300 text-primary-600">返回顶部</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-gradient-to-r from-primary-900 to-secondary-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <div class="text-2xl font-bold mb-2">农业大学教师能用DeepSeek做什么？</div>
+                    <p class="text-white text-opacity-80">大模型赋能农业教育，提升科研效率，创新教学方法，助力个人成长</p>
+                </div>
+                <div class="flex flex-col md:items-end">
+                    <div class="mb-4">
+                        <div class="flex items-center justify-end space-x-2">
+                            <div class="h-12 w-12 rounded-full bg-white flex items-center justify-center text-primary-600 font-bold text-xl">陈</div>
+                            <div>
+                                <div class="font-semibold">陈光</div>
+                                <div class="text-sm text-white text-opacity-80">内容作者</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-white text-opacity-70">
+                        © <span id="currentYear">2025</span> 版权所有
+                    </div>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-white text-opacity-80 hover:text-opacity-100 transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                            </svg>
+                        </a>
+                        <a href="#" class="text-white text-opacity-80 hover:text-opacity-100 transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="text-white text-opacity-80 hover:text-opacity-100 transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 自动设置当前年份 -->
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

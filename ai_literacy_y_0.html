@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI时代青少年核心素养分级框架：能力双螺旋模型</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        /* 自定义样式 */
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary-color: #7c3aed;
+            --accent-color: #f59e0b;
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --bg-light: #ffffff;
+            --bg-dark: #0f172a;
+            --card-light: #f8fafc;
+            --card-dark: #1e293b;
+            --transition-base: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(107, 114, 128, 0.7);
+        }
+
+        /* 文本渐变标题 */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* 卡片悬浮效果 */
+        .card-hover {
+            transition: var(--transition-base);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 自定义双螺旋背景 */
+        .helix-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            z-index: -1;
+            background-image: 
+                radial-gradient(circle at 20% 30%, var(--primary-color) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, var(--secondary-color) 0%, transparent 20%),
+                radial-gradient(circle at 40% 80%, var(--accent-color) 0%, transparent 15%),
+                radial-gradient(circle at 60% 20%, var(--primary-dark) 0%, transparent 15%);
+        }
+
+        /* 深色模式样式 */
+        .dark {
+            color-scheme: dark;
+        }
+
+        .dark .helix-bg {
+            opacity: 0.1;
+        }
+
+        /* 阅读进度条 */
+        .progress-bar {
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            width: 0%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        /* 入场动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* 螺旋图标旋转动画 */
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animate-spin-slow {
+            animation: spin 20s linear infinite;
+        }
+
+        /* 定义流体文字大小 */
+        .fluid-text-xl {
+            font-size: clamp(1.5rem, 3vw, 2.25rem);
+        }
+
+        .fluid-text-lg {
+            font-size: clamp(1.25rem, 2vw, 1.875rem);
+        }
+
+        .fluid-text-base {
+            font-size: clamp(1rem, 1.5vw, 1.125rem);
+        }
+
+        /* 3D 卡片效果 */
+        .card-3d {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .card-3d-inner {
+            transition: transform 0.6s;
+            transform: translateZ(0) rotateX(0) rotateY(0);
+        }
+
+        .card-3d:hover .card-3d-inner {
+            transform: translateZ(20px) rotateX(5deg) rotateY(5deg);
+        }
+
+        /* 光效 */
+        .light-effect {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .light-effect::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            transition: transform 0.6s;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .light-effect:hover::after {
+            transform: rotate(30deg) translate(50%, 50%);
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200" 
+      x-data="{ 
+          darkMode: localStorage.getItem('darkMode') === 'true', 
+          activeSection: 'intro',
+          showToc: false,
+          scrollProgress: 0
+      }"
+      x-init="
+          $watch('darkMode', val => {
+              localStorage.setItem('darkMode', val)
+              if (val) {
+                  document.documentElement.classList.add('dark')
+              } else {
+                  document.documentElement.classList.remove('dark')
+              }
+          });
+          
+          window.addEventListener('scroll', () => {
+              const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+              const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+              scrollProgress = (winScroll / height) * 100;
+              
+              // 设置当前激活的导航项
+              const sections = document.querySelectorAll('section[id]');
+              sections.forEach(section => {
+                  const sectionTop = section.offsetTop - 100;
+                  const sectionHeight = section.offsetHeight;
+                  if(winScroll >= sectionTop && winScroll < sectionTop + sectionHeight) {
+                      activeSection = section.getAttribute('id');
+                  }
+              });
+          });
+          
+          if (darkMode) document.documentElement.classList.add('dark')
+      "
+>
+    <!-- 阅读进度条 -->
+    <div class="progress-bar" :style="`width: ${scrollProgress}%`"></div>
+    
+    <!-- 背景图案 -->
+    <div class="helix-bg"></div>
+    
+    <!-- 顶部导航 -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-gray-900/80 shadow-sm">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold gradient-text">
+                <i class="ph ph-atom"></i> AI时代青少年核心素养框架
+            </h1>
+            
+            <div class="flex items-center space-x-4">
+                <!-- 目录按钮（移动端） -->
+                <button 
+                    @click="showToc = !showToc" 
+                    class="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                    aria-label="目录"
+                >
+                    <i class="ph ph-list text-xl"></i>
+                </button>
+                
+                <!-- 深色模式切换 -->
+                <button 
+                    @click="darkMode = !darkMode" 
+                    class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                    aria-label="切换深色模式"
+                >
+                    <i x-show="!darkMode" class="ph ph-moon-stars text-xl"></i>
+                    <i x-show="darkMode" class="ph ph-sun text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 移动端目录抽屉 -->
+    <div 
+        x-show="showToc" 
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 transform translate-x-full"
+        x-transition:enter-end="opacity-100 transform translate-x-0"
+        x-transition:leave="transition ease-in duration-300"
+        x-transition:leave-start="opacity-100 transform translate-x-0"
+        x-transition:leave-end="opacity-0 transform translate-x-full"
+        class="fixed inset-y-0 right-0 z-40 w-3/4 max-w-xs bg-white dark:bg-gray-800 shadow-xl p-4 overflow-y-auto md:hidden"
+    >
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold">目录</h3>
+            <button @click="showToc = false" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
+                <i class="ph ph-x text-xl"></i>
+            </button>
+        </div>
+        
+        <nav class="space-y-4">
+            <a @click="showToc = false" href="#intro" class="block py-2 px-4 rounded-lg transition" :class="activeSection === 'intro' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'hover:bg-gray-50 dark:hover:bg-gray-700'">导言</a>
+            <a @click="showToc = false" href="#grade-1-2" class="block py-2 px-4 rounded-lg transition" :class="activeSection === 'grade-1-2' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'hover:bg-gray-50 dark:hover:bg-gray-700'">小学1-2年级</a>
+            <a @click="showToc = false" href="#grade-3-6" class="block py-2 px-4 rounded-lg transition" :class="activeSection === 'grade-3-6' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'hover:bg-gray-50 dark:hover:bg-gray-700'">小学3-6年级</a>
+            <a @click="showToc = false" href="#middle-school" class="block py-2 px-4 rounded-lg transition" :class="activeSection === 'middle-school' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'hover:bg-gray-50 dark:hover:bg-gray-700'">初中阶段</a>
+            <a @click="showToc = false" href="#high-school" class="block py-2 px-4 rounded-lg transition" :class="activeSection === 'high-school' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'hover:bg-gray-50 dark:hover:bg-gray-700'">高中阶段</a>
+            <a @click="showToc = false" href="#principles" class="block py-2 px-4 rounded-lg transition" :class="activeSection === 'principles' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'hover:bg-gray-50 dark:hover:bg-gray-700'">素养发展原则</a>
+        </nav>
+    </div>
+    
+    <!-- 主要内容区域 -->
+    <main class="container mx-auto px-4 py-8 flex flex-col md:flex-row">
+        <!-- 桌面端侧边导航 -->
+        <aside class="hidden md:block md:w-64 lg:w-72 flex-shrink-0 sticky self-start top-24 pr-4">
+            <nav class="space-y-1 text-gray-600 dark:text-gray-400">
+                <a href="#intro" class="flex items-center py-2 px-4 rounded-lg transition" :class="activeSection === 'intro' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'hover:bg-gray-50 dark:hover:bg-gray-800'">
+                    <i class="ph ph-info mr-3"></i> 导言
+                </a>
+                <a href="#grade-1-2" class="flex items-center py-2 px-4 rounded-lg transition" :class="activeSection === 'grade-1-2' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'hover:bg-gray-50 dark:hover:bg-gray-800'">
+                    <i class="ph ph-number-circle-one mr-3"></i> 小学1-2年级
+                </a>
+                <a href="#grade-3-6" class="flex items-center py-2 px-4 rounded-lg transition" :class="activeSection === 'grade-3-6' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'hover:bg-gray-50 dark:hover:bg-gray-800'">
+                    <i class="ph ph-number-circle-two mr-3"></i> 小学3-6年级
+                </a>
+                <a href="#middle-school" class="flex items-center py-2 px-4 rounded-lg transition" :class="activeSection === 'middle-school' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'hover:bg-gray-50 dark:hover:bg-gray-800'">
+                    <i class="ph ph-number-circle-three mr-3"></i> 初中阶段
+                </a>
+                <a href="#high-school" class="flex items-center py-2 px-4 rounded-lg transition" :class="activeSection === 'high-school' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'hover:bg-gray-50 dark:hover:bg-gray-800'">
+                    <i class="ph ph-number-circle-four mr-3"></i> 高中阶段
+                </a>
+                <a href="#principles" class="flex items-center py-2 px-4 rounded-lg transition" :class="activeSection === 'principles' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'hover:bg-gray-50 dark:hover:bg-gray-800'">
+                    <i class="ph ph-spiral mr-3"></i> 素养发展原则
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- 文章内容 -->
+        <article class="md:flex-1 md:max-w-3xl mx-auto">
+            <!-- 封面区域 -->
+            <div class="mb-12 text-center py-10 animate-fadeInUp">
+                <h1 class="fluid-text-xl font-bold mb-4 gradient-text">AI时代青少年核心素养分级框架</h1>
+                <h2 class="fluid-text-lg font-medium mb-8 text-gray-600 dark:text-gray-400">能力双螺旋模型</h2>
+                
+                <div class="relative w-32 h-32 mx-auto mb-8">
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full opacity-20 animate-pulse"></div>
+                    <div class="absolute inset-0 flex items-center justify-center animate-spin-slow">
+                        <i class="ph ph-atom text-7xl text-blue-500 dark:text-blue-400"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 导言 -->
+            <section id="intro" class="mb-16">
+                <div class="prose prose-lg dark:prose-invert mx-auto">
+                    <p class="text-lg">
+                        传统素养框架往往是静态且分学科的，难以捕捉AI时代所需的跨学科、动态发展的能力体系。分级设计需要遵循发展性原则，不是简单的内容难度提升，而是能力性质的质变与复杂度的递增。各级素养既要相互衔接又要反映该阶段学生的独特发展需求和可能性。
+                    </p>
+                    
+                    <p class="text-lg">
+                        AI时代青少年核心素养分级框架应该形成一个螺旋上升的发展体系，而非简单线性递进。每个阶段都有其核心发展任务，同时为下一阶段奠定基础。这种分级不仅考虑认知能力发展，还需整合情感、社会性、价值观等多维度发展需求，形成全人教育的整体框架。
+                    </p>
+                    
+                    <p class="text-lg">
+                        AI时代青少年核心素养框架的关键，在于构建"元能力与特定能力"的双螺旋结构。每个教育阶段都同时发展两类能力：一是适应未来变化的"元能力"（如学习能力、适应力、思维模式），二是该阶段特别关键的"特定能力"（如基础认知工具、社会情感能力、专业探索能力）。随着教育阶段推进，元能力不断深化，特定能力不断更新，形成动态进化的能力发展体系。
+                    </p>
+                </div>
+            </section>
+            
+            <!-- 小学1-2年级 -->
+            <section id="grade-1-2" class="mb-16">
+                <div class="card-3d bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-800/80 rounded-xl p-6 mb-8 shadow-sm">
+                    <div class="card-3d-inner">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-3 flex items-center text-blue-600 dark:text-blue-400">
+                            <i class="ph ph-number-circle-one mr-3 text-blue-500 dark:text-blue-400"></i>
+                            小学1-2年级：感知与基础阶段
+                        </h2>
+                        <div class="text-gray-500 dark:text-gray-400 mb-4 ml-9 text-lg font-medium">核心发展主题：感知-探索-表达</div>
+                    </div>
+                </div>
+                
+                <!-- 认知基础素养 -->
+                <div class="light-effect mb-10 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-indigo-600 dark:text-indigo-400">
+                        1. 认知基础素养
+                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">元能力维度：多元感知与基础思维模式</div>
+                    </h3>
+                    
+                    <div class="space-y-6 pl-4 border-l-2 border-indigo-100 dark:border-indigo-900">
+                        <!-- 能力项 1 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">感官认知整合能力：在数字与实体世界间自如切换感官注意力，形成统一认知体验</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>能够识别实体世界与数字呈现的区别，不混淆虚拟与现实</li>
+                                <li>学会分配有限注意力，在屏幕活动与实体活动间保持平衡</li>
+                                <li>发展通过多感官方式（触觉、视觉、听觉等）理解同一概念的能力</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 能力项 2 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">具象思维与模式识别：识别简单规律，建立基础分类系统</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>能在日常事物中发现简单模式与规律（如形状、颜色、顺序模式）</li>
+                                <li>学会根据明显特征对事物进行基本分类与排序</li>
+                                <li>能用具体实例说明简单抽象概念（如大小、多少、相似性）</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 人机交互素养 -->
+                <div class="light-effect mb-10 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-600 dark:text-blue-400">
+                        2. 人机交互素养
+                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">特定能力维度：友善接触与基础使用</div>
+                    </h3>
+                    
+                    <div class="space-y-6 pl-4 border-l-2 border-blue-100 dark:border-blue-900">
+                        <!-- 能力项 1 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">技术友好接触能力：建立健康、积极的初始技术关系</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>了解数字设备的基本功能与正确使用方法</li>
+                                <li>在成人指导下安全使用简单AI应用（如语音助手、简单教育游戏）</li>
+                                <li>认识技术使用的时间与空间边界，形成初步自律意识</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 能力项 2 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">辅助型人机协作：借助简单技术工具扩展学习与创造可能性</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>使用绘画、讲故事类AI工具辅助创意表达</li>
+                                <li>在引导下使用语音转文字工具辅助表达思想</li>
+                                <li>理解"人指挥机器"的基本概念，培养主体意识</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 社会情感素养 -->
+                <div class="light-effect mb-10 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-purple-600 dark:text-purple-400">
+                        3. 社会情感素养
+                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">元能力维度：情感识别与基础人际互动</div>
+                    </h3>
+                    
+                    <div class="space-y-6 pl-4 border-l-2 border-purple-100 dark:border-purple-900">
+                        <!-- 能力项 1 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">数字环境中的情绪觉察：识别自身与他人的基本情绪状态</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>能表达使用技术时的情绪感受（如兴奋、困惑、沮丧）</li>
+                                <li>初步理解虚拟角色不具有真实情感，区分模拟与真实情感反应</li>
+                                <li>学习在数字活动引起负面情绪时寻求帮助</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 能力项 2 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">基础协作意识：体验共同完成任务的乐趣与方法</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>参与简单的小组数字创作活动（如共同讲故事、创作画作）</li>
+                                <li>学习基本的数字礼仪（如轮流使用设备、分享成果时署名）</li>
+                                <li>理解在技术辅助下共同完成任务的基本协作方式</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 创新启蒙素养 -->
+                <div class="light-effect mb-10 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-amber-600 dark:text-amber-400">
+                        4. 创新启蒙素养
+                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">特定能力维度：好奇心与表达欲</div>
+                    </h3>
+                    
+                    <div class="space-y-6 pl-4 border-l-2 border-amber-100 dark:border-amber-900">
+                        <!-- 能力项 1 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">自然好奇心保护：保持对世界的开放性探索态度</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>主动提出"为什么"和"怎么样"的问题</li>
+                                <li>对新奇事物表现出探索兴趣而非恐惧</li>
+                                <li>尝试多种方式解决简单问题，不局限于单一答案</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 能力项 2 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">多元表达尝试：尝试不同媒介与方式表达想法</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>结合传统工具与数字工具表达创意（如手绘+数字上色）</li>
+                                <li>通过讲故事、绘画、构建等多种方式表达同一想法</li>
+                                <li>在成人引导下使用简单AI工具扩展表达可能性</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 小学3-6年级 -->
+            <section id="grade-3-6" class="mb-16">
+                <div class="card-3d bg-gradient-to-br from-green-50 to-teal-50 dark:from-gray-800 dark:to-gray-800/80 rounded-xl p-6 mb-8 shadow-sm">
+                    <div class="card-3d-inner">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-3 flex items-center text-green-600 dark:text-green-400">
+                            <i class="ph ph-number-circle-two mr-3 text-green-500 dark:text-green-400"></i>
+                            小学3-6年级：理解与应用阶段
+                        </h2>
+                        <div class="text-gray-500 dark:text-gray-400 mb-4 ml-9 text-lg font-medium">核心发展主题：理解-应用-合作</div>
+                    </div>
+                </div>
+                
+                <!-- 认知发展素养 -->
+                <div class="light-effect mb-10 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-teal-600 dark:text-teal-400">
+                        1. 认知发展素养
+                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">元能力维度：系统思维初步与逻辑推理</div>
+                    </h3>
+                    
+                    <div class="space-y-6 pl-4 border-l-2 border-teal-100 dark:border-teal-900">
+                        <!-- 能力项 1 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">关联性思维：建立知识间的连接，形成初步知识网络</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>能将不同学科知识点连接成有意义的概念图</li>
+                                <li>识别事物间的因果关系与相互影响</li>
+                                <li>学会运用类比思维，从已知推断未知</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 能力项 2 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">算法思维基础：理解结构化思考与问题解决步骤</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>能将复杂任务分解为有序步骤</li>
+                                <li>理解基础程序逻辑（如条件、循环）并应用于解决问题</li>
+                                <li>识别日常生活中的算法现象（如游戏规则、食谱流程）</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 数字素养与人机协作 -->
+                <div class="light-effect mb-10 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-green-600 dark:text-green-400">
+                        2. 数字素养与人机协作
+                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">特定能力维度：理解原理与辅助使用</div>
+                    </h3>
+                    
+                    <div class="space-y-6 pl-4 border-l-2 border-green-100 dark:border-green-900">
+                        <!-- 能力项 1 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">AI工具原理理解：初步了解AI工具如何工作</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>理解AI通过数据学习和模式识别做出预测</li>
+                                <li>认识AI工具的基本局限性与优势</li>
+                                <li>能区分不同类型AI工具的适用场景（如翻译工具、创作工具、搜索工具）</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 能力项 2 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">辅助创作能力：使用AI工具扩展学习与创造能力</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>使用AI辅助完成写作、艺术创作等任务，而非完全依赖</li>
+                                <li>学习向AI工具提供有效指令的基本技巧</li>
+                                <li>对AI生成内容进行必要的核实和修改</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 能力项 3 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">信息素养基础：评估、选择与组织信息的初步能力</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>区分事实与观点，识别明显的偏见信息</li>
+                                <li>使用多个来源验证重要信息的准确性</li>
+                                <li>配合数字工具建立个人知识管理的初步系统</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 社会合作素养 -->
+                <div class="light-effect mb-10 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-emerald-600 dark:text-emerald-400">
+                        3. 社会合作素养
+                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">元能力维度：团队合作与数字社交能力</div>
+                    </h3>
+                    
+                    <div class="space-y-6 pl-4 border-l-2 border-emerald-100 dark:border-emerald-900">
+                        <!-- 能力项 1 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">数字协作能力：在数字环境中有效开展团队合作</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>使用协作工具（如共享文档、简单项目管理工具）完成小组任务</li>
+                                <li>理解数字协作中的角色分工与责任</li>
+                                <li>学习在线交流的有效方式与礼仪</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 能力项 2 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">数字社交伦理：发展负责任的在线社交行为</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>理解数字足迹的持久性与潜在影响</li>
+                                <li>识别并避免网络欺凌行为，学会保护自己与他人</li>
+                                <li>尊重数字创作的知识产权，理解引用与抄袭的区别</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 自主学习素养 -->
+                <div class="light-effect mb-10 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-cyan-600 dark:text-cyan-400">
+                        4. 自主学习素养
+                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">特定能力维度：学习策略与自我管理</div>
+                    </h3>
+                    
+                    <div class="space-y-6 pl-4 border-l-2 border-cyan-100 dark:border-cyan-900">
+                        <!-- 能力项 1 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">学习策略意识：认识并尝试不同学习方法</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>根据学习任务选择合适的学习工具与资源</li>
+                                <li>尝试不同笔记方法与记忆策略，发现适合自己的方式</li>
+                                <li>结合数字工具与传统方法构建个人学习系统</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 能力项 2 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">自我管理能力：计划、执行与调整学习过程</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>设定明确可行的短期学习目标</li>
+                                <li>合理安排学习时间，平衡数字活动与其他活动</li>
+                                <li>反思学习效果，调整学习策略</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 初中阶段 -->
+            <section id="middle-school" class="mb-16">
+                <div class="card-3d bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-gray-800 dark:to-gray-800/80 rounded-xl p-6 mb-8 shadow-sm">
+                    <div class="card-3d-inner">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-3 flex items-center text-purple-600 dark:text-purple-400">
+                            <i class="ph ph-number-circle-three mr-3 text-purple-500 dark:text-purple-400"></i>
+                            初中阶段：分析与整合阶段
+                        </h2>
+                        <div class="text-gray-500 dark:text-gray-400 mb-4 ml-9 text-lg font-medium">核心发展主题：分析-整合-创新</div>
+                    </div>
+                </div>
+                
+                <!-- 高阶认知素养 -->
+                <div class="light-effect mb-10 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-indigo-600 dark:text-indigo-400">
+                        1. 高阶认知素养
+                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">元能力维度：批判性思维与分析能力</div>
+                    </h3>
+                    
+                    <div class="space-y-6 pl-4 border-l-2 border-indigo-100 dark:border-indigo-900">
+                        <!-- 能力项 1 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">复杂系统分析能力：理解多因素系统与非线性关系</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>分析复杂问题中的多重因果关系</li>
+                                <li>识别系统中的反馈循环与意外后果</li>
+                                <li>应用图表、模型等工具可视化复杂系统</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 能力项 2 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">批判性信息评估：深入评估信息质量与可靠性</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>识别内容中的隐含假设、逻辑漏洞与证据质量</li>
+                                <li>评估信息源的可信度、专业性与潜在偏见</li>
+                                <li>理解算法推荐系统的工作原理与信息茧房效应</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 能力项 3 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">论证与反思能力：构建合理论证并反思自身思维</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>基于证据构建逻辑严密的论证</li>
+                                <li>辨识常见认知偏误，反思自身思维盲点</li>
+                                <li>欣赏并考虑与自己观点不同的合理论据</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 数字创造与人机协作素养 -->
+                <div class="light-effect mb-10 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-purple-600 dark:text-purple-400">
+                        2. 数字创造与人机协作素养
+                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">特定能力维度：创造性应用与协同工作</div>
+                    </h3>
+                    
+                    <div class="space-y-6 pl-4 border-l-2 border-purple-100 dark:border-purple-900">
+                        <!-- 能力项 1 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">创造性人机协作：将AI作为创意伙伴与思维延伸</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>使用AI工具进行创意激发与方案探索</li>
+                                <li>将AI生成内容与个人创意有效整合</li>
+                                <li>理解并利用AI的强项互补人类创造力</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 能力项 2 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">数字化创新能力：使用数字工具实现创新表达</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>综合运用多种数字工具实现复杂创意项目</li>
+                                <li>学习基础编程与数据分析，创建简单的数字解决方案</li>
+                                <li>将传统领域问题转化为可用技术解决的形式</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 能力项 3 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">AI素养深化：理解AI能力边界与伦理考量</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>分析AI系统的偏见来源与局限性</li>
+                                <li>理解数据质量对AI性能的影响</li>
+                                <li>思考AI应用的伦理问题与社会影响</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 社会责任与伦理素养 -->
+                <div class="light-effect mb-10 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-violet-600 dark:text-violet-400">
+                        3. 社会责任与伦理素养
+                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">元能力维度：数字公民责任与伦理思考</div>
+                    </h3>
+                    
+                    <div class="space-y-6 pl-4 border-l-2 border-violet-100 dark:border-violet-900">
+                        <!-- 能力项 1 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">数字公民责任：在数字空间中负责任地参与和贡献</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>理解并尊重数字空间中的法律与伦理边界</li>
+                                <li>参与积极的在线社区活动，贡献有价值内容</li>
+                                <li>保护个人与他人的数字权利与隐私</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 能力项 2 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">技术伦理思考：评估技术应用的伦理维度</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>分析技术方案的潜在社会后果与道德影响</li>
+                                <li>思考AI决策的公平性、透明度与问责机制</li>
+                                <li>在使用技术解决问题时考虑多元价值观与利益相关者</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 项目管理与执行素养 -->
+                <div class="light-effect mb-10 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-fuchsia-600 dark:text-fuchsia-400">
+                        4. 项目管理与执行素养
+                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">特定能力维度：规划、协调与完成复杂项目</div>
+                    </h3>
+                    
+                    <div class="space-y-6 pl-4 border-l-2 border-fuchsia-100 dark:border-fuchsia-900">
+                        <!-- 能力项 1 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">项目设计与规划：从构思到实施的系统化能力</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>将创意转化为可行的项目计划，设定明确目标和里程碑</li>
+                                <li>预估资源需求，制定风险应对策略</li>
+                                <li>整合数字工具与传统方法构建项目管理系统</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 能力项 2 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">团队领导与协调：引导团队协作完成复杂任务</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>在小组项目中承担相应领导角色</li>
+                                <li>协调多元背景成员的贡献，处理团队冲突</li>
+                                <li>利用数字协作平台优化团队工作流程</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 能力项 3 -->
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">执行力与适应性：坚持目标同时灵活调整方向</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 pl-4">
+                                <li>在面临挫折时保持韧性，调整策略继续前进</li>
+                                <li>根据反馈与环境变化灵活修订计划</li>
+                                <li>平衡完美主义与实用主义，确保项目完成</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 继续分段展示其他部分 -->
+        </article>
+    </main>
+    
+    <!-- 可返回顶部的按钮 -->
+    <button 
+        x-data="{ showButton: false }"
+        x-init="window.addEventListener('scroll', () => { showButton = window.scrollY > 500 })"
+        x-show="showButton"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 transform translate-y-10"
+        x-transition:enter-end="opacity-100 transform translate-y-0"
+        x-transition:leave="transition ease-in duration-300"
+        x-transition:leave-start="opacity-100 transform translate-y-0"
+        x-transition:leave-end="opacity-0 transform translate-y-10"
+        @click="window.scrollTo({top: 0, behavior: 'smooth'})"
+        class="fixed bottom-8 right-8 p-3 bg-blue-500 dark:bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-all z-30"
+        aria-label="返回顶部"
+    >
+        <i class="ph ph-arrow-up text-xl"></i>
+    </button>
+    
+    <!-- 骨架屏加载动画 -->
+    <div 
+        id="skeleton-loader"
+        class="fixed inset-0 bg-white dark:bg-gray-900 z-[9999] flex flex-col items-center justify-center"
+        x-data="{ loading: true }"
+        x-init="setTimeout(() => loading = false, 800)"
+        x-transition:leave="transition-opacity duration-500"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        x-show="loading"
+    >
+        <div class="w-24 h-24 relative">
+            <div class="absolute inset-0 flex items-center justify-center animate-spin-slow">
+                <i class="ph ph-atom text-6xl text-blue-500 dark:text-blue-400"></i>
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full opacity-20 animate-pulse"></div>
+        </div>
+        <div class="mt-6 text-xl font-medium text-gray-700 dark:text-gray-300">加载中...</div>
+    </div>
+    
+    <!-- 优雅的页脚 -->
+    <footer class="bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700/50 py-12 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-8 md:mb-0 text-center md:text-left">
+                    <div class="flex items-center justify-center md:justify-start space-x-3 mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white">
+                            <span class="font-bold text-xl">陈光</span>
+                        </div>
+                        <div class="text-xl font-semibold">陈光</div>
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-400">&copy; 2025 版权所有</p>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-500 dark:hover:text-blue-400 transition">
+                        <i class="ph ph-globe text-xl"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-500 dark:hover:text-blue-400 transition">
+                        <i class="ph ph-envelope-simple text-xl"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-500 dark:hover:text-blue-400 transition">
+                        <i class="ph ph-github-logo text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
