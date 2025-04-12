@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek助力教育 | 解决教师五大痛点</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/css/icons.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-icons@0.24.0/dist/umd/lucide.min.css">
+    <style>
+        /* 全局样式与变量设置 */
+        :root {
+            /* 主题色彩系统 - 浅色模式 */
+            --color-primary: #4361ee;
+            --color-primary-light: #4895ef;
+            --color-secondary: #3f37c9;
+            --color-accent: #f72585;
+            --color-neutral-50: #f8fafc;
+            --color-neutral-100: #f1f5f9;
+            --color-neutral-200: #e2e8f0;
+            --color-neutral-300: #cbd5e1;
+            --color-neutral-600: #475569;
+            --color-neutral-700: #334155;
+            --color-neutral-800: #1e293b;
+            --color-neutral-900: #0f172a;
+            
+            /* 文本颜色 */
+            --text-primary: var(--color-neutral-800);
+            --text-secondary: var(--color-neutral-700);
+            --text-tertiary: var(--color-neutral-600);
+            
+            /* 背景颜色 */
+            --bg-primary: #ffffff;
+            --bg-secondary: var(--color-neutral-50);
+            --bg-tertiary: var(--color-neutral-100);
+            
+            /* 交互颜色 */
+            --interactive-primary: var(--color-primary);
+            --interactive-secondary: var(--color-secondary);
+            --interactive-accent: var(--color-accent);
+            
+            /* 动画时间 */
+            --transition-fast: 150ms;
+            --transition-normal: 250ms;
+            --transition-slow: 350ms;
+        }
+
+        /* 深色模式变量 */
+        .dark-mode {
+            --color-primary: #4cc9f0;
+            --color-primary-light: #4361ee;
+            --color-secondary: #7209b7;
+            --color-accent: #f72585;
+            
+            /* 文本颜色 */
+            --text-primary: var(--color-neutral-100);
+            --text-secondary: var(--color-neutral-200);
+            --text-tertiary: var(--color-neutral-300);
+            
+            /* 背景颜色 */
+            --bg-primary: var(--color-neutral-900);
+            --bg-secondary: var(--color-neutral-800);
+            --bg-tertiary: var(--color-neutral-700);
+        }
+
+        /* 基础样式 */
+        body {
+            font-family: "SF Pro Display", "SF Pro", "Inter var", "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            transition: background-color var(--transition-normal), color var(--transition-normal);
+            overflow-x: hidden;
+        }
+
+        /* 排版系统 */
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.2;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        h2 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--color-primary);
+        }
+
+        h3 {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        h4 {
+            font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        p, li {
+            font-size: clamp(1rem, 1.5vw, 1.125rem);
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        /* 布局组件 */
+        .container-custom {
+            width: 95%;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        /* 卡片组件 */
+        .card {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+        }
+
+        /* 按钮样式 */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-primary-light);
+            box-shadow: 0 6px 16px rgba(67, 97, 238, 0.4);
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 1000;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color var(--transition-normal);
+        }
+
+        /* 动画效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .animated {
+            animation-duration: 0.8s;
+            animation-fill-mode: both;
+        }
+
+        .fadeInUp {
+            animation-name: fadeInUp;
+        }
+
+        .fadeIn {
+            animation-name: fadeIn;
+        }
+
+        /* 动画延迟类 */
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
+        .delay-500 { animation-delay: 500ms; }
+
+        /* 进度指示器 */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: transparent;
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        /* 装饰元素 */
+        .decoration-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .decoration-circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            right: -100px;
+        }
+
+        .decoration-circle-2 {
+            width: 500px;
+            height: 500px;
+            bottom: -200px;
+            left: -200px;
+        }
+
+        /* 高亮块 */
+        .highlight-block {
+            padding: 1.5rem;
+            border-radius: 12px;
+            background-color: rgba(67, 97, 238, 0.05);
+            border-left: 4px solid var(--color-primary);
+        }
+
+        /* 示例框 */
+        .example-box {
+            background-color: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 0.75rem 0;
+            font-family: 'SF Mono', 'Consolas', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        /* 作者签名区域 */
+        .author-signature {
+            position: relative;
+            padding: 2rem;
+            background: linear-gradient(to right, var(--bg-secondary), var(--bg-tertiary));
+            border-radius: 12px;
+            margin-top: 4rem;
+        }
+
+        .signature-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .container-custom {
+                width: 92%;
+            }
+            
+            .card {
+                margin-bottom: 1.5rem;
+            }
+            
+            .theme-toggle {
+                top: 1rem;
+                right: 1rem;
+                width: 40px;
+                height: 40px;
+            }
+            
+            .author-signature {
+                padding: 1.5rem;
+            }
+        }
+
+        /* 滚动条美化 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-primary-light);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-primary);
+        }
+    </style>
+</head>
+<body x-data="{ darkMode: false, activeSection: 'section1' }" :class="darkMode ? 'dark-mode' : ''">
+    <!-- 进度指示器 -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- 主题切换按钮 -->
+    <div class="theme-toggle" @click="darkMode = !darkMode">
+        <svg x-show="!darkMode" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <svg x-show="darkMode" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+    </div>
+
+    <!-- 装饰元素 -->
+    <div class="decoration-circle decoration-circle-1"></div>
+    <div class="decoration-circle decoration-circle-2"></div>
+
+    <!-- 主要内容区域 -->
+    <div class="container-custom py-8 md:py-16">
+        <!-- 标题区域 -->
+        <header class="text-center mb-12 md:mb-16 animated fadeInUp">
+            <h1 class="mb-4">DeepSeek助力教育创新</h1>
+            <p class="text-xl md:text-2xl max-w-3xl mx-auto">解决教师五大痛点，提升教学效率与质量</p>
+        </header>
+
+        <!-- 内容概述 -->
+        <section class="mb-16 animated fadeInUp delay-100">
+            <div class="highlight-block">
+                <p class="text-lg md:text-xl">基于DeepSeek这类大语言模型（LLM）的能力，以及中小学老师日常教学工作的普遍挑战，以下是DeepSeek能够显著帮助解决的五大痛点。通过合理使用AI技术，教师可以将更多精力投入到教学创新和学生个性化指导中。</p>
+            </div>
+        </section>
+
+        <!-- 主要内容 - 五大痛点 -->
+        <div class="space-y-24">
+            <!-- 痛点1 -->
+            <section id="section1" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="order-2 lg:order-1 animated fadeInUp">
+                    <h2 class="mb-4">01 / 备课耗时巨大，资源搜集与整合繁琐</h2>
+                    <p class="mb-4">教师每周需要花费大量时间准备教案、课件和教学资源，DeepSeek可以显著缩短这一过程。</p>
+                    
+                    <h4 class="mt-6 mb-3">应用场景:</h4>
+                    <ul class="list-disc pl-6 space-y-2 mb-6">
+                        <li>快速生成教案初稿</li>
+                        <li>搜集整合信息</li>
+                        <li>生成教学资源</li>
+                        <li>提供课件思路</li>
+                    </ul>
+                    
+                    <h4 class="mt-6 mb-3">提示词示例:</h4>
+                    <div class="example-box">
+                        <strong>生成教案:</strong> "请为[小学五年级][数学]课设计一份关于《[圆的认识]》的教案初稿。要求包含：教学目标（知识与技能、过程与方法、情感态度价值观）、教学重难点、教学过程（包含导入、新授、练习、总结，约40分钟）、板书设计建议。"
+                    </div>
+                    <div class="example-box">
+                        <strong>搜集资料:</strong> "查找关于[宋朝][活字印刷术]的背景知识、发明过程和历史意义，整理成适合向[初中二年级]学生介绍的要点，不超过500字。"
+                    </div>
+                </div>
+                <div class="order-1 lg:order-2 animated fadeInUp delay-200">
+                    <div class="card p-6 h-full flex flex-col justify-center">
+                        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-8 relative overflow-hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-blue-500 mb-4"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                            
+                            <div class="example-box mt-4 z-10 relative">
+                                <strong>生成练习题:</strong> "为[高中一年级][物理]的《[牛顿第二定律]》章节，生成5道选择题和2道计算题（附带答案和解析），难度中等，侧重考察概念理解和基本应用。"
+                            </div>
+                            
+                            <div class="example-box z-10 relative">
+                                <strong>课件思路:</strong> "我需要制作一个关于[植物光合作用]的[初中生物]教学PPT，请提供一个包含5-7页关键内容的PPT大纲，包括每页的标题建议和核心内容提示（如图文、视频链接建议等）。"
+                            </div>
+                            
+                            <div class="example-box z-10 relative">
+                                <strong>生成活动素材:</strong> "设计一个课堂小活动，帮助[小学三年级]学生理解[乘法分配律]，形式可以是情景模拟或小游戏，请描述活动规则和所需材料。"
+                            </div>
+                            
+                            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-100 dark:bg-blue-800/20 rounded-full opacity-50"></div>
+                        </div>
+                        <div class="card-gradient"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 痛点2 -->
+            <section id="section2" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="order-2 animated fadeInUp">
+                    <div class="card p-6 h-full flex flex-col justify-center">
+                        <div class="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-8 relative overflow-hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-purple-500 mb-4"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            
+                            <div class="example-box mt-4 z-10 relative">
+                                <strong>分层材料:</strong> "针对[初中英语]的[现在完成时]语法点，请分别生成三份不同难度的练习题：[基础巩固]（侧重基本结构）、[能力提升]（结合情景选择与填空）、[拓展应用]（包含句子翻译和短文改错）。"
+                            </div>
+                            
+                            <div class="example-box z-10 relative">
+                                <strong>个性化建议:</strong> "假设一名学生在[小学数学]的[小数除法]方面掌握不牢固，特别是[除数是小数]的情况。请为他设计一个包含3个步骤的课后自主复习建议，包括需要回顾的知识点、推荐的练习题类型和检查方法。"
+                            </div>
+                            
+                            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-100 dark:bg-purple-800/20 rounded-full opacity-50"></div>
+                        </div>
+                        <div class="card-gradient"></div>
+                    </div>
+                </div>
+                <div class="order-1 animated fadeInUp delay-200">
+                    <h2 class="mb-4">02 / 学生学情差异大，个性化教学与辅导难以实现</h2>
+                    <p class="mb-4">在班级规模较大的情况下，教师难以为每位学生提供量身定制的学习支持，DeepSeek可以帮助解决这一挑战。</p>
+                    
+                    <h4 class="mt-6 mb-3">应用场景:</h4>
+                    <ul class="list-disc pl-6 space-y-2 mb-6">
+                        <li>生成分层教学材料</li>
+                        <li>个性化学习建议</li>
+                        <li>多种方式解释概念</li>
+                        <li>生成反馈提示</li>
+                    </ul>
+                    
+                    <h4 class="mt-6 mb-3">提示词示例:</h4>
+                    <div class="example-box">
+                        <strong>多样解释:</strong> "请用至少三种不同的方式（例如：生活实例、比喻、画图解释思路）向[小学四年级]学生解释为什么[分数的分母不能为0]。"
+                    </div>
+                    <div class="example-box">
+                        <strong>反馈提示:</strong> "学生在写关于'[我的理想]'的作文时，普遍存在内容空泛、缺乏具体规划的问题。请生成3条不同的、引导性的评语提示，启发学生思考如何让理想更具体、更可行。"
+                    </div>
+                </div>
+            </section>
+
+            <!-- 痛点3 -->
+            <section id="section3" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="order-2 lg:order-1 animated fadeInUp">
+                    <h2 class="mb-4">03 / 作业设计与批改反馈重复性高、耗费精力</h2>
+                    <p class="mb-4">教师每天需要批改大量作业，提供针对性反馈，这项工作既耗时又容易产生职业倦怠，DeepSeek可以辅助优化这一过程。</p>
+                    
+                    <h4 class="mt-6 mb-3">应用场景:</h4>
+                    <ul class="list-disc pl-6 space-y-2 mb-6">
+                        <li>生成创意作业</li>
+                        <li>快速出客观题</li>
+                        <li>辅助批改反馈</li>
+                        <li>生成题目解析</li>
+                    </ul>
+                    
+                    <h4 class="mt-6 mb-3">提示词示例:</h4>
+                    <div class="example-box">
+                        <strong>创意作业:</strong> "围绕[高中历史]的[文艺复兴]主题，设计一个研究性学习任务，要求学生选择一位代表人物，探究其成就与时代背景的关系，成果形式可以是PPT报告或短篇论文，请给出任务指引和评价要点建议。"
+                    </div>
+                    <div class="example-box">
+                        <strong>生成客观题:</strong> "为[初中地理]的[中国气候]章节，快速生成15道判断题，覆盖主要气候类型、特征及影响因素，并提供答案。"
+                    </div>
+                </div>
+                <div class="order-1 lg:order-2 animated fadeInUp delay-200">
+                    <div class="card p-6 h-full flex flex-col justify-center">
+                        <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-8 relative overflow-hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-green-500 mb-4"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                            
+                            <div class="example-box mt-4 z-10 relative">
+                                <strong>辅助反馈 (需谨慎):</strong> "这是一篇关于'[记一次有意义的活动]'的[小学五年级]作文的评分要点：[中心明确、内容具体、语句通顺、有真情实感]。请根据这些要点，为一篇在'内容具体'方面表现稍弱的作文，提供2-3句改进建议的评语草稿。"
+                            </div>
+                            
+                            <div class="example-box z-10 relative">
+                                <strong>题目解析:</strong> "请为这道[初中数学]题：'[一元二次方程 x² - 5x + 6 = 0 的解是什么？]'提供详细的解题步骤和思路说明，包括可能用到的公式和解法。"
+                            </div>
+                            
+                            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-green-100 dark:bg-green-800/20 rounded-full opacity-50"></div>
+                        </div>
+                        <div class="card-gradient"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 痛点4 -->
+            <section id="section4" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="order-2 animated fadeInUp">
+                    <div class="card p-6 h-full flex flex-col justify-center">
+                        <div class="bg-orange-50 dark:bg-orange-900/20 rounded-xl p-8 relative overflow-hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-orange-500 mb-4"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3Z"/></svg>
+                            
+                            <div class="example-box mt-4 z-10 relative">
+                                <strong>草拟通知:</strong> "请草拟一份[小学二年级]关于[春季研学活动]的告家长书。内容需包括：活动时间、地点、目的、费用、注意事项（如着装、自带物品）、联系方式，语气亲切、说明清晰。"
+                            </div>
+                            
+                            <div class="example-box z-10 relative">
+                                <strong>活动策划:</strong> "为一个[初一年级]班级策划一次以'[增进同学友谊，提升班级凝聚力]'为主题的班会活动。请提供活动流程框架（约1小时），包含2-3个互动游戏或环节的建议，并列出初步的物资需求。"
+                            </div>
+                            
+                            <div class="example-box z-10 relative">
+                                <strong>总结报告:</strong> "根据以下要点：[本学期班级在学习纪律、文体活动、卫生习惯方面的总体表现；取得的主要成绩；存在的不足；下学期改进措施]，草拟一份[小学六年级]班主任学期工作总结的初稿（约600字），要求结构清晰，语言精炼。"
+                            </div>
+                            
+                            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-orange-100 dark:bg-orange-800/20 rounded-full opacity-50"></div>
+                        </div>
+                        <div class="card-gradient"></div>
+                    </div>
+                </div>
+                <div class="order-1 animated fadeInUp delay-200">
+                    <h2 class="mb-4">04 / 与家长的沟通、班级管理事务性工作繁杂</h2>
+                    <p class="mb-4">教师需要处理大量的行政事务，如撰写通知、策划活动、总结报告等，DeepSeek可以帮助减轻这些工作负担。</p>
+                    
+                    <h4 class="mt-6 mb-3">应用场景:</h4>
+                    <ul class="list-disc pl-6 space-y-2 mb-6">
+                        <li>草拟通知信函</li>
+                        <li>策划活动方案</li>
+                        <li>撰写总结报告</li>
+                    </ul>
+                    
+                    <p class="mt-6 text-lg font-medium">DeepSeek可以协助教师快速生成各类文档初稿，教师只需进行简单修改即可完成，大大提高工作效率。</p>
+                </div>
+            </section>
+
+            <!-- 痛点5 -->
+            <section id="section5" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="order-2 lg:order-1 animated fadeInUp">
+                    <h2 class="mb-4">05 / 知识更新快，跨学科融合与创新教学思路匮乏</h2>
+                    <p class="mb-4">在快速变化的教育环境中，教师需要不断更新知识，开发创新教学方法，DeepSeek可以提供丰富的创意支持。</p>
+                    
+                    <h4 class="mt-6 mb-3">应用场景:</h4>
+                    <ul class="list-disc pl-6 space-y-2 mb-6">
+                        <li>提供教学创新点子</li>
+                        <li>知识拓展更新</li>
+                        <li>跨学科连接建议</li>
+                        <li>头脑风暴</li>
+                    </ul>
+                    
+                    <h4 class="mt-6 mb-3">提示词示例:</h4>
+                    <div class="example-box">
+                        <strong>创新点子:</strong> "针对[小学科学]课的[水的不同形态变化]知识点，提出2个可以融入课堂的[STEAM]活动创意，说明活动目标、主要步骤和体现的跨学科元素。"
+                    </div>
+                    <div class="example-box">
+                        <strong>知识更新:</strong> "简要介绍一下[人工智能（AI）]目前在[教育领域]有哪些前沿应用？哪些简单的概念或案例适合在[初中信息技术课]上向学生介绍？"
+                    </div>
+                </div>
+                <div class="order-1 lg:order-2 animated fadeInUp delay-200">
+                    <div class="card p-6 h-full flex flex-col justify-center">
+                        <div class="bg-pink-50 dark:bg-pink-900/20 rounded-xl p-8 relative overflow-hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-pink-500 mb-4"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><path d="M11 18H8a2 2 0 0 1-2-2V9"/></svg>
+                            
+                            <div class="example-box mt-4 z-10 relative">
+                                <strong>跨学科连接:</strong> "如何将[高中语文]课文《[琵琶行]》的学习与[音乐欣赏]（了解琵琶乐器、相关乐曲）或[历史背景]（唐朝社会生活）进行有效结合？请提供1-2个具体的教学活动设计建议。"
+                            </div>
+                            
+                            <div class="example-box z-10 relative">
+                                <strong>头脑风暴:</strong> "我正在思考如何让[初中物理]的[力学实验]课更加生动有趣，吸引学生主动探究。目前感觉传统验证性实验效果一般。请和我一起头脑风暴，提出至少5种可能的改进方向或创新的实验设计思路。"
+                            </div>
+                            
+                            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-pink-100 dark:bg-pink-800/20 rounded-full opacity-50"></div>
+                        </div>
+                        <div class="card-gradient"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 使用提示 -->
+        <section class="mt-20 animated fadeInUp">
+            <div class="card p-8">
+                <h2 class="mb-6">使用提示</h2>
+                <ul class="space-y-4">
+                    <li class="flex gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary mt-1 flex-shrink-0"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        <p>[ ] 中的内容是需要老师根据实际情况替换的具体信息。</p>
+                    </li>
+                    <li class="flex gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary mt-1 flex-shrink-0"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        <p>提示词越具体、越清晰，DeepSeek生成的内容就越贴合需求。</p>
+                    </li>
+                    <li class="flex gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary mt-1 flex-shrink-0"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        <p>可以尝试调整语气要求，如"语气活泼"、"语言简洁"、"专业严谨"等。</p>
+                    </li>
+                    <li class="flex gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary mt-1 flex-shrink-0"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        <p>对于生成的内容，务必进行审核、修改和优化，确保符合教学实际和育人目标。</p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 作者签名区域 -->
+        <footer class="mt-20 author-signature animated fadeInUp">
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+                <div class="signature-img">陈光</div>
+                <div class="text-center md:text-left">
+                    <h3 class="mb-2">陈光</h3>
+                    <p class="mb-4">北京邮电大学 人工智能学院</p>
+                    <div class="flex justify-center md:justify-start gap-4 mt-4">
+                        <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 text-center md:text-right">
+                <p class="text-sm text-gray-500 dark:text-gray-400">© 2025 教育创新与人工智能应用. 保留所有权利.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // 进度条功能
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
+        };
+
+        // 滚动动画
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fadeInUp');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
