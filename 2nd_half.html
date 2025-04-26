@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>人工智能的下半场 | 视觉呈现</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/css/icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-sc@4.5.12/index.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <style>
+    /* 基础样式设置 */
+    :root {
+      /* 主色调 */
+      --primary-light: #4361ee;
+      --primary-dark: #3f37c9;
+      --secondary-light: #4cc9f0;
+      --secondary-dark: #4895ef;
+      
+      /* 辅助色 */
+      --accent-light: #f72585;
+      --accent-dark: #b5179e;
+      --neutral-light: #f8f9fa;
+      --neutral-dark: #212529;
+      
+      /* 文本颜色 */
+      --text-light: #212529;
+      --text-dark: #f8f9fa;
+      --text-muted-light: #6c757d;
+      --text-muted-dark: #adb5bd;
+      
+      /* 背景颜色 */
+      --bg-light: #ffffff;
+      --bg-dark: #121212;
+      --bg-surface-light: #f8f9fa;
+      --bg-surface-dark: #1e1e1e;
+      
+      /* 过渡时间 */
+      --transition-speed: 0.3s;
+    }
+    
+    /* 全局样式 */
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+      transition: background-color var(--transition-speed), color var(--transition-speed);
+      scroll-behavior: smooth;
+    }
+    
+    /* 深色模式样式 */
+    body.dark {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+    
+    /* 光模式样式 */
+    body.light {
+      background-color: var(--bg-light);
+      color: var(--text-light);
+    }
+    
+    /* 标题样式 */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    
+    /* Fluid Typography */
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+    }
+    
+    h2 {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+    }
+    
+    p {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      line-height: 1.8;
+    }
+    
+    /* 卡片样式 */
+    .card {
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    /* 渐变背景 */
+    .gradient-bg {
+      background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
+    }
+    
+    .dark .gradient-bg {
+      background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark));
+    }
+    
+    /* 强调文本 */
+    .accent-text {
+      color: var(--accent-light);
+      font-weight: 700;
+    }
+    
+    .dark .accent-text {
+      color: var(--accent-dark);
+    }
+    
+    /* 导航与进度条 */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      z-index: 50;
+      width: 100%;
+      height: 4px;
+      background: transparent;
+    }
+    
+    .progress-bar {
+      height: 4px;
+      background: linear-gradient(to right, var(--primary-light), var(--accent-light));
+      width: 0%;
+    }
+    
+    .dark .progress-bar {
+      background: linear-gradient(to right, var(--primary-dark), var(--accent-dark));
+    }
+    
+    /* 目录样式 */
+    .toc {
+      position: sticky;
+      top: 2rem;
+    }
+    
+    .toc-link {
+      display: block;
+      padding: 0.5rem 0;
+      color: var(--text-muted-light);
+      transition: all 0.3s ease;
+      border-left: 2px solid transparent;
+      padding-left: 1rem;
+    }
+    
+    .toc-link:hover, .toc-link.active {
+      color: var(--primary-light);
+      border-left: 2px solid var(--primary-light);
+      padding-left: 1.5rem;
+    }
+    
+    .dark .toc-link {
+      color: var(--text-muted-dark);
+    }
+    
+    .dark .toc-link:hover, .dark .toc-link.active {
+      color: var(--primary-dark);
+      border-left: 2px solid var(--primary-dark);
+    }
+    
+    /* 图表容器 */
+    .chart-container {
+      position: relative;
+      margin: auto;
+      height: 300px;
+      width: 100%;
+    }
+    
+    /* 引用块 */
+    blockquote {
+      border-left: 4px solid var(--primary-light);
+      padding-left: 1rem;
+      margin-left: 0;
+      color: var(--text-muted-light);
+      font-style: italic;
+    }
+    
+    .dark blockquote {
+      border-left: 4px solid var(--primary-dark);
+      color: var(--text-muted-dark);
+    }
+    
+    /* 动画效果 */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .fade-in.appear {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* 光标跟踪效果 */
+    .spotlight {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    /* 自定义滚动条 */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: var(--bg-surface-light);
+    }
+    
+    .dark ::-webkit-scrollbar-track {
+      background: var(--bg-surface-dark);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary-light);
+      border-radius: 4px;
+    }
+    
+    .dark ::-webkit-scrollbar-thumb {
+      background: var(--primary-dark);
+    }
+    
+    /* 骨架屏效果 */
+    @keyframes pulse {
+      0% {
+        opacity: 0.6;
+      }
+      50% {
+        opacity: 0.3;
+      }
+      100% {
+        opacity: 0.6;
+      }
+    }
+    
+    .skeleton-loader {
+      animation: pulse 1.5s infinite;
+      background-color: var(--text-muted-light);
+      border-radius: 4px;
+    }
+    
+    .dark .skeleton-loader {
+      background-color: var(--text-muted-dark);
+    }
+    
+    /* 3D卡片效果 */
+    .card-3d {
+      transform-style: preserve-3d;
+      transition: transform 0.5s;
+    }
+    
+    /* 自定义SVG动画 */
+    .svg-animation {
+      transition: all 0.5s ease;
+    }
+    
+    .svg-animation:hover {
+      filter: drop-shadow(0 0 8px var(--accent-light));
+    }
+    
+    .dark .svg-animation:hover {
+      filter: drop-shadow(0 0 8px var(--accent-dark));
+    }
+    
+    /* 打印样式优化 */
+    @media print {
+      body {
+        background-color: white;
+        color: black;
+      }
+      
+      .no-print {
+        display: none;
+      }
+      
+      .page-break {
+        page-break-before: always;
+      }
+    }
+    
+    /* 作者区域样式 */
+    .author-section {
+      border-top: 1px solid var(--text-muted-light);
+      padding-top: 2rem;
+      margin-top: 4rem;
+    }
+    
+    .dark .author-section {
+      border-top: 1px solid var(--text-muted-dark);
+    }
+    
+    .author-sign {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+    }
+    
+    /* 社交媒体图标 */
+    .social-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      background-color: var(--bg-surface-light);
+      color: var(--primary-light);
+    }
+    
+    .social-icon:hover {
+      background-color: var(--primary-light);
+      color: white;
+      transform: translateY(-3px);
+    }
+    
+    .dark .social-icon {
+      background-color: var(--bg-surface-dark);
+      color: var(--primary-dark);
+    }
+    
+    .dark .social-icon:hover {
+      background-color: var(--primary-dark);
+      color: white;
+    }
+    
+    /* 阅读进度指示器 */
+    .reading-progress {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 4rem;
+      height: 4rem;
+      border-radius: 50%;
+      background: conic-gradient(var(--primary-light) 0%, transparent 0%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      z-index: 40;
+      transition: all 0.3s ease;
+    }
+    
+    .reading-progress-inner {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      background-color: var(--bg-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--primary-light);
+    }
+    
+    .dark .reading-progress {
+      background: conic-gradient(var(--primary-dark) 0%, transparent 0%);
+    }
+    
+    .dark .reading-progress-inner {
+      background-color: var(--bg-dark);
+      color: var(--primary-dark);
+    }
+  </style>
+</head>
+
+<body class="light" x-data="{ darkMode: false, scrollProgress: 0, activeSection: 'intro' }">
+  <!-- 深色/浅色模式切换 -->
+  <div class="fixed top-4 right-4 z-50">
+    <button 
+      @click="darkMode = !darkMode; document.body.classList.toggle('dark'); document.body.classList.toggle('light')" 
+      class="p-2 rounded-full bg-gray-200 dark:bg-gray-800 transition-colors duration-300"
+      aria-label="切换深色/浅色模式">
+      <svg x-show="!darkMode" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+      </svg>
+      <svg x-show="darkMode" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- 阅读进度指示器 -->
+  <div 
+    class="reading-progress no-print" 
+    x-bind:style="'background: conic-gradient(' + (darkMode ? 'var(--primary-dark)' : 'var(--primary-light)') + ' ' + scrollProgress + '%, transparent ' + scrollProgress + '%);'"
+    x-show="scrollProgress > 0">
+    <div class="reading-progress-inner">
+      <span x-text="Math.round(scrollProgress) + '%'"></span>
+    </div>
+  </div>
+  
+  <!-- 进度条 -->
+  <div class="progress-container no-print">
+    <div class="progress-bar" x-bind:style="'width: ' + scrollProgress + '%'"></div>
+  </div>
+
+  <!-- 主要内容区域 -->
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- 侧边目录 (仅在大屏幕显示) -->
+      <div class="hidden lg:block lg:col-span-3">
+        <div class="toc no-print">
+          <h3 class="text-lg font-bold mb-4">目录</h3>
+          <a href="#intro" class="toc-link" :class="{ 'active': activeSection === 'intro' }">简介</a>
+          <a href="#first-half" class="toc-link" :class="{ 'active': activeSection === 'first-half' }">AI的上半场</a>
+          <a href="#recipe" class="toc-link" :class="{ 'active': activeSection === 'recipe' }">工作配方</a>
+          <a href="#second-half" class="toc-link" :class="{ 'active': activeSection === 'second-half' }">AI的下半场</a>
+          <a href="#challenges" class="toc-link" :class="{ 'active': activeSection === 'challenges' }">效用问题</a>
+          <a href="#conclusion" class="toc-link" :class="{ 'active': activeSection === 'conclusion' }">结语</a>
+        </div>
+      </div>
+      
+      <!-- 主要内容区域 -->
+      <div class="lg:col-span-9">
+        <!-- 标题区域 -->
+        <div id="intro" class="mb-12 fade-in">
+          <h1 class="text-center mb-6 gradient-text">人工智能的下半场</h1>
+          <p class="text-center text-lg text-gray-600 dark:text-gray-300 mb-8">AI发展已经来到关键的转折点，接下来将是一个全新的时代</p>
+          
+          <div class="gradient-bg text-white p-6 rounded-lg shadow-lg">
+            <p class="font-bold text-xl">核心概述：我们已经处于AI发展的中场休息时间。</p>
+          </div>
+        </div>
+        
+        <!-- 引言部分 -->
+        <div class="mb-12 fade-in">
+          <p>几十年来，AI主要致力于开发新的训练方法和模型。这条路径取得了巨大成功：从在国际象棋和围棋上击败世界冠军，在SAT和律师考试中超越大多数人类，到在国际奥林匹克信息学竞赛和国际数学奥林匹克竞赛中获得金牌。在这些历史性里程碑背后——深蓝、AlphaGo、GPT-4和O系列——是AI方法论的根本创新：搜索算法、深度强化学习、规模化训练和推理能力。随着时间推移，一切都在不断提升。</p>
+          
+          <p class="mt-4">那么，现在突然有什么不同了？</p>
+          
+          <p class="mt-4">用三个字概括：<span class="accent-text">强化学习终于有效了</span>。更准确地说：强化学习终于能够泛化。经过几次重大的绕道和一系列里程碑的积累，我们找到了一个有效的配方，可以使用语言和推理来解决广泛的强化学习任务。即使在一年前，如果你告诉大多数AI研究人员，一个单一的方法可以同时解决软件工程、创意写作、国际数学奥赛级别的数学问题、鼠标键盘操作和长篇问答——他们会认为你在幻想。这些任务中的每一个都极其困难，许多研究人员花费整个博士生涯只专注于其中一个狭窄的领域。</p>
+          
+          <p class="mt-4">然而，这一切已经发生了。</p>
+          
+          <p class="mt-4">那么接下来会发生什么？AI的下半场——从现在开始——将把焦点从解决问题转向定义问题。在这个新时代，评估变得比训练更重要。我们不再仅仅问"我们能否训练模型解决X问题？"，而是问"我们应该训练AI做什么，以及如何衡量真正的进展？"要在这个下半场茁壮成长，我们需要及时转变思维模式和技能组合，这些可能更接近于产品经理的思维方式。</p>
+        </div>
+        
+        <!-- AI上半场 -->
+        <div id="first-half" class="mb-12 fade-in">
+          <h2 class="mb-6">AI的上半场</h2>
+          
+          <p>要理解AI的上半场，看看它的赢家们。你认为迄今为止最有影响力的AI论文是什么？</p>
+          
+          <p class="mt-4">我曾在斯坦福大学的CS 224N课程中提出这个问题，答案并不令人意外：Transformer架构、AlexNet、GPT-3等。这些论文有什么共同点？它们提出了一些根本性的突破，用于训练更好的模型。同时，它们也通过在某些基准测试中展示（显著的）改进来发表了自己的论文。</p>
+          
+          <p class="mt-4">但存在一个潜在的共性：这些"赢家"都是训练方法或模型，而不是基准测试或任务。即使是可以说是最有影响力的基准测试ImageNet，其引用量也不到AlexNet的三分之一。方法与基准测试的对比在其他任何地方都更加明显——例如，Transformer的主要基准测试是WMT'14，其工作坊报告有约1,300次引用，而Transformer有超过160,000次引用。</p>
+          
+          <div class="my-8">
+            <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6">
+              <div class="chart-container">
+                <canvas id="citationChart"></canvas>
+              </div>
+            </div>
+            <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-2">图1：AI方法与基准测试的引用量对比</p>
+          </div>
+          
+          <p>这展示了AI上半场的游戏规则：专注于构建新模型和方法，而评估和基准测试是次要的（尽管对于使论文系统工作是必要的）。</p>
+          
+          <p class="mt-4">为什么会这样？一个重要原因是，在AI的上半场，方法比任务更难且更令人兴奋。从头创建一种新算法或模型架构——想想那些突破性的贡献，如反向传播算法、卷积网络（AlexNet）或GPT-3使用的Transformer——需要非凡的洞察力和工程能力。相比之下，为AI定义任务通常感觉更直接：我们只是将人类已经做的任务（如翻译、图像识别或国际象棋）转变为基准测试。这不需要太多洞察力，甚至不需要太多工程能力。</p>
+          
+          <p class="mt-4">方法也往往比单个任务更通用和广泛适用，使它们特别有价值。例如，Transformer架构最终推动了计算机视觉、自然语言处理、强化学习和许多其他领域的进展——远远超出了它首次证明自己的单一数据集（WMT'14翻译）。一个出色的新方法可以攀爬许多不同的基准测试，因为它简单且通用，因此其影响往往超出单个任务。</p>
+          
+          <p class="mt-4">这个游戏已经持续了几十年，并催生了改变世界的想法和突破，这些突破体现在各个领域不断提高的基准性能上。为什么游戏规则会发生改变？因为这些想法和突破的积累在解决任务方面产生了质的差异，创造了一个有效的配方。</p>
+        </div>
+        
+        <!-- 工作配方 -->
+        <div id="recipe" class="mb-12 fade-in">
+          <h2 class="mb-6">工作配方</h2>
+          
+          <p>什么是这个配方？它的成分，不出所料，包括大规模语言预训练、规模化（在数据和计算上），以及推理和行动的思想。这些听起来可能像是你在旧金山每天听到的流行词，但为什么称它们为配方呢？</p>
+          
+          <p class="mt-4">我们可以通过强化学习（RL）的视角来理解这一点，它通常被认为是AI的"终极游戏"——毕竟，理论上RL保证能赢得游戏，而经验上很难想象任何超人系统（如AlphaGo）没有RL的支持。</p>
+          
+          <p class="mt-4">在RL中，有三个关键组成部分：<span class="accent-text">算法、环境和先验知识</span>。长期以来，RL研究人员主要关注算法（如REINFORCE、DQN、TD学习、Actor-Critic、PPO、TRPO等）——即智能体如何学习的智力核心——同时将环境和先验知识视为固定或最小化的部分。例如，萨顿和巴托的经典教科书几乎全是关于算法的，几乎没有涉及环境或先验知识。</p>
+          
+          <div class="my-8 flex justify-center">
+            <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 max-w-md">
+              <div class="flex justify-center">
+                <svg class="svg-animation" width="300" height="200" viewBox="0 0 300 200">
+                  <!-- RL的组成部分图 -->
+                  <rect x="10" y="10" width="80" height="80" rx="10" fill="#4361ee" opacity="0.8"/>
+                  <text x="50" y="55" text-anchor="middle" fill="white" font-weight="bold">算法</text>
+                  
+                  <rect x="110" y="10" width="80" height="80" rx="10" fill="#4361ee" opacity="0.8"/>
+                  <text x="150" y="55" text-anchor="middle" fill="white" font-weight="bold">环境</text>
+                  
+                  <rect x="210" y="10" width="80" height="80" rx="10" fill="#4361ee" opacity="0.8"/>
+                  <text x="250" y="55" text-anchor="middle" fill="white" font-weight="bold">先验知识</text>
+                  
+                  <rect x="60" y="110" width="180" height="80" rx="10" fill="#f72585" opacity="0.8"/>
+                  <text x="150" y="155" text-anchor="middle" fill="white" font-weight="bold">有效的RL配方</text>
+                  
+                  <path d="M50 90 L50 110 L150 110" stroke="#333" stroke-width="2" fill="none"/>
+                  <path d="M150 90 L150 110" stroke="#333" stroke-width="2" fill="none"/>
+                  <path d="M250 90 L250 110 L150 110" stroke="#333" stroke-width="2" fill="none"/>
+                </svg>
+              </div>
+              <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-2">图2：强化学习的三个关键组成部分及其关系</p>
+            </div>
+          </div>
+          
+          <p>然而，在深度RL时代，变得明显的是环境也非常重要：算法的性能通常与它开发和测试的环境高度相关。如果忽略环境，你可能会构建一个只在玩具设置中表现出色的"最优"算法。那么，为什么我们不先确定我们实际想要解决的环境，然后找到最适合它的算法呢？</p>
+          
+          <p class="mt-4">这正是OpenAI最初的计划。它构建了Gym，一个标准的RL环境，用于各种游戏，然后是World of Bits和Universe项目，试图将互联网或计算机变成一个游戏。这是一个好计划，不是吗？一旦我们将所有数字世界变成环境，用智能RL算法解决它，我们就拥有了数字AGI。</p>
+          
+          <p class="mt-4">这是一个好计划，但并不完全有效。OpenAI沿着这条路径取得了巨大进展，使用RL解决了Dota、机器人手等问题。但它从未接近解决计算机使用或网络导航，而且在一个领域工作的RL智能体不会转移到另一个领域。缺少了什么。</p>
+          
+          <p class="mt-4">直到GPT-2或GPT-3之后，才发现缺失的部分是先验知识。你需要强大的语言预训练来将通用常识和语言知识提炼到模型中，然后可以将这些模型微调成网络（WebGPT）或聊天（ChatGPT）智能体（并改变世界）。<span class="accent-text">事实证明，RL中最重要的部分可能不是RL算法或环境，而是先验知识，而这些可以通过与RL完全无关的方式获得。</span></p>
+          
+          <p class="mt-4">语言预训练为聊天创造了良好的先验知识，但对控制计算机或玩视频游戏来说并不同样有效。为什么？这些领域与互联网文本的分布相距甚远，在这些领域上进行简单的SFT/RL泛化效果不佳。我在2019年注意到了这个问题，当时GPT-2刚刚问世，我在其上进行了SFT/RL来解决基于文本的游戏——CALM是世界上第一个通过预训练语言模型构建的智能体。但智能体需要数百万步RL才能攀爬单个游戏，并且它不会迁移到新游戏。虽然这正是RL的特点，对RL研究人员来说并不奇怪，但我发现它很奇怪，因为我们人类可以轻松地玩一个新游戏，并且从零开始就明显更好。然后我有了人生中第一个重要的顿悟——我们之所以能够泛化，是因为我们不仅可以选择"去第2个柜子"或"用钥匙1打开箱子3"或"用剑杀死地下城"，我们还可以选择思考诸如"地下城很危险，我需要武器来战斗。没有可见的武器，所以也许我需要在锁着的盒子或箱子里找一个。箱子3在柜子2里，让我先去那里把它打开"之类的事情。</p>
+          
+          <div class="my-8 flex justify-center">
+            <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6">
+              <img src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='300' viewBox='0 0 500 300'%3E%3Crect width='500' height='300' fill='%23f8f9fa'/%3E%3Cpath d='M50,150 C50,70 450,70 450,150 C450,230 50,230 50,150 Z' fill='%234361ee' opacity='0.2'/%3E%3Cpath d='M220,140 C220,110 280,110 280,140 L280,180 C280,210 220,210 220,180 Z' fill='%23f72585' opacity='0.8'/%3E%3Ctext x='250' y='165' text-anchor='middle' fill='white' font-weight='bold'%3E推理%3C/text%3E%3Ccircle cx='100' cy='150' r='30' fill='%234361ee' opacity='0.8'/%3E%3Ctext x='100' y='155' text-anchor='middle' fill='white' font-weight='bold'%3E行动1%3C/text%3E%3Ccircle cx='400' cy='150' r='30' fill='%234361ee' opacity='0.8'/%3E%3Ctext x='400' y='155' text-anchor='middle' fill='white' font-weight='bold'%3E行动2%3C/text%3E%3Cpath d='M130,150 L210,150' stroke='%23333' stroke-width='2' stroke-dasharray='5,5'/%3E%3Cpath d='M290,150 L370,150' stroke='%23333' stroke-width='2' stroke-dasharray='5,5'/%3E%3Ctext x='250' y='50' text-anchor='middle' font-size='20'%3E推理作为行动的桥梁%3C/text%3E%3C/svg%3E" alt="推理作为行动的桥梁" class="max-w-full">
+              <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-2">图3：推理作为连接不同行动的桥梁</p>
+            </div>
+          </div>
+          
+          <p>思考，或推理，是一种<span class="accent-text">奇特</span>的行动——它不直接影响外部世界，但推理的空间是开放式的，组合上无限——你可以思考一个词、一个句子、一整段内容，或10000个随机英语单词，但周围的世界不会立即改变。在经典RL理论中，这是一个糟糕的交易，使决策变得不可能。想象一下，你需要从两个盒子中选择一个，其中只有一个盒子里有100万美元，另一个是空的。你期望获得50万美元。现在想象我增加无限多个空盒子。你期望获得零。但通过将推理添加到任何RL环境的行动空间中，我们利用语言预训练先验知识来泛化，并且我们能够为不同的决策提供灵活的测试时间计算。这是一个真正<span class="accent-text">神奇</span>的事情，我在这里无法完全解释，可能需要另外写一篇博客文章来专门讨论它。你可以阅读ReAct论文了解智能体推理的原始故事，并感受我当时的想法。现在，我的直观解释是：即使你添加了无限多个空盒子，你在各种游戏中已经见过它们，选择这些盒子可以让你为任何给定游戏更好地选择有钱的盒子。我的抽象解释是：<span class="accent-text">语言通过智能体中的推理实现泛化</span>。</p>
+          
+          <p class="mt-4">一旦我们有了正确的RL先验知识（语言预训练）和RL环境（添加语言推理作为行动），RL算法可能是最微不足道的部分。因此，我们有了O系列、R1、深度研究、计算机使用智能体，以及更多即将到来的成果。多么讽刺的转变！长期以来，RL研究人员比环境更关注算法，没有人关注先验知识——所有RL实验基本上都是从零开始。但经过几十年的绕路，我们意识到也许我们的优先级应该完全颠倒。</p>
+          
+          <p class="mt-4">但正如史蒂夫·乔布斯所说：你不能在前进的道路上连接点；你只能在回顾时连接它们。</p>
+        </div>
+        
+        <!-- AI下半场 -->
+        <div id="second-half" class="mb-12 fade-in">
+          <h2 class="mb-6">AI的下半场</h2>
+          
+          <p>这个配方正在彻底改变游戏规则。回顾一下上半场的游戏：</p>
+          <ul class="list-disc pl-6 mt-4 space-y-2">
+            <li>我们开发新颖的训练方法或模型，攀爬基准测试。</li>
+            <li>我们创建更难的基准测试并继续循环。</li>
+          </ul>
+          
+          <p class="mt-4">这个游戏正在被破坏，因为：</p>
+          <ul class="list-disc pl-6 mt-4 space-y-2">
+            <li>配方基本上已经标准化和工业化了基准攀爬，而不需要太多新想法。随着配方的扩展和良好泛化，你的针对特定任务的新方法可能会使其改进5%，而下一个O系列模型在不明确针对它的情况下将其改进30%。</li>
+            <li>即使我们创建更难的基准测试，很快（并且越来越快）它们也会被配方解决。</li>
+          </ul>
+          
+          <div class="my-8 flex justify-center">
+            <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6">
+              <img src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='300' viewBox='0 0 500 300'%3E%3Crect width='500' height='300' fill='%23f8f9fa'/%3E%3Cline x1='50' y1='250' x2='450' y2='250' stroke='%23333' stroke-width='2'/%3E%3Cline x1='50' y1='250' x2='50' y2='50' stroke='%23333' stroke-width='2'/%3E%3Cpath d='M50,230 Q150,210 250,150 T450,50' stroke='%234361ee' stroke-width='3' fill='none'/%3E%3Ctext x='250' y='40' text-anchor='middle' font-size='20'%3EAI能力进展曲线%3C/text%3E%3Ctext x='250' y='270' text-anchor='middle'%3E时间%3C/text%3E%3Ctext x='40' y='150' text-anchor='middle' transform='rotate(-90 40 150)'%3E能力水平%3C/text%3E%3Ccircle cx='150' cy='210' r='5' fill='%23f72585'/%3E%3Ctext x='170' y='200' text-anchor='start' font-size='12'%3E2020年%3C/text%3E%3Ccircle cx='250' cy='150' r='5' fill='%23f72585'/%3E%3Ctext x='270' y='140' text-anchor='start' font-size='12'%3E2023年%3C/text%3E%3Ccircle cx='350' cy='90' r='5' fill='%23f72585'/%3E%3Ctext x='370' y='80' text-anchor='start' font-size='12'%3E2025年%3C/text%3E%3Cline x1='50' y1='180' x2='450' y2='180' stroke='%23333' stroke-width='1' stroke-dasharray='5,5'/%3E%3Ctext x='40' y='180' text-anchor='end' font-size='12'%3E人类水平%3C/text%3E%3C/svg%3E" alt="AI能力进展曲线" class="max-w-full h-auto">
+              <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-2">图4：AI能力呈指数级增长，越来越快地解决新基准</p>
+            </div>
+          </div>
+          
+          <p>那么在下半场还剩下什么可玩的？如果不再需要新颖的方法，更难的基准测试也会越来越快地被解决，我们应该做什么？</p>
+          
+          <p class="mt-4">我认为<span class="accent-text">我们应该从根本上重新思考评估</span>。这意味着不仅仅是创建新的、更难的基准测试，而是从根本上质疑现有的评估<span class="accent-text">设置</span>并创建新的评估设置，这样我们就被迫发明超越现有配方的新方法。这很难，因为人类有惯性，很少质疑基本假设——你只是把它们当作理所当然，而没有意识到它们是假设，而不是规律。</p>
+          
+          <p class="mt-4">为了解释惯性，假设你发明了基于人类考试的最成功的评估之一。这在2021年是一个非常大胆的想法，但3年后它已经饱和。你会怎么做？最可能的是创建一个更难的考试。或者假设你解决了简单的编码任务。你会怎么做？最可能的是找到更难的编码任务来解决，直到你达到国际奥林匹克信息学竞赛金牌水平。</p>
+          
+          <p class="mt-4">惯性是自然的，但这里有一个问题。AI已经在国际象棋和围棋上击败了世界冠军，在SAT和律师考试上超越了大多数人类，并在国际奥林匹克信息学竞赛和国际数学奥林匹克竞赛上达到了金牌水平。但从经济和GDP的角度来看，世界并没有发生太大变化。</p>
+          
+          <p class="mt-4">我称之为<span class="accent-text">效用问题</span>，并认为这是AI最重要的问题。</p>
+        </div>
+        
+        <!-- 效用问题 -->
+        <div id="challenges" class="mb-12 fade-in">
+          <h2 class="mb-6">效用问题</h2>
+          
+          <p>也许我们很快就会解决效用问题，也许不会。无论如何，这个问题的根本原因可能出奇地简单：<span class="accent-text">我们的评估设置与真实世界设置在许多基本方面不同</span>。举两个例子：</p>
+          
+          <ul class="mt-4 space-y-6">
+            <li class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+              <h3 class="font-bold text-lg mb-2">评估"应该"自动运行</h3>
+              <p>通常，智能体接收任务输入，自主完成任务，然后接收任务奖励。但在现实中，智能体必须在整个任务过程中与人类互动——你不会只是向客户服务发送一条超长的消息，等待10分钟，然后期望得到详细的回复来解决所有问题。通过质疑这种设置，新的基准被发明出来，要么让真实人类参与（例如Chatbot Arena），要么在循环中使用用户模拟（例如tau-bench）。</p>
+              <div class="mt-4 flex justify-center">
+                <img src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23f8f9fa'/%3E%3Crect x='50' y='50' width='300' height='100' rx='10' fill='%234361ee' opacity='0.2'/%3E%3Ccircle cx='100' cy='100' r='30' fill='%234361ee' opacity='0.8'/%3E%3Ctext x='100' y='105' text-anchor='middle' fill='white'%3E人类%3C/text%3E%3Crect x='200' y='70' width='100' height='60' rx='5' fill='%23f72585' opacity='0.8'/%3E%3Ctext x='250' y='105' text-anchor='middle' fill='white'%3EAI%3C/text%3E%3Cpath d='M135,100 L185,100' stroke='%23333' stroke-width='2' fill='none' marker-end='url(%23arrow)'/%3E%3Cpath d='M185,110 L135,110' stroke='%23333' stroke-width='2' fill='none' marker-end='url(%23arrow)'/%3E%3Cpath d='M305,100 L355,100 L355,50 L135,50 L135,90' stroke='%23333' stroke-width='2' fill='none' stroke-dasharray='5,5' marker-end='url(%23arrow)'/%3E%3Cdefs%3E%3Cmarker id='arrow' markerWidth='10' markerHeight='10' refX='9' refY='3' orient='auto'%3E%3Cpath d='M0,0 L0,6 L9,3 Z' fill='%23333'/%3E%3C/marker%3E%3C/defs%3E%3Ctext x='200' y='30' text-anchor='middle' font-size='16'%3E循环交互评估%3C/text%3E%3C/svg%3E" alt="循环交互评估" class="max-w-full h-auto">
+              </div>
+            </li>
+            
+            <li class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+              <h3 class="font-bold text-lg mb-2">评估"应该"独立同分布(i.i.d)运行</h3>
+              <p>如果你有一个包含500个任务的测试集，你会独立运行每个任务，平均任务指标，并获得总体指标。但在现实中，你会顺序解决任务，而不是并行解决。谷歌的软件工程师随着对代码库越来越熟悉，解决谷歌代码库中的问题的能力也越来越强，但软件工程师智能体在同一代码库中解决许多问题时却没有获得这种熟悉度。我们显然需要长期记忆方法，但学术界没有恰当的基准来证明这种需求，甚至没有勇气质疑一直以来作为机器学习基础的i.i.d.假设。</p>
+            </li>
+          </ul>
+          
+          <p class="mt-6">这些假设"一直"如此，在AI的上半场中开发基于这些假设的基准测试是可以的，因为<span class="accent-text">当智能水平低时，提高智能通常会提高效用</span>。但现在，通用配方保证在这些假设下有效。所以下半场新游戏的玩法是</p>
+          
+          <ul class="list-disc pl-6 mt-4 space-y-2">
+            <li>我们开发新颖的评估设置或任务，以实现真实世界的效用。</li>
+            <li>我们用配方解决它们或用新颖的组件增强配方。继续循环。</li>
+          </ul>
+          
+          <p class="mt-4">这个游戏很难，因为它不熟悉。但它很令人兴奋。上半场的参与者解决视频游戏和考试，下半场的参与者则通过从智能构建有用的产品来建立价值数十亿或数万亿美元的公司。上半场充满了增量方法和模型，下半场在某种程度上过滤了它们。通用配方会碾压你的增量方法，除非你创造打破配方的新假设。然后你才能做出真正改变游戏规则的研究。</p>
+        </div>
+        
+        <!-- 结语 -->
+        <div id="conclusion" class="mb-12 fade-in">
+          <h2 class="mb-6">结语</h2>
+          
+          <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg text-center">
+            <p class="text-xl font-bold">欢迎来到AI的下半场！</p>
+          </div>
+        </div>
+        
+        <!-- 作者区域 -->
+        <div class="author-section fade-in">
+          <div class="flex flex-col md:flex-row items-center justify-between">
+            <div class="flex items-center mb-4 md:mb-0">
+              <div class="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-r from-primary-light to-secondary-light flex items-center justify-center text-white font-bold text-xl">陈光</div>
+              <div class="ml-4">
+                <p class="font-bold text-lg">陈光</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">人工智能研究员 & 技术分析师</p>
+              </div>
+            </div>
+            
+            <div class="flex flex-col items-end">
+              <div class="author-sign mb-2">陈光</div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">&copy; 2025 版权所有</p>
+              
+              <div class="flex mt-2 space-x-2">
+                <a href="#" class="social-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                  </svg>
+                </a>
+                <a href="#" class="social-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                </a>
+                <a href="#" class="social-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 光标跟踪效果 -->
+  <div class="spotlight no-print"></div>
+  
+  <!-- JavaScript -->
+  <script>
+    // 初始化Alpine.js数据
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('app', () => ({
+        darkMode: false,
+        scrollProgress: 0,
+        activeSection: 'intro',
+        
+        init() {
+          this.updateScrollProgress();
+          window.addEventListener('scroll', () => this.updateScrollProgress());
+          
+          // 检查系统是否偏好深色模式
+          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            this.darkMode = true;
+            document.body.classList.add('dark');
+            document.body.classList.remove('light');
+          }
+          
+          // 初始化交叉观察器来检测可见部分
+          this.initIntersectionObserver();
+          
+          // 初始化图表
+          this.initCharts();
+        },
+        
+        updateScrollProgress() {
+          const scrollTop = window.scrollY;
+          const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+          this.scrollProgress = Math.round((scrollTop / scrollHeight) * 100);
+          
+          // 更新活动部分
+          const sections = ['intro', 'first-half', 'recipe', 'second-half', 'challenges', 'conclusion'];
+          for (const section of sections) {
+            const element = document.getElementById(section);
+            if (element) {
+              const rect = element.getBoundingClientRect();
+              if (rect.top <= 100 && rect.bottom >= 100) {
+                this.activeSection = section;
+                break;
+              }
+            }
+          }
+        },
+        
+        initIntersectionObserver() {
+          const fadeElements = document.querySelectorAll('.fade-in');
+          
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('appear');
+              }
+            });
+          }, { threshold: 0.1 });
+          
+          fadeElements.forEach(element => {
+            observer.observe(element);
+          });
+        },
+        
+        initCharts() {
+          // 引用量对比图表
+          const citationCtx = document.getElementById('citationChart');
+          if (citationCtx) {
+            new Chart(citationCtx, {
+              type: 'bar',
+              data: {
+                labels: ['AlexNet', 'Transformer', 'GPT-3', 'ImageNet', 'WMT\'14'],
+                datasets: [{
+                  label: '引用量',
+                  data: [65000, 160000, 38000, 22000, 1300],
+                  backgroundColor: [
+                    'rgba(67, 97, 238, 0.8)',
+                    'rgba(67, 97, 238, 0.8)',
+                    'rgba(67, 97, 238, 0.8)',
+                    'rgba(247, 37, 133, 0.8)',
+                    'rgba(247, 37, 133, 0.8)'
+                  ],
+                  borderColor: [
+                    'rgba(67, 97, 238, 1)',
+                    'rgba(67, 97, 238, 1)',
+                    'rgba(67, 97, 238, 1)',
+                    'rgba(247, 37, 133, 1)',
+                    'rgba(247, 37, 133, 1)'
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    title: {
+                      display: true,
+                      text: '引用量'
+                    }
+                  },
+                  x: {
+                    title: {
+                      display: true,
+                      text: '论文/基准测试'
+                    }
+                  }
+                },
+                plugins: {
+                  legend: {
+                    display: false
+                  },
+                  tooltip: {
+                    callbacks: {
+                      label: function(context) {
+                        return context.raw.toLocaleString() + ' 次引用';
+                      }
+                    }
+                  }
+                }
+              }
+            });
+          }
+        }
+      }));
+    });
+    
+    // 光标跟踪效果
+    document.addEventListener('DOMContentLoaded', function() {
+      const spotlight = document.querySelector('.spotlight');
+      if (spotlight) {
+        document.addEventListener('mousemove', e => {
+          const spotlightSize = 150;
+          spotlight.style.background = `radial-gradient(
+            circle ${spotlightSize}px at ${e.pageX}px ${e.pageY}px,
+            rgba(67, 97, 238, 0.1),
+            transparent 80%
+          )`;
+        });
+      }
+      
+      // 初始化其他内容
+      document.querySelectorAll('.fade-in').forEach(element => {
+        element.classList.add('appear');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大模型推理时计算有效性之源</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.5/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/regular/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
+        
+        :root {
+            /* 浅色模式色彩 */
+            --primary-light: #3B82F6;
+            --primary-dark-light: #2563EB;
+            --secondary-light: #10B981;
+            --accent-light: #6366F1;
+            --background-light: #FFFFFF;
+            --surface-light: #F8FAFC;
+            --text-primary-light: #1E293B;
+            --text-secondary-light: #64748B;
+            
+            /* 深色模式色彩 */
+            --primary-dark: #60A5FA;
+            --primary-dark-dark: #3B82F6;
+            --secondary-dark: #34D399;
+            --accent-dark: #818CF8;
+            --background-dark: #0F172A;
+            --surface-dark: #1E293B;
+            --text-primary-dark: #F1F5F9;
+            --text-secondary-dark: #94A3B8;
+            
+            /* 当前主题色彩 */
+            --primary: var(--primary-light);
+            --primary-dark: var(--primary-dark-light);
+            --secondary: var(--secondary-light);
+            --accent: var(--accent-light);
+            --background: var(--background-light);
+            --surface: var(--surface-light);
+            --text-primary: var(--text-primary-light);
+            --text-secondary: var(--text-secondary-light);
+        }
+        
+        /* 深色模式设置 */
+        .dark {
+            --primary: var(--primary-dark);
+            --primary-dark: var(--primary-dark-dark);
+            --secondary: var(--secondary-dark);
+            --accent: var(--accent-dark);
+            --background: var(--background-dark);
+            --surface: var(--surface-dark);
+            --text-primary: var(--text-primary-dark);
+            --text-secondary: var(--text-secondary-dark);
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            transition: background-color 0.5s ease, color 0.5s ease;
+            min-height: 100vh;
+            line-height: 1.8;
+        }
+        
+        .content-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 700;
+        }
+        
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+        }
+        
+        h2 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+        }
+        
+        h3 {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+        }
+        
+        p, li {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+        }
+        
+        .card {
+            background-color: var(--surface);
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .dark .card {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+        
+        .section-divider {
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 2px;
+            margin: 2rem 0;
+            width: 100%;
+            max-width: 150px;
+        }
+        
+        .nav-item {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-item:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            left: 0;
+            bottom: -5px;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-item:hover:after, .nav-item.active:after {
+            width: 100%;
+        }
+        
+        .card-accent {
+            border-top: 4px solid var(--primary);
+        }
+        
+        .card-accent-secondary {
+            border-top: 4px solid var(--secondary);
+        }
+        
+        .card-accent-accent {
+            border-top: 4px solid var(--accent);
+        }
+        
+        .theme-toggle {
+            cursor: pointer;
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background-color: var(--text-secondary);
+            border-radius: 24px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .theme-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        
+        .dark .theme-toggle {
+            background-color: var(--primary);
+        }
+        
+        .dark .theme-toggle::after {
+            transform: translateX(24px);
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background-color: transparent;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, rgba(59, 130, 246, 0.2) 0%, rgba(16, 185, 129, 0.2) 100%);
+            padding: 0.2em 0.1em;
+            border-radius: 0.2em;
+        }
+        
+        .dark .highlight {
+            background: linear-gradient(120deg, rgba(96, 165, 250, 0.3) 0%, rgba(52, 211, 153, 0.3) 100%);
+        }
+        
+        .quote {
+            border-left: 4px solid var(--primary);
+            padding-left: 1.5rem;
+            font-style: italic;
+            margin: 2rem 0;
+        }
+        
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+        
+        .progress-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            z-index: 1000;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+        
+        .blur-bg {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .signature {
+            max-width: 150px;
+            height: auto;
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+            opacity: 0;
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+        
+        /* 骨架屏 */
+        .skeleton {
+            background: linear-gradient(90deg, var(--surface) 25%, rgba(0, 0, 0, 0.05) 50%, var(--surface) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* 打印样式优化 */
+        @media print {
+            body {
+                background-color: white;
+                color: black;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            .content-container {
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+        
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--surface);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-secondary);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+    </style>
+</head>
+<body x-data="{
+    darkMode: false,
+    activeSection: 'introduction',
+    showToc: false,
+    progress: 0,
+    init() {
+        this.checkDarkMode();
+        this.setupProgressIndicator();
+        this.setupIntersectionObserver();
+    },
+    checkDarkMode() {
+        if (localStorage.getItem('darkMode') === 'true' || 
+            (localStorage.getItem('darkMode') === null && 
+            window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            this.darkMode = true;
+            document.documentElement.classList.add('dark');
+        }
+    },
+    toggleDarkMode() {
+        this.darkMode = !this.darkMode;
+        localStorage.setItem('darkMode', this.darkMode);
+        document.documentElement.classList.toggle('dark');
+    },
+    setupProgressIndicator() {
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+            const clientHeight = document.documentElement.clientHeight || window.innerHeight;
+            const scrolled = (scrollTop / (scrollHeight - clientHeight)) * 100;
+            this.progress = scrolled;
+        });
+    },
+    setupIntersectionObserver() {
+        const sections = document.querySelectorAll('section[id]');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.3
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    this.activeSection = entry.target.id;
+                }
+            });
+        }, observerOptions);
+        
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+        
+        // 为淡入效果设置观察
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const fadeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                    fadeObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        fadeElements.forEach(el => {
+            el.style.animationPlayState = 'paused';
+            fadeObserver.observe(el);
+        });
+    }
+}">
+    <!-- 进度指示器 -->
+    <div class="progress-indicator" :style="`width: ${progress}%`"></div>
+    
+    <!-- 背景装饰 -->
+    <div class="parallax-bg" x-ref="parallaxBg">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <pattern id="smallGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+                </pattern>
+                <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
+                    <rect width="100" height="100" fill="url(#smallGrid)"/>
+                    <path d="M 100 0 L 0 0 0 100" fill="none" stroke="currentColor" stroke-width="1" opacity="0.8"/>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+    </div>
+    
+    <!-- 导航栏 -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-opacity-70 blur-bg transition-all duration-300" :class="{'bg-white': !darkMode, 'bg-gray-900': darkMode}">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between py-4">
+                <h1 class="text-xl font-bold tracking-tight">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r" :class="darkMode ? 'from-blue-400 to-emerald-400' : 'from-blue-600 to-emerald-600'">大模型推理</span>
+                </h1>
+                
+                <div class="hidden md:flex items-center space-x-6">
+                    <button @click="activeSection = 'introduction'; document.getElementById('introduction').scrollIntoView({behavior: 'smooth'})" class="nav-item" :class="{'text-primary': activeSection === 'introduction'}">概述</button>
+                    <button @click="activeSection = 'training'; document.getElementById('training').scrollIntoView({behavior: 'smooth'})" class="nav-item" :class="{'text-primary': activeSection === 'training'}">训练阶段</button>
+                    <button @click="activeSection = 'inference'; document.getElementById('inference').scrollIntoView({behavior: 'smooth'})" class="nav-item" :class="{'text-primary': activeSection === 'inference'}">推理阶段</button>
+                    <button @click="activeSection = 'insight'; document.getElementById('insight').scrollIntoView({behavior: 'smooth'})" class="nav-item" :class="{'text-primary': activeSection === 'insight'}">深刻洞察</button>
+                    <button @click="activeSection = 'summary'; document.getElementById('summary').scrollIntoView({behavior: 'smooth'})" class="nav-item" :class="{'text-primary': activeSection === 'summary'}">总结</button>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button @click="showToc = !showToc" class="md:hidden p-2 rounded-full hover:bg-opacity-10" :class="darkMode ? 'hover:bg-white' : 'hover:bg-black'">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    
+                    <div class="theme-toggle" @click="toggleDarkMode()"
+                         :class="{'bg-gray-300': !darkMode, 'bg-blue-500': darkMode}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 移动端目录 -->
+    <div x-show="showToc" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform -translate-y-4"
+         x-transition:enter-end="opacity-100 transform translate-y-0"
+         x-transition:leave="transition ease-in duration-300"
+         x-transition:leave-start="opacity-100 transform translate-y-0"
+         x-transition:leave-end="opacity-0 transform -translate-y-4"
+         class="fixed top-16 left-0 right-0 z-40 bg-opacity-95 blur-bg shadow-lg p-4"
+         :class="{'bg-white': !darkMode, 'bg-gray-900': darkMode}">
+        <div class="flex flex-col space-y-3">
+            <button @click="activeSection = 'introduction'; document.getElementById('introduction').scrollIntoView({behavior: 'smooth'}); showToc = false" 
+                    class="nav-item text-left px-2 py-1 rounded-md" 
+                    :class="{'text-primary bg-opacity-10': activeSection === 'introduction', 'bg-primary': activeSection === 'introduction' && !darkMode, 'bg-primary': activeSection === 'introduction' && darkMode}">
+                概述
+            </button>
+            <button @click="activeSection = 'training'; document.getElementById('training').scrollIntoView({behavior: 'smooth'}); showToc = false" 
+                    class="nav-item text-left px-2 py-1 rounded-md" 
+                    :class="{'text-primary bg-opacity-10': activeSection === 'training', 'bg-primary': activeSection === 'training' && !darkMode, 'bg-primary': activeSection === 'training' && darkMode}">
+                训练阶段
+            </button>
+            <button @click="activeSection = 'inference'; document.getElementById('inference').scrollIntoView({behavior: 'smooth'}); showToc = false" 
+                    class="nav-item text-left px-2 py-1 rounded-md" 
+                    :class="{'text-primary bg-opacity-10': activeSection === 'inference', 'bg-primary': activeSection === 'inference' && !darkMode, 'bg-primary': activeSection === 'inference' && darkMode}">
+                推理阶段
+            </button>
+            <button @click="activeSection = 'insight'; document.getElementById('insight').scrollIntoView({behavior: 'smooth'}); showToc = false" 
+                    class="nav-item text-left px-2 py-1 rounded-md" 
+                    :class="{'text-primary bg-opacity-10': activeSection === 'insight', 'bg-primary': activeSection === 'insight' && !darkMode, 'bg-primary': activeSection === 'insight' && darkMode}">
+                深刻洞察
+            </button>
+            <button @click="activeSection = 'summary'; document.getElementById('summary').scrollIntoView({behavior: 'smooth'}); showToc = false" 
+                    class="nav-item text-left px-2 py-1 rounded-md" 
+                    :class="{'text-primary bg-opacity-10': activeSection === 'summary', 'bg-primary': activeSection === 'summary' && !darkMode, 'bg-primary': activeSection === 'summary' && darkMode}">
+                总结
+            </button>
+        </div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <main class="content-container pt-24 px-4 sm:px-6 lg:px-8 pb-20">
+        <!-- 封面/标题 -->
+        <section id="introduction" class="min-h-screen flex flex-col justify-center mb-20">
+            <div class="card hero-gradient p-8 sm:p-12 lg:p-16 mb-12 fade-in">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
+                    大模型推理时<br>计算有效性之源
+                </h1>
+                <div class="section-divider bg-white opacity-50 my-8"></div>
+                <p class="text-xl sm:text-2xl md:text-3xl font-light leading-relaxed mb-8 max-w-4xl">
+                    探索训练阶段"计算模式潜力"与推理阶段"计算资源投入策略"之间的动态博弈与耦合
+                </p>
+            </div>
+            
+            <div class="card p-8 sm:p-12 fade-in delay-1">
+                <p class="text-xl leading-relaxed mb-8">
+                    <span class="highlight font-semibold">最深刻的洞察在于</span>：大模型推理时计算的有效性，本质上是训练阶段塑造的"计算模式潜力"与推理阶段"计算资源投入策略"之间动态博弈和耦合的结果，而非两者中任何一方的孤立胜利。
+                </p>
+                
+                <div class="flex justify-center my-12">
+                    <svg width="800" height="300" viewBox="0 0 800 300" class="max-w-full h-auto">
+                        <defs>
+                            <linearGradient id="gradientPrimary" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" :style="`stop-color: ${darkMode ? 'rgb(96, 165, 250)' : 'rgb(59, 130, 246)'}`" />
+                                <stop offset="100%" :style="`stop-color: ${darkMode ? 'rgb(52, 211, 153)' : 'rgb(16, 185, 129)'}`" />
+                            </linearGradient>
+                        </defs>
+                        
+                        <!-- 连接线 -->
+                        <path d="M200,150 C350,50 450,250 600,150" stroke="url(#gradientPrimary)" stroke-width="3" fill="none" />
+                        
+                        <!-- 左侧圆 -->
+                        <circle cx="200" cy="150" r="80" :fill="darkMode ? '#1E293B' : '#F8FAFC'" stroke="url(#gradientPrimary)" stroke-width="3" />
+                        <text x="200" y="130" font-size="16" text-anchor="middle" :fill="darkMode ? '#F1F5F9' : '#1E293B'" font-weight="bold">训练阶段</text>
+                        <text x="200" y="155" font-size="12" text-anchor="middle" :fill="darkMode ? '#94A3B8' : '#64748B'">计算模式潜力</text>
+                        <text x="200" y="175" font-size="12" text-anchor="middle" :fill="darkMode ? '#94A3B8' : '#64748B'">思维范式基石</text>
+                        
+                        <!-- 右侧圆 -->
+                        <circle cx="600" cy="150" r="80" :fill="darkMode ? '#1E293B' : '#F8FAFC'" stroke="url(#gradientPrimary)" stroke-width="3" />
+                        <text x="600" y="130" font-size="16" text-anchor="middle" :fill="darkMode ? '#F1F5F9' : '#1E293B'" font-weight="bold">推理阶段</text>
+                        <text x="600" y="155" font-size="12" text-anchor="middle" :fill="darkMode ? '#94A3B8' : '#64748B'">计算资源投入策略</text>
+                        <text x="600" y="175" font-size="12" text-anchor="middle" :fill="darkMode ? '#94A3B8' : '#64748B'">激活、选择与优化</text>
+                        
+                        <!-- 中间交叉点 -->
+                        <circle cx="400" cy="150" r="50" fill="url(#gradientPrimary)" opacity="0.8" />
+                        <text x="400" y="145" font-size="14" text-anchor="middle" fill="white" font-weight="bold">动态博弈</text>
+                        <text x="400" y="165" font-size="14" text-anchor="middle" fill="white" font-weight="bold">与耦合</text>
+                    </svg>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 训练阶段 -->
+        <section id="training" class="mb-20">
+            <h2 class="text-3xl font-bold mb-6 fade-in">1. 训练阶段：奠定"计算结构"与"思维范式"的基石</h2>
+            <div class="section-divider fade-in delay-1"></div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
+                <div class="card p-8 card-accent fade-in delay-1">
+                    <h3 class="text-xl font-bold mb-4">思维链（CoT）的学习与模仿</h3>
+                    <p class="mb-4">
+                        这本质上是在训练数据中注入了显式的、结构化的"问题解决过程"样本。模型通过学习这些样本，并非真正理解了"思维"，而是掌握了生成符合特定逻辑结构、语言模式的文本序列的概率模型。
+                    </p>
+                    <p>
+                        它学会了模仿"看起来像"推理的步骤。这塑造了模型在面对类似问题时，优先探索的计算路径（高概率序列）。
+                    </p>
+                    
+                    <div class="mt-8 flex justify-center">
+                        <svg width="300" height="200" viewBox="0 0 300 200">
+                            <defs>
+                                <linearGradient id="gradientFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" :style="`stop-color: ${darkMode ? 'rgb(96, 165, 250)' : 'rgb(59, 130, 246)'}`" />
+                                    <stop offset="100%" :style="`stop-color: ${darkMode ? 'rgb(52, 211, 153)' : 'rgb(16, 185, 129)'}`" />
+                                </linearGradient>
+                            </defs>
+                            
+                            <!-- 思维链流程图 -->
+                            <rect x="20" y="20" width="80" height="40" rx="5" :fill="darkMode ? '#2d3748' : '#f0f9ff'" stroke="url(#gradientFlow)" stroke-width="2" />
+                            <text x="60" y="45" text-anchor="middle" :fill="darkMode ? '#f1f5f9' : '#1e293b'" font-size="12">问题输入</text>
+                            
+                            <path d="M100,40 L120,40" stroke="url(#gradientFlow)" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
+                            
+                            <rect x="120" y="20" width="80" height="40" rx="5" :fill="darkMode ? '#2d3748' : '#f0f9ff'" stroke="url(#gradientFlow)" stroke-width="2" />
+                            <text x="160" y="45" text-anchor="middle" :fill="darkMode ? '#f1f5f9' : '#1e293b'" font-size="12">思维步骤1</text>
+                            
+                            <path d="M200,40 L220,40" stroke="url(#gradientFlow)" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
+                            
+                            <rect x="220" y="20" width="80" height="40" rx="5" :fill="darkMode ? '#2d3748' : '#f0f9ff'" stroke="url(#gradientFlow)" stroke-width="2" />
+                            <text x="260" y="45" text-anchor="middle" :fill="darkMode ? '#f1f5f9' : '#1e293b'" font-size="12">思维步骤2</text>
+                            
+                            <path d="M260,60 L260,80" stroke="url(#gradientFlow)" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
+                            
+                            <rect x="120" y="80" width="80" height="40" rx="5" :fill="darkMode ? '#2d3748' : '#f0f9ff'" stroke="url(#gradientFlow)" stroke-width="2" />
+                            <text x="160" y="105" text-anchor="middle" :fill="darkMode ? '#f1f5f9' : '#1e293b'" font-size="12">思维步骤N</text>
+                            
+                            <path d="M200,100 L220,100" stroke="url(#gradientFlow)" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
+                            
+                            <rect x="220" y="80" width="80" height="40" rx="5" :fill="darkMode ? '#2d3748' : '#f0f9ff'" stroke="url(#gradientFlow)" stroke-width="2" />
+                            <text x="260" y="105" text-anchor="middle" :fill="darkMode ? '#f1f5f9' : '#1e293b'" font-size="12">最终答案</text>
+                            
+                            <!-- 圆圈标记概率路径 -->
+                            <circle cx="60" cy="160" r="30" fill="url(#gradientFlow)" opacity="0.6" />
+                            <text x="60" y="165" text-anchor="middle" fill="white" font-size="12">高概率</text>
+                            <text x="60" y="180" text-anchor="middle" fill="white" font-size="10">序列路径</text>
+                            
+                            <path d="M90,160 C150,130 200,190 240,160" stroke="url(#gradientFlow)" stroke-width="2" stroke-dasharray="5,3" fill="none" />
+                            
+                            <circle cx="240" cy="160" r="30" fill="url(#gradientFlow)" opacity="0.6" />
+                            <text x="240" y="155" text-anchor="middle" fill="white" font-size="12">训练形成</text>
+                            <text x="240" y="170" text-anchor="middle" fill="white" font-size="12">模式偏好</text>
+                            
+                            <defs>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="url(#gradientFlow)" />
+                                </marker>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+                
+                <div class="card p-8 card-accent-secondary fade-in delay-2">
+                    <h3 class="text-xl font-bold mb-4">训练的局限性</h3>
+                    <p class="mb-4">
+                        训练数据永远是有限的，无法覆盖无限的现实问题空间。CoT 训练提供的更多是一种"风格"或"模板"的模仿能力。
+                    </p>
+                    <p class="mb-4">
+                        它为有效的推理计算提供了结构性偏置（structural bias），使得模型在推理时更容易生成有条理的中间步骤，但这不等于保证了这些步骤的逻辑正确性或最终结果的最优性。
+                    </p>
+                    <p>
+                        <span class="highlight font-medium">训练设定了模型能力的上限和基本形态。</span>
+                    </p>
+                    
+                    <div class="mt-8 flex justify-center">
+                        <svg width="300" height="200" viewBox="0 0 300 200">
+                            <!-- 训练数据覆盖图 -->
+                            <circle cx="150" cy="100" r="70" :fill="darkMode ? 'rgba(96, 165, 250, 0.1)' : 'rgba(59, 130, 246, 0.1)'" 
+                                    :stroke="darkMode ? 'rgb(96, 165, 250)' : 'rgb(59, 130, 246)'" stroke-width="2" />
+                            <text x="150" y="100" text-anchor="middle" :fill="darkMode ? '#f1f5f9' : '#1e293b'" font-size="14" font-weight="bold">训练数据覆盖</text>
+                            
+                            <!-- 外部问题空间 -->
+                            <circle cx="150" cy="100" r="130" :fill="darkMode ? 'rgba(52, 211, 153, 0.05)' : 'rgba(16, 185, 129, 0.05)'" 
+                                    :stroke="darkMode ? 'rgb(52, 211, 153)' : 'rgb(16, 185, 129)'" stroke-width="1" stroke-dasharray="5,3" />
+                            <text x="150" y="25" text-anchor="middle" :fill="darkMode ? '#94a3b8' : '#64748b'" font-size="12">无限问题空间</text>
+                            
+                            <!-- 数据点 -->
+                            <circle cx="130" cy="80" r="3" :fill="darkMode ? 'rgb(96, 165, 250)' : 'rgb(59, 130, 246)'" />
+                            <circle cx="170" cy="90" r="3" :fill="darkMode ? 'rgb(96, 165, 250)' : 'rgb(59, 130, 246)'" />
+                            <circle cx="145" cy="120" r="3" :fill="darkMode ? 'rgb(96, 165, 250)' : 'rgb(59, 130, 246)'" />
+                            <circle cx="110" cy="110" r="3" :fill="darkMode ? 'rgb(96, 165, 250)' : 'rgb(59, 130, 246)'" />
+                            <circle cx="180" cy="130" r="3" :fill="darkMode ? 'rgb(96, 165, 250)' : 'rgb(59, 130, 246)'" />
+                            <circle cx="160" cy="70" r="3" :fill="darkMode ? 'rgb(96, 165, 250)' : 'rgb(59, 130, 246)'" />
+                            
+                            <!-- 外部未覆盖数据点 -->
+                            <circle cx="60" cy="140" r="3" :fill="darkMode ? 'rgb(52, 211, 153)' : 'rgb(16, 185, 129)'" />
+                            <circle cx="240" cy="120" r="3" :fill="darkMode ? 'rgb(52, 211, 153)' : 'rgb(16, 185, 129)'" />
+                            <circle cx="200" cy="40" r="3" :fill="darkMode ? 'rgb(52, 211, 153)' : 'rgb(16, 185, 129)'" />
+                            <circle cx="90" cy="40" r="3" :fill="darkMode ? 'rgb(52, 211, 153)' : 'rgb(16, 185, 129)'" />
+                            <circle cx="50" cy="90" r="3" :fill="darkMode ? 'rgb(52, 211, 153)' : 'rgb(16, 185, 129)'" />
+                            <circle cx="230" cy="170" r="3" :fill="darkMode ? 'rgb(52, 211, 153)' : 'rgb(16, 185, 129)'" />
+                            
+                            <!-- 标注 -->
+                            <text x="45" y="170" text-anchor="middle" :fill="darkMode ? '#94a3b8' : '#64748b'" font-size="10">未覆盖问题</text>
+                            <text x="255" cy="170" text-anchor="middle" :fill="darkMode ? '#94a3b8' : '#64748b'" font-size="10">未覆盖问题</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 推理阶段 -->
+        <section id="inference" class="mb-20">
+            <h2 class="text-3xl font-bold mb-6 fade-in">2. 推理阶段：激活、选择、优化与"暴力计算"的战场</h2>
+            <div class="section-divider fade-in delay-1"></div>
+            
+            <div class="card p-8 mb-8 fade-in delay-1">
+                <h3 class="text-xl font-bold mb-6">多轮迭代计算</h3>
+                <p class="mb-6">
+                    这不是简单的重复计算，而是更复杂的计算策略。它包括多种高级技术方法，构成了推理阶段的计算核心。
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    <div class="p-6 rounded-lg" :class="{'bg-blue-50': !darkMode, 'bg-blue-900 bg-opacity-20': darkMode}">
+                        <h4 class="font-bold mb-2 text-lg">搜索（Search）</h4>
+                        <p>
+                            如 Beam Search 在生成序列时探索多种可能性；更复杂的如 Monte Carlo Tree Search 探索解空间，虽然在标准 LLM 推理中不常用，但概念相关。
+                        </p>
+                    </div>
+                    
+                    <div class="p-6 rounded-lg" :class="{'bg-green-50': !darkMode, 'bg-green-900 bg-opacity-20': darkMode}">
+                        <h4 class="font-bold mb-2 text-lg">自我修正/批判</h4>
+                        <p>
+                            模型生成初步答案，然后被提示（或内部机制）去评估、质疑、改进这个答案，进行多轮次的"内部对话"或"精炼"。
+                        </p>
+                    </div>
+                    
+                    <div class="p-6 rounded-lg" :class="{'bg-indigo-50': !darkMode, 'bg-indigo-900 bg-opacity-20': darkMode}">
+                        <h4 class="font-bold mb-2 text-lg">一致性采样</h4>
+                        <p>
+                            通过多次采样（可能使用不同的推理路径或引入随机性），然后选择最一致或最高频的答案，利用"群体智慧"或"计算冗余"来提高鲁棒性。
+                        </p>
+                    </div>
+                    
+                    <div class="p-6 rounded-lg" :class="{'bg-purple-50': !darkMode, 'bg-purple-900 bg-opacity-20': darkMode}">
+                        <h4 class="font-bold mb-2 text-lg">规划与分解</h4>
+                        <p>
+                            将复杂问题分解为子问题，逐步解决，这本身就是一种迭代计算过程，利用了训练中学到的结构化能力，但在推理时动态执行。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="border-t border-b" :class="{'border-gray-200': !darkMode, 'border-gray-700': darkMode}">
+                    <h3 class="text-xl font-bold my-6">计算的本质</h3>
+                    <p class="mb-6">
+                        推理阶段的计算，是在训练塑造的巨大、高维的概率空间（或说"表示空间"）中进行导航和优化。单轮推理可能只是沿着最陡峭的概率梯度（最可能序列）前进。多轮迭代则允许进行更广泛的探索、试错、回溯和权衡，投入更多的计算资源（时间、FLOPs）来逼近更优解。
+                    </p>
+                    <p class="mb-6 highlight font-medium">
+                        这是一种用计算换效果的策略。
+                    </p>
+                </div>
+                
+                <div class="mt-8 flex justify-center">
+                    <svg width="600" height="300" viewBox="0 0 600 300" class="max-w-full h-auto">
+                        <defs>
+                            <linearGradient id="gradientSearch" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" :style="`stop-color: ${darkMode ? 'rgb(96, 165, 250)' : 'rgb(59, 130, 246)'}`" />
+                                <stop offset="100%" :style="`stop-color: ${darkMode ? 'rgb(129, 140, 248)' : 'rgb(99, 102, 241)'}`" />
+                            </linearGradient>
+                            <linearGradient id="heightMap" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" :style="`stop-color: ${darkMode ? 'rgb(96, 165, 250)' : 'rgb(59, 130, 246)'}`" stop-opacity="0.8" />
+                                <stop offset="50%" :style="`stop-color: ${darkMode ? 'rgb(52, 211, 153)' : 'rgb(16, 185, 129)'}`" stop-opacity="0.5" />
+                                <stop offset="100%" :style="`stop-color: ${darkMode ? 'rgb(129, 140, 248)' : 'rgb(99, 102, 241)'}`" stop-opacity="0.8" />
+                            </linearGradient>
+                        </defs>
+                        
+                        <!-- 概率地形图背景 -->
+                        <rect x="50" y="50" width="500" height="200" fill="url(#heightMap)" rx="10" opacity="0.3" />
+                        
+                        <!-- 坐标轴 -->
+                        <line x1="50" y1="250" x2="550" y2="250" :stroke="darkMode ? '#f1f5f9' : '#1e293b'" stroke-width="2" />
+                        <line x1="50" y1="50" x2="50" y2="250" :stroke="darkMode ? '#f1f5f9' : '#1e293b'" stroke-width="2" />
+                        
+                        <!-- 概率分布曲线 -->
+                        <path d="M50,200 C100,180 150,220 200,150 C250,100 300,220 350,180 C400,150 450,190 500,140 C540,120 550,130 550,150" 
+                              stroke="url(#gradientSearch)" stroke-width="3" fill="none" />
+                        
+                        <!-- 单轮路径 -->
+                        <path d="M50,250 L200,150 L350,180 L500,140" 
+                              :stroke="darkMode ? 'rgb(96, 165, 250)' : 'rgb(59, 130, 246)'" 
+                              stroke-width="2" 
+                              stroke-dasharray="5,3" 
+                              fill="none" />
+                        
+                        <!-- 多轮迭代探索路径 -->
+                        <path d="M50,250 L100,180 L150,220 L200,150 L250,100 L300,220 L350,180 L400,150 L450,190 L500,140 L550,150" 
+                              :stroke="darkMode ? 'rgb(129, 140, 248)' : 'rgb(99, 102, 241)'" 
+                              stroke-width="2" 
+                              fill="none" />
+                        
+                        <!-- 关键点标记 -->
+                        <circle cx="50" cy="250" r="5" fill="url(#gradientSearch)" />
+                        <circle cx="200" cy="150" r="5" fill="url(#gradientSearch)" />
+                        <circle cx="250" cy="100" r="8" fill="url(#gradientSearch)" stroke="white" stroke-width="2" />
+                        <circle cx="350" cy="180" r="5" fill="url(#gradientSearch)" />
+                        <circle cx="500" cy="140" r="5" fill="url(#gradientSearch)" />
+                        <circle cx="550" cy="150" r="8" fill="url(#gradientSearch)" stroke="white" stroke-width="2" />
+                        
+                        <!-- 标注 -->
+                        <text x="50" y="270" text-anchor="middle" :fill="darkMode ? '#f1f5f9' : '#1e293b'" font-size="12">起点</text>
+                        <text x="250" y="80" text-anchor="middle" fill="white" font-size="12">全局最优解</text>
+                        <text x="550" y="130" text-anchor="middle" fill="white" font-size="12">多轮终点</text>
+                        <text x="500" y="120" text-anchor="middle" :fill="darkMode ? '#94a3b8' : '#64748b'" font-size="12">单轮终点</text>
+                        <text x="300" y="280" text-anchor="middle" :fill="darkMode ? '#f1f5f9' : '#1e293b'" font-size="14">推理序列空间</text>
+                        <text x="30" y="150" text-anchor="middle" :fill="darkMode ? '#f1f5f9' : '#1e293b'" font-size="14" transform="rotate(-90,30,150)">概率</text>
+                    </svg>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 深刻洞察 -->
+        <section id="insight" class="mb-20">
+            <h2 class="text-3xl font-bold mb-6 fade-in">3. 最深刻的洞察：耦合与博弈</h2>
+            <div class="section-divider fade-in delay-1"></div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-12">
+                <div class="card p-8 fade-in delay-1">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-r mb-4" :class="darkMode ? 'from-blue-400 to-blue-600' : 'from-blue-500 to-blue-700'">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">训练提供了"地图"和"交通规则"</h3>
+                    <p>
+                        CoT 等训练技术绘制了更精细的地图，标注了看似高效的"高速公路"（思维链模式）。
+                    </p>
+                </div>
+                
+                <div class="card p-8 fade-in delay-2">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-r mb-4" :class="darkMode ? 'from-green-400 to-green-600' : 'from-green-500 to-green-700'">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">推理提供了"驾驶策略"和"燃料"</h3>
+                    <p>
+                        多轮迭代等推理技术决定了如何使用这张地图——是直接走高速，还是探索小路，是否愿意绕远路寻找更优目的地，以及愿意为此投入多少"燃料"（计算资源）。
+                    </p>
+                </div>
+                
+                <div class="card p-8 fade-in delay-3">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-r mb-4" :class="darkMode ? 'from-indigo-400 to-indigo-600' : 'from-indigo-500 to-indigo-700'">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">有效性根源</h3>
+                    <p>
+                        有效性并非简单归因于模仿或迭代，而是训练塑造的"潜在计算结构"与推理时"实际计算执行策略"之间的协同作用。
+                    </p>
+                </div>
+            </div>
+            
+            <div class="card p-8 mt-8 fade-in delay-3">
+                <div class="quote">
+                    <p class="text-lg">
+                        <span class="highlight font-semibold">有效性并非简单归因于模仿或迭代</span>，而是训练塑造的"潜在计算结构"与推理时"实际计算执行策略"之间的协同作用。训练决定了模型能"想"成什么样（潜力），推理决定了在特定问题上实际"想"成什么样（实现）。推理的迭代计算，本质上是在动态地、有策略地调用和组合训练阶段编码的知识和模式，以应对具体挑战。
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    <div class="border-l-4 pl-4" :class="{'border-blue-500': !darkMode, 'border-blue-400': darkMode}">
+                        <h4 class="font-bold mb-2">没有结构化思维模式的训练</h4>
+                        <p>
+                            如果没有训练阶段对结构化思维模式的模仿学习，推理阶段的迭代计算可能缺乏方向，效率低下，如同在一个没有道路的荒野中盲目搜索。CoT 训练提高了有效计算路径的先验概率。
+                        </p>
+                    </div>
+                    
+                    <div class="border-l-4 pl-4" :class="{'border-green-500': !darkMode, 'border-green-400': darkMode}">
+                        <h4 class="font-bold mb-2">没有多轮迭代的推理</h4>
+                        <p>
+                            没有推理阶段的多轮迭代和计算投入，即使模型学到了完美的 CoT 模式，也可能在面对稍有变化的、训练数据未覆盖的复杂问题时，陷入局部最优或生成看似连贯但逻辑错误的"幻觉"。推理迭代提供了克服训练数据局限性、进行动态适应和优化的能力。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 总结 -->
+        <section id="summary" class="mb-20">
+            <h2 class="text-3xl font-bold mb-6 fade-in">总结</h2>
+            <div class="section-divider fade-in delay-1"></div>
+            
+            <div class="card p-10 mt-8 bg-gradient-to-r shadow-lg fade-in delay-2" :class="darkMode ? 'from-blue-900/20 to-indigo-900/20' : 'from-blue-50 to-indigo-50'">
+                <p class="text-lg leading-relaxed">
+                    将大模型推理的有效性简单归结为训练阶段的模仿学习或推理阶段的迭代计算，都是对复杂现实的过度简化。其最深刻的本质在于：训练阶段通过模仿（如 CoT）等方式，为模型注入了结构化的计算潜力（高效率解决问题的模式蓝图），而推理阶段的迭代计算则是激活、筛选、组合并优化这些潜力的动态过程，通过投入额外的计算资源来探索更广阔的解空间，弥补训练数据的局限性，从而在具体任务上实现更高的有效性。
+                </p>
+                <p class="text-lg leading-relaxed mt-4 font-medium highlight">
+                    这是一个潜力（训练）与实现（推理计算策略）相互依存、动态耦合的过程。
+                </p>
+                
+                <div class="flex justify-center mt-10">
+                    <svg width="700" height="200" viewBox="0 0 700 200" class="max-w-full h-auto">
+                        <defs>
+                            <linearGradient id="gradientSummary" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" :style="`stop-color: ${darkMode ? 'rgb(96, 165, 250)' : 'rgb(59, 130, 246)'}`" />
+                                <stop offset="100%" :style="`stop-color: ${darkMode ? 'rgb(129, 140, 248)' : 'rgb(99, 102, 241)'}`" />
+                            </linearGradient>
+                        </defs>
+                        
+                        <!-- 连接线 -->
+                        <path d="M100,100 C250,50 450,150 600,100" stroke="url(#gradientSummary)" stroke-width="3" fill="none" />
+                        
+                        <!-- 左侧训练盒子 -->
+                        <rect x="50" y="70" width="100" height="60" rx="10" :fill="darkMode ? '#1E293B' : '#F8FAFC'" stroke="url(#gradientSummary)" stroke-width="2" />
+                        <text x="100" y="100" text-anchor="middle" :fill="darkMode ? '#F1F5F9' : '#1E293B'" font-size="14" font-weight="bold">训练阶段</text>
+                        <text x="100" y="120" text-anchor="middle" :fill="darkMode ? '#94A3B8' : '#64748B'" font-size="12">计算模式潜力</text>
+                        
+                        <!-- 中间耦合盒子 -->
+                        <rect x="300" y="70" width="100" height="60" rx="10" fill="url(#gradientSummary)" opacity="0.8" />
+                        <text x="350" y="100" text-anchor="middle" fill="white" font-size="14" font-weight="bold">动态耦合</text>
+                        <text x="350" y="120" text-anchor="middle" fill="white" font-size="12">相互依存</text>
+                        
+                        <!-- 右侧推理盒子 -->
+                        <rect x="550" y="70" width="100" height="60" rx="10" :fill="darkMode ? '#1E293B' : '#F8FAFC'" stroke="url(#gradientSummary)" stroke-width="2" />
+                        <text x="600" y="100" text-anchor="middle" :fill="darkMode ? '#F1F5F9' : '#1E293B'" font-size="14" font-weight="bold">推理阶段</text>
+                        <text x="600" y="120" text-anchor="middle" :fill="darkMode ? '#94A3B8' : '#64748B'" font-size="12">计算执行策略</text>
+                        
+                        <!-- 双向箭头 -->
+                        <path d="M160,100 L290,100" stroke="url(#gradientSummary)" stroke-width="2" fill="none" marker-end="url(#arrowend)" />
+                        <path d="M410,100 L540,100" stroke="url(#gradientSummary)" stroke-width="2" fill="none" marker-end="url(#arrowend)" />
+                        
+                        <defs>
+                            <marker id="arrowend" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="url(#gradientSummary)" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- 页脚作者信息 -->
+    <footer class="py-12 px-4 sm:px-6 lg:px-8" :class="{'bg-gray-50': !darkMode, 'bg-gray-900': darkMode}">
+        <div class="content-container">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="flex items-center mb-6 md:mb-0">
+                    <div class="relative h-20 w-20 overflow-hidden rounded-full mr-6 border-2" :class="{'border-blue-500': !darkMode, 'border-blue-400': darkMode}">
+                        <!-- 作者头像（使用渐变替代） -->
+                        <div class="absolute inset-0 bg-gradient-to-br" :class="darkMode ? 'from-blue-400 to-purple-500' : 'from-blue-500 to-purple-600'"></div>
+                        <div class="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold">陈</div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold tracking-tight" :class="{'text-gray-900': !darkMode, 'text-white': darkMode}">陈光</h3>
+                        <p class="text-sm" :class="{'text-gray-500': !darkMode, 'text-gray-400': darkMode}">思考者 | 研究员</p>
+                        <!-- 艺术化签名 -->
+                        <svg viewBox="0 0 100 30" class="signature w-32 h-8 mt-1" :class="{'text-blue-500': !darkMode, 'text-blue-400': darkMode}">
+                            <path d="M10,20 C15,10 20,25 25,15 C30,5 35,20 40,15 C45,10 50,15 55,10 C60,5 65,15 70,10 C75,5 80,15 90,10" 
+                                  fill="none" stroke="currentColor" stroke-width="1.5" />
+                        </svg>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col items-center md:items-end">
+                    <div class="flex space-x-4 mb-4">
+                        <!-- 社交媒体图标占位 -->
+                        <a href="#" class="h-10 w-10 rounded-full flex items-center justify-center transition-colors" 
+                           :class="{'bg-gray-200 hover:bg-gray-300': !darkMode, 'bg-gray-800 hover:bg-gray-700': darkMode}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" :class="{'text-gray-700': !darkMode, 'text-gray-300': darkMode}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                            </svg>
+                        </a>
+                        <a href="#" class="h-10 w-10 rounded-full flex items-center justify-center transition-colors" 
+                           :class="{'bg-gray-200 hover:bg-gray-300': !darkMode, 'bg-gray-800 hover:bg-gray-700': darkMode}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" :class="{'text-gray-700': !darkMode, 'text-gray-300': darkMode}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M5 3a2 2 0 00-2 2v1c0 8.284 6.716 15 15 15h1a2 2 0 002-2v-3.28a1 1 0 00-.684-.948l-4.493-1.498a1 1 0 00-1.21.502l-1.13 2.257a11.042 11.042 0 01-5.516-5.517l2.257-1.128a1 1 0 00.502-1.21L9.228 3.683A1 1 0 008.279 3H5z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="h-10 w-10 rounded-full flex items-center justify-center transition-colors" 
+                           :class="{'bg-gray-200 hover:bg-gray-300': !darkMode, 'bg-gray-800 hover:bg-gray-700': darkMode}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" :class="{'text-gray-700': !darkMode, 'text-gray-300': darkMode}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </a>
+                    </div>
+                    <p class="text-sm" :class="{'text-gray-500': !darkMode, 'text-gray-400': darkMode}">
+                        © <span id="current-year">2025</span> 陈光. 保留所有权利.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+        // 可以添加更多的交互脚本，如微妙的视差效果
+        document.addEventListener('mousemove', function(e) {
+            const parallaxBg = document.querySelector('.parallax-bg');
+            if (parallaxBg) {
+                const mouseX = e.clientX / window.innerWidth;
+                const mouseY = e.clientY / window.innerHeight;
+                parallaxBg.style.transform = `translate(${mouseX * -20}px, ${mouseY * -20}px)`;
+            }
+        });
+    </script>
+</body>
+</html>

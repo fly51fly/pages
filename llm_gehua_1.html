@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>歌华引入DeepSeek战略规划</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/css/icons.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@latest/font/lucide.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+        
+        :root {
+            /* 主色调 */
+            --primary-50: #f0f7ff;
+            --primary-100: #e0eefe;
+            --primary-200: #bae0fd;
+            --primary-300: #7dccfc;
+            --primary-400: #36b3f9;
+            --primary-500: #0c98eb;
+            --primary-600: #0277c7;
+            --primary-700: #0360a2;
+            --primary-800: #075185;
+            --primary-900: #0c446e;
+            
+            /* 辅助色 */
+            --secondary-50: #f2fbf9;
+            --secondary-100: #d6f4ee;
+            --secondary-200: #ade9df;
+            --secondary-300: #74d6c8;
+            --secondary-400: #38b9ab;
+            --secondary-500: #2aa99b;
+            --secondary-600: #1f857a;
+            --secondary-700: #1d6b63;
+            --secondary-800: #1b5752;
+            --secondary-900: #1a4945;
+            
+            /* 强调色 */
+            --accent-50: #fef3f2;
+            --accent-100: #fee5e2;
+            --accent-200: #fdcecb;
+            --accent-300: #fbaca7;
+            --accent-400: #f77b73;
+            --accent-500: #ef544b;
+            --accent-600: #db2f25;
+            --accent-700: #b9231b;
+            --accent-800: #992019;
+            --accent-900: #7f201b;
+            
+            /* 中性色 */
+            --neutral-50: #f9fafb;
+            --neutral-100: #f3f4f6;
+            --neutral-200: #e5e7eb;
+            --neutral-300: #d1d5db;
+            --neutral-400: #9ca3af;
+            --neutral-500: #6b7280;
+            --neutral-600: #4b5563;
+            --neutral-700: #374151;
+            --neutral-800: #1f2937;
+            --neutral-900: #111827;
+        }
+        
+        /* 基础样式 */
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+        
+        /* 亮色模式 */
+        .light-mode {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f3f4f6;
+            --bg-tertiary: #f9fafb;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-tertiary: #6b7280;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* 暗色模式 */
+        .dark-mode {
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --bg-tertiary: #374151;
+            --text-primary: #f9fafb;
+            --text-secondary: #e5e7eb;
+            --text-tertiary: #d1d5db;
+            --border-color: #374151;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 应用 */
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        
+        /* 响应式文本大小 */
+        .fluid-text-sm {
+            font-size: clamp(0.875rem, 0.8125rem + 0.3125vw, 1rem);
+        }
+        
+        .fluid-text-base {
+            font-size: clamp(1rem, 0.9375rem + 0.3125vw, 1.125rem);
+        }
+        
+        .fluid-text-lg {
+            font-size: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+        }
+        
+        .fluid-text-xl {
+            font-size: clamp(1.25rem, 1.125rem + 0.625vw, 1.5rem);
+        }
+        
+        .fluid-text-2xl {
+            font-size: clamp(1.5rem, 1.25rem + 1.25vw, 1.875rem);
+        }
+        
+        .fluid-text-3xl {
+            font-size: clamp(1.875rem, 1.5rem + 1.875vw, 2.25rem);
+        }
+        
+        .fluid-text-4xl {
+            font-size: clamp(2.25rem, 1.875rem + 1.875vw, 3rem);
+        }
+        
+        /* 卡片样式 */
+        .content-card {
+            background-color: var(--bg-secondary);
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        /* 按钮样式 */
+        .btn-primary {
+            background-color: var(--primary-600);
+            color: white;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-700);
+        }
+        
+        /* 高亮文本 */
+        .highlight {
+            color: var(--primary-600);
+            font-weight: 700;
+        }
+        
+        /* 数据标记 */
+        .data-point {
+            color: var(--accent-500);
+            font-weight: 700;
+        }
+        
+        /* 进度指示器 */
+        .progress-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-500), var(--accent-500));
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+        
+        /* 导航栏吸顶效果 */
+        .nav-sticky {
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .light-mode .nav-sticky {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .dark-mode .nav-sticky {
+            background-color: rgba(17, 24, 39, 0.8);
+        }
+        
+        /* 动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fadeIn {
+            animation: fadeIn 0.6s ease forwards;
+            opacity: 0;
+        }
+        
+        /* 栏目标题装饰 */
+        .section-title {
+            position: relative;
+            padding-left: 1rem;
+        }
+        
+        .section-title::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.25rem;
+            bottom: 0.25rem;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--primary-500), var(--accent-500));
+            border-radius: 2px;
+        }
+        
+        /* 数据可视化容器 */
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            margin: 2rem 0;
+        }
+        
+        /* 徽章 */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .badge-primary {
+            background-color: var(--primary-100);
+            color: var(--primary-800);
+        }
+        
+        .badge-secondary {
+            background-color: var(--secondary-100);
+            color: var(--secondary-800);
+        }
+        
+        .badge-accent {
+            background-color: var(--accent-100);
+            color: var(--accent-800);
+        }
+        
+        /* 引用样式 */
+        blockquote {
+            border-left: 4px solid var(--primary-400);
+            padding-left: 1rem;
+            font-style: italic;
+            margin: 1rem 0;
+            color: var(--text-secondary);
+        }
+        
+        /* 装饰元素 */
+        .decoration-circle {
+            position: absolute;
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        .light-mode .decoration-circle {
+            background: linear-gradient(135deg, var(--primary-300), var(--secondary-300));
+        }
+        
+        .dark-mode .decoration-circle {
+            background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+        }
+        
+        .decoration-1 {
+            width: 400px;
+            height: 400px;
+            top: 5%;
+            right: -200px;
+        }
+        
+        .decoration-2 {
+            width: 300px;
+            height: 300px;
+            bottom: 10%;
+            left: -150px;
+        }
+        
+        /* 分隔线 */
+        hr {
+            border: 0;
+            height: 1px;
+            background: var(--border-color);
+            margin: 2rem 0;
+        }
+        
+        /* 作者签名区样式 */
+        .author-signature {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-style: italic;
+            font-weight: 300;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+        
+        /* 社交图标 */
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        
+        .social-icon:hover {
+            background-color: var(--primary-100);
+            color: var(--primary-700);
+            transform: scale(1.1);
+        }
+        
+        /* 骨架屏 */
+        .skeleton {
+            background: linear-gradient(90deg, 
+                var(--bg-secondary) 25%, 
+                var(--border-color) 50%, 
+                var(--bg-secondary) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* 页面进入动画序列 */
+        .sequential-fade-in > * {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s ease forwards;
+        }
+        
+        .sequential-fade-in > *:nth-child(1) { animation-delay: 0.1s; }
+        .sequential-fade-in > *:nth-child(2) { animation-delay: 0.2s; }
+        .sequential-fade-in > *:nth-child(3) { animation-delay: 0.3s; }
+        .sequential-fade-in > *:nth-child(4) { animation-delay: 0.4s; }
+        .sequential-fade-in > *:nth-child(5) { animation-delay: 0.5s; }
+        .sequential-fade-in > *:nth-child(6) { animation-delay: 0.6s; }
+        
+        /* 打印样式优化 */
+        @media print {
+            .no-print {
+                display: none;
+            }
+            
+            body {
+                font-size: 12pt;
+                line-height: 1.5;
+                color: #000;
+                background-color: #fff;
+            }
+            
+            .content-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            
+            .page-break {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body x-data="{ darkMode: false, 
+               scrollProgress: 0,
+               activeSection: 'section-1',
+               showToc: false }" 
+      :class="darkMode ? 'dark-mode' : 'light-mode'" 
+      @scroll.window="scrollProgress = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100">
+
+    <!-- 进度指示器 -->
+    <div class="progress-indicator" :style="`width: ${scrollProgress}%`"></div>
+    
+    <!-- 装饰元素 -->
+    <div class="decoration-circle decoration-1"></div>
+    <div class="decoration-circle decoration-2"></div>
+    
+    <!-- 导航栏 -->
+    <nav class="nav-sticky py-4 border-b border-opacity-30" :class="scrollProgress > 5 ? 'border-none shadow-md' : 'border-solid'">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8 flex justify-between items-center">
+            <div class="flex items-center">
+                <svg class="w-10 h-10 mr-3" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 5C11.7157 5 5 11.7157 5 20C5 28.2843 11.7157 35 20 35C28.2843 35 35 28.2843 35 20C35 11.7157 28.2843 5 20 5Z" fill="url(#logo-gradient)" stroke="var(--primary-600)" stroke-width="2"/>
+                    <path d="M20 15V25M15 20H25" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="5" y1="5" x2="35" y2="35" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="var(--primary-500)"/>
+                            <stop offset="100%" stop-color="var(--secondary-500)"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <h1 class="text-lg md:text-xl font-bold">歌华引入DeepSeek战略规划</h1>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button @click="showToc = !showToc" class="p-2 rounded-full hover:bg-opacity-10 hover:bg-gray-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                
+                <button @click="darkMode = !darkMode" class="p-2 rounded-full hover:bg-opacity-10 hover:bg-gray-500 transition-colors">
+                    <svg x-show="!darkMode" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                    <svg x-show="darkMode" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 侧边目录 (移动端抽屉式, 桌面端固定) -->
+    <div x-show="showToc" 
+         @click.away="showToc = false"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform -translate-x-full"
+         x-transition:enter-end="opacity-100 transform translate-x-0"
+         x-transition:leave="transition ease-in duration-300"
+         x-transition:leave-start="opacity-100 transform translate-x-0"
+         x-transition:leave-end="opacity-0 transform -translate-x-full"
+         class="fixed top-0 left-0 h-full w-64 md:w-72 bg-opacity-95 z-50 overflow-y-auto py-20 px-4"
+         :class="darkMode ? 'bg-gray-900' : 'bg-white'">
+        
+        <h3 class="text-lg font-bold mb-4">目录</h3>
+        <ul class="space-y-2">
+            <li>
+                <a @click="activeSection = 'section-1'; showToc = false" 
+                   :class="{'text-primary-600 font-semibold': activeSection === 'section-1'}"
+                   class="block py-2 px-3 rounded-lg cursor-pointer hover:bg-opacity-10 hover:bg-gray-500 transition-colors">
+                   1. 直击痛点：应对广电"中年危机"
+                </a>
+            </li>
+            <li>
+                <a @click="activeSection = 'section-2'; showToc = false" 
+                   :class="{'text-primary-600 font-semibold': activeSection === 'section-2'}"
+                   class="block py-2 px-3 rounded-lg cursor-pointer hover:bg-opacity-10 hover:bg-gray-500 transition-colors">
+                   2. 量化效益：成本削减与效率提升
+                </a>
+            </li>
+            <li>
+                <a @click="activeSection = 'section-3'; showToc = false"
+                   :class="{'text-primary-600 font-semibold': activeSection === 'section-3'}"
+                   class="block py-2 px-3 rounded-lg cursor-pointer hover:bg-opacity-10 hover:bg-gray-500 transition-colors">
+                   3. 创造增收：探索新业务增长点
+                </a>
+            </li>
+            <li>
+                <a @click="activeSection = 'section-4'; showToc = false"
+                   :class="{'text-primary-600 font-semibold': activeSection === 'section-4'}"
+                   class="block py-2 px-3 rounded-lg cursor-pointer hover:bg-opacity-10 hover:bg-gray-500 transition-colors">
+                   4. 对标与压力：竞争态势分析
+                </a>
+            </li>
+            <li>
+                <a @click="activeSection = 'section-5'; showToc = false"
+                   :class="{'text-primary-600 font-semibold': activeSection === 'section-5'}"
+                   class="block py-2 px-3 rounded-lg cursor-pointer hover:bg-opacity-10 hover:bg-gray-500 transition-colors">
+                   5. 落地可行性与风险控制
+                </a>
+            </li>
+            <li>
+                <a @click="activeSection = 'section-6'; showToc = false"
+                   :class="{'text-primary-600 font-semibold': activeSection === 'section-6'}"
+                   class="block py-2 px-3 rounded-lg cursor-pointer hover:bg-opacity-10 hover:bg-gray-500 transition-colors">
+                   总结与行动建议
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 md:px-6 lg:px-8 py-12">
+        <!-- 页面标题区 -->
+        <header class="mb-16 text-center sequential-fade-in">
+            <h1 class="fluid-text-4xl font-bold mb-4">歌华引入<span class="text-primary-600">DeepSeek</span>战略方案</h1>
+            <p class="fluid-text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                破局广电行业"中年危机"，打造智能化竞争新优势
+            </p>
+            <div class="flex justify-center mt-8 gap-4">
+                <span class="badge badge-primary">人工智能</span>
+                <span class="badge badge-secondary">数字转型</span>
+                <span class="badge badge-accent">降本增效</span>
+                <span class="badge badge-primary">创新业务</span>
+            </div>
+        </header>
+
+        <!-- 第一部分：直击痛点 -->
+        <section id="section-1" x-show="activeSection === 'section-1'" class="mb-20 sequential-fade-in">
+            <h2 class="section-title fluid-text-3xl font-bold mb-8">直击痛点：用DeepSeek应对广电行业的"中年危机"</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="content-card p-6">
+                    <h3 class="fluid-text-xl font-bold mb-4 text-primary-700 dark:text-primary-400">行业困境</h3>
+                    <ul class="space-y-3 fluid-text-base">
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-accent-500 mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+                            </svg>
+                            <span>用户持续流失，OTT平台冲击传统有线电视业务</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-accent-500 mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>业务增长乏力，传统收入来源萎缩</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-accent-500 mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>运营成本高企，人力资源投入大</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-accent-500 mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                            <span>创新业务模式探索困难，转型周期长</span>
+                        </li>
+                    </ul>
+                    <div class="mt-6 p-4 bg-red-50 dark:bg-red-900 dark:bg-opacity-20 rounded-lg">
+                        <p class="text-red-700 dark:text-red-300 font-medium">
+                            不改变，就可能被淘汰 — 这是我们面临的残酷现实。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="content-card p-6">
+                    <h3 class="fluid-text-xl font-bold mb-4 text-primary-700 dark:text-primary-400">DeepSeek价值定位</h3>
+                    <div class="space-y-4 fluid-text-base">
+                        <p>
+                            DeepSeek不是遥远的未来科技，而是<span class="highlight">当下可用、能解决眼前问题的武器</span>。
+                        </p>
+                        <div class="flex items-center bg-primary-50 dark:bg-primary-900 dark:bg-opacity-30 p-4 rounded-lg">
+                            <div class="w-16 h-16 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center flex-shrink-0 mr-4">
+                                <svg class="w-8 h-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">破局工具</h4>
+                                <p class="text-gray-600 dark:text-gray-300">打破现有业务瓶颈的关键工具，而非锦上添花</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center bg-primary-50 dark:bg-primary-900 dark:bg-opacity-30 p-4 rounded-lg">
+                            <div class="w-16 h-16 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center flex-shrink-0 mr-4">
+                                <svg class="w-8 h-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">战略资产</h4>
+                                <p class="text-gray-600 dark:text-gray-300">关乎企业生存和发展的战略级技术投资</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center bg-primary-50 dark:bg-primary-900 dark:bg-opacity-30 p-4 rounded-lg">
+                            <div class="w-16 h-16 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center flex-shrink-0 mr-4">
+                                <svg class="w-8 h-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">转型引擎</h4>
+                                <p class="text-gray-600 dark:text-gray-300">加速数字化转型，实现降本增效与业务创新</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-card p-8 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-primary-900 dark:from-opacity-30 dark:to-secondary-900 dark:to-opacity-30">
+                <blockquote class="fluid-text-lg italic text-gray-700 dark:text-gray-200">
+                    "DeepSeek不仅是一项技术投资，更是歌华有线重塑核心竞争力的战略性选择。在数字化浪潮冲击下，我们必须通过前沿技术积极拥抱变革，而非被动应对。"
+                </blockquote>
+            </div>
+        </section>
+
+        <!-- 第二部分：量化效益 -->
+        <section id="section-2" x-show="activeSection === 'section-2'" class="mb-20 sequential-fade-in">
+            <h2 class="section-title fluid-text-3xl font-bold mb-8">量化效益：可测量的成本削减与效率提升案例</h2>
+            
+            <div class="mb-10">
+                <p class="fluid-text-lg mb-6">
+                    DeepSeek不是空谈"赋能"，而是能够带来<span class="highlight">明确可测量的商业价值</span>。以下案例展示了具体场景下的降本增效效果：
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+                <!-- 内容运营成本削减 -->
+                <div class="content-card p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="fluid-text-xl font-bold text-primary-700 dark:text-primary-400">内容运营成本削减</h3>
+                        <svg class="w-8 h-8 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-primary-500 pl-4 py-2">
+                            <h4 class="font-semibold mb-1">自动内容生产</h4>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                DeepSeek可自动生成节目摘要、看点标记、宣传文案等
+                            </p>
+                            <div class="mt-3 flex items-center">
+                                <span class="text-accent-600 dark:text-accent-400 font-bold text-xl">40%</span>
+                                <span class="ml-2 text-sm">编辑人力成本节省</span>
+                            </div>
+                        </div>
+                        
+                        <div class="border-l-4 border-primary-500 pl-4 py-2">
+                            <h4 class="font-semibold mb-1">智能媒资管理</h4>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                自动进行媒体内容标签化、分类、检索和管理
+                            </p>
+                            <div class="mt-3 flex items-center">
+                                <span class="text-accent-600 dark:text-accent-400 font-bold text-xl">3倍</span>
+                                <span class="ml-2 text-sm">媒资管理效率提升</span>
+                            </div>
+                            <div class="mt-1 flex items-center">
+                                <span class="text-accent-600 dark:text-accent-400 font-bold text-xl">85%</span>
+                                <span class="ml-2 text-sm">错标漏标率降低</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 客户服务成本压缩 -->
+                <div class="content-card p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="fluid-text-xl font-bold text-primary-700 dark:text-primary-400">客户服务成本压缩</h3>
+                        <svg class="w-8 h-8 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                        </svg>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-primary-500 pl-4 py-2">
+                            <h4 class="font-semibold mb-1">智能客服系统</h4>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                处理套餐查询、缴费咨询、故障报修等常见问题
+                            </p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="badge badge-primary">7x24小时在线</span>
+                                <span class="badge badge-secondary">零等待时间</span>
+                            </div>
+                            <div class="mt-3 flex items-center">
+                                <span class="text-accent-600 dark:text-accent-400 font-bold text-xl">60%</span>
+                                <span class="ml-2 text-sm">人工坐席依赖降低</span>
+                            </div>
+                        </div>
+                        
+                        <div class="border-l-4 border-primary-500 pl-4 py-2">
+                            <h4 class="font-semibold mb-1">用户问题解决优化</h4>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                智能分析用户问题，提供精准解答与服务推荐
+                            </p>
+                            <div class="mt-3 flex items-center">
+                                <span class="text-accent-600 dark:text-accent-400 font-bold text-xl">45%</span>
+                                <span class="ml-2 text-sm">首次问题解决率提升</span>
+                            </div>
+                            <div class="mt-1 flex items-center">
+                                <span class="text-accent-600 dark:text-accent-400 font-bold text-xl">30%</span>
+                                <span class="ml-2 text-sm">用户等待时间缩短</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 内部运营效率提升 -->
+                <div class="content-card p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="fluid-text-xl font-bold text-primary-700 dark:text-primary-400">内部运营效率提升</h3>
+                        <svg class="w-8 h-8 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                        </svg>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-primary-500 pl-4 py-2">
+                            <h4 class="font-semibold mb-1">文书工作自动化</h4>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                自动生成会议纪要、周报、数据分析报告初稿等
+                            </p>
+                            <div class="mt-3 flex items-center">
+                                <span class="text-accent-600 dark:text-accent-400 font-bold text-xl">35%</span>
+                                <span class="ml-2 text-sm">文书工作时间节省</span>
+                            </div>
+                        </div>
+                        
+                        <div class="border-l-4 border-primary-500 pl-4 py-2">
+                            <h4 class="font-semibold mb-1">IT开发与运维效率</h4>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                辅助代码编写、调试、文档生成等技术工作
+                            </p>
+                            <div class="mt-3 flex items-center">
+                                <span class="text-accent-600 dark:text-accent-400 font-bold text-xl">50%</span>
+                                <span class="ml-2 text-sm">开发效率提升</span>
+                            </div>
+                            <div class="mt-1 flex items-center">
+                                <span class="text-accent-600 dark:text-accent-400 font-bold text-xl">70%</span>
+                                <span class="ml-2 text-sm">文档生成时间减少</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 效益汇总 -->
+            <div class="content-card p-8 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900 dark:from-opacity-30 dark:to-primary-800 dark:to-opacity-20">
+                <h3 class="fluid-text-xl font-bold mb-6 text-center">综合效益预估</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">25-35%</div>
+                        <p class="text-gray-700 dark:text-gray-300">运营成本降低</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">2-3倍</div>
+                        <p class="text-gray-700 dark:text-gray-300">内容生产效率提升</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">10-15%</div>
+                        <p class="text-gray-700 dark:text-gray-300">用户满意度提升</p>
+                    </div>
+                </div>
+                <div class="mt-8 text-center">
+                    <p class="text-gray-700 dark:text-gray-300 font-medium">
+                        投资回报期预估：<span class="text-primary-700 dark:text-primary-300 font-bold">12-18个月</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第三部分：创造增收 -->
+        <section id="section-3" x-show="activeSection === 'section-3'" class="mb-20 sequential-fade-in">
+            <h2 class="section-title fluid-text-3xl font-bold mb-8">创造增收：探索基于DeepSeek的新业务增长点</h2>
+            
+            <div class="mb-10">
+                <p class="fluid-text-lg mb-6">
+                    DeepSeek不仅能节流，更能开源，帮助歌华打造新的收入增长点：
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <!-- 个性化内容推荐与精准营销 -->
+                <div class="content-card p-6 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-primary-100 dark:bg-primary-900 rounded-bl-full opacity-20"></div>
+                    
+                    <h3 class="fluid-text-xl font-bold mb-6 text-primary-700 dark:text-primary-400">个性化内容推荐与精准营销</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                                <svg class="w-5 h-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">深度理解用户偏好</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                    超越简单标签分类，通过DeepSeek深入理解用户真实兴趣与喜好模式
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                                <svg class="w-5 h-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">提升内容消费转化</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                    更精准的影视内容推荐，提升用户点播率达<span class="data-point">35%</span>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                                <svg class="w-5 h-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">广告价值提升</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                    精准广告投放，广告点击率/转化率提升<span class="data-point">40-60%</span>，带来直接收入增长
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-primary-50 dark:bg-primary-900 dark:bg-opacity-20 rounded-lg">
+                        <p class="text-primary-800 dark:text-primary-200 font-medium">
+                            预计可带来<span class="text-primary-600 dark:text-primary-300 font-bold">15-20%</span>的增量收入
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 智能化增值服务开发 -->
+                <div class="content-card p-6 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-secondary-100 dark:bg-secondary-900 rounded-bl-full opacity-20"></div>
+                    
+                    <h3 class="fluid-text-xl font-bold mb-6 text-secondary-700 dark:text-secondary-400">智能化增值服务开发</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 bg-secondary-100 dark:bg-secondary-800 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                                <svg class="w-5 h-5 text-secondary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">智能家居语音助手</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                    将机顶盒升级为智能家居控制中心，提供语音控制家电、智能推荐、生活助手等功能
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 bg-secondary-100 dark:bg-secondary-800 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                                <svg class="w-5 h-5 text-secondary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">本地生活信息智能问答</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                    提供社区服务、本地商业信息、公共服务等智能问答，打造社区信息枢纽
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 bg-secondary-100 dark:bg-secondary-800 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                                <svg class="w-5 h-5 text-secondary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">老年关怀互动服务</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                    针对老年群体的陪伴对话、健康提醒、家庭联络服务，提升用户黏性
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-secondary-50 dark:bg-secondary-900 dark:bg-opacity-20 rounded-lg">
+                        <p class="text-secondary-800 dark:text-secondary-200 font-medium">
+                            开拓新的付费服务场景，预计可创造<span class="text-secondary-600 dark:text-secondary-300 font-bold">1-2亿元/年</span>的新增收入
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 数据洞察驱动决策 -->
+            <div class="content-card p-8 relative overflow-hidden mb-10">
+                <div class="absolute bottom-0 right-0 w-48 h-48 bg-accent-100 dark:bg-accent-900 rounded-tl-full opacity-10"></div>
+                
+                <h3 class="fluid-text-xl font-bold mb-6 text-accent-700 dark:text-accent-400">数据洞察驱动决策</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-5 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                        <h4 class="font-semibold mb-3 flex items-center">
+                            <svg class="w-5 h-5 text-accent-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            用户行为分析
+                        </h4>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">
+                            深度分析用户观看习惯、兴趣变化、付费意愿等数据，提炼有价值的用户画像
+                        </p>
+                    </div>
+                    
+                    <div class="p-5 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                        <h4 class="font-semibold mb-3 flex items-center">
+                            <svg class="w-5 h-5 text-accent-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            市场趋势预测
+                        </h4>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">
+                            分析海量市场信息和竞争对手动态，预测行业发展方向和用户需求变化
+                        </p>
+                    </div>
+                    
+                    <div class="p-5 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                        <h4 class="font-semibold mb-3 flex items-center">
+                            <svg class="w-5 h-5 text-accent-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                            </svg>
+                            战略决策支持
+                        </h4>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">
+                            为管理层提供数据支持的决策建议，辅助产品规划、资源分配和战略调整
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="mt-8 p-4 bg-accent-50 dark:bg-accent-900 dark:bg-opacity-20 rounded-lg">
+                    <p class="text-accent-800 dark:text-accent-200">
+                        通过精准数据洞察和决策支持，间接促进业务增长，预计可提升<span class="text-accent-600 dark:text-accent-300 font-bold">15-25%</span>的决策准确率和业务增长率
+                    </p>
+                </div>
+            </div>
+            
+            <!-- 商业价值总结 -->
+            <div class="bg-gradient-to-r from-primary-50 via-secondary-50 to-accent-50 dark:from-primary-900 dark:from-opacity-30 dark:via-secondary-900 dark:via-opacity-30 dark:to-accent-900 dark:to-opacity-30 rounded-xl p-8 shadow-md">
+                <h3 class="fluid-text-xl font-bold mb-6 text-center">DeepSeek商业价值总结</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex flex-col items-center justify-center p-4 bg-white dark:bg-gray-800 bg-opacity-70 dark:bg-opacity-70 rounded-lg">
+                        <svg class="w-12 h-12 text-primary-500 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <h4 class="font-semibold mb-2">不仅能省钱，更能赚钱</h4>
+                        <p class="text-center text-gray-600 dark:text-gray-300 text-sm">
+                            从单纯的成本中心转变为价值创造引擎，带来全新收入来源
+                        </p>
+                    </div>
+                    
+                    <div class="flex flex-col items-center justify-center p-4 bg-white dark:bg-gray-800 bg-opacity-70 dark:bg-opacity-70 rounded-lg">
+                        <svg class="w-12 h-12 text-primary-500 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        <h4 class="font-semibold mb-2">差异化竞争优势</h4>
+                        <p class="text-center text-gray-600 dark:text-gray-300 text-sm">
+                            在行业同质化严重的情况下，建立技术壁垒，拓展业务边界
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第四部分：对标与压力 -->
+        <section id="section-4" x-show="activeSection === 'section-4'" class="mb-20 sequential-fade-in">
+            <h2 class="section-title fluid-text-3xl font-bold mb-8">对标与压力：竞争对手动态与行业趋势</h2>
+            
+            <div class="content-card p-8 mb-10">
+                <h3 class="fluid-text-xl font-bold mb-6">行业竞争态势分析</h3>
+                
+                <div class="space-y-8">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="flex-1 p-5 bg-red-50 dark:bg-red-900 dark:bg-opacity-20 rounded-lg">
+                            <h4 class="font-semibold mb-3 flex items-center text-red-700 dark:text-red-300">
+                                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                竞争风险
+                            </h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                多家国内广电及相关企业已开始AI战略布局，若不跟进将面临被竞争对手迅速拉开差距的风险。
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-red-600 dark:text-red-300">竞争压力指数</span>
+                                <div class="w-2/3 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                    <div class="h-full bg-red-500 rounded-full" style="width: 85%"></div>
+                                </div>
+                                <span class="text-sm font-bold text-red-600 dark:text-red-300">85%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-1 p-5 bg-amber-50 dark:bg-amber-900 dark:bg-opacity-20 rounded-lg">
+                            <h4 class="font-semibold mb-3 flex items-center text-amber-700 dark:text-amber-300">
+                                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                时间窗口
+                            </h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                行业AI应用尚处于早期阶段，目前仍有机会通过快速行动获取先发优势和技术积累。
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-amber-600 dark:text-amber-300">机会窗口期</span>
+                                <div class="w-2/3 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                    <div class="h-full bg-amber-500 rounded-full" style="width: 40%"></div>
+                                </div>
+                                <span class="text-sm font-bold text-amber-600 dark:text-amber-300">关闭中</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-5 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900 dark:from-opacity-30 dark:to-primary-800 dark:to-opacity-20 rounded-lg">
+                        <h4 class="font-semibold mb-4">国内外同业AI应用进展</h4>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                                    <svg class="w-5 h-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium">国际媒体集团</h5>
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                        全面启动AI战略，应用于内容创建、个性化推荐、用户分析等多个环节，效率提升30-50%
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                                    <svg class="w-5 h-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium">国内互联网视频平台</h5>
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                        已实现AI驱动的智能创作、精准营销、客户服务全链路应用，获取显著竞争优势
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                                    <svg class="w-5 h-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium">电信运营商</h5>
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                        将AI技术深度应用于用户服务、网络优化、内容分发，显著提升运营效率与用户体验
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 落后风险 -->
+            <div class="p-8 bg-red-50 dark:bg-red-900 dark:bg-opacity-20 rounded-xl shadow-md mb-10">
+                <h3 class="fluid-text-xl font-bold mb-6 text-red-800 dark:text-red-200 text-center">不作为的代价</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-sm">
+                        <h4 class="font-semibold mb-3 text-red-700 dark:text-red-300">
+                            效率差距扩大
+                        </h4>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">
+                            竞争对手AI赋能下的运营效率将远超传统模式，导致成本结构性差距日益扩大
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-sm">
+                        <h4 class="font-semibold mb-3 text-red-700 dark:text-red-300">
+                            用户体验落后
+                        </h4>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">
+                            用户对智能化、个性化服务的期望不断提高，无法满足将加速用户流失
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-sm">
+                        <h4 class="font-semibold mb-3 text-red-700 dark:text-red-300">
+                            创新能力受限
+                        </h4>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">
+                            缺乏AI驱动的创新能力，在新业务探索和价值创造上将持续落后于竞争对手
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="mt-8 p-4 bg-white dark:bg-gray-800 dark:bg-opacity-60 rounded-lg text-center">
+                    <p class="text-gray-800 dark:text-gray-200 font-medium">
+                        如不尽快启动AI战略，预计3年内将在效率、成本、用户体验和创新能力方面与行业领先者产生<span class="text-red-600 dark:text-red-300 font-bold">30%以上</span>的差距
+                    </p>
+                </div>
+            </div>
+            
+            <!-- 紧迫感图表 -->
+            <div class="content-card p-6">
+                <h3 class="fluid-text-xl font-bold mb-4 text-center">行动紧迫性分析</h3>
+                <div class="flex justify-center mb-6">
+                    <div class="relative w-64 h-64">
+                        <svg viewBox="0 0 120 120" class="w-full h-full">
+                            <circle cx="60" cy="60" r="54" fill="none" stroke="#e5e7eb" stroke-width="12" />
+                            <circle cx="60" cy="60" r="54" fill="none" stroke="#ef544b" stroke-width="12" stroke-dasharray="339.3" stroke-dashoffset="50" transform="rotate(-90 60 60)" />
+                            <text x="60" y="65" font-size="20" text-anchor="middle" fill="currentColor" class="font-bold">85%</text>
+                            <text x="60" y="85" font-size="12" text-anchor="middle" fill="currentColor">紧迫程度</text>
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-center text-gray-700 dark:text-gray-300">
+                    行业AI应用正迅速成熟，建议<span class="font-bold text-accent-600 dark:text-accent-400">6个月内</span>启动DeepSeek应用试点，<span class="font-bold text-accent-600 dark:text-accent-400">12个月内</span>实现规模化落地
+                </p>
+            </div>
+        </section>
+
+        <!-- 第五部分：落地可行性与风险控制 -->
+        <section id="section-5" x-show="activeSection === 'section-5'" class="mb-20 sequential-fade-in">
+            <h2 class="section-title fluid-text-3xl font-bold mb-8">落地可行性与风险控制</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <!-- 落地路径 -->
+                <div class="content-card p-6">
+                    <h3 class="fluid-text-xl font-bold mb-6 text-primary-700 dark:text-primary-400">DeepSeek部署路径</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                            <div class="flex items-center mb-3">
+                                <div class="w-8 h-8 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                                    <span class="text-primary-700 dark:text-primary-300 font-bold">1</span>
+                                </div>
+                                <h4 class="font-semibold">API接入试点</h4>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm pl-11">
+                                首期通过公有云API快速接入DeepSeek能力，实现内容摘要、标签生成等基础功能，验证商业价值
+                            </p>
+                            <div class="mt-3 pl-11">
+                                <span class="badge badge-primary">1-2个月</span>
+                                <span class="badge badge-secondary">低成本</span>
+                                <span class="badge badge-accent">快速见效</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                            <div class="flex items-center mb-3">
+                                <div class="w-8 h-8 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                                    <span class="text-primary-700 dark:text-primary-300 font-bold">2</span>
+                                </div>
+                                <h4 class="font-semibold">混合部署阶段</h4>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm pl-11">
+                                核心功能采用私有化部署，确保数据安全；非核心功能仍采用公有云方案，平衡成本与效益
+                            </p>
+                            <div class="mt-3 pl-11">
+                                <span class="badge badge-primary">3-6个月</span>
+                                <span class="badge badge-secondary">中等投入</span>
+                                <span class="badge badge-accent">规模应用</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                            <div class="flex items-center mb-3">
+                                <div class="w-8 h-8 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                                    <span class="text-primary-700 dark:text-primary-300 font-bold">3</span>
+                                </div>
+                                <h4 class="font-semibold">全面私有化与定制</h4>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm pl-11">
+                                建设完整的私有部署环境，基于歌华业务场景进行模型调优和定制，打造专属AI能力
+                            </p>
+                            <div class="mt-3 pl-11">
+                                <span class="badge badge-primary">6-12个月</span>
+                                <span class="badge badge-secondary">战略投入</span>
+                                <span class="badge badge-accent">差异化竞争</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 风险控制 -->
+                <div class="content-card p-6">
+                    <h3 class="fluid-text-xl font-bold mb-6 text-primary-700 dark:text-primary-400">风险识别与管控</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 bg-red-100 dark:bg-red-900 dark:bg-opacity-50 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                                <svg class="w-6 h-6 text-red-600 dark:text-red-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">信息准确性风险</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                    DeepSeek可能生成不准确内容或幻觉问题
+                                </p>
+                                <div class="mt-2 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-sm">
+                                    <span class="font-medium">管控措施：</span> 建立人机协作审核机制，关键应用场景保持人工监督，设置内容可靠性评分系统
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 bg-amber-100 dark:bg-amber-900 dark:bg-opacity-50 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                                <svg class="w-6 h-6 text-amber-600 dark:text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">数据安全合规风险</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                    涉及用户数据的应用场景可能带来隐私和合规问题
+                                </p>
+                                <div class="mt-2 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-sm">
+                                    <span class="font-medium">管控措施：</span> 核心业务数据采用私有化部署，建立数据脱敏机制，遵循最小授权原则，定期进行合规审计
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900 dark:bg-opacity-50 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                                <svg class="w-6 h-6 text-blue-600 dark:text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">员工技能转型风险</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                    现有员工可能缺乏AI应用所需技能，导致落地受阻
+                                </p>
+                                <div class="mt-2 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-sm">
+                                    <span class="font-medium">管控措施：</span> 分阶段培训计划，设立AI应用专家团队，建立知识分享机制，强调AI是工具而非替代者
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 资源投入 -->
+            <div class="content-card p-8 mb-10">
+                <h3 class="fluid-text-xl font-bold mb-6 text-center">所需资源投入</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-5 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                        <div class="flex items-center justify-center mb-4">
+                            <svg class="w-12 h-12 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                        <h4 class="font-semibold mb-2 text-center">财务投入</h4>
+                        <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                            <li class="flex items-start">
+                                <svg class="w-4 h-4 text-primary-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                初期试点：200-300万元
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-4 h-4 text-primary-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                混合部署：800-1200万元
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-4 h-4 text-primary-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                全面部署：2000-3000万元
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-5 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                        <div class="flex items-center justify-center mb-4">
+                            <svg class="w-12 h-12 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </div>
+                        <h4 class="font-semibold mb-2 text-center">人员配置</h4>
+                        <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                            <li class="flex items-start">
+                                <svg class="w-4 h-4 text-primary-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                AI应用专家：5-8人
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-4 h-4 text-primary-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                业务分析师：3-5人
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-4 h-4 text-primary-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                技术开发团队：10-15人
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-5 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                        <div class="flex items-center justify-center mb-4">
+                            <svg class="w-12 h-12 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                            </svg>
+                        </div>
+                        <h4 class="font-semibold mb-2 text-center">技术基础设施</h4>
+                        <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                            <li class="flex items-start">
+                                <svg class="w-4 h-4 text-primary-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                算力资源：GPU服务器集群
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-4 h-4 text-primary-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                存储系统：高性能分布式存储
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-4 h-4 text-primary-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                网络架构：高速内网与安全外联
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 落地可行性总结 -->
+            <div class="bg-gradient-to-r from-primary-50 via-secondary-50 to-accent-50 dark:from-primary-900 dark:from-opacity-30 dark:via-secondary-900 dark:via-opacity-30 dark:to-accent-900 dark:to-opacity-30 rounded-xl p-8 shadow-md">
+                <h3 class="fluid-text-xl font-bold mb-6 text-center">落地可行性评估</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex items-center">
+                        <div class="w-full bg-white dark:bg-gray-800 rounded-lg p-6">
+                            <h4 class="font-semibold mb-4">总体可行性</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm">技术成熟度</span>
+                                        <span class="text-sm font-medium">高</span>
+                                    </div>
+                                    <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-primary-500 rounded-full" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm">投入产出比</span>
+                                        <span class="text-sm font-medium">优</span>
+                                    </div>
+                                    <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-primary-500 rounded-full" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm">组织适应性</span>
+                                        <span class="text-sm font-medium">中高</span>
+                                    </div>
+                                    <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-primary-500 rounded-full" style="width: 65%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm">风险可控性</span>
+                                        <span class="text-sm font-medium">中高</span>
+                                    </div>
+                                    <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-primary-500 rounded-full" style="width: 70%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col justify-center bg-white dark:bg-gray-800 rounded-lg p-6">
+                        <h4 class="font-semibold mb-4">关键成功因素</h4>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-primary-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                                <span>高层领导的坚定支持与资源保障</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-primary-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                                <span>分阶段实施策略，确保每阶段都有可见成果</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-primary-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                                <span>建立跨部门协作与知识共享机制</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-primary-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                                <span>客观评估指标体系，确保价值可量化</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 总结部分 -->
+        <section id="section-6" x-show="activeSection === 'section-6'" class="mb-20 sequential-fade-in">
+            <h2 class="section-title fluid-text-3xl font-bold mb-8">总结与行动建议</h2>
+            
+            <div class="content-card p-8 mb-12">
+                <h3 class="fluid-text-xl font-bold mb-6 text-center">核心要点总结</h3>
+                
+                <div class="space-y-6">
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                            <svg class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-1 fluid-text-lg">迫切需求</h4>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                歌华有线面临用户流失、增长乏力、成本高企等挑战，亟需通过技术创新突破"中年危机"，DeepSeek是应对变革的关键工具。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                            <svg class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-1 fluid-text-lg">明确价值</h4>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                DeepSeek能带来可量化的降本增效(25-35%的运营成本降低)，并创造新的收入增长点(15-20%的增量收入)，投资回报期仅需12-18个月。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                            <svg class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-1 fluid-text-lg">紧迫行动</h4>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                行业竞争激烈，时间窗口正在关闭，如不尽快行动，3年内与领先企业将产生30%以上的差距，建议6个月内启动试点，12个月内规模落地。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1">
+                            <svg class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-1 fluid-text-lg">可行方案</h4>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                采用分阶段实施策略(API试点→混合部署→私有化定制)，投入可控，风险可管，确保每个阶段都能产生可见价值，技术和组织都已具备落地条件。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 行动建议 -->
+            <div class="bg-gradient-to-r from-primary-600 to-primary-700 dark:from-primary-800 dark:to-primary-900 text-white rounded-xl p-8 shadow-lg">
+                <h3 class="fluid-text-2xl font-bold mb-6 text-center">行动建议</h3>
+                
+                <div class="space-y-4">
+                    <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">1. 成立DeepSeek战略工作组</h4>
+                        <p>
+                            由高管牵头，整合业务、技术、数据等跨部门资源，制定完整实施路线图，明确责任与时间节点
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">2. 启动快速价值验证项目</h4>
+                        <p>
+                            选择2-3个高价值场景(如内容摘要生成、智能客服)进行试点，通过API方式快速部署，60天内出结果
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">3. 建立AI能力中心</h4>
+                        <p>
+                            组建专职团队，负责技术选型、方案设计、培训赋能，打造可复用的AI能力平台与最佳实践
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">4. 制定全面数据战略</h4>
+                        <p>
+                            完善数据收集、整合、治理体系，为DeepSeek应用提供高质量数据基础，建立数据安全保障机制
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">5. 规划长期竞争力建设</h4>
+                        <p>
+                            将DeepSeek与企业数字化转型战略深度融合，打造面向未来的智能化能力矩阵，实现持续创新
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <button class="btn-primary bg-white text-primary-700 hover:bg-gray-100">
+                        启动DeepSeek战略规划
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 最终展望 -->
+            <div class="mt-12 text-center">
+                <blockquote class="fluid-text-xl italic mx-auto max-w-3xl">
+                    "DeepSeek不仅是一项技术投资，更是歌华有线重新定义自身、拥抱智能化未来的战略性选择。今天的决策，将决定未来的竞争格局。"
+                </blockquote>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-50 dark:bg-gray-900 py-12 mt-20 border-t border-gray-200 dark:border-gray-800">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-8 md:mb-0 text-center md:text-left">
+                    <div class="author-signature text-primary-600 dark:text-primary-400 mb-3">陈光</div>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">
+                        北京邮电大学 人工智能学院
+                    </p>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <a href="#" class="social-icon">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 text-center">
+                <p class="text-gray-500 dark:text-gray-500 text-sm">
+                    版权所有 &copy; 2025 陈光 · 保留所有权利
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 页面加载脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置初始活动部分
+            const activeSection = document.getElementById('section-1');
+            if (activeSection) {
+                activeSection.style.display = 'block';
+            }
+            
+            // 监听滚动，触发动画
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        
+                        // 对于序列动画容器中的子元素
+                        if (entry.target.classList.contains('sequential-fade-in')) {
+                            const children = entry.target.children;
+                            Array.from(children).forEach((child, index) => {
+                                setTimeout(() => {
+                                    child.style.opacity = '1';
+                                    child.style.transform = 'translateY(0)';
+                                }, index * 100);
+                            });
+                        }
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            // 观察所有需要动画的元素
+            document.querySelectorAll('.content-card, .sequential-fade-in').forEach(el => {
+                observer.observe(el);
+            });
+            
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
