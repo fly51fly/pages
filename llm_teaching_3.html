@@ -330,6 +330,61 @@
           <p>价值在持续对话中显现。第一回答往往不是终点，而是起点。<br/>通过追问、引导和反馈，模型才能走向你真正需要的内容。</p>
         </div>
       </section>
+      <!-- 提示示例 -->
+      <section>
+        <h2>明确意图的重要性</h2>
+        <div class="grid-2">
+          <div class="card fragment">
+            <h4><i class="fas fa-times-circle icon"></i> 不佳提示</h4>
+            <p>"写个故事。"</p>
+            <p><strong>可能输出：</strong><br/>一篇随机主题、<br/>风格不定的短文。</p>
+          </div>
+          <div class="card fragment">
+            <p><i class="fas fa-check-circle icon"></i> 优化提示</p>
+            <p>"我想写一个关于一只勇敢小猫在外太空探险的科幻童话故事，目标读者是6-8岁儿童，风格要轻松有趣，结局要温馨。"</p>
+            <p><strong>预期效果：</strong><br/>模型能更精准地把握主题、风格、受众，生成更符合需求的内容。</p>
+          </div>
+        </div>
+      </section>
+      <!-- 提供上下文示例 -->
+      <section>
+        <h2>提供充分上下文的重要性</h2>
+        <div class="grid-2">
+          <div class="card fragment">
+            <h4><i class="fas fa-times-circle icon"></i> 不佳提示</h4>
+            <p>"这个项目计划书怎么样？"</p>
+            <p><strong>可能输出：</strong><br/>模型无法评价未提供的内容，<br/>或给出泛泛而谈的回应。</p>
+          </div>
+          <div class="card fragment">
+            <h4><i class="fas fa-check-circle icon"></i> 优化提示</h4>
+            <p>"我正在为一个面向大学生的在线编程学习平台写项目计划书。这是计划书的初稿：[此处可粘贴部分关键内容或概述]。请帮我分析一下，这个定位对大学生是否有吸引力？有哪些潜在风险？"</p>
+            <p><strong>预期效果：</strong><br/>模型能基于提供的具体信息，<br/>进行有针对性的分析和建议。</p>
+          </div>
+        </div>
+      </section>
+      <!-- 迭代追问示例 -->
+      <section>
+        <h2>迭代追问的艺术</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h4><i class="fas fa-comments icon"></i> 对话示例</h4>
+            <div class="practice">
+              <p>初始提示<br/>"帮我构思一个环保主题的活动。"</p>
+              <p>模型首次回答：<br/>"可以组织一场社区清洁活动。"</p>
+              <p>不佳的下一步：<br/>满足于此，或者觉得不够好就放弃。</p>
+            </div>
+          </div>
+          <div class="card">
+            <h4><i class="fas fa-lightbulb icon"></i> 优质追问</h4>
+            <div>
+              <p>"这个想法不错，但我们希望更有创意一些，有什么建议吗？"</p>
+              <p>"如果目标人群是中学生，如何让活动对他们更有吸引力？"</p>
+              <p>"有没有成本更低，但影响力可能更大的方案？"</p>
+            </div>
+            <p><strong>预期效果：</strong>通过不断追问和引导，深挖模型的创意潜力，逐步完善方案。</p>
+          </div>
+        </div>
+      </section>
 
       <!-- 引用 -->
       <section>
@@ -374,13 +429,14 @@
       <!-- 思维伙伴 -->
       <section data-auto-animate>
         <h2>思维伙伴而非答案机器</h2>
+        <p class="fragment">不只问“如何做”，更要邀请模型参与思考“<strong>为什么这么做，还有其他可能吗？</strong>”</p>
         <div class="grid-2">
-          <div>
-            <p><i class="fas fa-times-circle icon"></i> <strong>不只问:</strong> "如何做X"</p>
-            <p><i class="fas fa-check-circle icon"></i> <strong>而是:</strong> "我正在思考X问题，我的初步想法是Y，你能帮我拓展思路吗？"</p>
+          <div class="fragment">
+            <p><i class="fas fa-times-circle icon"></i> <strong>不只问:</strong> “如何做X”</p>
+            <p><i class="fas fa-check-circle icon"></i> <strong>而是:</strong> <br/>“我正在思考X问题，我的初步想法是Y，<br/>能<strong>帮我拓展思路</strong>吗？”<br/>“我的问题是X，AI给我的回答是Y，<br/>该<strong>如何改进</strong>？”</p>
           </div>
-          <div class="highlight-box">
-            <p>让模型成为思维的催化剂，参与你的思考过程</p>
+          <div class="highlight-box  fragment">
+            <p>让模型成为<strong>思维的催化剂</strong>，<br/>参与你的思考过程</p>
           </div>
         </div>
       </section>
@@ -390,11 +446,11 @@
         <h2>建立个人知识循环</h2>
         <div class="grid-2">
           <div class="highlight-box">
-            <p>将模型产出导入你的知识系统，再将系统内容喂回模型进行重组和深化</p>
+            <p>将模型的产出融入你的笔记、资料库，<br/>再把整合后的内容反哺给模型，<br/>进行<strong>重组和深化</strong></p>
           </div>
           <div>
-            <p>大模型与个人笔记、资料库、创作形成闭环</p>
-            <p>这种循环不断提炼认知价值</p>
+            <p>大模型与个人笔记、资料库、创作形成<strong>闭环</strong></p>
+            <p>这种循环不断<strong>提炼认知价值</strong></p>
           </div>
         </div>
       </section>
@@ -406,23 +462,26 @@
         <div class="grid-3">
           <div class="principle fragment">
             <h4>逆向推理</h4>
-            <p>从结果反推过程和原因</p>
+            <p>从结果反推过程和原因，从结果探寻根源，重塑问题视角</p>
+            <p>“如果X是答案，问题可能是什么？”<br/>“导致X的步骤有哪些？”</p>
           </div>
           <div class="principle fragment">
             <h4>角色扮演</h4>
-            <p>激活特定领域的专业知识</p>
+            <p>赋予模型特定身份、立场或情感，以该视角进行交互和产出</p>
+            <p>让模型成为“挑剔的客户”、“乐观的创业者”或“某个历史人物”，体验不同维度的思考。</p>
           </div>
           <div class="principle fragment">
             <h4>多步思考</h4>
-            <p>复杂问题的分解与整合</p>
+            <p>引导模型显式地分解复杂问题，逐步推理，而非直接给出结论</p>
+            <p>指令中加入“请逐步思考”、“先分析A，再分析B，最后总结”等，提升复杂任务的准确性和可解释性。</p>
           </div>
         </div>
       </section>
 
       <!-- 核心突破 -->
-      <section class="quote-slide">
+      <section>
         <div class="big-quote">
-          核心突破在于：不再询问"我能从模型获得什么"，而是探索"模型如何改变我的思考方式"
+          核心突破在于：<br/>不再询问<br/>“我能从模型获得什么”，<br/>而是探索<br/>“<strong>模型如何改变我的思考方式</strong>”
         </div>
       </section>
 
@@ -439,13 +498,40 @@
         <h2>最佳实践：极致推理</h2>
         <div class="practice fragment">
           <h4><i class="fas fa-user-tie"></i> 角色定义</h4>
-          <p><strong>原理：</strong>显式赋予角色能激活模型内部对应的数据模式，引导其以特定视角、知识储备和表达风格进行回应。</p>
+          <p><strong>原理：</strong>显式赋予角色能激活模型内部对应的数据模式，引导其以<strong>特定视角、知识储备和表达风格</strong>进行回应。</p>
           <p><strong>实践：</strong>极端具体。避免"你是一个助手"，尝试"你是一位拥有20年经验的分子生物学博士，擅长以科普方式向高中生解释复杂概念"。</p>
         </div>
         <div class="practice fragment">
           <h4><i class="fas fa-tasks"></i> 任务拆解与指令清晰化</h4>
           <p><strong>原理：</strong>复杂任务若不拆解，模型可能遗漏、误解或简化处理。</p>
-          <p><strong>实践：</strong>将宏大任务分解为可执行的子步骤。每条指令必须无歧义，使用精确动词。</p>
+          <p><strong>实践：</strong>将宏大任务<strong>分解为可执行的子步骤</strong>。每条指令必须无歧义，使用精确动词。</p>
+        </div>
+      </section>
+      <section>
+        <h2>任务拆解与指令清晰化</h2>
+        <div class="grid-2">
+          <div class="card fragment">
+            <h4><i class="fas fa-times-circle icon"></i> 不佳提示</h4>
+            <p>"帮我分析一下这个季度的销售数据，并提出改进建议，做成PPT。"</p>
+            <div>
+              <p><strong>可能输出：</strong>尝试一次性完成所有任务，但可能遗漏细节或质量不高。</p>
+            </div>
+            <h4><i class="fas fa-lightbulb icon"></i> 反思</h4>
+            <p>期望模型"理解"隐含意图是幼稚的。它只执行明确的符号操作。<strong>清晰的步骤分解</strong>是获得高质量输出的关键。</p>
+          </div>
+          <div class="card fragment">
+            <h4><i class="fas fa-check-circle icon"></i> 最佳实践提示</h4>
+            <div class="practice">
+              <ol>
+                请按以下步骤操作：
+                <li>总结附件[销售数据.csv]中，各产品线的销售额和同比增长率</li>
+                <li>找出销售额最高和最低的三个产品</li>
+                <li>分析可能导致畅销和滞销的原因（可基于常识或提出假设）</li>
+                <li>针对滞销产品，提出至少三个具体的改进建议，并说明理由</li>
+                <li>将以上分析和建议，以清晰的要点形式整理出来，方便后续制作PPT</li>
+              </ol>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -461,6 +547,29 @@
           <p><strong>实践：</strong>明确告知模型应基于哪些提供的信息作答，或禁止其使用外部知识。</p>
         </div>
       </section>
+<section>
+  <h2>上下文注入与知识限定</h2>
+  <div class="grid-2">
+    <div class="card fragment">
+      <h4><i class="fas fa-times-circle icon"></i> 不佳提示</h4>
+      <p>"最新的AI技术进展有哪些？"</p>
+      <div>
+        <p>可能输出：过时或不准确的信息，模型"幻觉"产生的内容。</p>
+      </div>
+      <h4><i class="fas fa-lightbulb icon"></i> 反思</h4>
+      <p>未限定知识范围和来源，模型可能基于训练数据产生过时或错误信息。<strong>明确的上下文和知识边界</strong>是避免"幻觉"和过时信息、获得可靠输出的关键。</p>
+    </div>
+    <div class="card fragment">
+      <h4><i class="fas fa-check-circle icon"></i> 最佳实践提示</h4>
+      <div class="practice">
+        <ol>
+        注入新知识："请根据我提供的《2025年AI领域技术趋势报告》[附上报告摘要]，总结其中提到的三个最重要的AI技术进展及其潜在应用。"<br/>
+        限定知识范围："仅使用你训练数据中截止到2023年的知识，不要联网查询，告诉我当时AlphaGo的技术原理。"
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
 
       <section>
         <div class="practice">
