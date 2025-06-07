@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大模型时代的教师人工智能素养与最佳实践</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/black.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --primary-color: #6366f1;
+      --secondary-color: #2dd4bf;
+      --accent-color: #f97316;
+      --text-color: #f8fafc;
+      --bg-dark: #0f172a;
+      --bg-gradient: linear-gradient(135deg, var(--bg-dark), #1e293b);
+      --font-sans: 'Source Sans Pro', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      --font-serif: 'Noto Serif SC', 'SimSun', serif;
+    }
+
+    .reveal {
+      font-family: var(--font-sans);
+      font-size: 2rem;
+    }
+
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+      font-family: var(--font-sans);
+      text-transform: none;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .reveal h1 {
+      font-size: 3.5em;
+      font-weight: 800;
+      margin-bottom: 0.5em;
+    }
+
+    .reveal h2 {
+      font-size: 2.5em;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    .reveal h3 {
+      font-size: 1.8em;
+      font-weight: 600;
+      color: var(--secondary-color);
+    }
+
+    .reveal p, .reveal ul, .reveal ol {
+      line-height: 1.5;
+      margin-bottom: 1em;
+    }
+
+    .reveal strong {
+      color: var(--accent-color);
+      font-weight: 600;
+    }
+
+    .reveal blockquote {
+      width: 85%;
+      border-left: 4px solid var(--primary-color);
+      padding: 0.5em 1em;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 0 4px 4px 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .reveal blockquote p {
+      font-family: var(--font-serif);
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Cover slide */
+    .cover {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: var(--bg-gradient);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at center, transparent 0%, rgba(15, 23, 42, 0.8) 70%);
+      z-index: 1;
+    }
+
+    .cover-content {
+      position: relative;
+      z-index: 2;
+      max-width: 80%;
+      margin: 0 auto;
+    }
+
+    .cover h1 {
+      font-size: 4em;
+      margin-bottom: 0.2em;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+    }
+
+    .cover h3 {
+      opacity: 0.8;
+      margin: 1em 0;
+    }
+
+    /* Card styles */
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 1.5em;
+      margin: 1em 0;
+      border-left: 4px solid var(--primary-color);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Grid layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2em;
+      margin: 1em 0;
+      align-items: center;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.5em;
+      margin: 1em 0;
+    }
+    
+    /* Special content styles */
+    .highlight-box {
+      margin: 1em 0;
+      padding: 1em;
+      background: rgba(99, 102, 241, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .principle {
+      margin: 0.7em 0;
+      padding: 0.8em;
+      background: rgba(45, 212, 191, 0.1);
+      border-left: 3px solid var(--secondary-color);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .principle h4 {
+      color: var(--secondary-color);
+      margin: 0 0 0.5em 0;
+    }
+
+    /* Icon styling */
+    .icon {
+      display: inline-block;
+      margin-right: 0.5em;
+      color: var(--accent-color);
+    }
+    
+    .big-icon {
+      font-size: 4em;
+      color: var(--primary-color);
+      margin-bottom: 0.3em;
+      opacity: 0.8;
+    }
+
+    /* Center content vertically and horizontally */
+    .center-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      text-align: center;
+    }
+
+    /* Quote slide */
+    .quote-slide {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      text-align: center;
+      background: var(--bg-gradient);
+    }
+
+    .big-quote {
+      font-size: 2.2em;
+      line-height: 1.4;
+      max-width: 80%;
+      margin: 0 auto;
+      font-family: var(--font-serif);
+      color: var(--text-color);
+      position: relative;
+    }
+
+    .big-quote::before {
+      content: """;
+      font-size: 3em;
+      position: absolute;
+      left: -0.5em;
+      top: -0.3em;
+      color: var(--primary-color);
+      opacity: 0.5;
+    }
+
+    /* Practice section styling */
+    .practice {
+      margin-bottom: 1em;
+      padding-bottom: 1em;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .practice h4 {
+      color: var(--secondary-color);
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5em;
+    }
+
+    .practice h4 i {
+      margin-right: 0.5em;
+    }
+
+    /* Media queries for responsiveness */
+    @media (max-width: 900px) {
+      .grid-3 {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .reveal {
+        font-size: 1.6rem;
+      }
+      
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+      
+      .cover h1 {
+        font-size: 3em;
+      }
+      
+      .big-quote {
+        font-size: 1.8em;
+        max-width: 90%;
+      }
+    }
+
+    @media (max-height: 600px) {
+      .reveal {
+        font-size: 1.4rem;
+      }
+      
+      .reveal section {
+        padding-top: 0;
+        height: 90vh;
+        overflow-y: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      
+      <!-- 封面 -->
+      <section>
+        <div class="cover-content">
+          <h2>大模型时代的教师人工智能素养与最佳实践</h2>
+          <h3>重塑角色，赋能教学，引领未来</h3>
+          <p>大模型<strong>从工具到伙伴</strong>的思维延伸进阶之旅</p>
+        </div>
+      </section>
+
+<!-- 今日议程 -->
+<section>
+  <h2>今日议程</h2>
+<ul class="agenda-list" style="list-style: none; padding: 0;">
+  <li style="display: flex; align-items: center; margin-bottom: 1em;">
+    <i class="fas fa-sync-alt" style="font-size: 1.5em; margin-right: 0.5em; color: var(--primary-color);"></i>
+    <div>
+      <h3 style="margin: 0;">认知重构：不可逆转的范式转移</h3>
+    </div>
+  </li>
+
+  <li style="display: flex; align-items: center; margin-bottom: 1em;">
+    <i class="fas fa-graduation-cap" style="font-size: 1.5em; margin-right: 0.5em; color: var(--primary-color);"></i>
+    <div>
+      <h3 style="margin: 0;">素养框架：新时代教师的能力地基</h3>
+    </div>
+  </li>
+
+  <li style="display: flex; align-items: center; margin-bottom: 1em;">
+    <i class="fas fa-map" style="font-size: 1.5em; margin-right: 0.5em; color: var(--primary-color);"></i>
+    <div>
+      <h3 style="margin: 0;">实践蓝图：从理论到行动的转化路径</h3>
+    </div>
+  </li>
+
+  <li style="display: flex; align-items: center; margin-bottom: 1em;">
+    <i class="fas fa-compass" style="font-size: 1.5em; margin-right: 0.5em; color: var(--primary-color);"></i>
+    <div>
+      <h3 style="margin: 0;">伦理罗盘：确保技术向善的行动准则</h3>
+    </div>
+  </li>
+
+  <li style="display: flex; align-items: center; margin-bottom: 1em;">
+    <i class="fas fa-fire" style="font-size: 1.5em; margin-right: 0.5em; color: var(--primary-color);"></i>
+    <div>
+      <h3 style="margin: 0;">未来展望：成为无可替代的“引火者”</h3>
+    </div>
+  </li>
+</ul>
+</section>
+
+<section>
+  <h2>认知重构：不可逆转的范式转移</h2>
+</section>
+
+<section>
+    <h2>看清大模型：拨开迷雾，直击本质</h2>
+    
+    <div class="grid-2">
+      <div class="card fragment">
+        <h3><i class="fas fa-magic icon"></i> 本质特征</h3>
+        <ul>
+          <li>一个超大的"文字接龙"系统</li>
+          <li>通过海量文本学会语言规律</li>
+          <li>能理解上下文并作出恰当回应</li>
+        </ul>
+        <p class="fragment">就像一个博学多识的对话者，<br/>但没有真正的理解和思维</p>
+      </div>
+  
+      <div class="card fragment">
+        <h3><i class="fas fa-tools icon"></i> 教育价值</h3>
+        <ul>
+          <li>个性化助教：因材施教好帮手</li>
+          <li>知识助手：快速获取/整理信息</li>
+          <li>创意激发器：提供多角度思路</li>
+        </ul>
+        <p class="fragment">不是取代教师，<br/>而是增强教学效能的得力助手</p>
+      </div>
+    </div>
+  </section>
+  
+<!-- 变革的本质 -->
+<section>
+  <h2>变革的本质：从"工具"到"环境"</h2>
+  
+  <div class="grid-2">
+    <div class="card fragment">
+      <h3><i class="fas fa-sync-alt icon"></i>认知环境转变</h3>
+      <p>大模型不是又一个"PPT"或"计算器"，而是与物理世界、网络空间并行的<strong>认知环境</strong></p>
+      <blockquote>
+        <p>它正在重塑我们获取知识、思考问题和解决问题的方式</p>
+      </blockquote>
+    </div>
+    
+    <div class="card fragment">
+      <h3><i class="fas fa-chart-line icon"></i>价值重构</h3>
+      <ul>
+        <li>知识获取趋向零成本</li>
+        <li>低阶思维能力价值下降</li>
+        <li>高阶思维能力愈发重要</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+<!-- 变革的本质 -->
+<section>
+    <h2>变革的本质：从"工具"到"环境"</h2>
+  <div class="grid-3 fragment">
+    <div class="principle">
+      <h4><i class="fas fa-book icon"></i> 知识获取零成本化</h4>
+      <p>传统以知识传授为核心的教学价值正在被迅速稀释</p>
+    </div>
+    
+    <div class="principle">
+      <h4><i class="fas fa-brain icon"></i> 能力模型颠覆</h4>
+      <p>记忆和复述等低阶思维让位于<strong>提问、批判、创造</strong>等高阶思维</p>
+    </div>
+    
+    <div class="principle">
+      <h4><i class="fas fa-network-wired icon"></i> 教育生态重塑</h4>
+      <p>从"教师-学生"二元结构转向<strong>"教师-AI-学生"三元动态关系</strong></p>
+    </div>
+  </div>
+
+  <div class="highlight-box fragment">
+    <h4><i class="fas fa-lightbulb icon"></i> 关键启示</h4>
+    <p>教师角色需要从知识传授者转变为<strong>学习引导者</strong>和<strong>思维促进者</strong></p>
+    <p>重点培养学生在AI环境下的<strong>高阶认知能力</strong>和<strong>批判性思维</strong></p>
+  </div>
+</section>
+
+<section>
+  <h2>教师角色的强制进化</h2>
+  <!-- <p class="fragment">变革不是选择题，而是生存题。<br/>教师的价值必须从"知识的垄断者"向更高维度迁移。</p> -->
+
+<div class="grid-2 fragment">
+    <div>
+    <div class="principle">
+        <h4>过去</h4>
+        <p><i class="fas fa-book icon"></i> 知识传授者<br/>
+        <i class="fas fa-tasks icon"></i> 课程执行者<br/>
+        <i class="fas fa-check-circle icon"></i> 答案评判者</p>
+    </div>
+    </div>
+    <div>
+    <div class="principle">
+        <h4>现在和未来</h4>
+        <p><i class="fas fa-drafting-compass icon"></i> 学习设计师<br/>
+        <i class="fas fa-brain icon"></i> 思维教练<br/>
+        <i class="fas fa-lightbulb icon"></i> 意义共创者</p>
+    </div>
+    </div>
+</div>
+
+  <div class="highlight-box fragment">
+    <h4><i class="fas fa-exclamation-circle icon"></i> 关键启示</h4>
+    <p>在AI时代，教师角色必须完成从<strong>知识传递</strong>到<strong>能力培养</strong>的转型</p>
+    <p>重点在于引导学生发展<strong>批判性思维</strong>和<strong>创造性问题解决能力</strong></p>
+  </div>
+</section>
+
+<!-- AI挑战教育基本假设 -->
+<section>
+  <h2>AI挑战教育基本假设</h2>
+  
+  <div class="grid-2">
+    <div class="card fragment">
+      <h3><i class="fas fa-robot icon"></i> 认知边界的模糊</h3>
+      <p>AI系统展现出学习、适应和创造能力，挑战"只有人类才能学习和教学"的传统认知</p>
+      <blockquote>
+        <p>教育必须重新思考其服务对象和参与主体</p>
+      </blockquote>
+    </div>
+    
+    <div class="card fragment">
+      <h3><i class="fas fa-sync icon"></i> 教育范式转变</h3>
+      <ul>
+        <li>教育对象：纯人类 → 人类+AI</li>
+        <li>教学角色：人类教师 → 人机协同</li>
+        <li>学习群体：人类社群 → 混合生态</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+<!-- AI挑战教育基本假设 -->
+<section>
+  <h2>AI挑战教育基本假设</h2>
+  <div class="highlight-box">
+    <h4><i class="fas fa-lightbulb icon"></i> 深层逻辑</h4>
+    <div class="grid-2">
+      <div>
+        <p><strong>当下变革：</strong>AI进化模糊人机认知边界</p>
+        <p><strong>未来方向：</strong>引导整个智能生态协同进化</p>
+      </div>
+      <div>
+        <p><strong>教育使命：</strong>不仅关注人类智能发展</p>
+        <p><strong>新的责任：</strong>确保AI朝有益方向发展</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+    <h2>素养框架：新时代教师的能力地基</h2>
+</section>
+
+<section>
+  <h2>定义教师AI素养：基于UNESCO框架</h2>
+
+  <div class="grid-3">
+    <div class="principle fragment">
+      <h4><i class="fas fa-heart icon"></i> 以人为本的心态</h4>
+      <p>将AI视为增强而非替代，始终把握教育的人文本质</p>
+    </div>
+    
+    <div class="principle fragment">
+      <h4><i class="fas fa-balance-scale icon"></i> 人工智能伦理</h4>
+      <p>理解并遵循AI应用的伦理边界，保护学生权益</p>
+    </div>
+    
+    <div class="principle fragment">
+      <h4><i class="fas fa-microchip icon"></i> AI基础与应用</h4>
+      <p>掌握AI核心概念和关键技术，能够有效应用AI工具</p>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="principle fragment">
+      <h4><i class="fas fa-chalkboard-teacher icon"></i> AI教学法</h4>
+      <p>设计和实施AI增强的教学活动，创新教学模式</p>
+    </div>
+    
+    <div class="principle fragment">
+      <h4><i class="fas fa-chart-line icon"></i> AI促进专业发展</h4>
+      <p>利用AI持续提升专业能力，推动教育创新</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>定义教师AI素养：基于UNESCO框架</h2>
+  <div class="highlight-box">
+    <h4><i class="fas fa-lightbulb icon"></i> 关键启示</h4>
+    <div class="grid-2">
+      <div>
+        <p><strong>整体性：</strong>五大维度相互关联，共同构建完整素养体系</p>
+        <p><strong>进阶性：</strong>从认知到实践，从基础到创新，逐步提升</p>
+      </div>
+      <div>
+        <p><strong>实践性：</strong>强调在教学实践中应用和发展AI素养</p>
+        <p><strong>发展性：</strong>持续更新知识技能，适应AI教育新趋势</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>维度一：以人为本的心态</h2>
+  
+  <div class="grid-2">
+    <div class="card fragment">
+      <h3><i class="fas fa-user icon"></i> 定义</h3>
+      <p>将技术置于服务人类发展的从属地位，确保人的能动性、问责性和社会责任。</p>
+      <blockquote>
+        <p>技术是手段，人的发展才是目的。</p>
+      </blockquote>
+    </div>
+    
+    <div class="card fragment">
+      <h3><i class="fas fa-check-circle icon"></i> 核心要义</h3>
+      <ul>
+        <li>保持人的主体地位</li>
+        <li>强调教育的人文关怀</li>
+        <li>重视社会责任担当</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+<section>
+  <h2>维度一：以人为本的心态</h2>
+  <div class="grid-3">
+    <div class="principle fragment">
+      <h4><i class="fas fa-brain icon"></i> 批判性认知</h4>
+      <p>理解AI的局限性、潜在偏见和"一本正经胡说八道"的幻觉</p>
+    </div>
+    
+    <div class="principle fragment">
+      <h4><i class="fas fa-handshake icon"></i> 人机协同</h4>
+      <p>明确AI只是助手，最终的教育判断和情感关怀必须由人做出</p>
+    </div>
+    
+    <div class="principle fragment">
+      <h4><i class="fas fa-compass icon"></i> 价值引领</h4>
+      <p>引导学生关注AI如何解决真实社会问题，而非仅仅作为工具使用</p>
+    </div>
+  </div>
+
+  <div class="highlight-box fragment">
+    <h4><i class="fas fa-lightbulb icon"></i> 教师行为指标</h4>
+    <div class="grid-2">
+      <div>
+        <p><strong>认知层面：</strong>准确理解AI的能力边界</p>
+        <p><strong>实践层面：</strong>在教学中保持人文关怀</p>
+      </div>
+      <div>
+        <p><strong>引导层面：</strong>培养学生的社会责任感</p>
+        <p><strong>发展层面：</strong>促进AI与人的共同进步</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>维度二：人工智能伦理</h2>
+  
+  <div class="grid-2">
+    <div class="card fragment">
+      <h3><i class="fas fa-shield-alt icon"></i> 定义</h3>
+      <p>理解并应用AI相关的伦理原则、法规和实践准则，确保安全、公平、负责任地使用。</p>
+      <blockquote>
+        <p>伦理不是限制，而是确保AI教育健康发展的基石。</p>
+      </blockquote>
+    </div>
+    
+    <div class="card fragment">
+      <h3><i class="fas fa-check-circle icon"></i> 核心要义</h3>
+      <ul>
+        <li>保护数据隐私安全</li>
+        <li>确保算法使用公平</li>
+        <li>维护学术诚信标准</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>维度二：人工智能伦理</h2>
+  <div class="grid-3">
+    <div class="principle fragment">
+      <h4><i class="fas fa-user-shield icon"></i> 数据隐私与安全</h4>
+      <p>保护学生和教师数据，谨慎选择AI工具，确保数据安全可控</p>
+    </div>
+    
+    <div class="principle fragment">
+      <h4><i class="fas fa-balance-scale icon"></i> 算法公平性</h4>
+      <p>警惕并消除AI系统中的偏见，确保教育机会公平</p>
+    </div>
+    
+    <div class="principle fragment">
+      <h4><i class="fas fa-graduation-cap icon"></i> 学术诚信</h4>
+      <p>制定明确的AI使用规范，培养负责任的AI应用意识</p>
+    </div>
+  </div>
+
+  <div class="highlight-box fragment">
+    <h4><i class="fas fa-lightbulb icon"></i> 教师行为指标</h4>
+    <div class="grid-2">
+      <div>
+        <p><strong>安全意识：</strong>只使用可信的AI工具和平台</p>
+        <p><strong>公平性：</strong>关注并消除AI应用中的偏见</p>
+      </div>
+      <div>
+        <p><strong>规范建设：</strong>建立清晰的AI使用准则</p>
+        <p><strong>示范引导：</strong>培养学生负责任地使用AI</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>维度三：人工智能基础与应用</h2>
+  
+  <div class="grid-2">
+    <div class="card fragment">
+      <h3><i class="fas fa-microchip icon"></i> 定义</h3>
+      <p>掌握选择、应用和定制AI工具所需的基本概念和技能。</p>
+      <blockquote>
+        <p>不需要成为AI专家，但要理解基本原理和应用边界。</p>
+      </blockquote>
+    </div>
+    
+    <div class="card fragment">
+      <h3><i class="fas fa-check-circle icon"></i> 核心要义</h3>
+      <ul>
+        <li>理解AI基本原理</li>
+        <li>掌握提示词工程</li>
+        <li>认知AI工具谱系</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>维度三：人工智能基础与应用</h2>
+  <div class="grid-3">
+    <div class="principle fragment">
+      <h4><i class="fas fa-brain icon"></i> 基本原理理解</h4>
+      <p>了解大语言模型的基本工作方式，避免神化或过分依赖</p>
+    </div>
+    
+    <div class="principle fragment">
+      <h4><i class="fas fa-keyboard icon"></i> 核心技能掌握</h4>
+      <p>精通提示词工程的核心技巧，能与AI进行高效、精准的对话</p>
+    </div>
+    
+    <div class="principle fragment">
+      <h4><i class="fas fa-tools icon"></i> 工具谱系认知</h4>
+      <p>了解不同类型AI工具（文本、图像、代码等）及其适用场景</p>
+    </div>
+  </div>
+
+  <div class="highlight-box fragment">
+    <h4><i class="fas fa-lightbulb icon"></i> 教师行为指标</h4>
+    <div class="grid-2">
+      <div>
+        <p><strong>认知层面：</strong>理解AI的基本原理和局限</p>
+        <p><strong>技能层面：</strong>熟练运用提示词与AI对话</p>
+      </div>
+      <div>
+        <p><strong>应用层面：</strong>能选择合适的AI工具</p>
+        <p><strong>发展层面：</strong>持续跟进AI技术进展</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>维度四：人工智能教学法</h2>
+  
+  <div class="grid-2">
+    <div class="card fragment">
+      <h3><i class="fas fa-chalkboard-teacher icon"></i> 定义</h3>
+      <p>将AI有效融入课程设计、教学实施、学习评估等环节，以创新教学方法。</p>
+      <blockquote>
+        <p>AI不是教学的点缀，而是重塑教学范式的催化剂。</p>
+      </blockquote>
+    </div>
+    
+    <div class="card fragment">
+      <h3><i class="fas fa-check-circle icon"></i> 核心要义</h3>
+      <ul>
+        <li>AI增强教学设计</li>
+        <li>AI驱动个性化学习</li>
+        <li>AI时代的评估改革</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>维度四：人工智能教学法</h2>
+  <div class="grid-3">
+    <div class="principle fragment">
+      <h4><i class="fas fa-pencil-alt icon"></i> AI增强教学设计</h4>
+      <p>利用AI快速生成教学大纲、备课资料、案例习题，提升效率</p>
+    </div>
+    
+    <div class="principle fragment">
+      <h4><i class="fas fa-user-graduate icon"></i> AI驱动个性化学习</h4>
+      <p>利用AI工具为学生提供定制化学习路径和即时反馈，因材施教</p>
+    </div>
+    
+    <div class="principle fragment">
+      <h4><i class="fas fa-tasks icon"></i> AI时代的评估改革</h4>
+      <p>设计AI无法轻易完成的评估任务，如项目式学习、批判性评估等</p>
+    </div>
+  </div>
+
+  <div class="highlight-box fragment">
+    <h4><i class="fas fa-lightbulb icon"></i> 教师行为指标</h4>
+    <div class="grid-2">
+      <div>
+        <p><strong>设计层面：</strong>善用AI工具提升备课效率</p>
+        <p><strong>实施层面：</strong>融合AI实现个性化教学</p>
+      </div>
+      <div>
+        <p><strong>评估层面：</strong>创新评估方式适应AI时代</p>
+        <p><strong>发展层面：</strong>持续探索AI教学新模式</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>维度五：人工智能促进专业发展</h2>
+  
+  <div class="grid-2">
+    <div class="card fragment">
+      <h3><i class="fas fa-graduation-cap icon"></i> 定义</h3>
+      <p>利用AI作为终身学习的伙伴，推动自身专业能力的持续提升和转型。</p>
+      <blockquote>
+        <p>AI不仅是教学工具，更是专业成长的助推器。</p>
+      </blockquote>
+    </div>
+    
+    <div class="card fragment">
+      <h3><i class="fas fa-check-circle icon"></i> 核心要义</h3>
+      <ul>
+        <li>AI辅助学习与研究</li>
+        <li>跨学科知识构建</li>
+        <li>实践反思与迭代</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>维度五：人工智能促进专业发展</h2>
+  <div class="grid-3">
+    <div class="principle fragment">
+      <h4><i class="fas fa-search icon"></i> 信息处理研究助理</h4>
+      <p>用AI进行文献检索、总结、翻译等，提升科研和学习效率</p>
+    </div>
+    
+    <div class="principle fragment">
+      <h4><i class="fas fa-project-diagram icon"></i> 知识网络构建</h4>
+      <p>用AI探索跨学科知识，快速构建新领域知识框架</p>
+    </div>
+    
+    <div class="principle fragment">
+      <h4><i class="fas fa-users icon"></i> 反思与迭代</h4>
+      <p>同行组建学习小组，定期分享AI教学实践，共同探索最佳路径</p>
+    </div>
+  </div>
+
+  <div class="highlight-box fragment">
+    <h4><i class="fas fa-lightbulb icon"></i> 教师行为指标</h4>
+    <div class="grid-2">
+      <div>
+        <p><strong>学习层面：</strong>善用AI工具提升学习效率</p>
+        <p><strong>研究层面：</strong>将AI融入科研工作流程</p>
+      </div>
+      <div>
+        <p><strong>实践层面：</strong>持续记录和总结AI应用经验</p>
+        <p><strong>分享层面：</strong>积极参与教师学习社群</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+    <h2>实践蓝图：理论到行动的转化路径</h2>
+</section>
+
+<section>
+    <h2>三点基本互动原则 🎯</h2>
+    <div class="principle fragment">
+        <h4><i class="fas fa-bullseye icon"></i> 明确你的意图（指令） 🎯</h4>
+        <p>清晰、准确、简要地告诉模型你想解决什么，达到什么目的。<br/>模型需要理解你的目标才能定向发力。 💪</p>
+    </div>
+    <div class="principle fragment">
+        <h4><i class="fas fa-sitemap icon"></i> 提供足够上下文（背景） 📝</h4>
+        <p>模型没有你脑中的信息，分享必要背景和细节帮助它理解你的处境。 🧠</p>
+    </div>
+    <div class="principle fragment">
+        <h4><i class="fas fa-lock icon"></i> 提供必要的约束（限定） 🔒</h4>
+        <p>模型需要明确的边界和限制才能给出精准答案。<br/>通过设定范围、格式和标准，引导模型产出更符合预期的内容。 ⚡️</p>
+    </div>
+</section>
+
+<section>
+    <h2>大模型对话的“三板斧”</h2>
+  
+    <div class="grid-3">
+      <div class="card fragment">
+        <h3>多提问</h3>
+        <ul>
+          <li>想到什么就问AI</li>
+          <li>跳出问题提问</li>
+          <li>追问细节和理由</li>
+        </ul>
+        <div>
+          <p><strong>实例：</strong><br/>
+          "这个教案设计如何？"<br/>
+          "能具体说说哪些环节可以改进？"</p>
+        </div>
+      </div>
+  
+      <div class="card fragment">
+        <h3>多举例</h3>
+        <ul>
+          <li>用具体案例说明</li>
+          <li>提供实际场景</li>
+          <li>分享教学经验</li>
+        </ul>
+        <div>
+          <p><strong>实例：</strong><br/>
+          "请参考'认识时钟'这节课..."<br/>
+          "请参考以下获奖教改方案..."</p>
+        </div>
+      </div>
+  
+      <div class="card fragment">
+        <h3>多迭代</h3>
+        <ul>
+          <li>反复打磨完善</li>
+          <li>循序渐进提升</li>
+          <li>持续优化方案</li>
+        </ul>
+        <div>
+          <p><strong>实例：</strong><br/>
+          一、获取基本方案<br/>
+          二、细化教学步骤<br/>
+          三、优化难点设计</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section>
+  <h2>核心策略：将AI打造成"超级助理"</h2>
+  
+  <div class="grid-2">
+    <div class="card fragment">
+      <i class="fas fa-tasks big-icon"></i>
+      <h3>1、行政助理</h3>
+      <p>处理重复性、事务性工作</p>
+      <ul>
+        <li>批量处理文档</li>
+        <li>自动生成报告</li>
+        <li>日程管理优化</li>
+      </ul>
+    </div>
+    
+    <div class="card fragment">
+      <i class="fas fa-chalkboard-teacher big-icon"></i>
+      <h3>2、教学助理</h3>
+      <p>优化教学设计与资源生成</p>
+      <ul>
+        <li>教案设计辅助</li>
+        <li>课件资源制作</li>
+        <li>作业批改建议</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>核心策略：将AI打造成"超级助理"</h2>
+  <div class="grid-2">
+    <div class="card fragment">
+      <i class="fas fa-graduation-cap big-icon"></i>
+      <h3>3、学术助理</h3>
+      <p>辅助个人研究与专业成长</p>
+      <ul>
+        <li>文献综述整理</li>
+        <li>研究方向探索</li>
+        <li>论文写作建议</li>
+      </ul>
+    </div>
+    
+    <div class="card fragment">
+      <i class="fas fa-brain big-icon"></i>
+      <h3>4、认知外脑</h3>
+      <p>作为激发创意的对话伙伴</p>
+      <ul>
+        <li>头脑风暴</li>
+        <li>多角度思考</li>
+        <li>创意激发</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>核心策略：将AI打造成"超级助理"</h2>
+  <div class="highlight-box fragment">
+    <h4><i class="fas fa-lightbulb icon"></i> 实践建议</h4>
+    <div class="grid-2">
+      <div>
+        <p><strong>循序渐进：</strong>从最熟悉的场景开始尝试</p>
+        <p><strong>持续优化：</strong>不断调整与AI的协作模式</p>
+      </div>
+      <div>
+        <p><strong>效果评估：</strong>定期总结AI助理的实际效果</p>
+        <p><strong>能力提升：</strong>逐步扩展AI辅助的应用范围</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>实践场景一：高效课程设计与备课</h2>
+  <!-- <p class="fragment">一小时高效完成一周的备课工作</p> -->
+  <div class="grid-3">
+    <div class="card fragment">
+      <ul>
+        <strong>生成教学大纲</strong>
+        <li>输入课程目标</li>
+        <li>指定学生水平</li>
+        <li>获取结构化大纲</li>
+      </ul>
+        <p><strong>示例提示词：</strong><br/>
+        "请基于新课标，为高二年级设计'细胞呼吸'单元的教学大纲，重点关注学生的思维培养。"</p>
+    </div>
+
+    <div class="card fragment">
+      <ul>
+        <strong>创建教学资源</strong>
+        <li>PPT初稿生成</li>
+        <li>课堂活动设计</li>
+        <li>情境案例分析</li>
+      </ul>
+        <p><strong>创新应用：</strong><br/>
+        让AI扮演历史人物进行对话，增加教学趣味性</p>
+    </div>
+
+    <div class="card fragment">
+      <ul>
+        <strong>设计多元化练习</strong>
+        <li>选择填空题</li>
+        <li>简答题设计</li>
+        <li>情景分析题</li>
+      </ul>
+      <div class="practice">
+        <p><strong>分层设计：</strong><br/>
+        根据知识点生成不同难度的练习，满足差异化教学需求</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>实践场景一：高效课程设计与备课</h2>
+  <div class="highlight-box fragment">
+    <h4><i class="fas fa-lightbulb icon"></i> 实践建议</h4>
+    <div class="grid-2">
+      <div>
+        <p><strong>系统思维：</strong>先规划整体框架，再完善具体内容</p>
+        <p><strong>迭代优化：</strong>AI生成初稿后，教师进行专业调整</p>
+      </div>
+      <div>
+        <p><strong>资源积累：</strong>建立个人教学资源库，持续完善</p>
+        <p><strong>创新应用：</strong>善用AI的创造力，设计新颖教学活动</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>实践场景二：个性化辅导与反馈</h2>
+  
+  <div class="grid-2">
+    <div class="card fragment">
+      <h3><i class="fas fa-chalkboard-teacher icon"></i> 智能导师系统</h3>
+      <p>学生可随时向AI助教提问，获得即时解答和引导</p>
+      <div class="principle">
+        <h4>关键价值</h4>
+        <ul>
+          <li>打破时空限制的即时答疑</li>
+          <li>降低提问焦虑，提高参与度</li>
+          <li>减轻教师答疑负担</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="card fragment">
+      <h3><i class="fas fa-tasks icon"></i> 作业智能批改与反馈</h3>
+      <p>快速批改与个性化修改建议</p>
+      <div class="principle">
+        <h4>应用场景</h4>
+        <ul>
+          <li>客观题自动评分</li>
+          <li>主观题初步点评</li>
+          <li>个性化改进建议</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>实践场景二：个性化辅导与反馈</h2>
+  <div class="card">
+    <h3><i class="fas fa-route icon"></i> 学习路径规划</h3>
+    <div class="grid-2">
+      <div>
+        <p><strong>数据分析：</strong></p>
+        <ul>
+          <li>作业完成情况</li>
+          <li>测验成绩表现</li>
+          <li>知识点掌握度</li>
+        </ul>
+      </div>
+      <div>
+        <p><strong>个性化推荐：</strong></p>
+        <ul>
+          <li>发现知识薄弱点</li>
+          <li>推荐学习资源</li>
+          <li>制定复习计划</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>实践场景二：个性化辅导与反馈</h2>
+  <div class="highlight-box">
+    <h4><i class="fas fa-lightbulb icon"></i> 实践建议</h4>
+    <div class="grid-2">
+      <div>
+        <p><strong>循序渐进：</strong>先从简单场景开始尝试</p>
+        <p><strong>及时干预：</strong>保持对AI反馈的监督</p>
+      </div>
+      <div>
+        <p><strong>数据积累：</strong>建立学生学习档案</p>
+        <p><strong>持续优化：</strong>根据实践效果调整策略</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>实践场景三：高阶思维评估改革</h2>
+  <!-- <p>设计"防AI"且"用AI"的新型作业与考试</p> -->
+
+  <div class="grid-3">
+    <div class="card fragment">
+      <!-- <i class="fas fa-gavel big-icon"></i> -->
+      <h4>"AI批判会"</h4>
+      <ul>
+        <li>学生用AI完成</li>
+        <li>撰写批判性报告</li>
+        <li>评估AI优缺点</li>
+        <li>识别潜在偏见</li>
+      </ul>
+      <div class="highlight-box">
+        <p><strong>培养目标：</strong><br/>
+        批判性思维与分析能力</p>
+      </div>
+    </div>
+
+    <div class="card fragment">
+      <!-- <i class="fas fa-puzzle-piece big-icon"></i> -->
+      <h4>逆向工程</h4>
+      <ul>
+        <li>提供AI生成答案</li>
+        <li>反推优质提示词</li>
+        <li>理解AI思维模式</li>
+        <li>掌握提示工程</li>
+      </ul>
+      <div class="highlight-box">
+        <p><strong>培养目标：</strong><br/>
+        逻辑推理与工程思维</p>
+      </div>
+    </div>
+
+    <div class="card fragment">
+      <!-- <i class="fas fa-globe big-icon"></i> -->
+      <h4>真实世界问题解决</h4>
+      <ul>
+        <li>开放跨学科问题</li>
+        <li>AI作为研究工具</li>
+        <li>形成解决方案</li>
+        <li>展示与答辩</li>
+      </ul>
+      <div class="highlight-box">
+        <p><strong>培养目标：</strong><br/>
+        综合应用与创新能力</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box fragment">
+    <h4><i class="fas fa-lightbulb icon"></i> 评估改革要点</h4>
+    <div class="grid-2">
+      <div>
+        <p><strong>过程导向：</strong>关注思维过程而非最终答案</p>
+        <p><strong>能力导向：</strong>培养高阶思维与实践能力</p>
+      </div>
+      <div>
+        <p><strong>工具意识：</strong>合理运用AI作为学习辅助</p>
+        <p><strong>创新思维：</strong>鼓励多元解决方案</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+    <h2>伦理罗盘：确保技术向善行动准则</h2>
+</section>
+
+<section>
+  <h2>识别核心风险：硬币的另一面</h2>
+  
+  <div class="grid-2">
+    <div class="card fragment">
+      <h3><i class="fas fa-exclamation-triangle icon"></i> 学术/伦理风险</h3>
+      <ul>
+        <li>学术诚信的模糊化</li>
+        <li>学生原创能力下降</li>
+        <li>知识产权归属争议</li>
+      </ul>
+      <blockquote>
+        <p>过度依赖AI可能导致学生失去独立思考和创造的能力</p>
+      </blockquote>
+    </div>
+    
+    <div class="card fragment">
+      <h3><i class="fas fa-shield-alt icon"></i> 技术/社会风险</h3>
+      <ul>
+        <li>数据隐私安全漏洞</li>
+        <li>算法偏见与信息茧房</li>
+        <li>数字鸿沟加剧</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>识别核心风险：硬币的另一面</h2>
+  <div class="highlight-box">
+    <h4><i class="fas fa-lightbulb icon"></i> 应对策略</h4>
+    <div class="grid-2">
+      <div>
+        <p><strong>制度建设：</strong>建立明确的AI使用规范和伦理准则</p>
+        <p><strong>能力培养：</strong>加强师生AI素养和批判性思维训练</p>
+      </div>
+      <div>
+        <p><strong>技术防护：</strong>采用安全可靠的AI平台和工具</p>
+        <p><strong>资源均衡：</strong>确保AI教育资源的公平可及性</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>教师的伦理行动指南</h2>
+  
+  <div class="grid-2">
+    <div class="card fragment">
+      <h3><i class="fas fa-eye icon"></i> 公开透明原则</h3>
+      <p>向学生明确说明课程中AI的使用政策和期望</p>
+      <div class="principle">
+        <p>制定清晰的AI使用规范</p>
+        <p>与学生共同探讨AI伦理边界</p>
+      </div>
+    </div>
+    
+    <div class="card fragment">
+      <h3><i class="fas fa-user-shield icon"></i> 人类监督原则</h3>
+      <p>永不将最终的评分、评价和重要决策完全交由AI</p>
+      <div class="principle">
+        <p>保持人为判断的主导地位</p>
+        <p>AI建议仅作为参考依据</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>教师的伦理行动指南</h2>
+  <div class="grid-2">
+    <div class="card fragment">
+      <h3><i class="fas fa-graduation-cap icon"></i> 赋能而非替代原则</h3>
+      <p>教学设计的核心是提升学生的能力，而非展示AI的能力</p>
+      <div class="principle">
+        <p>以培养学生能力为中心</p>
+        <p>避免过度依赖AI工具</p>
+      </div>
+    </div>
+    
+    <div class="card fragment">
+      <h3><i class="fas fa-balance-scale icon"></i> 批判性教学原则</h3>
+      <p>将AI伦理和局限性作为教学内容的一部分，培养学生的数字公民素养</p>
+      <div class="principle">
+        <p>引导学生理性认识AI</p>
+        <p>培养负责任的使用习惯</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box fragment">
+    <h4><i class="fas fa-shield-alt icon"></i> 选择合规工具</h4>
+    <div class="grid-2">
+      <div>
+        <p><strong>优先选择：</strong>遵守数据保护法规的AI服务</p>
+        <p><strong>重点关注：</strong>服务商的政策透明度</p>
+      </div>
+      <div>
+        <p><strong>定期评估：</strong>AI工具的安全性和合规性</p>
+        <p><strong>及时更新：</strong>工具使用的管理策略</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section>
+    <h2>未来展望：成为无可替代的<br/>“引火者”</h2>
+</section>
+<section>
+  <h2>放下包袱，轻装上阵</h2>
+  
+  <div class="grid-3">
+    <div class="card fragment">
+      <!-- <i class="fas fa-unlock big-icon"></i> -->
+      <h4><strong>知识的垄断权</strong></h4>
+      <p>基础知识讲解可由AI或线上资源完成</p>
+      <div class="principle">
+        <p>从"知识的守门人"转变为"学习的引导者"</p>
+      </div>
+    </div>
+
+    <div class="card fragment">
+      <!-- <i class="fas fa-user-graduate big-icon"></i> -->
+      <h4><strong>"全知全能"的形象</strong></h4>
+      <p>承认"我不知道，让我们一起用AI探索"是一种更强大的教育力量</p>
+      <div class="principle">
+        <p>展现真实的学习态度，培养终身学习能力</p>
+      </div>
+    </div>
+
+    <div class="card fragment">
+      <!-- <i class="fas fa-tasks big-icon"></i> -->
+      <h4><strong>标准化的评估方式</strong></h4>
+      <p>拥抱更多元、更侧重过程和能力的项目式评估</p>
+      <div class="principle">
+        <p>重视学习过程，关注能力培养</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section>
+  <h2>放下包袱，轻装上阵</h2>
+  <div class="highlight-box">
+    <h4><i class="fas fa-lightbulb icon"></i> 转变建议</h4>
+    <div class="grid-2">
+      <div>
+        <p><strong>心态调整：</strong>接纳变化，拥抱新角色</p>
+        <p><strong>能力提升：</strong>专注引导和启发的教学技能</p>
+      </div>
+      <div>
+        <p><strong>评估创新：</strong>设计更符合AI时代的评价方式</p>
+        <p><strong>共同成长：</strong>与学生一起探索和学习</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>未来教师的核心价值：点燃火焰</h2>
+
+  <div class="quote-slide">
+    <div class="big-quote fragment">
+      教育的目标不是灌满一个桶，<br/>而是点燃一把火。
+    </div>
+    <p><em>— W.B. Yeats</em></p>
+  </div>
+</section>
+
+<section>
+  <h2>未来教师的核心价值：点燃火焰</h2>
+  
+  <div class="grid-2">
+    <div class="card fragment">
+      <h3><i class="fas fa-database icon"></i>"桶"：知识传授</h3>
+      <p>可以由AI高效完成：</p>
+      <ul>
+        <li>知识的系统化传递</li>
+        <li>标准答案的解析</li>
+        <li>基础能力的训练</li>
+      </ul>
+    </div>
+    
+    <div class="card fragment">
+      <h3><i class="fas fa-fire icon"></i>"火"：智慧启迪</h3>
+      <p>只能由教师来点燃：</p>
+      <ul>
+        <li>思想的启发与引导</li>
+        <li>人格的塑造与成长</li>
+        <li>潜能的激发与释放</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>未来教师的核心价值：点燃火焰</h2>
+  <div class="highlight-box fragment">
+    <h4><i class="fas fa-lightbulb icon"></i> 教师的不可替代性</h4>
+    <div class="grid-2">
+      <div>
+        <p><strong>温度：</strong>真实的情感共鸣与关怀</p>
+        <p><strong>智慧：</strong>基于经验的判断与引导</p>
+      </div>
+      <div>
+        <p><strong>同理心：</strong>深入理解学生需求</p>
+        <p><strong>价值观：</strong>人文关怀与道德引领</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 最后的思考 -->
+<section>
+  <h2>最后的思考：提出更好的问题</h2>
+  
+  <div class="grid-2">
+    <div class="card fragment">
+      <h3><i class="fas fa-question-circle icon"></i>答案泛滥时</h3>
+      <p>在AI可以瞬间生成海量答案的今天，真正稀缺的是提出好问题的能力。</p>
+      <blockquote>
+        <p>这正是人类教师无可替代的价值所在。</p>
+      </blockquote>
+    </div>
+    
+    <div class="card fragment">
+      <h3><i class="fas fa-lightbulb icon"></i>教师的核心价值</h3>
+      <ul>
+        <li>引导学生发现问题</li>
+        <li>培养批判性思维</li>
+        <li>激发探索欲望</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 最后的思考 -->
+<section>
+  <h2>最后的思考：提出更好的问题</h2>
+  <div class="highlight-box">
+    <h4><i class="fas fa-star icon"></i> 结束语</h4>
+    <p>最好的教育，永远是关于提出更好的问题，而非提供标准的答案。</p>
+    <p>让我们一起成为那个引导学生不断追问、探索未知的引路人。</p>
+  </div>
+</section>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/notes/notes.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/markdown/markdown.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/highlight.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/zoom/zoom.js"></script>
+  
+  <script>
+    // 初始化RevealJS
+    Reveal.initialize({
+      hash: true,
+      slideNumber: true,
+      center: true,
+      progress: true,
+      controls: true,
+      touch: true,
+      transition: 'slide',
+      transitionSpeed: 'default',
+      backgroundTransition: 'fade',
+      plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealZoom ],
+      width: '100%',
+      height: '100%',
+      margin: 0.05,
+      minScale: 0.2,
+      maxScale: 2.0,
+      keyboard: {
+        // 添加自定义快捷键
+        76: function() { // 按'l'键进入概览模式
+          Reveal.toggleOverview();
+        }
+      }
+    });
+
+    // 优化响应式设计
+    function updateResponsiveDesign() {
+      const scale = Math.min(
+        window.innerWidth / 1200,
+        window.innerHeight / 800
+      );
+      
+      document.documentElement.style.fontSize = `${Math.max(16, 16 * scale)}px`;
+    }
+
+    window.addEventListener('resize', updateResponsiveDesign);
+    updateResponsiveDesign();
+  </script>
+</body>
+</html>
