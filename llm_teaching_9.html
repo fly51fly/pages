@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="zh">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>引爆大模型认知引擎：从指令执行到智能共生</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reset.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css" id="theme">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+  <style>
+    :root {
+      --r-main-font-size: 30px; /* 进一步调小，适配大屏 */
+      --r-heading1-size: 2.6em;
+      --r-heading2-size: 1.9em;
+      --r-heading3-size: 1.4em;
+      --r-heading4-size: 1.1em;
+      /* 主题色微调，使其更柔和 */
+      --r-link-color: #58a6ff;
+      --r-link-color-hover: #79b8ff;
+      --r-selection-background-color: #58a6ff;
+    }
+
+    .reveal {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", "Microsoft YaHei", "PingFang SC";
+    }
+
+    .reveal .slides {
+        text-align: left;
+    }
+
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+        text-align: center;
+        font-weight: 600;
+    }
+    
+    .reveal p, .reveal li {
+        line-height: 1.7; /* 优化行高 */
+    }
+
+    /* 布局与卡片 */
+    .grid-2, .grid-3 {
+      display: grid;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      align-items: start;
+    }
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    .card {
+      background: rgba(40, 42, 54, 0.6); /* 卡片颜色 */
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      backdrop-filter: blur(12px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+    }
+    
+    .principle {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-left: 5px solid var(--r-link-color);
+      background: rgb(65, 65, 65);
+      border-radius: 0 8px 8px 0;
+    }
+    
+    /* 修复代码块溢出 */
+    .reveal pre {
+      width: 100%;
+      box-sizing: border-box;
+      max-height: 450px; /* 限制高度 */
+      overflow-y: auto !important; /* 强制显示滚动条 */
+    }
+    .reveal pre code {
+      max-height: none; /* 允许code内容撑开 */
+    }
+
+    /* 金句与引言 */
+    .golden-quote {
+      font-size: 1.4em;
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.5;
+      padding: 1.5rem;
+      color: #f1fa8c; /* 金句颜色 */
+      background: rgba(241, 250, 140, 0.1);
+      border-left: 8px solid #f1fa8c;
+      border-radius: 10px;
+      margin: 1.5rem auto;
+    }
+    
+    /* 图标 */
+    .icon {
+      color: var(--r-link-color);
+      margin-right: 12px;
+    }
+    .big-icon {
+        font-size: 3.5em;
+        display: block;
+        text-align: center;
+        margin-bottom: 0.5em;
+        color: var(--r-link-color);
+    }
+    
+    /* 封面与居中 */
+    .cover-content, .center-content {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .reveal blockquote {
+        background: rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section data-background-gradient="radial-gradient(ellipse at center, #282a36, #21222c)">
+        <div class="cover-content">
+          <h1>引爆大模型认知引擎</h1>
+          <h3 class="fragment">从<code style="color: #f1fa8c;">指令执行</code>到<code style="color: #50fa7b;">智能共生</code></h3>
+          <p class="fragment" style="font-size: 1.5em; margin-top: 1em;">“AI最大的价值，是逼你成为一个更好的思考者。”</p>
+          <div class="fragment" style="margin-top: 2rem; border: 2px solid var(--r-link-color); padding: 1rem 2rem; border-radius: 50px;">
+              <p style="margin:0; font-size: 1.2em;"><i class="fas fa-rocket icon"></i> 今天，从大胆地“无事不问”开始</p>
+          </div>
+        </div>
+        <aside class="notes">
+            大家好！[停顿，环视观众] 我们先来看一句话：“AI最大的价值，是逼你成为一个更好的思考者。” 这就是我们今天所有分享的核心。<br>
+            [点击1] 很多教程在教“术”，我们今天聊“道”。<br>
+            [点击2] 这不是关于如何使用一个工具，而是关于如何升级我们的思维。<br>
+            [点击3] 而这一切的起点，非常简单，就是这个呼吁：从今天起，养成一个新习惯——大胆地“无事不问”。无论事情大小，都试着问问AI。这是用好AI的唯一捷径。
+        </aside>
+      </section>
+
+      <section>
+        <h2>你真的“会”用AI吗？</h2>
+        <p>我们真正的目标不是找到一个虚无缥缈的“标准答案”，<br/>而是学会如何与这个聪明的“新物种”<strong style="color:#e68e21">有效对话🤝🤖</strong>，<br/>让它成为我们认知能力的“放大器”！</p>
+        <div class="fragment golden-quote">
+           你的提问质量，决定了AI的智商上限。
+        </div>
+        <p class="fragment">所以，核心问题从：“AI能做什么？”<br/>转变为：“<strong style="color:#bd93f9">我该如何提问，才能激发AI与我的全部潜力？</strong>”</p>
+         <aside class="notes">
+            这页是心态的转变。<br>
+            [点击1] 抛出金句，引发思考。可以问观众：“大家认同吗？” 稍微停顿一下。<br>
+            [点击2] 提出核心问题的转变。这引导观众从关注AI的能力，转向关注自身提问的能力。这是一种视角的升维。
+        </aside>
+      </section>
+
+      <section>
+        <section>
+          <h2>建立默契的第一步：互动三原则</h2>
+          <div class="principle fragment">
+            <h4><i class="fas fa-bullseye icon"></i> 明确你的意图（Instruction）</h4>
+          </div>
+          <div class="principle fragment">
+            <h4><i class="fas fa-sitemap icon"></i> 提供足够上下文（Context）</h4>
+          </div>
+          <div class="principle fragment">
+            <h4><i class="fas fa-lock icon"></i> 施加必要约束（Constraint）</h4>
+          </div>
+          <div class="fragment golden-quote">
+            好的问题，本身就蕴含了一半的答案。
+          </div>
+          <p class="fragment" style="text-align: center; margin-top: 1rem;">↓ 下滑查看案例与底层逻辑 ↓</p>
+            <aside class="notes">
+                这是基础中的基础。<br>
+                [逐个点击] 快速过一下三个原则。<br>
+                [点击] 抛出金句，强调提问本身的重要性。<br>
+                [点击] 引导观众下滑。
+            </aside>
+        </section>
+        <section data-auto-animate>
+            <h2>原则案例：撰写周报</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h4><i class="fas fa-times-circle icon"></i> 翻车现场 👎</h4>
+                    <pre><code data-line-numbers class="plaintext">帮我写这周的周报。</code></pre>
+                </div>
+                <div class="card" data-id="prompt-card">
+                    <h4><i class="fas fa-check-circle icon"></i> 高光时刻 👍</h4>
+                    <pre><code data-line-numbers="1-10" class="language-markdown">
+# 角色：你是一名高级项目经理
+# 意图：为我的上级(CTO)写一份专业、数据驱动的周报。
+# 上下文：
+- 我本周完成了【A项目的前端开发】和【B项目的用户调研】。
+- 关键数据：用户注册量环比增长15%，日活下降5%。
+- 遇到的挑战：B项目的用户访谈预约困难。
+# 约束：
+- 格式：严格按照“1.本周成果 2.数据洞察 3.挑战与对策 4.下周计划”的结构。
+- 风格：正式、专业、主动，并对数据下降提出初步分析和解决方案。
+                    </code></pre>
+                </div>
+            </div>
+            <aside class="notes">
+                用一个非常贴近大家工作的例子——写周报——来讲解。好的提示本身就是一次对工作的梳理。
+            </aside>
+        </section>
+        <section data-auto-animate>
+            <h2>原则案例：撰写PPT提纲</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h4><i class="fas fa-times-circle icon"></i> 翻车现场 👎</h4>
+                    <pre><code data-line-numbers class="plaintext">帮我写一个关于AI使用技巧的PPT提纲。</code></pre>
+                </div>
+                <div class="card" data-id="prompt-card">
+                    <h4><i class="fas fa-check-circle icon"></i> 高光时刻 👍</h4>
+                    <pre><code data-line-numbers="1-12" class="language-markdown"># 角色：你是一位资深的演讲教练和PPT设计专家
+# 意图：为一场45分钟的技术分享会设计提纲，主题是AI使用技巧
+# 上下文：
+- 听众：主要是程序员和产品经理，约100人
+- 分享目标：让听众掌握与AI高效对话的方法论
+- 参考案例：我很欣赏Simon Sinek的演讲结构
+# 约束：
+- 结构：遵循"Why-How-What"框架
+- 篇幅：4-5个主要章节，每章节不超过3个核心观点
+- 风格：需要包含具体案例和实操建议
+- 互动：设计2-3个与听众互动的环节</code></pre>
+                </div>
+            </div>
+            <aside class="notes">
+                用一个制作本PPT的真实案例来说明。这个例子特别贴切，因为大家正在看这个成品。
+            </aside>
+        </section>
+        
+        <section data-auto-animate>
+            <h2>三原则的底层逻辑：降低信息熵</h2>
+            <div class="card">
+                <p>为什么这三点如此重要？因为我们要对抗沟通中的“<strong style="color: #f1fa8c;">熵增</strong>”。</p>
+                <ul>
+                    <li>AI的世界充满了无限可能性（高熵）。</li>
+                    <li class="fragment">你的每一次<strong style="color: #50fa7b;">意图</strong>澄清、<strong style="color: #50fa7b;">上下文</strong>补充和<strong style="color: #50fa7b;">约束</strong>施加，都是在向这个混乱的系统注入“秩序”，把一个模糊问题，收敛成一个清晰任务。</li>
+                </ul>
+            </div>
+            <div class="fragment golden-quote">
+                一个好的提问者，<br/>本质上是一个优秀的“信息建筑师”。
+            </div>
+            <aside class="notes">
+                [用一种更深入、更具洞察的语气] 这一页，我们从“术”上升到“道”。<br>
+                [点击1] 引入“信息熵”的概念。<br>
+                [点击2] 解释三原则如何帮助降低不确定性。<br>
+                [点击3] 抛出第二个金句，给提问者一个新的、更高级的身份定义。
+            </aside>
+        </section>
+      </section>
+
+      <section>
+        <section>
+            <h2>对话进阶：认知交互“三板斧” 🪓</h2>
+            <div class="grid-3">
+                <div class="card fragment">
+                    <h3><i class="fas fa-question-circle icon"></i> 多提问</h3>
+                </div>
+                <div class="card fragment">
+                    <h3><i class="fas fa-stream icon"></i> 多举例</h3>
+                </div>
+                <div class="card fragment">
+                    <h3><i class="fas fa-sync-alt icon"></i> 多迭代</h3>
+                </div>
+            </div>
+            <p class="fragment" style="text-align: center; margin-top: 2rem;">↓ 下滑逐一解锁每一把“神斧”的用法 ↓</p>
+        </section>
+        <section>
+            <h2>第一板斧：多提问 (<i class="fas fa-search-plus" style="color: #ff79c6;"></i> 拓展模式)</h2>
+            <div class="grid-2">
+                <div class="card fragment">
+                    <h4><i class="fas fa-lightbulb icon"></i> 拓展性提问</h4>
+                    <p>"关于[某个想法]，还有哪些我没想到的角度？"</p>
+                    <p>"从用户/商业/技术视角，分别如何评价这件事？"</p>
+                </div>
+                <div class="card fragment">
+                    <h4><i class="fas fa-user-secret icon"></i> 假设性提问</h4>
+                    <p>"如果我们有无限的预算，会怎么做这件事？"</p>
+                    <p>"如果我们必须在明天上线，最核心的功能是什么？"</p>
+                </div>
+            </div>
+            <p class="fragment" style="text-align: center; margin-top: 2rem;">↓ 下滑继续解锁“多提问”技巧 ↓</p>
+        </section>
+        <section>
+            <h2>第一板斧：多提问 (<i class="fas fa-search-plus" style="color: #ff79c6;"></i> 拓展模式)</h2>
+            <div class="grid-2">
+                <div class="card fragment">
+                    <h4><i class="fas fa-share-alt icon"></i> 类比提问</h4>
+                    <p>"如果把我们的产品比作一个动物，它会是什么？为什么？"</p>
+                    <p>"这个问题的解决方案，能否借鉴[其他行业]的经验？"</p>
+                </div>
+                <div class="card fragment">
+                    <h4><i class="fas fa-brain icon"></i> 元认知提问</h4>
+                    <p>"我的这个问题本身有什么缺陷吗？"</p>
+                    <p>"为了得到更好的答案，我应该如何改进我的提问？"</p>
+                </div>
+            </div>
+            <aside class="notes">
+                这一页是提问模式的“军火库”。<br>
+                [逐个点击] 展示每一种高级提问模式。特别是“元认知提问”，这是最高级的技巧，是让AI成为你教练的方法。强调这一点，会给观众带来巨大启发。
+            </aside>
+        </section>
+        <section>
+            <h2>第二板斧：多举例 (<i class="fas fa-palette" style="color: #ffb86c;"></i> 品味校准)</h2>
+            <blockquote class="fragment">
+                <p><b>我的小故事：</b>我曾想让AI帮我女儿写个睡前故事。我只说‘写个关于小兔子的故事’，结果非常无聊。后来，我把我最喜欢的一本童书的开头喂给它，说‘请模仿这种温暖、富有想象力的风格，主角是一只爱冒险的小兔子’。结果，AI写出的故事充满了奇思妙想，连我自己都看入迷了。</p>
+            </blockquote>
+            <div class="fragment golden-quote">
+                我没有教它怎么写作，我只是让它“品尝”了一下好故事的味道。
+            </div>
+            <p class="fragment">举例，是向AI传递“品味”和“感觉”的唯一途径。</p>
+        </section>
+        <section>
+            <h2>第三板斧：多迭代 (<i class="fas fa-drafting-compass" style="color: #8be9fd;"></i> 演化收敛)</h2>
+            <div class="grid-2">
+                 <div class="card fragment">
+                    <h4><i class="fas fa-crosshairs icon"></i> 画靶后纠偏</h4>
+                    <p>先让AI给出一个初步方案（画个靶子），即使不完美。然后你针对性地提出修改意见。</p>
+                    <p>“这个方向不错，但第二部分太啰嗦，请精简一半。第三部分增加一个具体案例。”</p>
+                </div>
+                <div class="card fragment">
+                    <h4><i class="fas fa-code-branch icon"></i> 请求替代方案</h4>
+                    <p>当一个方案不理想时，不要只是否定，而是要求提供全新的路径。</p>
+                    <p>“这个方案太常规了。请抛开它，给我三个全新的、更大胆的思路。”</p>
+                </div>
+            </div>
+            <div class="fragment golden-quote">
+                最好的 Prompt，<br/>是你与AI连续对话的聊天记录。
+            </div>
+        </section>
+      </section>
+
+      <section>
+        <section data-background-gradient="radial-gradient(ellipse at center, #44475a, #282a36)">
+            <h2>认知再升级：人机共生的三大心法</h2>
+            <p style="text-align: center;">掌握了“术”，我们还需要提升“心”。</p>
+        </section>
+        <section>
+            <h3>心法一：价值在交互中“涌现”</h3>
+            <div class="card">
+                <p>最有价值的洞见，往往不是你最初提问时想要的那个答案，而是在你和AI一来一回的对话中，意外“涌现”出来的。</p>
+                <ul class="fragment">
+                    <li>你抛出一个问题。</li>
+                    <li>AI的回答，给了你一个新的角度。</li>
+                    <li>这个新角度，激发了你一个更好的问题。</li>
+                    <li>...循环往复，最终的落点可能远超你最初的想象。</li>
+                </ul>
+            </div>
+            <div class="fragment golden-quote">
+                不要只盯着终点，<br/>伟大的想法诞生于伟大的过程。
+            </div>
+             <aside class="notes">
+                这是对“迭代”的进一步升华。<br>
+                [点击] 解释“涌现”的概念。它强调了过程的重要性。<br>
+                [点击] 抛出金句，鼓励观众拥抱不确定性，享受探索的过程。
+            </aside>
+        </section>
+        <section>
+            <h3>心法二：人做减法，AI做加法</h3>
+             <div class="card">
+                <p>AI极度擅长“加法”——生成海量信息、罗列各种可能性、从不同维度发散。</p>
+                <p class="fragment">而我们人类，作为“决策者”，核心价值在于做“<strong style="color: #ff5555;">减法</strong>”：</p>
+                <ul class="fragment">
+                    <li><strong style="color: #ff5555;">筛选：</strong>从100个点子中，砍掉99个，找到那个最关键的。</li>
+                    <li><strong style="color: #ff5555;">排序：</strong>明确任务的优先级和重要性。</li>
+                    <li><strong style="color: #ff5555;">决策：</strong>结合你的经验、直觉和品味，做出最终判断。</li>
+                </ul>
+            </div>
+            <div class="fragment golden-quote">
+               让AI做不知疲倦的“矿工”，而你，是那个决定哪块才是真金的“炼金师”。
+            </div>
+             <aside class="notes">
+                这个心法清晰地定义了人与AI的分工。<br>
+                [点击] 解释AI的“加法”能力。<br>
+                [点击] 强调人的“减法”价值。这会让观众，特别是管理者和资深人士，感到自己的价值被肯定。<br>
+                [点击] 用一个生动的比喻总结。
+            </aside>
+        </section>
+        <section>
+            <h3>心法三：“表达”与“挑刺”同样重要</h3>
+            <div class="card">
+                <p>我们一直在谈论如何更好地“表达”我们的需求（写Prompt）。</p>
+                <p class="fragment">但同样重要的，是你“<strong style="color: #f1fa8c;">挑刺</strong>”的能力——也就是你的<strong style="color: #f1fa8c;">批判性思维</strong>和<strong style="color: #f1fa8c;">审美能力</strong>。</p>
+                 <ul class="fragment">
+                    <li>你得能判断出AI的回答是“平庸”、“优秀”还是“卓越”。</li>
+                    <li>你得能一针见血地指出问题所在：“这里逻辑不通”、“这个例子不贴切”、“这个风格不对”。</li>
+                 </ul>
+            </div>
+             <div class="fragment golden-quote">
+                AI的水平，<br/>永远不会超过使用者的“品味天花板”。
+            </div>
+             <aside class="notes">
+                这个心法非常关键，它指出了人的核心竞争力。<br>
+                [点击] 提出“挑刺”能力的重要性。<br>
+                [点击] 解释具体什么是挑刺能力。<br>
+                [点击] 抛出金句，一语中的。提升自己的品味，才能用好AI。
+            </aside>
+        </section>
+      </section>
+      
+      <section>
+        <section>
+            <h2>我踩过的坑 & 血泪教训 (2.0版)</h2>
+            <p>分享几个我真实踩过的大坑，希望大家引以为戒。</p>
+            <p style="text-align:center;">(↓ 下滑查看我的“翻车”实录 ↓)</p>
+        </section>
+        <section>
+            <h3>天坑一：把AI当成无所不能的神</h3>
+            <div class="card">
+                <p><i class="fas fa-crosshairs icon"></i> <strong>症状：</strong> 认为AI应该什么都懂，给它一个模糊的指令，就期待一个完美的结果。</p>
+                <p><i class="fas fa-pills icon"></i> <strong>教训：</strong> AI是你能力的“放大器”，而不是“替代品”。你的认知水平，决定了AI能为你做什么。</p>
+            </div>
+        </section>
+         <section>
+            <h3>天坑二：陷入“完美Prompt”的陷阱</h3>
+             <div class="card">
+                <p><i class="fas fa-crosshairs icon"></i> <strong>症状：</strong> 痴迷于寻找和收藏各种“神级咒语”，以为只要复制粘贴，就能解决一切问题。</p>
+                <p><i class="fas fa-pills icon"></i> <strong>教训：</strong> 真正的魔法不在于那个“咒语”，而在于你来我往的“对话”。上下文、追问、迭代，远比一个静态的完美Prompt重要。</p>
+            </div>
+        </section>
+         <section>
+            <h3>天坑三：虚假的安全感</h3>
+             <div class="card">
+                <p><i class="fas fa-crosshairs icon"></i> <strong>症状：</strong> AI给出了一个看起来很专业、很完整的答案，就信以为真，直接复制使用。</p>
+                <p><i class="fas fa-pills icon"></i> <strong>教训：</strong> AI是“一本正经地胡说八道”的世界冠军。它会编造事实、数据、引用。你必须成为最终的“事实检验官”，尤其是在关键决策上。</p>
+            </div>
+        </section>
+         <section>
+            <h3>天坑四：低水平的勤奋</h3>
+             <div class="card">
+                <p><i class="fas fa-crosshairs icon"></i> <strong>症状：</strong> 用AI来完成大量自己本该思考的浅层任务，比如写邮件、做总结，并沉浸在这种“高效率”中。</p>
+                <p><i class="fas fa-pills icon"></i> <strong>教训：</strong> 如果只用AI做“替代自己思考”的事，你的能力会不升反降。要警惕！应该多用AI做“激发自己思考”的事，比如寻求不同观点、做思维实验、挑战自己的假设。</p>
+            </div>
+        </section>
+         <section>
+            <h3>天坑五：忽略了对AI的“品味”训练</h3>
+             <div class="card">
+                <p><i class="fas fa-crosshairs icon"></i> <strong>症状：</strong> 满足于AI给出的“还行”的答案，从不给它看什么是“卓越”。</p>
+                <p><i class="fas fa-pills icon"></i> <strong>教训：</strong> 你需要持续地用高质量的范例、你自己的优秀作品去“喂养”它。你对待AI的方式，决定了它成为“庸才”还是“天才”。</p>
+            </div>
+        </section>
+      </section>
+      
+      <section class="center-content" data-background-gradient="radial-gradient(ellipse at center, #50fa7b, #282a36)">
+        <h2 style="color:#282a36;">最后的呼吁：现在就开始！</h2>
+        <div class="golden-quote" style="transform: scale(1.1); background: #282a36; border-color: #f1fa8c;">
+            从今天起，大胆地“无事不问”。<br>把AI当成你的健身教练，<br>用得越多，你的“思维肌肉”才越发达。
+        </div>
+        <h3 style="margin-top: 2em; color:#282a36;">Thank you! Q&A</h3>
+        <aside class="notes">
+            [用充满激情和号召力的声音] 最后，让我们回到最初的呼吁。<br>
+            [点击] 抛出最后的比喻：健身教练。这个比喻非常生动，强调了主动使用和长期获益的关系。<br>
+            感谢大家的聆听，现在是Q&A环节。
+        </aside>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/notes/notes.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/highlight.min.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      notes: true,
+      plugins: [RevealHighlight, RevealNotes],
+      transition: 'slide', 
+      backgroundTransition: 'fade',
+      slideNumber: true,
+    });
+  </script>
+</body>
+</html>
