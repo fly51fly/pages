@@ -128,6 +128,10 @@
     
     .reveal blockquote {
         background: rgba(0,0,0,0.2);
+        width: 90%; /* 增加宽度到90% */
+        margin: 20px auto; /* 居中显示 */
+        padding: 20px; /* 增加内边距 */
+        border-radius: 8px; /* 添加圆角 */
     }
   </style>
 </head>
@@ -137,7 +141,7 @@
     <div class="slides">
       <section data-background-gradient="radial-gradient(ellipse at center, #282a36, #21222c)">
         <div class="cover-content">
-          <h1>引爆大模型认知引擎</h1>
+          <h1>引爆<strong style="color:#e68e21">大模型</strong>认知引擎</h1>
           <h3 class="fragment">从<code style="color: #f1fa8c;">指令执行</code>到<code style="color: #50fa7b;">智能共生</code></h3>
           <p class="fragment" style="font-size: 1.5em; margin-top: 1em;">“AI最大的价值，是逼你成为一个更好的思考者。”</p>
           <div class="fragment" style="margin-top: 2rem; border: 2px solid var(--r-link-color); padding: 1rem 2rem; border-radius: 50px;">
@@ -154,7 +158,7 @@
 
       <section>
         <h2>你真的“会”用AI吗？</h2>
-        <p>我们真正的目标不是找到一个虚无缥缈的“标准答案”，<br/>而是学会如何与这个聪明的“新物种”<strong style="color:#e68e21">有效对话🤝🤖</strong>，<br/>让它成为我们认知能力的“放大器”！</p>
+        <p>我们真正的目标不是找到一个虚无缥缈的“标准答案”，<br/>而是学会如何与这个聪明的“新物种”进行<strong style="color:#e68e21">有效对话🤝🤖</strong>，<br/>让它成为我们<strong style="color:#e68e21">“认知能力的放大器”</strong>！</p>
         <div class="fragment golden-quote">
            你的提问质量，决定了AI的智商上限。
         </div>
@@ -170,18 +174,17 @@
         <section>
           <h2>建立默契的第一步：互动三原则</h2>
           <div class="principle fragment">
-            <h4><i class="fas fa-bullseye icon"></i> 明确你的意图（Instruction）</h4>
+            <h4><i class="fas fa-bullseye icon"></i> 明确你的<strong style="color:#e68e21">意图（Instruction）</strong></h4>
           </div>
           <div class="principle fragment">
-            <h4><i class="fas fa-sitemap icon"></i> 提供足够上下文（Context）</h4>
+            <h4><i class="fas fa-sitemap icon"></i> 提供足够的<strong style="color:#e68e21">上下文（Context）</strong></h4>
           </div>
           <div class="principle fragment">
-            <h4><i class="fas fa-lock icon"></i> 施加必要约束（Constraint）</h4>
+            <h4><i class="fas fa-lock icon"></i> 施加必要的<strong style="color:#e68e21">约束（Constraint）</strong></h4>
           </div>
           <div class="fragment golden-quote">
             好的问题，本身就蕴含了一半的答案。
           </div>
-          <p class="fragment" style="text-align: center; margin-top: 1rem;">↓ 下滑查看案例与底层逻辑 ↓</p>
             <aside class="notes">
                 这是基础中的基础。<br>
                 [逐个点击] 快速过一下三个原则。<br>
@@ -192,11 +195,12 @@
         <section data-auto-animate>
             <h2>原则案例：撰写周报</h2>
             <div class="grid-2">
-                <div class="card">
+                <div class="card fragment">
                     <h4><i class="fas fa-times-circle icon"></i> 翻车现场 👎</h4>
                     <pre><code data-line-numbers class="plaintext">帮我写这周的周报。</code></pre>
+                    <p style="color: #888; font-size: 0.7em;">AI的内心OS："你的周报？我都不知道你这周干了啥...只能编了：'本周工作顺利，下周继续努力'。"</p>
                 </div>
-                <div class="card" data-id="prompt-card">
+                <div class="card fragment" data-id="prompt-card">
                     <h4><i class="fas fa-check-circle icon"></i> 高光时刻 👍</h4>
                     <pre><code data-line-numbers="1-10" class="language-markdown">
 # 角色：你是一名高级项目经理
@@ -215,30 +219,34 @@
                 用一个非常贴近大家工作的例子——写周报——来讲解。好的提示本身就是一次对工作的梳理。
             </aside>
         </section>
-        <section data-auto-animate>
-            <h2>原则案例：撰写PPT提纲</h2>
+        <section>
+            <h2>原则案例：策划市场活动</h2>
             <div class="grid-2">
-                <div class="card">
+                <div class="card fragment">
                     <h4><i class="fas fa-times-circle icon"></i> 翻车现场 👎</h4>
-                    <pre><code data-line-numbers class="plaintext">帮我写一个关于AI使用技巧的PPT提纲。</code></pre>
+                    <pre><code data-line-numbers class="plaintext">给我一些市场活动的点子。</code></pre>
+                    <p style="color: #888; font-size: 0.7em;"><strong>AI的内心OS：</strong>“抽奖、打折、发优惠券...这些老三样你要不要？”</p>
                 </div>
-                <div class="card" data-id="prompt-card">
+                <div class="card fragment">
                     <h4><i class="fas fa-check-circle icon"></i> 高光时刻 👍</h4>
-                    <pre><code data-line-numbers="1-12" class="language-markdown"># 角色：你是一位资深的演讲教练和PPT设计专家
-# 意图：为一场45分钟的技术分享会设计提纲，主题是AI使用技巧
+                    <pre><code data-line-numbers class="plaintext">
+# 意图：为一款新上市的“燕麦拿铁”策划一场低成本、高传播的社交媒体活动。
 # 上下文：
-- 听众：主要是程序员和产品经理，约100人
-- 分享目标：让听众掌握与AI高效对话的方法论
-- 参考案例：我很欣赏Simon Sinek的演讲结构
+- 目标用户：20-30岁的都市白领、大学生。
+- 品牌调性：健康、活力、有趣。
+- 预算：总预算5000元。
+- 核心平台：小红书、抖音。
 # 约束：
-- 结构：遵循"Why-How-What"框架
-- 篇幅：4-5个主要章节，每章节不超过3个核心观点
-- 风格：需要包含具体案例和实操建议
-- 互动：设计2-3个与听众互动的环节</code></pre>
+- 产出3个完全不同方向的创意。
+- 每个创意需包含：活动主题、核心玩法、传播口号(Slogan)、以及潜在的引爆点。
+- 排除传统的打折和抽奖。
+                    </code></pre>
                 </div>
             </div>
-            <aside class="notes">
-                用一个制作本PPT的真实案例来说明。这个例子特别贴切，因为大家正在看这个成品。
+             <aside class="notes">
+                另一个日常工作案例。<br>
+                [点击1] 无效提问，得到无效回答。<br>
+                [点击2] 一个高质量的提问，几乎就是一个微型的brief。这样的提问，强迫我们自己先想清楚。强调这一点：AI在帮你思考之前，先强迫你把问题想清楚，这本身就是巨大的价值。
             </aside>
         </section>
         
@@ -248,7 +256,7 @@
                 <p>为什么这三点如此重要？因为我们要对抗沟通中的“<strong style="color: #f1fa8c;">熵增</strong>”。</p>
                 <ul>
                     <li>AI的世界充满了无限可能性（高熵）。</li>
-                    <li class="fragment">你的每一次<strong style="color: #50fa7b;">意图</strong>澄清、<strong style="color: #50fa7b;">上下文</strong>补充和<strong style="color: #50fa7b;">约束</strong>施加，都是在向这个混乱的系统注入“秩序”，把一个模糊问题，收敛成一个清晰任务。</li>
+                    <li class="fragment">你的每一次<strong style="color: #50fa7b;">意图</strong>澄清、<strong style="color: #50fa7b;">上下文</strong>补充和<strong style="color: #50fa7b;">约束</strong>施加，都是在向这个混乱的系统<strong style="color:#e68e21">注入秩序</strong>，把一个模糊问题，收敛成一个清晰任务。</li>
                 </ul>
             </div>
             <div class="fragment golden-quote">
@@ -280,20 +288,54 @@
             <p class="fragment" style="text-align: center; margin-top: 2rem;">↓ 下滑逐一解锁每一把“神斧”的用法 ↓</p>
         </section>
         <section>
+            <h2>多提问：想到就问 💭</h2>
+            <div class="grid-2">
+                <div class="card fragment">
+                    <h4><i class="fas fa-exclamation-circle icon"></i> 不要觉得问题"太简单"</h4>
+                    <div class="principle">
+                        <p>"这个想法合理吗？"</p>
+                        <p>"能给我更多例子吗？"</p>
+                        <p>"我这样理解对吗？"</p>
+                    </div>
+                    <p style="margin-top: 1rem;">简单问题也能带来启发。</p>
+                </div>
+                <div class="card fragment">
+                    <h4><i class="fas fa-puzzle-piece icon"></i> 也不要觉得问题"太复杂"</h4>
+                    <div class="principle">
+                        <p>"如果换个角度思考呢？"</p>
+                        <p>"这个问题可以拆解成哪些小问题？"</p>
+                    </div>
+                    <p style="margin-top: 1rem;">复杂问题正是AI的打手好菜。</p>
+                </div>
+            </div>
+            <div class="fragment golden-quote">
+                与其纠结要不要问，不如先问为敬。
+            </div>
+            <aside class="notes">
+                这页是为了打消大家对提问的顾虑。<br>
+                [点击1] 解释为什么简单问题也值得问。<br>
+                [点击2] 说明复杂问题更应该问。<br>
+                [点击3] 用金句总结，鼓励行动。
+            </aside>
+        </section>
+        <section>
             <h2>第一板斧：多提问 (<i class="fas fa-search-plus" style="color: #ff79c6;"></i> 拓展模式)</h2>
             <div class="grid-2">
                 <div class="card fragment">
                     <h4><i class="fas fa-lightbulb icon"></i> 拓展性提问</h4>
                     <p>"关于[某个想法]，还有哪些我没想到的角度？"</p>
                     <p>"从用户/商业/技术视角，分别如何评价这件事？"</p>
+                    <p>"如果把这个想法推广到完全不同的领域，会有什么新启发？"</p>
+                    <p>"这个方案最容易被忽视但可能很关键的前提假设是什么？"</p>
                 </div>
                 <div class="card fragment">
                     <h4><i class="fas fa-user-secret icon"></i> 假设性提问</h4>
                     <p>"如果我们有无限的预算，会怎么做这件事？"</p>
                     <p>"如果我们必须在明天上线，最核心的功能是什么？"</p>
+                    <p>"如果在5年后回看这个决策，最容易被忽视的风险是什么？"</p>
+                    <p>"如果这个产品上市，用户会有哪些反馈？"</p>
                 </div>
             </div>
-            <p class="fragment" style="text-align: center; margin-top: 2rem;">↓ 下滑继续解锁“多提问”技巧 ↓</p>
         </section>
         <section>
             <h2>第一板斧：多提问 (<i class="fas fa-search-plus" style="color: #ff79c6;"></i> 拓展模式)</h2>
@@ -302,11 +344,15 @@
                     <h4><i class="fas fa-share-alt icon"></i> 类比提问</h4>
                     <p>"如果把我们的产品比作一个动物，它会是什么？为什么？"</p>
                     <p>"这个问题的解决方案，能否借鉴[其他行业]的经验？"</p>
+                    <p>"如果把这个项目比作一场电影，会如何发展？"</p>
+                    <p>"假设这个系统是一个生态系统，各组件会如何互相影响？"</p>
                 </div>
                 <div class="card fragment">
                     <h4><i class="fas fa-brain icon"></i> 元认知提问</h4>
                     <p>"我的这个问题本身有什么缺陷吗？"</p>
                     <p>"为了得到更好的答案，我应该如何改进我的提问？"</p>
+                    <p>"我的需求是[需求]，请你提出问题帮我明确具体细节。"</p>
+                    <p>"请根据我的需求，提供精确的优化建议。"</p>
                 </div>
             </div>
             <aside class="notes">
@@ -315,26 +361,53 @@
             </aside>
         </section>
         <section>
+            <h2>第一板斧：多提问 (<i class="fas fa-search-plus" style="color: #ff79c6;"></i> 思维催化)</h2>
+            <div class="grid-2">
+                <div class="card fragment">
+                    <h4><i class="fas fa-route icon"></i> 从"如何做"到"为什么"</h4>
+                    <div class="principle">
+                        <p>❌ "如何优化这段代码？"</p>
+                        <p>✅ "我想优化这段代码的性能，我考虑用X方案，你觉得这个思路怎样？有什么其他可能性？"</p>
+                    </div>
+                    <p style="margin-top: 1rem;">邀请AI参与你的思考过程，而不是简单寻求答案。</p>
+                </div>
+                <div class="card fragment">
+                    <h4><i class="fas fa-comments icon"></i> 共创式对话</h4>
+                    <div class="principle">
+                        <p>"我的思路是[...]，你能帮我找出其中的盲点吗？"</p>
+                        <p>"AI给我的建议是[...]，你觉得如何改进？"</p>
+                        <p>"从[X]角度思考这个问题，会有什么新发现？"</p>
+                    </div>
+                </div>
+            </div>
+            <aside class="notes">
+                这页强调了与AI对话的高级模式。<br>
+                [点击1] 展示如何从简单提问升级到思维共创。<br>
+                [点击2] 通过具体例子说明如何与AI进行更深层的对话。<br>
+                [点击3] 用金句强调AI作为思维催化剂的角色。
+            </aside>
+        </section>
+        <section>
             <h2>第二板斧：多举例 (<i class="fas fa-palette" style="color: #ffb86c;"></i> 品味校准)</h2>
             <blockquote class="fragment">
-                <p><b>我的小故事：</b>我曾想让AI帮我女儿写个睡前故事。我只说‘写个关于小兔子的故事’，结果非常无聊。后来，我把我最喜欢的一本童书的开头喂给它，说‘请模仿这种温暖、富有想象力的风格，主角是一只爱冒险的小兔子’。结果，AI写出的故事充满了奇思妙想，连我自己都看入迷了。</p>
+                <p><b>我的小故事：</b>我想用AI给正在叛逆期的孩子写封信。一开始我说'写封给青春期孩子的信'，结果很说教、很生硬。后来，我把最喜欢的一封家书的开头给它，说'请用这种理解、包容又不失温暖的语气，写一封给成长中孩子的信'。AI写出的信字里行间充满了理解与关怀，既表达了父母的爱，又尊重了孩子的成长空间。</p>
             </blockquote>
             <div class="fragment golden-quote">
                 我没有教它怎么写作，我只是让它“品尝”了一下好故事的味道。
             </div>
-            <p class="fragment">举例，是向AI传递“品味”和“感觉”的唯一途径。</p>
+            <p class="fragment">举例，也许是向AI传递“品味”和“感觉”的最佳途径。</p>
         </section>
         <section>
             <h2>第三板斧：多迭代 (<i class="fas fa-drafting-compass" style="color: #8be9fd;"></i> 演化收敛)</h2>
             <div class="grid-2">
                  <div class="card fragment">
-                    <h4><i class="fas fa-crosshairs icon"></i> 画靶后纠偏</h4>
+                    <h4><i class="fas fa-crosshairs icon"></i> 先画靶后纠偏</h4>
                     <p>先让AI给出一个初步方案（画个靶子），即使不完美。然后你针对性地提出修改意见。</p>
                     <p>“这个方向不错，但第二部分太啰嗦，请精简一半。第三部分增加一个具体案例。”</p>
                 </div>
                 <div class="card fragment">
                     <h4><i class="fas fa-code-branch icon"></i> 请求替代方案</h4>
-                    <p>当一个方案不理想时，不要只是否定，而是要求提供全新的路径。</p>
+                    <p>当方案不理想时，不要只是否定，而是要求提供全新的路径。</p>
                     <p>“这个方案太常规了。请抛开它，给我三个全新的、更大胆的思路。”</p>
                 </div>
             </div>
@@ -414,8 +487,8 @@
       
       <section>
         <section>
-            <h2>我踩过的坑 & 血泪教训 (2.0版)</h2>
-            <p>分享几个我真实踩过的大坑，希望大家引以为戒。</p>
+            <h2>我曾经踩过的坑 & 血泪教训</h2>
+            <p style="text-align: center;">分享几个我真实踩过的大坑，希望大家引以为戒。</p>
             <p style="text-align:center;">(↓ 下滑查看我的“翻车”实录 ↓)</p>
         </section>
         <section>
