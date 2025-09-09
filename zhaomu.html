@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《人工智能导论》创新学习实验班 | 探索未来，从这里开始</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Orbitron:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Variables for easy theme modification */
+        :root {
+            --bg-dark: #0A0A1F; /* Very dark background */
+            --bg-medium: #151530; /* Slightly lighter for cards */
+            --accent-blue: #00BFFF; /* Deep Sky Blue - primary accent */
+            --accent-purple: #8A2BE2; /* Blue Violet - secondary accent for gradients */
+            --text-light: #E0E0FF; /* Off-white for general text */
+            --text-dim: #A0A0C0; /* Dimmer text for sub-headings */
+            --border-light: #2A2A50;
+            --gradient-1: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
+            --gradient-2: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            --shadow-glow: 0 0 20px rgba(0, 191, 255, 0.4), 0 0 40px rgba(138, 43, 226, 0.2);
+        }
+
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.8;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        /* --- Global Components --- */
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 70px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-2);
+            margin: 20px auto 0;
+            border-radius: 2px;
+            animation: expandLine 1.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes expandLine {
+            from { width: 0; }
+            to { width: 80px; }
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: var(--bg-dark) url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 L 0 10" fill="none" stroke="%231a1a3a" stroke-width="0.5" /></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)" /></svg>') repeat; /* Subtle grid background */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle at center, rgba(0, 191, 255, 0.15) 0%, rgba(138, 43, 226, 0.1) 30%, transparent 60%);
+            transform: translate(-50%, -50%);
+            filter: blur(150px);
+            animation: heroGlow 10s infinite alternate ease-in-out;
+            z-index: 0;
+        }
+
+        @keyframes heroGlow {
+            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            padding: 20px;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5rem;
+            font-weight: 900;
+            margin-bottom: 25px;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--shadow-glow);
+            animation: slideInUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.6rem;
+            color: var(--text-dim);
+            margin-bottom: 40px;
+            animation: slideInUp 1.2s ease-out;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--gradient-1);
+            color: var(--bg-dark);
+            padding: 18px 45px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.4s ease;
+            box-shadow: var(--shadow-glow);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            animation: slideInUp 1.4s ease-out;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+            transform: skewX(-20deg);
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 0 30px var(--accent-blue), 0 0 60px var(--accent-purple);
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Project Background --- */
+        #background p {
+            font-size: 1.2rem;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+            color: var(--text-dim);
+        }
+        #background strong {
+            color: var(--text-light);
+            font-weight: 800;
+        }
+
+        /* --- Lab Model Section --- */
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .model-card {
+            background-color: var(--bg-medium);
+            padding: 35px;
+            border-radius: 18px;
+            border: 1px solid var(--border-light);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .model-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-1);
+            opacity: 0.1;
+            filter: blur(50px);
+            z-index: 0;
+            transition: all 0.5s ease;
+        }
+
+        .model-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: var(--shadow-glow);
+            border-color: var(--accent-blue);
+        }
+        
+        .model-card:hover::before {
+            opacity: 0.2;
+            transform: scale(1.1);
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+            display: inline-block;
+            filter: drop-shadow(0 0 10px rgba(0, 191, 255, 0.5));
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .model-card p {
+            color: var(--text-dim);
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- "Who We're Looking For" Section --- */
+        .traits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .trait-item {
+            background: var(--bg-medium);
+            border: 1px solid var(--border-light);
+            padding: 25px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .trait-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 5px 20px rgba(0, 191, 255, 0.2);
+            border-color: var(--accent-blue);
+        }
+        
+        .trait-item .icon {
+            font-size: 2rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 5px rgba(0, 191, 255, 0.3));
+        }
+        
+        .trait-item h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .trait-item p {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+        }
+
+
+        /* --- Benefits Section --- */
+        .benefits-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .benefit-item {
+            background: var(--bg-medium);
+            border: 1px solid var(--border-light);
+            padding: 25px;
+            border-radius: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.2);
+            border-color: var(--accent-purple);
+        }
+
+        .benefit-icon {
+            font-size: 2.2rem;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 5px rgba(138, 43, 226, 0.3));
+        }
+
+        .benefit-text h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            color: var(--text-light);
+            letter-spacing: 0.3px;
+        }
+        .benefit-item p {
+            color: var(--text-dim);
+            font-size: 1rem;
+        }
+
+        /* --- Application Process Section --- */
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: var(--border-light);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+
+        .timeline-container {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+        }
+
+        .timeline-container.left {
+            left: 0;
+            padding-right: 70px; /* Space for the line and circle */
+        }
+
+        .timeline-container.right {
+            left: 50%;
+            padding-left: 70px; /* Space for the line and circle */
+        }
+
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background-color: var(--bg-dark);
+            border: 4px solid var(--accent-blue);
+            top: 35px;
+            border-radius: 50%;
+            z-index: 1;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .timeline-container:hover::after {
+            background-color: var(--accent-blue);
+            border-color: var(--accent-purple);
+        }
+
+        .timeline-container.left::after {
+            right: -14px;
+        }
+
+        .timeline-container.right::after {
+            left: -14px;
+        }
+
+        .timeline-content {
+            padding: 25px 30px;
+            background-color: var(--bg-medium);
+            position: relative;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+            border-color: var(--accent-purple);
+        }
+        
+        .timeline-content h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--accent-blue);
+            margin-bottom: 12px;
+            font-size: 1.5rem;
+        }
+        .timeline-content p {
+            color: var(--text-dim);
+        }
+
+        /* --- Schedule Section --- */
+        .schedule-grid {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: 50px;
+        }
+        .schedule-item {
+            flex: 1;
+            min-width: 200px;
+            background: var(--bg-medium);
+            border: 1px solid var(--border-light);
+            border-radius: 15px;
+            padding: 25px 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .schedule-item:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-glow);
+            border-color: var(--accent-blue);
+        }
+        .schedule-item h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-purple);
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        .schedule-item p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        /* --- Quote & Footer --- */
+        .quote {
+            text-align: center;
+            padding: 100px 20px;
+            background: var(--bg-medium);
+            border-top: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+        }
+        .quote::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle at center, rgba(138, 43, 226, 0.1) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            filter: blur(100px);
+            z-index: 0;
+        }
+
+        .quote p {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-style: italic;
+            max-width: 1000px;
+            margin: 0 auto;
+            color: var(--text-light);
+            line-height: 1.5;
+            text-shadow: 0 0 10px rgba(0, 191, 255, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        .quote p::before, .quote p::after {
+            content: '“';
+            font-size: 4rem;
+            opacity: 0.3;
+            color: var(--accent-blue);
+            position: absolute;
+            top: -20px;
+            left: -50px;
+        }
+        .quote p::after {
+            content: '”';
+            left: auto;
+            right: -50px;
+            top: auto;
+            bottom: -20px;
+        }
+
+
+        .footer {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: var(--bg-dark);
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .footer-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--shadow-glow);
+        }
+
+        /* --- Responsive Design --- */
+        @media screen and (max-width: 992px) {
+            .hero-title { font-size: 3.5rem; }
+            .hero-subtitle { font-size: 1.3rem; }
+            .section-title { font-size: 2.5rem; }
+            .quote p { font-size: 1.5rem; }
+            .footer-text { font-size: 1.6rem; }
+
+            .timeline::after { left: 15px; }
+            .timeline-container { width: 100%; padding-left: 50px; padding-right: 15px; }
+            .timeline-container.left::after, .timeline-container.right::after { left: 4px; }
+            .timeline-container.right { left: 0%; }
+            .timeline-container.left { padding-right: 15px; } /* Adjust padding for left items on smaller screens */
+            .timeline-container.right .timeline-content { margin-left: 0; }
+        }
+
+        @media screen and (max-width: 600px) {
+            .hero-title { font-size: 2.5rem; }
+            .hero-subtitle { font-size: 1rem; }
+            .cta-button { padding: 12px 30px; font-size: 1rem; }
+            .section-title { font-size: 1.8rem; margin-bottom: 40px;}
+            .model-card, .trait-item, .benefit-item, .schedule-item { padding: 20px; }
+            .card-icon { font-size: 2.8rem; margin-bottom: 15px; }
+            .card-title { font-size: 1.4rem; }
+            .timeline-content h2 { font-size: 1.2rem; }
+            .quote p { font-size: 1.2rem; }
+            .footer-text { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">《人工智能导论》创新学习实验班</h1>
+            <p class="hero-subtitle">加入我们，共同塑造AI知识的全新边界，体验前所未有的创新学习之旅。</p>
+            <a href="#application" class="cta-button">立即解锁你的AI潜能</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="background" class="container">
+            <h2 class="section-title">变革传统，共创未来</h2>
+            <p>在高速迭代的数字时代，我们意识到传统课堂已无法完全激发你对AI的无限热情。这一次，在《人工智能导论》的舞台上，我们将打破常规，倾力打造一个<strong>实验班</strong>，邀请那些真正对AI充满好奇与渴望的你，成为知识的<strong>核心共创者</strong>，而非被动的旁观者。</p>
+        </section>
+
+        <section id="model" class="container">
+            <h2 class="section-title">我们如何学习</h2>
+            <div class="model-grid">
+                <div class="model-card">
+                    <div class="card-icon">💡</div>
+                    <h3 class="card-title">翻转课堂</h3>
+                    <p>核心概念提前消化，课堂时间全情投入深度探讨与项目实践，让你的思考不再受限。</p>
+                </div>
+                <div class="model-card">
+                    <div class="card-icon">🔗</div>
+                    <h3 class="card-title">知识共生树</h3>
+                    <p>师生协作，共同搭建AI知识体系。你的每一次洞察，都将成为这棵不断生长知识树的新枝叶。</p>
+                </div>
+                <div class="model-card">
+                    <div class="card-icon">⚡</div>
+                    <h3 class="card-title">敏捷内容迭代</h3>
+                    <p>紧追AI前沿，学习内容依据你的兴趣和行业趋势动态调整，确保你始终站在最前沿。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="who" class="container">
+            <h2 class="section-title">谁是AI未来共创者？</h2>
+            <div class="traits-grid">
+                <div class="trait-item">
+                    <span class="icon">🔥</span>
+                    <div>
+                        <h3>自驱力超强</h3>
+                        <p>无需督促，你就是自己学习的发动机，主动探索，永不止步。</p>
+                    </div>
+                </div>
+                <div class="trait-item">
+                    <span class="icon">💬</span>
+                    <div>
+                        <h3>思想的传达者</h3>
+                        <p>乐于分享观点，敢于质疑，在交流中碰撞出更多火花。</p>
+                    </div>
+                </div>
+                <div class="trait-item">
+                    <span class="icon">🤝</span>
+                    <div>
+                        <h3>卓越的协作者</h3>
+                        <p>善于倾听，建设性参与，你的团队精神将点亮集体智慧。</p>
+                    </div>
+                </div>
+                <div class="trait-item">
+                    <span class="icon">🧠</span>
+                    <div>
+                        <h3>不凡的创新者</h3>
+                        <p>拒绝墨守成规，敢于提出新颖见解，挑战AI的无限可能。</p>
+                    </div>
+                </div>
+                <div class="trait-item">
+                    <span class="icon">🗓️</span>
+                    <div>
+                        <h3>高效的时间管理</h3>
+                        <p>合理规划，确保全身心投入实验室的精彩活动。</p>
+                    </div>
+                </div>
+                <div class="trait-item">
+                    <span class="icon">💡</span>
+                    <div>
+                        <h3>基础知识储备 (加分项)</h3>
+                        <p>虽非必需，但拥有AI基础能让你更快融入深度讨论与实践。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="benefits" class="container">
+            <h2 class="section-title">你的未来收益</h2>
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <div class="benefit-icon">✨</div>
+                    <div class="benefit-text">
+                        <h3>AI深度洞察</h3>
+                        <p>超越表面知识，构建系统而前瞻的AI思维体系。</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🔬</div>
+                    <div class="benefit-text">
+                        <h3>科研级思考力</h3>
+                        <p>培养批判性思维，像真正的AI科学家一样思考和解决问题。</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🤝</div>
+                    <div class="benefit-text">
+                        <h3>精英社群归属</h3>
+                        <p>加入由顶尖学生组成的社区，拓展你未来的专业人脉。</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">⭐</div>
+                    <div class="benefit-text">
+                        <h3>专属导师指导</h3>
+                        <p>获得量身定制的专业引导，助你聚焦个人AI兴趣方向。</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🏆</div>
+                    <div class="benefit-text">
+                        <h3>创新学习认证</h3>
+                        <p>独一无二的结业证书，是你创新能力和实践精神的有力证明。</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🚀</div>
+                    <div class="benefit-text">
+                        <h3>项目实习直通车</h3>
+                        <p>表现优异者，优先推荐进入优秀实验室项目！</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="application" class="container">
+            <h2 class="section-title">AI未来入场券</h2>
+            <div class="timeline">
+                <div class="timeline-container left">
+                    <div class="timeline-content">
+                        <h2>Step 1: 提交你的故事</h2>
+                        <p>填写在线申请表，用简短的自我介绍和真挚的参与动机打动我们。</p>
+                    </div>
+                </div>
+                <div class="timeline-container right">
+                    <div class="timeline-content">
+                        <h2>Step 2: 挑战AI思辨</h2>
+                        <p>回答一个开放性AI问题，展示你的独特思考视角和创新能力。</p>
+                    </div>
+                </div>
+                <div class="timeline-container left">
+                    <div class="timeline-content">
+                        <h2>Step 3: 团队力量展示</h2>
+                        <p>入围者将参与20分钟小组面谈，展现你的沟通协作与问题解决能力。</p>
+                    </div>
+                </div>
+                <div class="timeline-container right">
+                    <div class="timeline-content">
+                        <h2>Step 4: 荣耀入选</h2>
+                        <p>综合评估后，最终确定20名AI未来实验室的创始成员，共同开启卓越旅程！</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="schedule" class="container">
+             <h2 class="section-title">关键时间节点</h2>
+                <div class="schedule-grid">
+                    <div class="schedule-item">
+                        <h3>申请截止</h3>
+                        <p>2025年X月X日</p>
+                    </div>
+                    <div class="schedule-item">
+                        <h3>面谈时间</h3>
+                        <p>2025年X月X日 - X日</p>
+                    </div>
+                    <div class="schedule-item">
+                        <h3>项目启动</h3>
+                        <p>2025年X月X日</p>
+                    </div>
+                     <div class="schedule-item">
+                        <h3>项目周期</h3>
+                        <p>一学期 (14周)</p>
+                    </div>
+                </div>
+        </section>
+
+    </main>
+    
+    <div class="quote">
+        <div class="container">
+            <p>"在AI的未来，最宝贵的并非已有算法，<br/>而是我们提出新问题的勇气与能力。"</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+             <p class="footer-text">期待与你同行，一起重新定义AI学习的无限可能！</p>
+             <a href="#application" class="cta-button">即刻加入，开启你的AI新篇章</a>
+        </div>
+    </footer>
+
+</body>
+</html>
