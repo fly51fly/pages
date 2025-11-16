@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>北邮人工智能学院「AI在大前」教研团队海南沙龙报名</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: radial-gradient(circle at top left, #1d4ed8 0, #020617 45%, #020617 100%);
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 16px 60px;
+    }
+
+    .page {
+      max-width: 1160px;
+      width: 100%;
+    }
+
+    .poster {
+      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.4), rgba(15, 23, 42, 0.98));
+      border-radius: 28px;
+      padding: 40px 40px 34px;
+      box-shadow: 0 30px 80px rgba(15, 23, 42, 0.85);
+      display: grid;
+      grid-template-columns: minmax(0, 3.2fr) minmax(280px, 2.2fr);
+      gap: 32px;
+      color: #e5e7eb;
+    }
+
+    @media (max-width: 900px) {
+      .poster {
+        grid-template-columns: 1fr;
+        padding: 28px 20px 24px;
+        gap: 24px;
+      }
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+      align-items: center;
+    }
+
+    .tag {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: #cbd5f5;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(10px);
+    }
+
+    .tag-primary {
+      border-color: #4f46e5;
+      background: rgba(79, 70, 229, 0.28);
+      color: #e0e7ff;
+    }
+
+    .uni-name {
+      font-size: 13px;
+      color: #cbd5f5;
+    }
+
+    .title {
+      font-size: 32px;
+      line-height: 1.32;
+      font-weight: 750;
+      color: #f9fafb;
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    @media (max-width: 600px) {
+      .title {
+        font-size: 26px;
+      }
+    }
+
+    .title span.highlight {
+      background: linear-gradient(to right, #f97316, #22c55e);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: #d1d5db;
+      margin-bottom: 24px;
+      line-height: 1.8;
+      max-width: 640px;
+    }
+
+    .info-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px 28px;
+      font-size: 14px;
+      margin-bottom: 26px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: #e5e7eb;
+      min-width: 210px;
+    }
+
+    .info-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #9ca3af;
+      margin-bottom: 2px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      font-size: 12px;
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(12px);
+    }
+
+    .pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+    }
+
+    .pill-warning {
+      border-color: #f97316;
+      color: #fed7aa;
+    }
+
+    .section-title {
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin-bottom: 10px;
+    }
+
+    .topics {
+      list-style: none;
+      font-size: 14px;
+      color: #e5e7eb;
+      display: grid;
+      gap: 9px;
+      margin-bottom: 16px;
+      line-height: 1.65;
+    }
+
+    .topics li::before {
+      content: "•";
+      margin-right: 10px;
+      color: #a5b4fc;
+    }
+
+    .hint {
+      font-size: 13px;
+      color: #e5e7eb;
+      margin-bottom: 12px;
+      line-height: 1.7;
+    }
+
+    .hint strong {
+      color: #bfdbfe;
+    }
+
+    .selection-note {
+      font-size: 12px;
+      color: #fbbf24;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: rgba(251, 191, 36, 0.08);
+      border: 1px dashed rgba(251, 191, 36, 0.6);
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+
+    .speakers {
+      margin-top: 18px;
+      border-top: 1px dashed rgba(148, 163, 184, 0.55);
+      padding-top: 14px;
+      font-size: 13px;
+      color: #e5e7eb;
+      line-height: 1.7;
+    }
+
+    .speakers strong {
+      color: #e5e7eb;
+    }
+
+    .qr-panel {
+      border-radius: 22px;
+      background: radial-gradient(circle at top, rgba(59, 130, 246, 0.35), rgba(15, 23, 42, 0.95));
+      padding: 22px 22px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      backdrop-filter: blur(16px);
+    }
+
+    .qr-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .qr-subtitle {
+      font-size: 13px;
+      color: #d1d5db;
+      text-align: center;
+      margin-bottom: 18px;
+      line-height: 1.75;
+    }
+
+    .qr-box {
+      width: 220px;
+      height: 220px;
+      border-radius: 18px;
+      background: #f9fafb;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 18px 48px rgba(15, 23, 42, 0.9);
+      margin-bottom: 12px;
+    }
+
+    .qr-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .qr-note {
+      font-size: 12px;
+      color: #e5e7eb;
+      text-align: center;
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+
+    .counter {
+      font-size: 12px;
+      color: #e5e7eb;
+      margin-bottom: 8px;
+    }
+
+    .counter strong {
+      color: #bfdbfe;
+    }
+
+    .bottom-note {
+      font-size: 11px;
+      color: #9ca3af;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* 报名表单区域 */
+
+    .form-section {
+      margin-top: 28px;
+      background: #f9fafb;
+      border-radius: 24px;
+      padding: 24px 24px 20px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 22px 50px rgba(15, 23, 42, 0.2);
+    }
+
+    @media (max-width: 700px) {
+      .form-section {
+        padding: 20px 16px 18px;
+      }
+    }
+
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .form-title {
+      font-size: 20px;
+      font-weight: 650;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .form-subtitle {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.7;
+      max-width: 600px;
+    }
+
+    .form-badge {
+      align-self: flex-start;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #4f46e5;
+      background: rgba(79, 70, 229, 0.08);
+      border-radius: 999px;
+      padding: 4px 11px;
+      border: 1px solid rgba(79, 70, 229, 0.3);
+      white-space: nowrap;
+    }
+
+    .form-selection-note {
+      font-size: 12px;
+      color: #b45309;
+      margin-top: 6px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: #fffbeb;
+      border: 1px dashed #facc15;
+      line-height: 1.7;
+    }
+
+    form {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px 18px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 680px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 13px;
+      color: #374151;
+    }
+
+    label span.req {
+      color: #dc2626;
+      margin-left: 2px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    textarea {
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      padding: 9px 11px;
+      font: inherit;
+      resize: vertical;
+      min-height: 40px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, transform 0.06s ease;
+      background-color: #ffffff;
+      line-height: 1.6;
+    }
+
+    textarea {
+      min-height: 82px;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.22);
+      background-color: #ffffff;
+      transform: translateY(-0.5px);
+    }
+
+    .help {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .question-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .question-index {
+      font-size: 13px;
+      color: #111827;
+      font-weight: 500;
+    }
+
+    .question-tip {
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    .actions {
+      margin-top: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      grid-column: 1 / -1;
+      flex-wrap: wrap;
+      padding-top: 8px;
+      border-top: 1px dashed #e5e7eb;
+    }
+
+    .btn-primary {
+      padding: 10px 20px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: white;
+      background: linear-gradient(to right, #4f46e5, #22c55e);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+    }
+
+    .btn-primary span.icon {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      border-top-color: transparent;
+      border-right-color: transparent;
+      transform: rotate(45deg);
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.3);
+    }
+
+    .form-note {
+      font-size: 12px;
+      color: #4b5563;
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    .form-note strong {
+      color: #111827;
+    }
+
+    .form-note span.key {
+      color: #4f46e5;
+      font-weight: 500;
+    }
+
+    .footer {
+      margin-top: 16px;
+      font-size: 11px;
+      color: #6b7280;
+      text-align: right;
+    }
+
+    .footer span {
+      color: #374151;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- 上半部分：海报区域 -->
+    <section class="poster">
+      <div>
+        <div class="tag-row">
+          <span class="tag tag-primary">「AI面对面」沙龙 · 报名中</span>
+          <span class="tag">北邮玛丽女王海南学院 × 人工智能时代</span>
+          <span class="uni-name">北邮人工智能学院「AI在大前」教研团队</span>
+        </div>
+
+        <h1 class="title">
+          <span class="highlight">AI时代</span>，<br />
+          我们该如何把握机遇、修炼能力？
+        </h1>
+
+        <p class="subtitle">
+          北邮人工智能学院「AI在大前」教研团队将走进玛丽女王海南学院，与同学们现场对话，
+          围绕「时代机遇」「人工智能如何教 & 如何学」「如何面向AI时代规划个人能力结构」等话题展开开放交流。
+        </p>
+
+        <div class="info-row">
+          <div class="info-item">
+            <div>
+              <div class="info-label">时间</div>
+              <div>11月22日 9:00</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <div>
+              <div class="info-label">地点</div>
+              <div>北邮玛丽女王海南学院 · xxxxxx</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="pill">
+              <span class="pill-dot"></span>
+              <span>形式：短分享 + 深度 Q&amp;A</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="pill pill-warning">
+              <span>现场名额有限 · 将根据提问质量进行筛选</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-title">我们一起聚焦的问题</div>
+          <ul class="topics">
+            <li>大模型浪潮下，我们真正的时代机遇和风险在哪里？</li>
+            <li>人工智能如何教，才能既跟上技术演进，又不丢掉底层能力的训练？</li>
+            <li>人工智能如何学，才能避免「只会调API」「只会抄代码」式的浅层使用？</li>
+            <li>如何在本科阶段规划自己的知识结构与能力谱系，真正面向AI时代？</li>
+            <li>如何更好地与AI交叉：科研、竞赛、实习与未来去向的可能路径？</li>
+          </ul>
+
+          <p class="hint">
+            报名时，每位同学需要提交 <strong>3 个你最想在沙龙上讨论的问题</strong>，
+            这些问题将直接影响我们现场讨论的深度与方向。
+          </p>
+
+          <p class="selection-note">
+            提示：<strong>本次沙龙采取「问题驱动」的筛选机制</strong>，
+            现场座位有限，我们会根据你在问卷中提交的 3 个问题的思考深度与聚焦程度，
+            确定最终入选名单，以保证讨论质量。
+          </p>
+        </div>
+
+        <div class="speakers">
+          <strong>参与教师：</strong>北邮人工智能学院「AI在大前」教研团队核心成员<br />
+          <strong>面向对象：</strong>xxxxxx（优先本专业在校同学）<br />
+          <strong>活动形式：</strong>短分享 + 深度 Q&amp;A（以学生提问为主线，拒绝流水式宣讲）
+        </div>
+      </div>
+
+      <aside class="qr-panel">
+        <div class="qr-title">扫码报名 · 用你的 3 个问题参与筛选</div>
+        <div class="qr-subtitle">
+          使用手机微信/浏览器扫码，填写基本信息，<br />
+          提交你最关心的 3 个问题，作为筛选与讨论的依据。
+        </div>
+
+        <div class="qr-box">
+          <!-- 
+            TODO：将下面 img 的 src 替换为「实际报名表单链接」生成的二维码图片。
+            示例：用在线工具将报名页面 URL 生成为 PNG 图片，然后替换文件路径。
+          -->
+          <img src="qr-placeholder.png" alt="报名二维码（示意）" />
+        </div>
+
+        <div class="counter">
+          预计现场人数：<strong>30人</strong> &nbsp;|&nbsp; 将按提问质量进行筛选
+        </div>
+
+        <p class="bottom-note">
+          报名成功后页面会提示提交完成。<br />
+          最终入选名单及具体安排，将通过你留下的联系方式通知。
+        </p>
+      </aside>
+    </section>
+
+    <!-- 下半部分：线上访问本页面时的报名表 -->
+    <section class="form-section" id="signup">
+      <div class="form-header">
+        <div>
+          <div class="form-title">线上报名 · 提交你的 3 个「AI 时代问题」</div>
+          <div class="form-subtitle">
+            如果你是通过电脑或手机直接打开本页面，也可以在下方填写报名信息。
+            线下扫码也会跳转到同一份问卷。<br />
+            请把这次当作一个认真向自己和老师「发问」的机会，而不是简单填个表。
+          </div>
+        </div>
+        <div class="form-badge">3 Questions · Required</div>
+      </div>
+
+      <div class="form-selection-note">
+        说明：现场人数有限，<strong>会根据你提交的 3 个问题的质量进行筛选</strong>。
+        请尽量围绕「如何把握 AI 时代机遇」「人工智能如何教 &amp; 如何学」「能力结构与长期成长」展开，
+        提出你真正关心、愿意现场深入讨论的问题。
+      </div>
+
+      <!-- 
+        注意：
+        1. 默认使用 JavaScript 拦截提交，做简单校验与示范。
+        2. 如果你有真实后端（例如学院问卷系统、表单收集平台），
+           可以删除 onsubmit，并给 form 添加 action / method，将字段名称对接即可。
+      -->
+      <form onsubmit="handleSubmit(event)">
+        <div class="form-group">
+          <label for="name">姓名<span class="req">*</span></label>
+          <input id="name" name="name" type="text" required placeholder="例如：张三" />
+        </div>
+
+        <div class="form-group">
+          <label for="student-id">学号<span class="req">*</span></label>
+          <input id="student-id" name="student_id" type="text" required placeholder="用于签到与入选确认" />
+        </div>
+
+        <div class="form-group">
+          <label for="major-class">专业 / 班级<span class="req">*</span></label>
+          <input id="major-class" name="major_class" type="text" required placeholder="例如：智能医学工程 21-1 班" />
+        </div>
+
+        <div class="form-group">
+          <label for="grade">年级<span class="req">*</span></label>
+          <input id="grade" name="grade" type="text" required placeholder="例如：2022 级" />
+        </div>
+
+        <div class="form-group">
+          <label for="contact">联系方式（手机 / 微信）<span class="req">*</span></label>
+          <input id="contact" name="contact" type="text" required placeholder="用于最终入选通知及时间地点变更" />
+        </div>
+
+        <div class="form-group">
+          <label for="email">邮箱（可选）</label>
+          <input id="email" name="email" type="email" placeholder="例如：example@bupt.edu.cn" />
+        </div>
+
+        <div class="form-group full">
+          <div class="question-label">
+            <span class="question-index">问题 1<span class="req">*</span></span>
+            <span class="question-tip">优先级最高的问题：与你「AI 时代的个人机遇/焦虑」相关</span>
+          </div>
+          <textarea
+            id="q1"
+            name="question_1"
+            required
+            placeholder="例如：大模型技术发展这么快，作为智能医学工程专业的学生，我应该重点押注哪些方向（技能/领域），才不会在 5–10 年后被边缘化？"
+          ></textarea>
+        </div>
+
+        <div class="form-group full">
+          <div class="question-label">
+            <span class="question-index">问题 2<span class="req">*</span></span>
+            <span class="question-tip">关于「人工智能如何学」或「导论课如何教得更好」</span>
+          </div>
+          <textarea
+            id="q2"
+            name="question_2"
+            required
+            placeholder="例如：现在很多 AI 工具已经很强了，在导论课和后续 AI 课程中，哪些内容应该让机器帮我做，哪些能力必须自己硬啃下来？老师在教学设计上会如何平衡？"
+          ></textarea>
+        </div>
+
+        <div class="form-group full">
+          <div class="question-label">
+            <span class="question-index">问题 3<span class="req">*</span></span>
+            <span class="question-tip">关于你本科四年的能力结构与长期规划</span>
+          </div>
+          <textarea
+            id="q3"
+            name="question_3"
+            required
+            placeholder="例如：如果我希望未来在 AI+医疗方向做出一点东西，本科阶段在数学、编程、医学知识、科研经历、工程项目之间，应该如何分配精力？有没有一个推荐的「能力组合」？"
+          ></textarea>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn-primary">
+            <span>提交报名信息</span>
+            <span class="icon"></span>
+          </button>
+          <p class="form-note">
+            请避免泛泛而谈的「大而空」问题，尽量结合自己的真实困惑来提问。
+            <br />
+            <strong>筛选标准会更偏向有具体情境、有思考深度的问题，</strong>
+            而不是简单的「AI 发展前景如何」这类可在搜索引擎轻易获得答案的问题。
+          </p>
+        </div>
+      </form>
+
+      <div class="footer">
+        组织：<span>北邮人工智能学院「AI在大前」教研团队 · 北京邮电大学玛丽女王海南学院智能医学工程专业</span>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // 极简示例：前端拦截提交，可在这里接入真实后端（改为 fetch / XMLHttpRequest 等）
+    function handleSubmit(event) {
+      event.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const sid = document.getElementById("student-id").value.trim();
+      const q1 = document.getElementById("q1").value.trim();
+      const q2 = document.getElementById("q2").value.trim();
+      const q3 = document.getElementById("q3").value.trim();
+
+      if (!name || !sid || !q1 || !q2 || !q3) {
+        alert("请完整填写姓名、学号以及 3 个问题。");
+        return;
+      }
+
+      // 这里可以替换为真实提交逻辑，例如：
+      // fetch('/api/signup', {
+      //   method: 'POST',
+      //   body: JSON.stringify({
+      //     name, student_id: sid, question_1: q1, question_2: q2, question_3: q3
+      //   }),
+      //   headers: { 'Content-Type': 'application/json' }
+      // })
+
+      alert(
+        "报名信息已在本地示范性校验通过。\n\n实际部署时请将表单提交到学院/学校的正式系统，并根据问题质量进行筛选。"
+      );
+      event.target.reset();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  </script>
+</body>
+</html>
