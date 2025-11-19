@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学术讲座海报：认识人工智能 - 李思</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 暗黑风配色定义 */
+            --bg-body: #020617;       /* 极深午夜蓝背景 */
+            --bg-card: #0B1121;       /* 海报主体深蓝 */
+            --bg-block: #151E32;      /* 内容块背景 */
+            
+            --primary-glow: #38bdf8;  /* 荧光蓝（高亮强调） */
+            --secondary-glow: #818cf8; /* 紫调蓝 */
+            --accent-orange: #fbbf24; /* 琥珀金（时间点缀） */
+            
+            --text-white: #FFFFFF;    /* 高亮白 */
+            --text-grey-blue: #94A3B8; /* 灰蓝（正文） */
+            --text-dark-grey: #475569; /* 深灰蓝（边框/装饰） */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--bg-body);
+            /* 深邃背景光效 */
+            background-image: 
+                radial-gradient(circle at 80% 10%, rgba(56, 189, 248, 0.08) 0%, transparent 30%),
+                radial-gradient(circle at 20% 90%, rgba(129, 140, 248, 0.08) 0%, transparent 30%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-grey-blue);
+        }
+
+        /* 海报主体容器 */
+        .poster-container {
+            width: 100%;
+            max-width: 700px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            /* 深色阴影 + 微弱光晕 */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            position: relative;
+            border-top: 4px solid var(--primary-glow);
+        }
+
+        /* 装饰背景线条 */
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.03),
+                rgba(255, 255, 255, 0.03) 1px,
+                transparent 1px,
+                transparent 10px
+            );
+            mask-image: radial-gradient(circle at top right, black, transparent 80%);
+            -webkit-mask-image: radial-gradient(circle at top right, black, transparent 80%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 头部区域：嘉宾信息 */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 40px 40px 20px 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .avatar-box {
+            flex-shrink: 0;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            overflow: hidden;
+            /* 头像边框改为微发光 */
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+            margin-right: 30px;
+            background-color: #1e293b;
+        }
+
+        .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+        }
+
+        .speaker-info h2 {
+            font-size: 2.2rem;
+            color: var(--text-white);
+            margin-bottom: 8px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .speaker-info p {
+            font-size: 1.1rem;
+            color: var(--text-grey-blue);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .speaker-info .badge {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--primary-glow);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            font-weight: 700;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        /* 标题区域 */
+        .main-title-section {
+            padding: 10px 40px;
+            text-align: left;
+        }
+
+        .tag {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
+            color: #000; /* 标签文字深色以保证对比度 */
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .main-title {
+            font-size: 3rem;
+            line-height: 1.2;
+            font-weight: 900;
+            /* 标题渐变：白到蓝 */
+            background: -webkit-linear-gradient(120deg, #ffffff 30%, var(--primary-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(56, 189, 248, 0.1);
+        }
+
+        /* 时间地点卡片 - 玻璃拟态 */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 40px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-left: 4px solid var(--accent-orange);
+            transition: transform 0.2s, background 0.3s;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: #64748b; /* 更暗的灰蓝 */
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .info-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-white);
+        }
+        
+        .info-value.date {
+            color: var(--accent-orange);
+        }
+
+        /* 内容区域 */
+        .content-section {
+            padding: 10px 40px 40px 40px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-glow);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 24px;
+            background: var(--primary-glow);
+            margin-right: 10px;
+            border-radius: 3px;
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .text-block {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-grey-blue);
+            margin-bottom: 30px;
+            text-align: justify;
+        }
+        
+        .text-block b {
+            color: var(--text-white);
+        }
+
+        /* 简介块 - 深色背景 */
+        .bio-block {
+            background: var(--bg-block);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-grey-blue);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .highlight {
+            color: var(--text-white);
+            font-weight: 600;
+        }
+        
+        .bio-block b {
+            color: #cbd5e1; /* 浅灰 */
+        }
+
+        /* 底部 */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #0f172a;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: #64748b;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            font-weight: 300;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                padding: 30px 20px;
+            }
+            .avatar-box {
+                margin-right: 0;
+                margin-bottom: 20px;
+                width: 120px;
+                height: 120px;
+            }
+            .speaker-info p {
+                justify-content: center;
+            }
+            .main-title {
+                font-size: 2.2rem;
+            }
+            .info-grid {
+                grid-template-columns: 1fr;
+                margin: 10px 20px;
+            }
+            .content-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="poster-container">
+        <div class="bg-pattern"></div>
+
+        <!-- 头部：嘉宾信息 -->
+        <div class="header">
+            <div class="avatar-box">
+                <!-- 提示：请替换为李思教授的真实照片 -->
+                <img src="lisi.jpg" alt="李思教授">
+            </div>
+            <div class="speaker-info">
+                <h2>李思</h2>
+                <p>北京邮电大学 <span class="badge">副教授</span></p>
+                <p style="margin-top:5px; font-size: 0.9rem; color: #64748b;">人工智能学院 / 博士生导师</p>
+            </div>
+        </div>
+
+        <!-- 标题区域 -->
+        <div class="main-title-section">
+            <span class="tag">学术讲座 Lecture</span>
+            <h1 class="main-title">认识人工智能</h1>
+        </div>
+
+        <!-- 时间地点 -->
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-label">TIME / 时间</div>
+                <div class="info-value date">2025.11.22</div>
+                <div style="font-size: 1rem; margin-top: 4px; color: #94a3b8;">周六 9:00 - 9:45</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">LOCATION / 地点</div>
+                <div class="info-value">公共实验楼</div>
+                <div style="font-size: 1rem; margin-top: 4px; color: #94a3b8;">103 教室</div>
+            </div>
+        </div>
+
+        <!-- 内容区域 -->
+        <div class="content-section">
+            
+            <div class="section-title">报告摘要</div>
+            <div class="text-block">
+                本报告将分享人工智能的<b>发展历程</b>，深入剖析人工智能的<b>能力属性、工具属性和实用属性</b>，旨在为同学们后续深入学习人工智能知识提供坚实的认知基础。
+            </div>
+
+            <div class="section-title">专家简介</div>
+            <div class="bio-block">
+                <p>
+                    <span class="highlight">李思</span>，北京邮电大学人工智能学院副教授，博士生导师，北京市人工智能通识课程团队核心成员。
+                </p>
+                <p style="margin-top: 10px;">
+                    毕业于北京邮电大学（博士）及美国布兰迪斯大学（博士后），曾在新加坡国立大学、日本国立信息学研究所从事科研工作。
+                </p>
+                <p style="margin-top: 10px;">
+                    <b>研究方向：</b>多模态智能信息处理。在 TPAMI、CVPR、ICCV、NeurIPS 及 ACL 等顶级期刊和会议上发表多篇论文。主持国家自然科学基金、科技创新 2030—“新一代人工智能”重大项目等多项课题。
+                </p>
+                <p style="margin-top: 10px;">
+                    <b>荣誉与贡献：</b>第二十三届中国计算语言学大会亮点英文论文、浩埔杯全国一等奖、中国图象图形学会优秀硕士学位论文指导教师等。制作《AI 在大前》、《小 V 讲 AI》等系列科普网课及短视频。
+                </p>
+            </div>
+        </div>
+
+        <!-- 底部 -->
+        <div class="footer">
+            WELCOME TO ATTEND
+        </div>
+    </div>
+
+</body>
+</html>
